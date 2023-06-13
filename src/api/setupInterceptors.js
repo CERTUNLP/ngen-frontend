@@ -60,7 +60,7 @@ const setup = (store) => {
             const originalConfig = error.config;
 
             // verificar error.response.code
-            if (error.response.code === 'token_not_valid' && !originalConfig._retry) {
+            if (error.response.data.code === 'token_not_valid' && !originalConfig._retry) {
 
                 originalConfig._retry = true;   
 
@@ -76,7 +76,7 @@ const setup = (store) => {
 
                         return apiInstance(originalConfig)
                                     .catch(error => {
-                                        if (error.response.code === 'token_not_valid') {
+                                        if (error.response.data.code === 'token_not_valid') {
                                             dispatch({
                                                 type: LOGOUT
                                             });
