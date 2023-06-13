@@ -1,7 +1,7 @@
 export const BASENAME = ''; // don't add '/' at end off BASENAME
 export const BASE_URL = '/metrics';
 export const BASE_TITLE = ' | ngen ';
-export const API_SERVER = 'http://localhost:8000/api/';
+export const API_SERVER = 'https://localhost/api/';
 export const PAGE = '?page=';
 
 export const CONFIG = {
