@@ -35,16 +35,16 @@ const NavBar = () => {
                     <div className="b-bg">
                         <i className="feather icon-trending-up" />
                     </div>
-                    <span className="b-title">Datta Able</span>
+                    <span className="b-title">NGEN</span>
                 </Link>
                 {/* <Link to='#' className={moreClass.join(' ')} onClick={() => setMoreToggle(!moreToggle)}>
                     <i className="feather icon-more-vertical"/>
                 </Link> */}
             </div>
-            <div className={collapseClass.join(' ')}>
+            {/* <div className={collapseClass.join(' ')}>
                 <NavLeft />
                 <NavRight />
-            </div>
+            </div> */}
         </React.Fragment>
     );
 

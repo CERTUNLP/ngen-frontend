@@ -50,7 +50,7 @@ const setup = (store) => {
               
                 originalConfig._retry = true;
 
-                refreshToken()
+                return refreshToken()
                     .then((res) => { 
  
                         const state = store.getState();
