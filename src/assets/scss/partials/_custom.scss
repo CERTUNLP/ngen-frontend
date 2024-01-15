@@ -54,5 +54,4 @@
     transform: rotateY(0deg);
     opacity: 1;
     clip-path: inset(0 calc(200px - #{$Menu-collapsed-width} + 40px) 0 0);
-    transition: clip-path 0.3s;
 }
