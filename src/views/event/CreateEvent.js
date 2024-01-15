@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Card } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import FormEvent from './components/FormEvent'
 import Navigation from '../../components/Navigation/Navigation'
 import { postEvent} from "../../api/services/events";
@@ -71,7 +71,7 @@ const CreateEvent = () => {
           response.map((item) => {
             const parts = item.url.split("/");
             let itemNumber = parts[parts.length - 2];
-            list.push({value:item.url, label:itemNumber})
+            list.push({value:item.url, label:item.uuid})
           })
           setCases(list)
         })

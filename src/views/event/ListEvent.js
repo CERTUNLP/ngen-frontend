@@ -126,7 +126,7 @@ const ListEvent = () => {
       response.map((item) => {
         const parts = item.url.split("/");
         let itemNumber = parts[parts.length - 2];
-        list.push({value:item.url, label:itemNumber})
+        list.push({value:item.url, label:item.uuid})
       })
       setCases(list)
     })

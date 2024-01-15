@@ -145,7 +145,6 @@ const FormUser= ({body, setBody, priorities, createUser, loading}) =>{
             : 
             <><Button variant="primary" disabled>Guardar</Button></> }
             <Button variant="primary" href="/users">Cancelar</Button>
-            <><Button variant="primary" onClick={createUser} >Guardar</Button></>
         
         
     </Form>
