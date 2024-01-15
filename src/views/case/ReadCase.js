@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CloseButton, Col, Form, Modal, Row, Table } from 'react-bootstrap';
-import Navigation from '../../components/Navigation/Navigation';
 import { useLocation } from 'react-router-dom';
+import Navigation from '../../components/Navigation/Navigation';
 import ViewFiles from '../../components/Button/ViewFiles';
+import SmallEventTable from './components/SmallEventTable'; 
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
+import { getEvent} from "../../api/services/events";
+
 
 
 const ReadCase = () => { 
@@ -25,7 +28,30 @@ const ReadCase = () => {
     
     const [modalShowEvent, setModalShowEvent] = useState(false);
 
+    const [list, setList] = useState([]);
+   
     useEffect(() => {
+        
+        if (caseItem !== null) {
+            const listEvents = []
+            console.log(caseItem)
+            const eventPromises = caseItem.events.map(url => getEvent(url));
+
+            Promise.all(eventPromises)
+            .then(responses => {
+                // Todas las llamadas se han completado exitosamente
+                const eventsData = responses.map(response => response.data);
+                setList(eventsData);
+            })
+            .catch(error => {
+                // Maneja cualquier error que ocurra durante las llamadas
+                console.error("Error al obtener eventos:", error);
+            });
+            
+            
+        }
+        
+        
         if (!caseItem) {
             const caseUrl = localStorage.getItem('case');
             console.log("STORAGE")
@@ -97,6 +123,8 @@ const ReadCase = () => {
             }
         }
     }, [caseItem]);
+
+    
 
     return (
         caseItem &&
@@ -199,6 +227,7 @@ const ReadCase = () => {
                     </Card>
 
                     {caseItem.evidence.length > 0 
+                        
                     ?
                     <Card>
                         <Card.Header>    
@@ -212,30 +241,7 @@ const ReadCase = () => {
                         </Card.Body>
                     </Card>
                     : <></>}
-
-                    {caseItem.events.length > 0 ?
-                        <Card>
-                            <Card.Header>
-                                <Card.Title as="h5">Eventos</Card.Title>
-                            </Card.Header>
-                            <Card.Body> 
-                                <Row>
-                                    <Col sm={6} lg={3}>Link</Col>
-                                    <Col><Form.Control plaintext readOnly defaultValue={caseItem.events}/></Col>
-                                    <Col sm={6} lg={2}>
-                                        <Button 
-                                            size="sm"
-                                            className='text-capitalize'
-                                            variant='light'
-                                            title='Ir'
-                                            onClick={() => setModalShowEvent(true)}>
-                                            <i className="fas fa-external-link-alt"/>
-                                        </Button> 
-                                    </Col>
-                                </Row>
-                            </Card.Body> 
-                        </Card>
-                        :<></>}
+                    <SmallEventTable list={list}/>
                         <Card>
                             <Card.Header>
                                 <Card.Title as="h5">Informacion Adicional</Card.Title>

@@ -80,5 +80,17 @@ const getAllEvents = (currentPage = 1, results = [], limit = 100) => {
             return Promise.reject(error);
         })   
 }
+const getListEvents = (list) => {
+    const listEvents = []
+    list.forEach(function(url) {
+        apiInstance.get(url).then((response) => {
+            listEvents.push(response.data)
+        })
+        .catch((error)=>{
+            return Promise.reject(error);
+        })
+    });
+    return list
+}
 
-export { getEvents , postEvent, putEvent, deleteEvent, mergeEvent, getEvent, getAllEvents};
+export { getEvents , postEvent, putEvent, deleteEvent, mergeEvent, getEvent, getAllEvents, getListEvents};

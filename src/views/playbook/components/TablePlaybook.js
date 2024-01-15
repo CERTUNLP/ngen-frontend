@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Table, Spinner,Form } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
-import { getPlaybook, deletePlaybook } from '../../../api/services/playbooks';
+import { getPlaybook, deletePlaybook } from '../../../api/services/playbooks'
+import CallBackendByName from '../../../components/CallBackendByName'; 
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ModalDetailPlaybook from './ModalDetailPlaybook';
@@ -29,7 +30,7 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
         boxShadow: "none"
     }
 
-    useEffect( ()=> { 
+    /*useEffect( ()=> { 
         async function processList(list) {
             if (Array.isArray(list)) {
               try {
@@ -67,7 +68,7 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
           // Llama a la función processList con tu lista
           processList(list);
     
-    },[list])
+    },[list])*/
 
     if (loading) {
         return (
@@ -116,6 +117,15 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
             })
     };
 
+    const callbackTaxonomy = (url ,setPriority) => {
+        getTaxonomy(url)
+        .then((response) => {
+         
+            setPriority(response.data)
+        })
+        .catch();
+    }
+
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="playbook"/>
@@ -129,14 +139,13 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        { listPlaybook.map((book, index) => {
+                        { list.map((book, index) => {
                             return (
                                 <tr key={book.url}>
                                     <th scope="row">{ 1+index+10*(currentPage-1) }</th>
                                     <td>{book.name}</td>
                                     <td>
-
-                                    <Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={book.taxonomy} />
+                                    <CallBackendByName url={book.taxonomy} callback={callbackTaxonomy} useBadge={false}/>
                                     </td>
                                     <td>
                                         <CrudButton type='read' onClick={() => showPlaybook(book.url)} />

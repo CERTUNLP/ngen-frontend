@@ -34,7 +34,6 @@ const EditPriority = () => {
             solve_time_days=priority.solve_time.split(" ")[1] ? priority.solve_time.split(" ")[0] : ""
             solve_time_hours=priority.solve_time.split(" ")[1] ? priority.solve_time.split(":")[1] : priority.solve_time.split(":")[0]
             solve_time_minutes=priority.solve_time.split(" ")[1] ? priority.solve_time.split(":")[2] : priority.solve_time.split(":")[1]
-            
         }
         const form={ 
             url:priority.url,

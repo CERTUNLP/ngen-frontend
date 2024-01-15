@@ -66,7 +66,10 @@ const ReadEvent = () => {
         })
         .catch();
     }
-    console.log(body.date)
+    const returnBack = () => {
+        window.history.back()
+    }
+  
   return (
     <div>
         <Row>
@@ -237,7 +240,7 @@ const ReadEvent = () => {
                 
             </Card.Body>
         </Card>
-        <Button variant="primary" href="/events">Volver</Button>
+        <Button variant="primary" onClick={() =>returnBack()}>Volver</Button>
         
         </Table>
     </div>

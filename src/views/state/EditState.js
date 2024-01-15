@@ -56,7 +56,6 @@ const EditState = () => {
             setShowAlert(true) 
             setError(error);           
         })
-       
     }
   return (
     <div>

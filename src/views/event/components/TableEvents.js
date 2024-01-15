@@ -12,6 +12,7 @@ import { getFeed } from '../../../api/services/feeds';
 import { deleteEvent} from "../../../api/services/events";
 import Ordering from '../../../components/Ordering/Ordering'
 
+
 const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, currentPage}) => {
 
     const [deleteName, setDeleteName] = useState()
@@ -25,7 +26,7 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
 
     useEffect(() => { 
         setList(events)
-        console.log(events)
+        
        
       }, [events]);
    

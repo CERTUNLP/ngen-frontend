@@ -15,14 +15,7 @@ const menuItems = {
                     icon: 'feather icon-home',
                     breadcrumbs: false
                 },
-                {
-                    id: 'feeds',
-                    title: 'Fuentes',
-                    type: 'item',
-                    url: '/feeds',
-                    icon: 'feather icon-globe',
-                    breadcrumbs: false
-                },
+                
                 {
                     id: 'Eventos',
                     title: 'Eventos',
@@ -94,7 +87,23 @@ const menuItems = {
                             url: '/tlp',
                             icon: '',
                             breadcrumbs: false
-                        },          
+                        }, 
+                        {
+                            id: 'report',
+                            title: 'Report',
+                            type: 'item',
+                            url: '/reports',
+                            icon: '',
+                            breadcrumbs: false
+                        }, 
+                        {
+                            id: 'feeds',
+                            title: 'Fuentes',
+                            type: 'item',
+                            url: '/feeds',
+                            icon: '',
+                            breadcrumbs: false
+                        },         
                         {
                             id: 'priority',
                             title: 'Prioridades',
