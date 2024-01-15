@@ -35,3 +35,21 @@
         inset 0 7px 4px -7px $theme-font-color,
         0 0 0 0px $theme-font-color;
 }
+
+#teamlogo_login {
+    max-width: 200px;
+}
+
+#teamlogo {
+    max-width: 200px;
+}
+
+.pcoded-navbar.navbar-collapsed:hover .header-logo img {
+    opacity: 1;
+}
+
+.pcoded-navbar.navbar-collapsed .header-logo img {
+    transform: rotateY(0deg);
+    opacity: 1;
+    clip-path: inset(0 calc(200px - #{$Menu-collapsed-width} + 40px) 0 0);
+}

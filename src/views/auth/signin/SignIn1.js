@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
+import { API_SERVER } from '../../../config/constant';
 import Breadcrumb from '../../../layouts/AdminLayout/Breadcrumb';
 
 import RestLogin from './RestLogin';
@@ -10,7 +11,7 @@ import Alert from './../../../components/Alert/Alert';
 
 const Signin1 = () => {
     return (
-        <React.Fragment>    
+        <React.Fragment>
             <Breadcrumb />
             <div className="auth-wrapper">
                 <div className="auth-content">
@@ -22,7 +23,9 @@ const Signin1 = () => {
                     </div>
                     <Card className="borderless text-center">
                         <Card.Body>
-                            <h4 className="mb-4">NGEN</h4>
+                            <div className="mb-4">
+                                <img src={API_SERVER + 'static/img/ngenlogo_inv.png'} alt="NGEN" className="logo" id="teamlogo_login" />
+                            </div>
 
                             <div className="mb-4">
                                 <i className="feather icon-unlock auth-icon" />
