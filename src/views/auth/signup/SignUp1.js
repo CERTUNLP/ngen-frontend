@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
+import { API_SERVER } from '../../../config/constant';
 import RestRegister from './RestRegister';
 import Breadcrumb from '../../../layouts/AdminLayout/Breadcrumb';
 
@@ -21,7 +22,9 @@ const SignUp1 = () => {
                         <Row className="align-items-center">
                             <Col>
                                 <Card.Body className="text-center">
-                                    <h4 className="mb-4">NGEN</h4>
+                                    <div className="mb-4">
+                                        <img src={API_SERVER + 'static/img/ngenlogo_inv.png'} alt="NGEN" className="logo" id="teamlogo_login" />
+                                    </div>
 
                                     <div className="mb-4">
                                         <i className="feather icon-user-plus auth-icon" />
