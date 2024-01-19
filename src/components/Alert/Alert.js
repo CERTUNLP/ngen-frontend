@@ -41,7 +41,7 @@ const Alert = ({ showAlert , resetShowAlert, component}) => {
             <Toast id={type==='success' ? 'alertStyleGreen' : 'alertStyleRed'} onClose={() => resetAlert()} show={show} autohide >
                     <i id="alertStyle__icon" className={type==='success' ? 'feather icon-check-circle mx-1' : 'feather icon-alert-triangle mx-1'} />
                     <tr id="alertStyle__text" plaintext readOnly>{text}</tr>                    
-                    <i id="alertStyle__close" class="material-icons" title="Cerrar" onClick={() => resetAlert()}>close</i>
+                    <i id="alertStyle__close" className="material-icons" title="Cerrar" onClick={() => resetAlert()}>close</i>
             </Toast>
         </div>
     );

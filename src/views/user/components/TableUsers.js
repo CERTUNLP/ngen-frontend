@@ -169,7 +169,7 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Ultimo inicio de cesion</td>
+                                        <td>Ultimo inicio de sesión</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={user.last_login ? user.last_login.slice(0,10) : ""} />
                                         </td>

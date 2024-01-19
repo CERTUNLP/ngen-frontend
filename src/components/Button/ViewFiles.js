@@ -36,7 +36,7 @@ const ViewFiles = (props) => {
                 title={'Evidencia '+ props.index} 
                 onClick={openFile} 
                 size="sm">
-                <i class="fas fa-external-link-alt"/>
+                <i className="fas fa-external-link-alt"/>
                 {'Abrir Evidencia '+ props.index + '  '} 
                 
             </Button>
