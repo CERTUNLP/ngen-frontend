@@ -2,6 +2,7 @@ import axios from 'axios';
 import apiInstance from './api';
 import { refreshToken } from './services/auth';
 import setAlert from '../utils/setAlert';
+import { LOGOUT } from '../store/actions';
 
 const setup = (store) => {
 
@@ -47,10 +48,16 @@ const setup = (store) => {
                 isRefreshing = true;
                 refreshToken()
                     .then(response => {
-                        isRefreshing = false;
                         let newToken = response.data.access;
                         onRefreshed(newToken);
+                    }).catch(error => {
+                        store.dispatch({
+                            type: LOGOUT,
+                        });
+                        setAlert("Su sesión ha expirado", "error");
+                    }).finally(() => {
                         refreshSubscribers = [];
+                        isRefreshing = false;
                     });
             }
 
