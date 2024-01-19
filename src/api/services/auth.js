@@ -7,14 +7,14 @@ import { store } from '../../store';
 
 const register = (username, password, email) => {
     return apiInstance.post(COMPONENT_URL.register, {
-        username: username,  
-        password: password, 
-        email: email, 
+        username: username,
+        password: password,
+        email: email,
         is_active: true
     }).then(response => {
         setAlert("Registración exitosa", "success");
         return response;
-    }).catch( error => { 
+    }).catch(error => {
         setAlert("No se pudo registrar al usuario", "error");
         return Promise.reject(error);
     });
@@ -23,11 +23,11 @@ const register = (username, password, email) => {
 const login = (username, password) => {
     return apiInstance.post(COMPONENT_URL.login, {
         username: username,
-        password: password, 
-    }).catch( error => { 
+        password: password,
+    }).catch(error => {
         if (error.response.data.detail === "La combinación de credenciales no tiene una cuenta activa") {
             setAlert("Las credenciales de acceso son inválidas", "error");
-        }  else {
+        } else {
             setAlert("No se pudo realizar el login", "error");
         }
         return Promise.reject(error);
@@ -35,47 +35,40 @@ const login = (username, password) => {
 }
 
 const refreshToken = () => {
-    return apiInstance.post(COMPONENT_URL.refreshCookieToken, {
-    }).then(response => {
-
-            console.log(response);
-            const { dispatch } = store;
-
+    return apiInstance.post(COMPONENT_URL.refreshCookieToken, {})
+        .then(response => {
+            const { dispatch } = store;
             try {
                 dispatch({
-                 type: REFRESH_TOKEN,
-                 payload: { token: response.data.access }
+                    type: REFRESH_TOKEN,
+                    payload: { token: response.data.access }
                 });
 
                 return response;
-            } catch(e){
+            } catch (e) {
                 console.log('Error en el dispatch')
             }
-            
-    }).catch( error => { 
+        })
+        .catch(error => {
+            const { dispatch } = store;
+            try {
+                dispatch({
+                    type: LOGOUT
+                });
+                dispatch({
+                    type: CLEAR_MESSAGE
+                });
+            } catch (e) {
+                console.log('Error en el dispatch')
+            }
 
-        const { dispatch } = store;
-
-        try {
-            dispatch({
-                type: LOGOUT
-            });
-            dispatch({
-                type: CLEAR_MESSAGE
-            });
-        } catch(e){
-            console.log('Error en el dispatch')
-        }
-
-        console.log("ERROR en el refresh desde auth");
-
-        return Promise.reject(error);
-    }); 
+            return Promise.reject(error);
+        });
 }
 
 const logout = () => {
     return apiInstance.post(COMPONENT_URL.logout)
-        .catch( error => { 
+        .catch(error => {
             return Promise.reject(error);
         });
 }
