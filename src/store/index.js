@@ -6,6 +6,7 @@ import reducers from './reducers';
 
 const store = configureStore({
     reducer: reducers,
+    middleware: [],
     devTools: true
 });
 
