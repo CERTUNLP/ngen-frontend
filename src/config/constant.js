@@ -1,7 +1,7 @@
-export const BASENAME = ''; // don't add '/' at end off BASENAME
-export const BASE_URL = '/metrics';
+export const API_SERVER = process.env.REACT_APP_API_SERVER;
+export const BASE_URL = process.env.REACT_APP_BASE_URL || '/metrics';
+export const BASENAME = process.env.REACT_APP_BASENAME || '';
 export const BASE_TITLE = ' | ngen ';
-export const API_SERVER = 'http://localhost:8000/api/';
 export const PAGE = '?page=';
 
 export const CONFIG = {
@@ -28,7 +28,7 @@ export const CONFIG = {
     layout6BackSize: '' // disable on free version
 };
 
-export const COMPONENT_URL={ 
+export const COMPONENT_URL = {
     tlp: "administration/tlp/",
     feed: "administration/feed/",
     priority: "administration/priority/",
@@ -55,9 +55,9 @@ export const COMPONENT_URL={
     searchCase: "search/case/",
     logout: "ctoken/logout/",
     refreshCookieToken: "ctoken/refresh/",
-    stringidentifier:"stringidentifier/",
-    dashboardFeed:"dashboard/feeds",
-    dashboardEvent:"dashboard/events",
-    dashboardCases:"dashboard/cases",
-    dashboardNetworkEntities:"dashboard/network_entities",
+    stringidentifier: "stringidentifier/",
+    dashboardFeed: "dashboard/feeds",
+    dashboardEvent: "dashboard/events",
+    dashboardCases: "dashboard/cases",
+    dashboardNetworkEntities: "dashboard/network_entities",
 };
