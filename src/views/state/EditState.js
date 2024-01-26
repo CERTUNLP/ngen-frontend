@@ -6,6 +6,7 @@ import FormState from './components/FormState'
 import Navigation from '../../components/Navigation/Navigation'
 import { putState} from "../../api/services/states";
 import { getAllStates} from "../../api/services/states";
+import ListEdge from '../edge/ListEdge';
 
 
 const EditState = () => {
@@ -13,17 +14,21 @@ const EditState = () => {
     const fromState = location.state;
     const[body,setBody]=useState(fromState);
 
-    const [alert, setAlert] = useState(null)
-    const [stateAlert, setStateAlert] = useState(null)
     const [error,setError]=useState()
     const [states, setStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
+    const [edge, setEdge] = useState()
+
+    const [sectionAddEdge, setSectionAddEdge] = useState(false);
 
     console.log(body)
 
 
     useEffect( ()=> {
+        if(body.children !== []){
+            setSectionAddEdge(true)
+        }
         const fetchPosts = async () => {
             getAllStates().then((response) => { 
 
@@ -63,18 +68,8 @@ const EditState = () => {
         <Row>
             <Navigation actualPosition="Editar Estado" path="/states" index ="Estados"/> 
         </Row>
-    
-            <Card>
-                <Card.Header>
-                    <Card.Title as="h5">Editar Estado</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                <Form>
-                    <FormState body={body} setBody={setBody} createState={editState} childernes={states} />        
-                </Form>
-                </Card.Body>
-            </Card>
-        
+        <FormState body={body} setBody={setBody} edge ={edge } createState={editState} childernes={states} type ={"Editar"}/>         
+        <ListEdge state={body} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
     </div>
   )
 }

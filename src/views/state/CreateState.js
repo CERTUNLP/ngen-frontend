@@ -1,17 +1,12 @@
 import React,{useState,useEffect} from 'react'
-import { Card } from 'react-bootstrap';
 import FormState from './components/FormState'
 import Navigation from '../../components/Navigation/Navigation'
-import { postState} from "../../api/services/states";
-import { useLocation } from 'react-router-dom';
 import Alert from '../../components/Alert/Alert';
-import { getAllStates } from "../../api/services/states";
+import { postState} from "../../api/services/states";
+import ListEdge from '../edge/ListEdge';
 
 const AddState = () => {
-    const states = useLocation().state;
-     //descripcion  y active en postman me lo marca como requerido
-     //nombre debe ser unico en el sistema
-     //slug no es unico ¿deberia serlo? ademas es un campo requerido pero toma el valor de nombre
+    
  
     const formEmpty={ 
         name: "",//requerido
@@ -21,51 +16,43 @@ const AddState = () => {
         description: "",
         children: []
     }
+    const [state, setState] = useState({});
     const [body, setBody] = useState(formEmpty)
     const [error,setError]=useState()
     const [childernes, setChildernes]=useState([])
     const [showAlert, setShowAlert] = useState(false)
 
+    //Collapse
+    const [sectionAddEdge, setSectionAddEdge] = useState(false);
+
     const resetShowAlert = () => {
         setShowAlert(false);
     }
-    useEffect( ()=> {
-        getAllStates().then((response) => { 
-
-            var listChildren = []
-            response.map((state)=>{
-                listChildren.push({value:state.url, label:state.name})
-            })
-            setChildernes(listChildren)
-          })
-          .catch((error) => {
-              setError(error)
-              
-          })
-        
-    },[])
 
     const createState=()=>{
         console.log(body.children)
         postState(body.name, body.attended, body.solved, 1, body.description, body.children)
-        .then(() => {
-            window.location.href = '/states';
+        .then((response) => {
+            setState(response.data) // y la url
+            console.log(response.data.url)
+            setSectionAddEdge(true)
         })
         .catch((error) => {
             setShowAlert(true) 
             setError(error);           
+        }).finally(() => {
+            setShowAlert(true)
         })
     }
+
+
   return (
     <div>
         <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
         <Navigation actualPosition="Agregar Estado" path="/states" index ="Estados"/>
-        <Card>
-            <Card.Header>
-                <Card.Title as="h5">Agregar Estado</Card.Title>
-            </Card.Header>
-            <FormState body={body} setBody={setBody} createState={createState} childernes={childernes} />
-      </Card>
+        <FormState body={body} setBody={setBody} createState={createState} childernes={childernes} type={"Agregar"}/>
+        <ListEdge state={state} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
+      
     </div>
   )
 }

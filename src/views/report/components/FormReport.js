@@ -91,7 +91,7 @@ const FormReport = ({body, setBody, taxonomies, createOrEdit}) => {
             </Col> 
             <Col sm={12} lg={4}>
                 <Form.Group controlId="Form.Network.Type">
-                    <Form.Label>Lenguaje </Form.Label>
+                    <Form.Label>Idioma <b style={{color:"red"}}>*</b></Form.Label>
                     <Form.Control
                         name="lang"
                         type="choice"
@@ -107,7 +107,13 @@ const FormReport = ({body, setBody, taxonomies, createOrEdit}) => {
         </Row>
         
            
-            <><Button variant="primary" onClick={createOrEdit}>Guardar</Button></> 
+            
+            {body.problem !== "" & body.derived_problem !== "" & body.verification !== "" & 
+             body.recommendations !== "" & body.more_information !== "" & body.lang !== "" & body.taxonomy !== "-1"   ? 
+                    <Button variant="primary" onClick={createOrEdit}>Guardar</Button>
+                    : 
+                     <><Button variant="primary" disabled>Guardar</Button></>                    
+            }
             <Button variant="primary" href="/reports">Cancelar</Button>
         
         

@@ -14,7 +14,7 @@ const CreateReport = () => {
         recommendations: "",//required
         more_information: "",//required
         lang: "",
-        taxonomy: null//required
+        taxonomy: "-1"//required
     })
     const [taxonomies, setTaxonomies] = useState([])
 
@@ -37,7 +37,7 @@ const CreateReport = () => {
           })
         
       },[]);
-    
+
 
     //Create
     const addReport = () => {
@@ -46,14 +46,14 @@ const CreateReport = () => {
             window.location.href = "/reports"
         })
         .catch((error) => {
-            console.log(error)
+           
             setShowAlert(true)
         })
     };
        
     return (
         <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity"/>
+        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report"/>
             <Row>
                 <Navigation actualPosition="Crear reporte" path="/reports" index ="Reportes"/>
             </Row>

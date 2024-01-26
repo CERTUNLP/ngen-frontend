@@ -9,7 +9,6 @@ const getReports = (currentPage, filters,order) => {
         return response;
     }).catch( error => { 
         let statusText = error.response.statusText;
-        console.log(error.response.statusText)
         messageError += statusText;
         setAlert(messageError , "error", "report");
         return Promise.reject(error);
@@ -45,7 +44,7 @@ const getAllReports = (currentPage = 1, results = [], limit = 100) => {
 
 const postReport = (problem, derived_problem, verification, recommendations, more_information, lang, taxonomy)=>{
     let messageSuccess = `El reporte se ha creado correctamente.`;
-    let messageError 
+    let messageError = `El reporte no se pudo crear. `;
     return apiInstance.post(COMPONENT_URL.report, {
         problem: problem,
         derived_problem: derived_problem,
@@ -58,6 +57,13 @@ const postReport = (problem, derived_problem, verification, recommendations, mor
         setAlert(messageSuccess, "success", "report");
         return response;
     }).catch( error => { 
+        let statusText = ""; 
+        if (error.response.status == 400){
+            if (error.response.data.non_field_errors && error.response.data.non_field_errors[0] === "The fields lang, taxonomy must make a unique set.") {
+                statusText = "Ya existe para esa taxonomia en ese idioma.";
+            }  
+        }
+        messageError += statusText;
         setAlert(messageError , "error", "report");
         return Promise.reject(error);
     });
@@ -79,7 +85,12 @@ const putReport = (url, problem, derived_problem, verification, recommendations,
         setAlert(messageSuccess , "success", "report");
         return response;
     }).catch( error => { 
-        let statusText = error.response.statusText;
+        let statusText = ""; 
+        if (error.response.status == 400){
+            if (error.response.data.non_field_errors && error.response.data.non_field_errors[0] === "The fields lang, taxonomy must make a unique set.") {
+                statusText = "ya existe esa taxonomia con ese idioma ";
+            }
+        }
         messageError += statusText;
         setAlert(messageError , "error", "report");
         return Promise.reject(error);
@@ -102,20 +113,4 @@ const deleteReport = (url) => {
     });
 }
 
-const isActive = (url, active, name) => { 
-    let messageSuccess = !active ? `El reporte ha sido desactivada.` : `El reporte ha sido activada.`;
-    let messageError = !active ? `El reporte no ha sido desactivada. ` : `El reporte no ha sido activada. `;
-    return apiInstance.patch(url, {
-        active: active
-    }).then(response => {
-        setAlert(messageSuccess , "success", "report");
-        return response;
-    }).catch( error => { 
-        let statusText = error.response.statusText;
-        messageError += statusText;
-        setAlert(messageError , "error", "report");
-        return Promise.reject(error);
-    });
-}
-
-export { getReports, getAllReports, getReport, postReport, putReport, deleteReport, isActive };
+export { getReports, getAllReports, getReport, postReport, putReport, deleteReport };

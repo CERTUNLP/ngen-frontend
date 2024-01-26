@@ -52,7 +52,7 @@ const EditReport = () => {
     }
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report"/>
         <Row>
             <Navigation actualPosition="Editar reporte" path="/reports" index ="Reportes"/> 
         </Row>
