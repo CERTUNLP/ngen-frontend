@@ -89,8 +89,8 @@ const menuItems = {
                             breadcrumbs: false
                         }, 
                         {
-                            id: 'report',
-                            title: 'Report',
+                            id: 'reporte',
+                            title: 'Reporte',
                             type: 'item',
                             url: '/reports',
                             icon: '',

@@ -61,6 +61,7 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
                 response.map((item) => {
                     stateOp[item.url] = {name: item.name}
                 })
+             
                 setStateOption(stateOp)
             })
             .catch((error)=>{

@@ -1,26 +1,30 @@
 import React,{ useState} from 'react'
 import {
-    Button,Card, Table , Modal, Row,Col, Form, Badge,CloseButton, Spinner
+    Card, Table , Modal, Row,Col, Form, Badge,CloseButton, Spinner
   } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import {Link} from 'react-router-dom'
 
 import Alert from '../../../components/Alert/Alert';
 import CallBackendByName from '../../../components/CallBackendByName'; 
-import { getAllTaxonomies, getTaxonomy } from "../../../api/services/taxonomies";
+import { getTaxonomy } from "../../../api/services/taxonomies";
 import { deleteReport } from "../../../api/services/reports";
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 
 const TableReport = ({list, loading, currentPage}) => {
  
-    const [dataState,setDataState] = useState({})
-    const [showState, setShowState] = useState()
+    const [report,setReport] = useState({})
+    const [modalShow, setModalShow] = useState(false);
     const [showAlert, setShowAlert] = useState(false)
 
     const [deleteUrl, setDeleteUrl] = useState()
     const [remove, setRemove] = useState()
     const [deleteName, setDeleteName] = useState("")
     const [error, setError] = useState(null);
+
+    const language={
+        en: "Ingles",
+        es: "Español"}
 
     if (loading) {
         return (
@@ -37,6 +41,12 @@ const TableReport = ({list, loading, currentPage}) => {
     const modalDelete = ( url)=>{
         setDeleteUrl(url) 
         setRemove(true)
+    }
+
+    const showModalReport = (user) => {
+        setReport(user)
+        setModalShow(true)
+       
     }
 
     const handleDelete = () => {
@@ -56,6 +66,7 @@ const TableReport = ({list, loading, currentPage}) => {
         })
         .catch();
     }
+
       
       
   return (
@@ -80,7 +91,7 @@ const TableReport = ({list, loading, currentPage}) => {
                                            
                                             <td><CallBackendByName url={report.taxonomy} callback={callbackTaxonomy} useBadge={false}/></td>
                                             <td>
-                                            <CrudButton type='read' onClick={() => console.log("aaa")} />
+                                            <CrudButton type='read' onClick={() => showModalReport(report)} />
                                             <Link to={{pathname:'/reports/edit', state: report}} >
                                                 <CrudButton type='edit'/>
                                             </Link>
@@ -92,6 +103,90 @@ const TableReport = ({list, loading, currentPage}) => {
                         </tbody>
                     </Table>
                     <ModalConfirm type='delete' component='Reporte' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)}/> 
+                    <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>            
+            <Modal.Body>
+                <Row>    
+                    <Col>                 
+                        <Card>
+                            <Card.Header> 
+                                <Row>
+                                    <Col>
+                                        <Card.Title as="h5">Reporte</Card.Title>
+                                        <span className="d-block m-t-5">Detalle del reporte</span>
+                                    </Col>
+                                    <Col sm={12} lg={4}>                       
+                                            <Link to={{pathname:'/reports/edit', state: report}} >
+                                                <CrudButton type='edit'/>
+                                            </Link>
+                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                    </Col>
+                                </Row>         
+                            </Card.Header>
+                            <Card.Body>
+                                <Table responsive >
+                                    <tr>
+                                        <td>Problema</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.problem} />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Derivacion del problema</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.derived_problem } />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Verificación</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.verification} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Recomendación</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.recommendations } />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Idioma</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={language[report.lang] } />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mas información</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.more_information } />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>taxonomia</td>
+                                        <td>
+                                            <CallBackendByName url={report.taxonomy} callback={callbackTaxonomy} useBadge={false}/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Creación</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.created ? report.created.slice(0,10)+" "+report.created.slice(11,19) : ""} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Actualización</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={report.modified ? report.modified.slice(0,10)+" "+report.modified.slice(11,19): ""} />
+                                        </td>
+                                    </tr>
+                                    
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                    </Col> 
+                </Row>
+            </Modal.Body>            
+        </Modal>
                 </ul>
            
     </div>

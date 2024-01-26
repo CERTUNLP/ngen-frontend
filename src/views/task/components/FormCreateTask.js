@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Button, Col, Row, Form} from 'react-bootstrap';
-import { getPriorities } from '../../../api/services/priorities';
+import { getAllPriorities } from '../../../api/services/priorities';
 import { validateSpace, validateAlphanumeric } from '../../../utils/validators'; 
 import { validateTaskName, validateTaskDescription, validateUnrequiredInput } from '../../../utils/validators/tasks';
 
@@ -17,9 +17,9 @@ const FormCreateTask = (props) => {
 
     useEffect(()=> {
 
-        getPriorities()
+        getAllPriorities()
             .then((response) => {
-                setPriorityOption(Object.values(response.data.results))
+                setPriorityOption(response)
                 console.log(response.data.results)
             })
             .catch((error)=>{

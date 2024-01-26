@@ -54,7 +54,7 @@ const ListReport = () => {
     
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+      <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report"/>
       <Row>
         <Navigation actualPosition="Reporte"/>
       </Row>
