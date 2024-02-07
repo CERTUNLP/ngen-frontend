@@ -3,14 +3,14 @@ import { Button, Card, CloseButton, Col, Form, Modal, Row, Table } from 'react-b
 import { useLocation } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import ViewFiles from '../../components/Button/ViewFiles';
-import SmallEventTable from './components/SmallEventTable'; 
+import SmallEventTable from './components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
-import { getEvent} from "../../api/services/events";
+import { getEvent } from "../../api/services/events";
 
 
 
-const ReadCase = () => { 
+const ReadCase = () => {
     const location = useLocation();
     const [caseItem, setCaseItem] = useState(location?.state?.item || null);
 
@@ -25,122 +25,123 @@ const ReadCase = () => {
     const [priority, setPriority] = useState('');
     const [tlp, setTlp] = useState('');
     const [state, setState] = useState('');
-    
+
     const [modalShowEvent, setModalShowEvent] = useState(false);
 
     const [list, setList] = useState([]);
-   
+
     useEffect(() => {
-        
+
         if (caseItem !== null) {
             const listEvents = []
             console.log(caseItem)
             const eventPromises = caseItem.events.map(url => getEvent(url));
 
             Promise.all(eventPromises)
-            .then(responses => {
-                // Todas las llamadas se han completado exitosamente
-                const eventsData = responses.map(response => response.data);
-                setList(eventsData);
-            })
-            .catch(error => {
-                // Maneja cualquier error que ocurra durante las llamadas
-                console.error("Error al obtener eventos:", error);
-            });
-            
-            
+                .then(responses => {
+                    // Todas las llamadas se han completado exitosamente
+                    const eventsData = responses.map(response => response.data);
+                    setList(eventsData);
+                })
+                .catch(error => {
+                    // Maneja cualquier error que ocurra durante las llamadas
+                    console.error("Error al obtener eventos:", error);
+                });
+
+
         }
-        
-        
+
+
         if (!caseItem) {
             const caseUrl = localStorage.getItem('case');
             console.log("STORAGE")
             getCase(caseUrl)
-            .then((response) => {
-                setCaseItem(response.data)
-            }).catch(error => console.log(error));
-          
-          }
+                .then((response) => {
+                    setCaseItem(response.data)
+                }).catch(error => console.log(error));
+
+        }
 
         const getEvidenceFile = (url) => {
             return apiInstance.get(url)
-        .then(response => {        
-            return response.data.file;
-        }).catch(error =>{
-            let statusText = error.response.statusText;
-            console.log(error)
-        })
+                .then(response => {
+                    return response.data.file;
+                }).catch(error => {
+                    console.log(error)
+                })
         }
 
         const getName = (url, set) => {
             return apiInstance.get(url)
-            .then(response => {
-                set(response.data.name);
-            }).catch(error =>{
-                let statusText = error.response.statusText;
-                console.log(error)
-            })
+                .then(response => {
+                    set(response.data.name);
+                }).catch(error => {
+                    console.log(error)
+                })
         }
         const getAssignedUser = (url) => {
             return apiInstance.get(url)
-            .then(response => {
-                setAssigned(response.data.username);
-            }).catch(error =>{
-                let statusText = error.response.statusText;
-                console.log(error)
-            })
+                .then(response => {
+                    setAssigned(response.data.username);
+                }).catch(error => {
+                    console.log(error)
+                })
         }
         const formatDate = (dateTime, set) => { //2023-09-11T17:14:20.292538Z
             let date = dateTime.split('T')
-            set(date[0]+ ' ' + date[1].slice(0,8));
+            set(date[0] + ' ' + date[1].slice(0, 8));
         }
 
-        if(caseItem){
-            if (caseItem.evidence.length > 0){// aca esta el error en los read
+        if (caseItem) {
+            if (caseItem.evidence.length > 0) {// aca esta el error en los read
                 getEvidenceFile(caseItem.evidence).then(r => console.log(r))
             }
             getName(caseItem.priority, setPriority);
             getName(caseItem.tlp, setTlp);
-            getAssignedUser(caseItem.user_creator);
+            if (caseItem.user_creator) {
+                getAssignedUser(caseItem.user_creator);
+            } else {
+                setAssigned('No asignado')
+            }
             getName(caseItem.state, setState);
-            
-            let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length-2]
+
+            let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length - 2]
             setId(idItem)
 
             let datetime = caseItem.created.split('T');
-            setCreated(datetime[0] + ' ' + datetime[1].slice(0,8))
+            setCreated(datetime[0] + ' ' + datetime[1].slice(0, 8))
             datetime = caseItem.modified.split('T');
-            setModified(datetime[0] + ' ' + datetime[1].slice(0,8))
+            setModified(datetime[0] + ' ' + datetime[1].slice(0, 8))
 
-            if(caseItem.date){
+            if (caseItem.date) {
                 formatDate(caseItem.date, setDate)
             }
-            if(caseItem.attend_date){
+            if (caseItem.attend_date) {
                 formatDate(caseItem.attend_date, setAttend_Date)
             }
-            if(caseItem.solve_date){
+            if (caseItem.solve_date) {
                 formatDate(caseItem.solve_date, setSolve_Date)
             }
         }
     }, [caseItem]);
 
-    
+
 
     return (
         caseItem &&
         <React.Fragment>
             <Row>
-                <Navigation actualPosition="Detalle" path="/cases" index ="Casos"/>
+                <Navigation actualPosition="Detalle" path="/cases" index="Casos" />
             </Row>
             <Row>
                 <Col sm={12}>
 
-                <Card>
+                    <Card>
                         <Card.Header>
                             <Card.Title as="h5">Principal</Card.Title>
                         </Card.Header>
-                        <Card.Body> 
-                             <Table responsive >
+                        <Card.Body>
+                            <Table responsive >
                                 <tbody>
                                     <tr>
                                         <td>Id del sistema</td>
@@ -179,35 +180,35 @@ const ReadCase = () => {
                         <Card.Header>
                             <Card.Title as="h5">Fechas</Card.Title>
                         </Card.Header>
-                        <Card.Body> 
+                        <Card.Body>
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>date?</td>
+                                        <td>Fecha</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={date} />
                                         </td>
                                         <td>Atencion</td>
-                                        {caseItem.attend_date ? 
-                                        <td>
-                                            <Form.Control plaintext readOnly defaultValue={attend_date} />
-                                        </td>
-                                        :
-                                        <td>
-                                            <Form.Control plaintext readOnly defaultValue='No atendido' />
-                                        </td> 
-                                    }
-                                        
+                                        {caseItem.attend_date ?
+                                            <td>
+                                                <Form.Control plaintext readOnly defaultValue={attend_date} />
+                                            </td>
+                                            :
+                                            <td>
+                                                <Form.Control plaintext readOnly defaultValue='No atendido' />
+                                            </td>
+                                        }
+
                                         <td>Resolucion</td>
-                                        {caseItem.solve_date ? 
-                                        <td>
-                                            <Form.Control plaintext readOnly defaultValue={solve_date} />
-                                        </td>
-                                        :
-                                        <td>
-                                            <Form.Control plaintext readOnly defaultValue='No resuelto' />
-                                        </td> 
-                                    }
+                                        {caseItem.solve_date ?
+                                            <td>
+                                                <Form.Control plaintext readOnly defaultValue={solve_date} />
+                                            </td>
+                                            :
+                                            <td>
+                                                <Form.Control plaintext readOnly defaultValue='No resuelto' />
+                                            </td>
+                                        }
                                     </tr>
                                     <tr>
                                         <td>Creacion</td>
@@ -226,65 +227,65 @@ const ReadCase = () => {
                         </Card.Body>
                     </Card>
 
-                    {caseItem.evidence.length > 0 
-                        
-                    ?
-                    <Card>
-                        <Card.Header>    
-                            <Card.Title as="h5">Evidencias</Card.Title>              
-                        </Card.Header>
-                        <Card.Body>
-                            {caseItem.evidence.map((url, index) => {
-                                console.log(url)
-                                return  (<ViewFiles url={url} index={index+1}  />)
-                            })}
-                        </Card.Body>
-                    </Card>
-                    : <></>}
-                    <SmallEventTable list={list}/>
+                    {caseItem.evidence.length > 0
+
+                        ?
                         <Card>
                             <Card.Header>
-                                <Card.Title as="h5">Informacion Adicional</Card.Title>
+                                <Card.Title as="h5">Evidencias</Card.Title>
                             </Card.Header>
-                            <Card.Body> 
-                                <Row>
-                                    <Col sm={6} lg={3}>
-                                        Comentarios
-                                    </Col>
-                                    <Col>
-                                        <Form.Control plaintext readOnly defaultValue={caseItem.comments} />
-                                    </Col>
-                                </Row>
+                            <Card.Body>
+                                {caseItem.evidence.map((url, index) => {
+                                    console.log(url)
+                                    return (<ViewFiles url={url} index={index + 1} />)
+                                })}
                             </Card.Body>
                         </Card>
-                        {caseItem.children.length > 0 ?                        
-                            <Card>
+                        : <></>}
+                    <SmallEventTable list={list} />
+                    <Card>
+                        <Card.Header>
+                            <Card.Title as="h5">Informacion Adicional</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col sm={6} lg={3}>
+                                    Comentarios
+                                </Col>
+                                <Col>
+                                    <Form.Control plaintext readOnly defaultValue={caseItem.comments} />
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                    {caseItem.children.length > 0 ?
+                        <Card>
                             <Card.Header>
                                 <Card.Title as="h5">Children</Card.Title>
                             </Card.Header>
-                            <Card.Body> 
+                            <Card.Body>
                                 <Row>
                                     <Col sm={6} lg={3}>Children</Col>
                                     <Col>
-                                        <Form.Control plaintext readOnly defaultValue={caseItem.children}/>
+                                        <Form.Control plaintext readOnly defaultValue={caseItem.children} />
                                     </Col>
                                 </Row>
                             </Card.Body>
                         </Card>
-                    :<></>}
+                        : <></>}
 
 
 
                     <Button variant="primary" href="/cases">Volver</Button>
                 </Col>
             </Row>
-            
-            <Modal size='lg' show={modalShowEvent} onHide={() => setModalShowEvent(false)} aria-labelledby="contained-modal-title-vcenter" centered>            
+
+            <Modal size='lg' show={modalShowEvent} onHide={() => setModalShowEvent(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
-                    <Row>    
+                    <Row>
                         <Col>
                             <Card>
-                                <Card.Header> 
+                                <Card.Header>
                                     <Row>
                                         <Col>
                                             <Card.Title as="h5">Evento</Card.Title>
@@ -293,13 +294,13 @@ const ReadCase = () => {
                                         <Col sm={12} lg={4}>
                                             <CloseButton aria-label='Cerrar' onClick={() => setModalShowEvent(false)} />
                                         </Col>
-                                    </Row>         
+                                    </Row>
                                 </Card.Header>
                                 <Card.Body>Informacion del evento</Card.Body>
                             </Card>
-                        </Col> 
+                        </Col>
                     </Row>
-                </Modal.Body>            
+                </Modal.Body>
             </Modal>
         </React.Fragment>
     );
