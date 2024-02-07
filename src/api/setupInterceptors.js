@@ -34,9 +34,9 @@ const setup = (store) => {
     apiInstance.interceptors.response.use(response => {
         return response;
     }, error => {
-        if (!error.response) {
-            setAlert("Falló la conexión al servidor", "error");
+        if (error.response === undefined) {
             console.log("Falló la conexión al servidor");
+            return Promise.reject(error);
         }
 
         const originalRequest = error.config;
