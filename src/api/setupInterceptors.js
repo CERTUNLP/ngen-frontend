@@ -24,7 +24,7 @@ const setup = (store) => {
         if (request.url.includes("refresh")) {
             delete apiInstance.defaults.headers.common["Authorization"];
         } else if (token) {
-            // request.headers.Authorization = `Bearer ${token}`;
+            request.headers.Authorization = `Bearer ${token}`;
             apiInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
 
