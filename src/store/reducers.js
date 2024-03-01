@@ -11,7 +11,7 @@ const reducers = combineReducers({
         {
             key: 'account',
             storage,
-            keyPrefix: 'datta-'
+            keyPrefix: 'ngen-'
         },
         accountReducer
     ),
@@ -19,7 +19,7 @@ const reducers = combineReducers({
         {
             key: 'message',
             storage,
-            keyPrefix: 'datta-'
+            keyPrefix: 'ngen-'
         },
         messageReducer
     ),
