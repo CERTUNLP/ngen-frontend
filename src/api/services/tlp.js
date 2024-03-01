@@ -2,9 +2,20 @@ import  apiInstance  from "../api";
 import { COMPONENT_URL } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
-const getTLP = () => {
+const getMinifiedTlp = () => {
     let messageError = `No se pudo recuperar la informacion de TLP`;
-    return apiInstance.get(COMPONENT_URL.tlp)
+    return apiInstance.get(COMPONENT_URL.tlpMinifiedList)
+    .then(response => {      
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error");
+        return Promise.reject(error);
+    });
+}
+
+const getTLP = (filters,order) => {//hay que agregar pagiandor en tlp
+    let messageError = `No se pudo recuperar la informacion de TLP`;
+    return apiInstance.get(COMPONENT_URL.tlp+ '?ordering=' + order +'&' + filters)
     .then(response => {   
         console.log(response)     
         return response;
@@ -13,8 +24,9 @@ const getTLP = () => {
         return Promise.reject(error);
     });
 }
+
 const getTLPSpecific = (url) => {
     return apiInstance.get(url);
 }
 
-export { getTLP, getTLPSpecific };
+export { getTLP, getTLPSpecific, getMinifiedTlp };

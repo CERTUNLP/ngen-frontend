@@ -13,7 +13,6 @@ const AdvancedPagination = ({ countItems, updatePage, updatePagination, setUpdat
   const [arrayPages, setArrayPages] = useState([]);
 
   useEffect(() => { 
-    console.log("entra al useeffect")
     // First time to set lastPage
     if (updatePagination && currentPage ===1) {// no se actualiza por lastpage
       setLastPage(Math.ceil(countItems / 10));
@@ -27,9 +26,9 @@ const AdvancedPagination = ({ countItems, updatePage, updatePagination, setUpdat
 
       let list = []
       let index
-      console.log(lastPage)
       if(lastPage >= 4){
         index = lastPage-currentPage >= 4 ? currentPage : lastPage-3 ;
+        console.log(index)
       }else{
         index = initPage
       }

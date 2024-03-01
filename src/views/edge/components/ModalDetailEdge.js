@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Form, Table, Modal, CloseButton } from 'react-bootstrap';
-import CrudButton from '../../../components/Button/CrudButton';
-import PriorityButton from '../../../components/Button/PriorityButton';
 
 const ModalDetailEdge = (props) => {
     const [created, setCreated] = useState('');
@@ -42,11 +40,9 @@ const ModalDetailEdge = (props) => {
                                         <Col>
                                             <Card.Title as="h5">Tarea</Card.Title>
                                             <span className="d-block m-t-5">Detalle de la tarea</span>
+                                            
                                         </Col>
-                                        <Col sm={12} lg={2}>                       
-                                            {/*<Link to={{pathname:'/task/edit', state: props.task}} >
-                                            </Link>*/}
-                                                <CrudButton type='edit'/>
+                                        <Col sm={12} lg={2}>             
                                             <CloseButton aria-label='Cerrar' onClick={props.onHide} />
                                         </Col>
                                     </Row>

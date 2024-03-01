@@ -77,8 +77,6 @@ const TableReport = ({list, loading, currentPage}) => {
                     <Table responsive hover className="text-center">
                         <thead>
                             <tr>
-                                <th>#</th>
-                               
                                 <th>Taxonomia</th>
                                 <th>Opciones</th>
                             </tr>
@@ -87,7 +85,6 @@ const TableReport = ({list, loading, currentPage}) => {
                             {list.map((report, index) => {
                             return (
                                         <tr>
-                                            <th >{ 1+index+10*(currentPage-1) }</th>
                                            
                                             <td><CallBackendByName url={report.taxonomy} callback={callbackTaxonomy} useBadge={false}/></td>
                                             <td>

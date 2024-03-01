@@ -80,6 +80,8 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
     const resetShowAlert = () => {
         setShowAlert(false);
     }
+
+    const letterSize= { fontSize: '1.1em' }
   return (
     <div>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>  
@@ -88,9 +90,8 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <Ordering field="username" label="Nombre de usuario" order={order} setOrder={setOrder} setLoading={setLoading} />
-                            <Ordering field="email" label="Email" order={order} setOrder={setOrder} setLoading={setLoading} />
+                            <Ordering field="username" label="Nombre de usuario" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <Ordering field="email" label="Email" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th>Nombre</th>
                             <th>Estado</th>
                             <th>Ultimo login</th>
@@ -103,7 +104,6 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
                            let itemNumber = parts[parts.length - 2];
                         return (
                                     <tr>
-                                        <th >{ 1+index+10*(currentPage-1) }</th>
                                         <td>{user.username}</td>
                                         <td>{user.email}</td>
                                         <td>{user.first_name}</td>

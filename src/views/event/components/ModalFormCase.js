@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {Button, Card, Col, Form, Row} from 'react-bootstrap';
-import { getAllPriorities } from '../../../api/services/priorities';
-import { getTLP } from '../../../api/services/tlp';
-import { getAllUsers } from '../../../api/services/users';
-import ViewFiles from '../../../components/Button/ViewFiles';
-import FileUpload  from '../../../components/UploadFiles/FileUpload/FileUpload'
-import FileList from '../../../components/UploadFiles/FileList/FileList'
+import {Card, Col, Form, Row} from 'react-bootstrap';
+
 import Alert from '../../../components/Alert/Alert';
-import { getAllStates } from '../../../api/services/states';
+
+import { getAllStates, getMinifiedState } from '../../../api/services/states';
+import { getAllPriorities, getMinifiedPriority } from '../../../api/services/priorities';
+import { getTLP, getMinifiedTlp } from '../../../api/services/tlp';
+import { getAllUsers, getMinifiedUser } from '../../../api/services/users';
 
 
 const ModalFormCase = (props) => {
-    
-    
-
     //select
     const [allPriorities, setAllPriorities ] = useState([])
     const [allTlp, setAllTlp] = useState([])
@@ -27,9 +23,8 @@ const ModalFormCase = (props) => {
 
     useEffect(()=> {
 
-        getAllStates()
+        getMinifiedState()
         .then((response) => {
-            console.log(response);
             let listStates = []
             response.map((stateItem)=>{
                 listStates.push({value:stateItem.url, label:stateItem.name, childrenUrl:stateItem.children})
@@ -42,7 +37,7 @@ const ModalFormCase = (props) => {
             console.log(error)
         })
       
-        getAllPriorities()
+        getMinifiedPriority()
         .then((response) => {
             setAllPriorities (Object.values(response))
             console.log(response)
@@ -51,19 +46,17 @@ const ModalFormCase = (props) => {
             console.log(error)
         })
 
-        getTLP()
+        getMinifiedTlp()
         .then((response) => {
-            setAllTlp(response.data.results)
-            console.log(response.data.results)
+            setAllTlp(response)
         })
         .catch((error)=>{
             console.log(error)
         })
 
-        getAllUsers()
+        getMinifiedUser()
         .then((response) => {
             setAllUsers(response)
-            console.log(response)
         })
         .catch((error)=>{
             console.log(error)
@@ -97,25 +90,6 @@ const ModalFormCase = (props) => {
         }
     ]
 
-
-    /***************************************/
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        console.log('1-------------------------')
-      }
-    const handleDrop = (event) => {
-        console.log('2-------------------------')
-        event.preventDefault();
-        const filesToUpload = event.dataTransfer.files
-        props.setEvidences([...props.evidences, ...filesToUpload]);
-        console.log('3-------------------------')
-    };
-    const removeFile = (position) => {
-        if (props.evidences.length>0){
-            props.setEvidences(props.evidences.filter((file, index) => index !== position));
-        }
-      }
-/********************************************** */
   return (
     <React.Fragment>  
     <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>

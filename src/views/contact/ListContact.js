@@ -25,6 +25,10 @@ const ListContact = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
+    const [wordToSearch, setWordToSearch]= useState('')
+
+    const [order, setOrder] = useState("");
+
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }
@@ -33,7 +37,7 @@ const ListContact = () => {
 
         setCurrentPage(currentPage)//?
 
-        getContacts(currentPage)
+        getContacts(currentPage, wordToSearch, order)
             .then((response) => {
                 setContacts(response.data.results);
                 //Pagination
@@ -50,7 +54,7 @@ const ListContact = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-        }, [currentPage, isModify])
+        }, [currentPage, isModify, wordToSearch])
 
     // ------- SEARCH --------
     const action = () => {
@@ -79,7 +83,7 @@ const ListContact = () => {
                     <Card.Header>
                         <Row>
                             <Col>
-                                <Search type="contacto" action={action} search={search} setSearch={setSearch}/> 
+                                <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                             </Col>
                             <Col sm={3} lg={3}>
                                 <Link to={{pathname:'/contacts/create'}} >

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Card, Collapse } from 'react-bootstrap';
 import CrudButton from '../../components/Button/CrudButton';
 import { getNetworks } from '../../api/services/networks';
-import { getAllContacts, getAllEntities } from '../../api/services/entities';
+import {  getAllEntities, getMinifiedEntity } from '../../api/services/entities';
 import TableNetwork from './components/TableNetwork';
 import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
@@ -37,6 +37,8 @@ const ListNetwork = () => {
     const [entitiesFilter, setEntitiesFilter] = useState("")
     const [order, setOrder] = useState("");
 
+    const [entityNames, setEntityNames] = useState({});
+
 
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
@@ -44,13 +46,16 @@ const ListNetwork = () => {
 
     useEffect( ()=> {
 
-        getAllEntities()
+        getMinifiedEntity()
             .then((response) => {
                 let listEntities = []
+                let dicEntities={}
                 response.map((entitiesItem)=>{
                     listEntities.push({value:entitiesItem.url, label:entitiesItem.name })
+                    dicEntities[entitiesItem.url]=entitiesItem.name
                 })
                 setEntities(listEntities)
+                setEntityNames(dicEntities)
             })
             .catch((error)=>{
                 
@@ -68,7 +73,7 @@ const ListNetwork = () => {
 
             })
             .catch((error) => {
-                // Show alert
+                console.log(error)
             })
             .finally(() => {
                 setShowAlert(true)
@@ -126,7 +131,8 @@ const ListNetwork = () => {
                         </Collapse> 
                     </Card.Header>
                     <Card.Body>
-                        <TableNetwork setIsModify={setIsModify} list={network} loading={loading} currentPage={currentPage} order={order} setOrder={setOrder} setLoading={setLoading}/>
+                        <TableNetwork setIsModify={setIsModify} list={network} loading={loading} currentPage={currentPage} order={order} setOrder={setOrder} setLoading={setLoading}
+                        entityNames={entityNames}/>
                     </Card.Body>
                     <Card.Footer>
                         <Row className="justify-content-md-center">

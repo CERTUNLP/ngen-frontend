@@ -41,6 +41,8 @@ const ListTLP = () => {
         setShowAlert(false);
     }   
 
+    const letterSize= { fontSize: '1.1em' }
+
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
@@ -64,8 +66,7 @@ const ListTLP = () => {
                             <Table responsive hover className="text-center">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <Ordering field="code" label="Codigo" order={order} setOrder={setOrder} setLoading={setLoading}/>
+                                        <Ordering field="code" label="Codigo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                                         <th>Descripcion</th>
                                         <th>¿Cuando utilizarlo?</th>
                                         <th>¿Como compartirlo?</th>      
@@ -79,7 +80,6 @@ const ListTLP = () => {
 
                                     return(
                                         <tr key={itemNumber}>
-                                            <th scope="row">{itemNumber}</th>
                                             <td><p className="p-3 mb-2 bg-dark rounded" style={{color: item.color}}><b>{item.information}</b></p></td>
                                             <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.description} /></td>
                                             <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.when} /></td>

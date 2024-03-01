@@ -21,9 +21,6 @@ const ListReport = () => {
 
     const [showAlert, setShowAlert] = useState(false)
 
-    const resetShowAlert = () => {
-        setShowAlert(false);
-      }
 
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);

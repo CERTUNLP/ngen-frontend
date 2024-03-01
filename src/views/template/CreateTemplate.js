@@ -15,7 +15,7 @@ const CreateTemplate = () => {
     cidr: "",
     domain: "",
     address_value: "",
-    active: false,
+    active: true,
     priority: "-1",
     event_taxonomy: "-1",
     event_feed: "-1",

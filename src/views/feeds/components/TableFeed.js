@@ -77,6 +77,7 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
     const resetShowAlert = () => {
         setShowAlert(false);
     }
+    const letterSize= { fontSize: '1.1em' }
 
   return (
     <div>
@@ -85,8 +86,7 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
             <Table responsive hover className="text-center">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} />
+                        <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                         <th>Activo</th>
                         <th>Casos Asociados</th>                                                                                  
                         <th>Acciones</th>
@@ -98,7 +98,6 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
                         let itemNumber = parts[parts.length - 2];
                         return (
                         <tr key={index}>
-                            <th scope="row">{1+index+10*(currentPage-1)}</th>
                             <td>{feed.name}</td>
                             <td>
                                 

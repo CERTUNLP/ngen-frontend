@@ -10,7 +10,7 @@ import { getEntity } from '../../../api/services/entities';
 import FormGetName from '../../../components/Form/FormGetName';
 import Ordering from '../../../components/Ordering/Ordering'
 
-const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading , currentPage}) => {
+const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading , currentPage, entityNames}) => {
     const [network, setNetwork] = useState('')
 
     const [modalDelete, setModalDelete] = useState(false)
@@ -86,17 +86,17 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                 setModalDelete(false)
             })
     };
+    const letterSize= { fontSize: '1.1em' }
 
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Direción de valor </th>
                             <th>Dominio</th>
                             <th>Cidr</th>
-                            <Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} />
+                            {<Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>}
                             <th>Activo</th>
                             <th>Entidad</th>
                             <th>Accion</th>
@@ -107,7 +107,6 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                         {
                             return (
                                 <tr key={network.url}>
-                                    <th scope="row">{ 1+index+10*(currentPage-1)  }</th>
                                     <td>{network.address_value}</td>
                                     <td>{network.domain}</td>
                                     <td>{network.cidr}</td>
@@ -117,7 +116,7 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                                     </td>
                                     <td>
                                         {network.network_entity  ?
-                                            <FormGetName form={false} get={getEntity} url={network.network_entity} key={index} />:
+                                            entityNames[network.network_entity]:
                                             "-"
                                         }
                                     </td>

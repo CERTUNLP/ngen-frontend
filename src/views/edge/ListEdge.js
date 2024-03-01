@@ -6,9 +6,10 @@ import FormCreateEdge from './components/FormCreateEdge';
 import { getAllStates, getState } from "../../api/services/states";
 import { postEdge, getAllEdges } from "../../api/services/edges";
 import RowEdge from './components/RowEdge';
+import Alert from '../../components/Alert/Alert';
 
 
-const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
+const ListEdge = (props) => {
     
     const [states, setStates]=useState([])
     const [edges, setEdges]=useState([])
@@ -23,8 +24,12 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
     })
     const [selectChild, setSelectChild] = useState("");
 
+    const [showAlert, setShowAlert] = useState(false)
+
+
     //Create Edge
     const [modalCreate, setModalCreate] = useState(false)
+    
     
 
     const [edgeCreated, setEdgeCreated] = useState(null);
@@ -37,8 +42,8 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
 
 
      useEffect( ()=> {
-        if(state.url !== undefined ){
-            getState(state.url).then((response) => { 
+        if(props.url !== undefined ){
+            getState(props.url).then((response) => { 
                 //este metodo es para las posibles opciones a hora de cargar un edge en el formulario
                 setListChildren(findElementsWithSameUrl(response.data.children, states))
                 
@@ -47,11 +52,10 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
                   console.log(error)
               })
         }
-        if(state.url !== undefined ){
+        if(props.url !== undefined ){
             getAllEdges().then((response) => { 
                 //necito listar todos los edges que esten asociado a este estado padre
-
-                setEdges(findElementsTheEdges(state.url, response))
+                setEdges(findElementsTheEdges(props.url, response))
               })
               .catch((error) => {
                   setError(error)
@@ -116,10 +120,19 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
             return foundItems
         }
     }
+    const closeModal = () => { 
+        setEdge({
+            discr: "",
+            parent: null,
+            child: null
+        })
+        setSelectChild("")
+        setModalCreate(false)
+    }
 
     const createEdge = () => { 
 
-        postEdge(edge.discr, state.url, edge.child)
+        postEdge(edge.discr, props.url, edge.child)
             .then((response) => { 
                 setEdgeCreated(response)
                 setEdge({
@@ -132,9 +145,10 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
             })
             .catch((error) => {
                 console.log(error)
+                setShowAlert(true)
             })
             .finally(() =>{
-            setShowAlert(true)
+                props.setShowAlert(true)
         })
     };
 
@@ -145,13 +159,14 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
             <Col>
                 <Card>
                     <Card.Header>
+                        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="edge"/>
                         <Row>
                             <Col sm={12} lg={9}>
                                 <Card.Title as="h5">Transiciones</Card.Title>
                                 <span className="d-block m-t-5">Lista de transiciones</span>
                             </Col>
                             <Col sm={12} lg={3}>
-                                {sectionAddEdge ? 
+                                {props.sectionAddEdge ? 
                                 <CrudButton type='create' name='transición' onClick={() => setModalCreate(true)} />
                                 :
                                 <><Button variant="outline-primary" disabled>Agregar transición</Button></> 
@@ -160,7 +175,7 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
                         </Row>
                     </Card.Header>
 
-                    <Collapse in={sectionAddEdge}>
+                    <Collapse in={props.sectionAddEdge}>
                         <div id="basic-collapse">
                         <Card.Body >
                                 <Table responsive hover className="text-center">
@@ -176,7 +191,10 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
                                     <tbody>
                                         {edges ? edges.map((edge, index) => {
                                             return (
-                                                <RowEdge url={edge.url}  edges={edges} urlByStateName={urlByStateName} states={states} listChildren={children} id={index+1} edgeDeleted={edgeDeleted} setEdgeDeleted={setEdgeDeleted} edgeUpdated={edgeUpdated} setEdgeUpdated={setEdgeUpdated} setShowAlert={setShowAlert}/>)
+                                                <RowEdge url={edge.url}  edges={edges} urlByStateName={urlByStateName} states={states} 
+                                                listChildren={children} id={index+1} edgeDeleted={edgeDeleted} setEdgeDeleted={setEdgeDeleted} 
+                                                edgeUpdated={edgeUpdated} setEdgeUpdated={setEdgeUpdated} setShowAlert={setShowAlert} setEdges={setEdges}
+                                                edge={edge}/>)
                                             }) : <></>
                                         }
                                     </tbody>
@@ -195,19 +213,20 @@ const ListEdge = ({state, sectionAddEdge, setShowAlert}) => {
             </Col>
         </Row>
 
-        <Modal size='lg' show={modalCreate} onHide={() => setModalCreate(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal size='lg' show={modalCreate} onHide={() => closeModal()} aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Body>
                 <Row>    
                     <Col>                 
                         <Card>
                         <Card.Header> 
+                                <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="edge"/>
                                 <Row>
                                     <Col>
                                         <Card.Title as="h5">Transición</Card.Title>
                                         <span className="d-block m-t-5">Crear transición</span>
                                     </Col>
                                     <Col sm={12} lg={2}>                       
-                                        <CloseButton aria-label='Cerrar' onClick={() => setModalCreate(false)} />
+                                        <CloseButton aria-label='Cerrar' onClick={() => closeModal()} />
                                     </Col>
                                 </Row>
                             </Card.Header>

@@ -102,7 +102,7 @@ function ListUser() {
             <ButtonFilter open={open} setOpen={setOpen} />
           </Col>
               <Col sm={12} lg={8}>
-                <Search type="por nombre, usuario o email" action={action} />
+                <Search type="por nombre, usuario o email" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
               </Col>
               <Col sm={12} lg={3}>
               <Link to={{pathname:'/users/create'}} >

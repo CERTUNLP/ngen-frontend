@@ -60,4 +60,16 @@ export const COMPONENT_URL = {
     dashboardEvent: "dashboard/events",
     dashboardCases: "dashboard/cases",
     dashboardNetworkEntities: "dashboard/network_entities",
+    constance: "constance/",
+    profile: "profile/",
+    taxonomyMinifiedList:"minified/taxonomy/",
+    priorityMinifiedList: "minified/priority/",
+    tlpMinifiedList: "minified/tlp/",
+    feedMinifiedList:"minified/feed/",
+    stateMinifiedList: "minified/state/",
+    entityMinifiedList: "minified/Entity",
+    contactMinifiedList: "minified/Contact/",
+    userMinifiedList: "minified/User/",
+    group: "api/groups/"
+
 };

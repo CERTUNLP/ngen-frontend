@@ -99,7 +99,6 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Nombre</th>
                             <th>Activo</th>
                             <th>Redes Asociadas</th>
@@ -111,7 +110,6 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
 
                             return (
                                 <tr key={entity.url}>
-                                    <th scope="row">{1+index+10*(currentPage-1)}</th>
                                     <td>{entity.name}</td>
                                     <td>
                                         <ActiveButton active={entity.active} onClick={() => pressActive(entity.url, entity.active, entity.name)} />

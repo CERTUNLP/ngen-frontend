@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 
-const Ordering = ({field, label, order, setOrder, setLoading}) => {
+const Ordering = ({field, label, order, setOrder, setLoading, letterSize=""}) => {
 
     const getIconColor = (field) => (order === field || order === `-${field}`) ? 'red' : 'black';
 
@@ -12,7 +12,7 @@ const Ordering = ({field, label, order, setOrder, setLoading}) => {
     };
 
   return (
-        <th style={{ fontSize: '1.2em' }}>
+        <th style={letterSize}>
             {label}
             <span
                 className="material-icons"

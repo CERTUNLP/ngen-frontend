@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Button,Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
+    Button,Card, Table , Row,Col, Form
   } from 'react-bootstrap';
 import CallBackendByName from '../../components/CallBackendByName'; 
 import CallBackendByType from '../../components/CallBackendByType'; 
@@ -85,7 +85,7 @@ const ReadEvent = () => {
                             Fecha
                         </Col>
                         <Col sm={12} lg={4}>
-                            <Form.Control plaintext readOnly defaultValue={body.date !== undefined ? body.date.slice(0,10)+" "+body.date.slice(11,19): ""} />
+                            <Form.Control plaintext readOnly defaultValue={""} />
                         </Col>
                     </Row>
                     <p/>

@@ -16,7 +16,11 @@ const RowEdge = (props) => {
 
     useEffect(() => { //props.setShowAlert
 
+        let isMounted = true;
         showEdgeData(props.url)
+        return () => {
+      isMounted = false; // Marca el componente como desmontado cuando se desmonta
+    };
        
         
     }, [props.url, props.edgeDeleted, props.edgeUpdated]);
@@ -39,9 +43,11 @@ const RowEdge = (props) => {
     const removeEdge = (url, name,)=> {
         deleteEdge(url, name)
             .then((response) => {
-                console.log(response)
+                console.log("entra")
+               
+                const filteredData = props.edges.filter(item => item.url !== url);
+                props.setEdges(filteredData)
                 props.setEdgeDeleted(response)
-                
             })
             .catch((error) => {
                 console.log(error)
@@ -52,8 +58,6 @@ const RowEdge = (props) => {
                 props.setShowAlert(true)
             })
     };
-    
-
     
 
 return (
@@ -72,7 +76,7 @@ return (
             </tr>
 
             <ModalDetailEdge show={modalShow} edge={edge} laterStateName={props.urlByStateName[edge.child]} onHide={() => setModalShow(false)}/>
-            <ModalEditEdge show={modalEdit} edge={edge} urlByStateName={props.urlByStateName} childrens={props.listChildren} onHide={() => setModalEdit(false)} ifEdit={props.setEdgeUpdated} setShowAlert={props.setShowAlert} />
+            <ModalEditEdge show={modalEdit} edge={edge} nameState={props.urlByStateName[edge.child]} childrens={props.listChildren} onHide={() => setModalEdit(false)} ifEdit={props.setEdgeUpdated} setShowAlert={props.setShowAlert} />
             <ModalConfirm showModal={modalDelete} type='delete' component='Edge' name={edge.discr}  onHide={() => setModalDelete(false)} ifConfirm={() => removeEdge(edge.url, edge.discr)}/>
 
         </React.Fragment>
