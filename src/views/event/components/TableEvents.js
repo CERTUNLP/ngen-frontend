@@ -1,19 +1,15 @@
 import React,{ useState, useEffect} from 'react'
-import {
-  Button,Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
-} from 'react-bootstrap';
+import { Table , Modal, Row,Col, Form,  Spinner } from 'react-bootstrap';
 import {Link} from 'react-router-dom'
 import CrudButton from '../../../components/Button/CrudButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import CallBackendByName from '../../../components/CallBackendByName'; 
-import { getTaxonomy } from '../../../api/services/taxonomies';
 import { getTLPSpecific } from '../../../api/services/tlp';
-import { getFeed } from '../../../api/services/feeds';
 import { deleteEvent} from "../../../api/services/events";
 import Ordering from '../../../components/Ordering/Ordering'
 
 
-const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, currentPage}) => {
+const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames}) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
@@ -39,26 +35,10 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
     }
 
     
-    const callbackTaxonomy = (url ,setPriority) => {
-        getTaxonomy(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
-    }
     const callbackTlp = (url ,setPriority) => {
         getTLPSpecific(url)
         .then((response) => {
           
-            setPriority(response.data)
-        })
-        .catch();
-    }
-    const callbackFeed = (url ,setPriority) => {
-        getFeed(url)
-        .then((response) => {
-         
             setPriority(response.data)
         })
         .catch();
@@ -97,7 +77,8 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
       };
     
       ////////////////////////////////////////////////////
-    
+
+      const letterSize= { fontSize: '1.1em' }
   return (
     <div>
         
@@ -111,28 +92,27 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                         onChange={handleSelectAll} checked={selectedEvent.length != 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
                                 </Form.Group>
                             </th>
-                            <th>#</th>
-                            <Ordering field="date" label="Fecha" order={order} setOrder={setOrder} setLoading={setLoading} />
-                            <th>Identificador </th>
-                            <th>Dominio</th>
-                            <th>Cidr</th>
-                            <th>TLP</th>
-                            <th>Taxonomia</th>
-                            <th>Fuente de Informacion</th>
-                            <th>Opciones</th>
+                        
+                            <Ordering field="date" label="Fecha" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}>Identificador </th>
+                            <th style={letterSize}>Dominio</th>
+                            <th style={letterSize}>Cidr</th>
+                            <th style={letterSize}>TLP</th>
+                            <th style={letterSize}>Taxonomia</th>
+                            <th style={letterSize}>Fuente de Informacion</th>
+                            <th style={letterSize}>Opciones</th>
                         </tr>
                    </thead>
                     <tbody>
                     {list.map((event, index) => {
                         return (
-                            <tr>
+                            <tr key={index}>
                                 <th ><Form.Group>
                                             <Form.Check disabled={event.solve_date != null ? true : false} 
                                                 type="checkbox" id={event.url} 
                                                 onChange={handleClick} checked={selectedEvent.includes(event.url)} />
                                         </Form.Group>
                                 </th>
-                                <td>{1+index+10*(currentPage-1)}</td>
 
                                 <td>{event.date ? event.date.slice(0,10)+" "+event.date.slice(11,19): ""}</td>
                                 <td>{event.address_value}</td>
@@ -141,9 +121,9 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                 
                                 <td><CallBackendByName url={event.tlp} callback={callbackTlp } useBadge={true}/></td>
                                 
-                                <td><CallBackendByName url={event.taxonomy} callback={callbackTaxonomy} useBadge={false}/></td>
+                                <td>{taxonomyNames[event.taxonomy]}</td>
                                 
-                                <td><CallBackendByName url={event.feed} callback={callbackFeed} useBadge={false}/></td>
+                                <td>{feedNames[event.feed]}</td>
                                 
                                 <td>
                                 <Link to={{pathname:"/events/view", state: event}} >

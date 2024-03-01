@@ -156,6 +156,15 @@ const menuItems = {
                             classes: '',
                             icon: '',
                             breadcrumbs: false,
+                        },
+                        {
+                            id: 'Configuración',
+                            title: 'Configuración',
+                            type: 'item',
+                            url: '/setting',
+                            classes: '',
+                            icon: '',
+                            breadcrumbs: false,
                         }
                     ]
                 }

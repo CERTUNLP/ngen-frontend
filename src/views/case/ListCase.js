@@ -3,9 +3,9 @@ import { Badge, Button, Card, Col, Row , Collapse} from 'react-bootstrap';
 import CrudButton from '../../components/Button/CrudButton'; 
 import TableCase from './components/TableCase'; 
 import { getCases, mergeCase } from '../../api/services/cases';
-import { getAllPriorities} from "../../api/services/priorities";
-import { getTLP } from '../../api/services/tlp';
-import { getAllStates } from '../../api/services/states'
+import { getMinifiedPriority } from "../../api/services/priorities";
+import {getTLP, getMinifiedTlp } from '../../api/services/tlp';
+import { getMinifiedState } from '../../api/services/states'
 import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
@@ -45,31 +45,42 @@ const ListCase = () => {
 
     const [states, setStates] = useState([]);
     const [stateFilter, setStateFilter] = useState("");
+
+    //url by name
+    const [priorityNames, setPriorityNames] = useState({});
+    const [tlpNames, setTlpNames] = useState({});
+    const [stateNames, setStateNames] = useState({});
      
+
+    const [refresh,setRefresh]= useState(true)
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }  
     //ORDER
     useEffect( ()=> {
-        getAllStates()
+        getMinifiedState()
         .then((response) => {
             let stateOp = []
-            response.map((item) => {
-                stateOp.push({value: item.url, label: item.name})
+            let dicState={}
+            response.map((state) => {
+                stateOp.push({value: state.url, label: state.name})
+                dicState[state.url]= state.name
             })
-            console.log(stateOp)
+            setStateNames(dicState)
             setStates(stateOp)
         })
         .catch((error)=>{
             console.log(error)
         })
-        getAllPriorities()
+        getMinifiedPriority()
         .then((response) => {
             let priorityOp = []
-            response.map((item) => {
-                priorityOp.push({value: item.url, label: item.name})
+            let dicPriority={}
+            response.map((priority) => {
+                priorityOp.push({value: priority.url, label: priority.name})
+                dicPriority[priority.url]= priority.name
             })
-            console.log(priorityOp)
+            setPriorityNames(dicPriority)
             setPriorities(priorityOp)
             
         })
@@ -79,11 +90,14 @@ const ListCase = () => {
 
         getTLP()
             .then((response) => {
-                let tlp = []
-                response.data.results.map((item) => {
-                    tlp.push({value: item.url, label: item.name})
+                let list = []
+                let dicTlp = {}
+                response.data.results.map((tlp) => {
+                    list.push({value: tlp.url, label: tlp.name})
+                    dicTlp[tlp.url]=tlp.name
                 })
-                setTlps(tlp)
+                setTlpNames(dicTlp) 
+                setTlps(list)
             })
             .catch((error)=>{
                 console.log(error)
@@ -92,6 +106,7 @@ const ListCase = () => {
         getCases(currentPage,priorityFilter+tlpFilter+stateFilter+wordToSearch, order) 
             .then((response) => {
                 setCases(response.data.results)
+                console.log(response.data.results)
                 setCountItems(response.data.count);
                 // Pagination
                 if(currentPage === 1){
@@ -108,7 +123,7 @@ const ListCase = () => {
                 setLoading(false)
             })
         
-    }, [currentPage, ifModify, order, wordToSearch, priorityFilter, tlpFilter, stateFilter])
+    }, [currentPage, ifModify, order, wordToSearch, priorityFilter, tlpFilter, stateFilter, refresh])
 
 
     //-----------------MERGE------------------------
@@ -129,6 +144,11 @@ const ListCase = () => {
                 })
         });
     }
+
+    const reloadPage = () => {
+        setRefresh(!refresh)
+      }
+    
 
     return (
     <React.Fragment>
@@ -166,6 +186,16 @@ const ListCase = () => {
                                         {selectedCases.length} 
                                     </Badge>
                                 </Button>  
+                                <Button 
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => reloadPage()}
+                                    >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                                    </svg>
+                                </Button>
                             </Col>
                         </Row>                        
                         <Row>
@@ -191,8 +221,9 @@ const ListCase = () => {
                         </Collapse> 
                     </Card.Header>
                     <Card.Body>
-                        <TableCase list={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} 
-                                order={order}  setOrder={setOrder} setIfModify={setIfModify} setLoading={setLoading} currentPage={currentPage}/>
+                        <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} 
+                                order={order}  setOrder={setOrder} setIfModify={setIfModify} setLoading={setLoading} currentPage={currentPage}
+                                priorityNames={priorityNames}  stateNames={stateNames}/>
                     </Card.Body>
                     <Card.Footer >
                         <Row className="justify-content-md-center">

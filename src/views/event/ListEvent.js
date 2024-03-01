@@ -4,12 +4,11 @@ import { Card,Row,Col, Button, Badge, Collapse, Form, Modal } from 'react-bootst
 import Navigation from '../../components/Navigation/Navigation'
 import Search from '../../components/Search/Search'
 import CrudButton from '../../components/Button/CrudButton';
-import { getEvents, mergeEvent} from "../../api/services/events";
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllTaxonomies } from '../../api/services/taxonomies';
-import { getTLP} from "../../api/services/tlp";
 import TableEvents from './components/TableEvents';
+//filters
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
+import FilterSelect from '../../components/Filter/FilterSelect';
+
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import ModalConfirm from '../../components/Modal/ModalConfirm';
 import Alert from '../../components/Alert/Alert';
@@ -17,15 +16,31 @@ import ButtonFilter from '../../components/Button/ButtonFilter';
 import Select from 'react-select';
 import { getAllCases, patchCase, postCase } from "../../api/services/cases";
 import ModalFormCase from './components/ModalFormCase';
-import { getStates } from '../../api/services/states';
+
+//filters
+import { getEvents, mergeEvent} from "../../api/services/events";
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedTaxonomy } from '../../api/services/taxonomies';
+import { getMinifiedTlp } from "../../api/services/tlp";
+
 
 const ListEvent = () => {
   const [events, setEvents] = useState([])
   
   const [loading, setLoading] = useState(true)
   const [error,setError]= useState()
+
+  const [refresh,setRefresh]= useState(true)
+
+  //url by name
+  // tlp feed
+  const [taxonomyNames, setTaxonomyNames] = useState({});
+  const [feedNames, setFeedNames] = useState({});
+
+  //pagination
   const [countItems, setCountItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1)
+
   const [ifModify, setIfModify] = useState(null) 
   const [showAlert, setShowAlert] = useState(false)
   //event merge Event
@@ -33,34 +48,11 @@ const ListEvent = () => {
   const [selectedEvent, setSelectedEvent] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  //modal case
-  const [showModalCase, setShowModalCase] = useState(false);
-  const [cases, setCases] = useState([])
-  const [selectCase, setSelectCase] = useState("")
-
-  //add to cases
-  const [openCases, setOpenCases] = useState(true);
-  const [opeFormCases, setOpenFormCases] = useState(false);
-  const [allStates, setAllStates] = useState([]) //multiselect
-
-  const caseItem = {
-      lifecycle: '0',//required
-      priority: '0', //required
-      tlp: '0', //required
-      state: '0', //required
-      date: null, //required
-      parent: null,
-      assigned: null,
-      attend_date: null, //imprime la hora actual +3horas
-      solve_date: null,
-      comments: [], //?
-      evidence: [],
-  }
-
   //filters and search
   const [wordToSearch, setWordToSearch]= useState('')
-
+  const [isChecked, setChecked] = useState(false);
   const [taxonomyFilter, setTaxonomyFilter]= useState('')
+  
   const [tlpFilter, setTlpFilter]= useState('')
   const [feedFilter, setFeedFilter]= useState('')
 
@@ -77,6 +69,15 @@ const ListEvent = () => {
   const [open, setOpen] = useState(false);
   const [updatePagination, setUpdatePagination] = useState(false)
   const [disabledPagination, setDisabledPagination] = useState(true)
+  const types = [{ value: "true", label: "Eventos sin casos asignados" },{ value: "false", label: "Eventos con casos asignados" }]
+  const [caseIsNull, setCaseIsNull]= useState('')
+  //add to cases
+  const [openCases, setOpenCases] = useState(true);
+
+  //modal case
+  const [showModalCase, setShowModalCase] = useState(false);
+  const [cases, setCases] = useState([])
+  const [selectCase, setSelectCase] = useState("")
 
   //create case
   const [bodyCase, setBodyCase] = useState({
@@ -90,10 +91,11 @@ const ListEvent = () => {
     attend_date:"",
     solve_date:"",
     selectedEvent:"",
-    comments:[],
+    comments:[]
       
   }) 
   const [evidenceCase, setEvidenceCase] = useState([])
+
   //commet
   const [ comm, setComm ] = useState();
 
@@ -107,25 +109,9 @@ const ListEvent = () => {
 
   useEffect(() => {
 
-    getStates().then((response) => {
-          console.log(response);
-          let listStates = []
-          response.data.results.map((stateItem)=>{
-              listStates.push({value:stateItem.url, label:stateItem.name, childrenUrl:stateItem.children})
-          })
-          setAllStates(listStates)
-
-          console.log(response.data.results)
-      })
-      .catch((error)=>{
-          console.log(error)
-      })
-
     getAllCases().then((response) => { 
       let list = []
       response.map((item) => {
-        const parts = item.url.split("/");
-        let itemNumber = parts[parts.length - 2];
         list.push({value:item.url, label:item.uuid})
       })
       setCases(list)
@@ -137,30 +123,37 @@ const ListEvent = () => {
         setLoading(false)
     })
 
-    getAllTaxonomies()
+    getMinifiedTaxonomy()
     .then((response) => {
         let listTaxonomies = []
+        let dicTaxonomy={}
         response.map((taxonomy) => {
             listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+            dicTaxonomy[taxonomy.url]=taxonomy.name
         })
+        setTaxonomyNames(dicTaxonomy)
         setTaxonomies(listTaxonomies)
     })
 
-    getAllFeeds().then((response) => {
+    getMinifiedFeed().then((response) => {
         let listFeeds = []
-        response.map((taxonomy) => {
-          listFeeds.push({value:taxonomy.url, label:taxonomy.name})
+        let dicFeed={}
+        response.map((feed) => {
+          listFeeds.push({value:feed.url, label:feed.name})
+          dicFeed[feed.url]=feed.name
         })
+      setFeedNames(dicFeed)
       setFeeds(listFeeds)
     })
-    getTLP().then((response) => {
+
+    getMinifiedTlp().then((response) => {
       let listTlp = []
-        response.data.results.map((taxonomy) => {
-          listTlp.push({value:taxonomy.url, label:taxonomy.name})
+        response.map((tlp) => {
+          listTlp.push({value:tlp.url, label:tlp.name})
         })
       setTlpList(listTlp)
     })
-    getEvents(currentPage, starDateFilter+endDateFilter+taxonomyFilter+tlpFilter+feedFilter+wordToSearch, order).then((response) => {// por alguna razon lo tengo que poner a lo ultimo paar que el buscador funciones
+    getEvents(currentPage, starDateFilter+endDateFilter+taxonomyFilter+tlpFilter+feedFilter+caseIsNull+wordToSearch, order).then((response) => {// por alguna razon lo tengo que poner a lo ultimo paar que el buscador funciones
         setEvents(response.data.results)
         setCountItems(response.data.count)
         if(currentPage === 1){
@@ -177,7 +170,11 @@ const ListEvent = () => {
       setShowAlert(true)
     })
 
-  }, [ currentPage, ifModify, wordToSearch, taxonomyFilter, tlpFilter, feedFilter, filterDate, order, ])
+  }, [ currentPage, ifModify, wordToSearch, taxonomyFilter, tlpFilter, feedFilter, filterDate, order, caseIsNull, refresh])
+
+  const reloadPage = () => {
+    setRefresh(!refresh)
+  }
 
   const mergeConfirm = () => {
     //setId
@@ -259,6 +256,11 @@ const ListEvent = () => {
     setSelectCase("")
     setShowModalCase(false)
 
+  };
+  const handleCheckboxChange = () => {
+    setCaseIsNull("&case__isnull="+!isChecked)
+    console.log("&case__isnull="+!isChecked)
+    setChecked(!isChecked); // Cambiamos el estado opuesto al actual
   };
 
   //Create
@@ -349,7 +351,7 @@ const ListEvent = () => {
         <Col sm={1} lg={1}>
           <ButtonFilter open={open} setOpen={setOpen} />
         </Col>
-        <Col sm={8} lg={5} >
+        <Col sm={8} lg={4} >
               <Search type="por taxonomia, fuentes o recurso afectado" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
         </Col>
         <Col> 
@@ -381,6 +383,19 @@ const ListEvent = () => {
                     {selectedEvent.length} 
                 </Badge>
             </Button>                                 
+            <Button 
+              size="lm"
+              variant="outline-dark"
+              onClick={() => reloadPage()}
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+              </svg>
+          </Button>
+
+            
+            
         </Col>
       </Row>
       <Collapse in={open}>
@@ -424,12 +439,19 @@ const ListEvent = () => {
             </Col>
             
           </Row>
+          <Row>
+              <Col sm={4} lg={4}>
+                  <FilterSelect options={types} partOfTheUrl="case__isnull" setFilter={setCaseIsNull} currentFilter={caseIsNull} setLoading={setLoading} placeholder="Filtrar por casos" />
+              </Col>
+            
+          </Row>
           <br /> 
         </div>
       </Collapse>              
         </Card.Header>
         <Card.Body>
-           <TableEvents events={events} loading={loading} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} order={order} setOrder={setOrder} setLoading={setLoading} currentPage={currentPage}/> 
+           <TableEvents events={events} loading={loading} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} order={order} setOrder={setOrder} 
+           setLoading={setLoading} currentPage={currentPage} taxonomyNames={taxonomyNames} feedNames={feedNames}/> 
         </Card.Body>
         <Card.Footer >
           <Row className="justify-content-md-center">

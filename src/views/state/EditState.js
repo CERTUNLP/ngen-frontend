@@ -22,8 +22,6 @@ const EditState = () => {
 
     const [sectionAddEdge, setSectionAddEdge] = useState(false);
 
-    console.log(body)
-
 
     useEffect( ()=> {
         if(body.children !== []){
@@ -64,12 +62,12 @@ const EditState = () => {
     }
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="state"/>
         <Row>
             <Navigation actualPosition="Editar Estado" path="/states" index ="Estados"/> 
         </Row>
         <FormState body={body} setBody={setBody} edge ={edge } createState={editState} childernes={states} type ={"Editar"}/>         
-        <ListEdge state={body} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
+        <ListEdge url={body.url} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
     </div>
   )
 }

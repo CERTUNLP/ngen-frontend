@@ -42,15 +42,14 @@ const TableTaxonomy = ({setIsModify, list, loading, order, setOrder, setLoading,
                 setModalDelete(false)
             })
         };
-    
+        const letterSize= { fontSize: '1.1em' }
     
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>  
-                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} />
+                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th>Activo</th>     
                             <th>Eventos</th>                                                                         
                             <th>Acciones</th>
@@ -62,7 +61,6 @@ const TableTaxonomy = ({setIsModify, list, loading, order, setOrder, setLoading,
                             let itemNumber = parts[parts.length - 2];
                         return(
                             <tr key={itemNumber}>
-                                <th scope="row">{ 1+index+10*(currentPage-1) }</th>
                                 <td>{taxonomy.name}</td>
                                 <td>
                                     <ButtonState taxonomy={taxonomy}></ButtonState>

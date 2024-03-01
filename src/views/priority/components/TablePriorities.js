@@ -54,6 +54,8 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
         setModalShow(true)
        
       }
+
+      const letterSize= { fontSize: '1.1em' }
   return (
    <div>
     <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
@@ -62,8 +64,7 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} />
+                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th>Fecha limite de respuesta</th>
                             <th>Fecha limite de resolucion </th>
                             <th>Opciones</th>
@@ -75,7 +76,6 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
                         let itemNumber = parts[parts.length - 2];
                         return (
                             <tr>
-                                <th >{ 1+index+10*(currentPage-1) }</th>
                                 <td>{priority.name}</td>
                                 <td>{priority.attend_time}</td>
                                 <td>{priority.solve_time}</td>

@@ -2,6 +2,17 @@ import  apiInstance  from "../api";
 import { COMPONENT_URL, PAGE } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
+const getMinifiedFeed = () => { //+- id, name, slug, created, modified
+    let messageError = `No se pudo recuperar la informacion de las fuentes de informacion`;
+    return apiInstance.get(COMPONENT_URL.feedMinifiedList )
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error");
+        return Promise.reject(error);
+    });
+}
+
 const getFeeds = (currentPage, filters,order) => { //+- id, name, slug, created, modified
     let messageError = `No se pudo recuperar la informacion de las fuentes de informacion`;
     return apiInstance.get(COMPONENT_URL.feed + PAGE + currentPage + '&ordering=' + order +'&' + filters )
@@ -106,4 +117,4 @@ const deleteFeed = (url, name) => {
 }
 
 
-export { getFeeds, getFeed, getAllFeeds, postFeed, putFeed, putActivationStatus, deleteFeed };
+export { getFeeds, getFeed, getAllFeeds, postFeed, putFeed, putActivationStatus, deleteFeed, getMinifiedFeed };

@@ -2,6 +2,17 @@ import  apiInstance  from "../api";
 import { COMPONENT_URL , PAGE} from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
+const getMinifiedPriority = () => {//el parametro es para completar la url con el numero de pagina
+    let messageError = `No se pudo recuperar la informacion de las prioridades`;
+    return apiInstance.get(COMPONENT_URL.priorityMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error");
+        return Promise.reject(error);
+    });
+}
+
 const getPriorities = (currentPage, filters,order) => {//el parametro es para completar la url con el numero de pagina
     let messageError = `No se pudo recuperar la informacion de las prioridades`;
     return apiInstance.get(COMPONENT_URL.priority+ PAGE + currentPage + '&ordering=' + order +'&' + filters)
@@ -139,4 +150,4 @@ const deletePriority = (url) => {
         return Promise.reject(error);
     });
 }
-export { getPriorities, getAllPriorities, getPriority, postPriority, deletePriority, putPriority }
+export { getPriorities, getAllPriorities, getPriority, postPriority, deletePriority, putPriority, getMinifiedPriority }

@@ -28,6 +28,9 @@ const ListEntity = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
+    const [wordToSearch, setWordToSearch]= useState('')
+    const [order, setOrder] = useState("");
+
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }
@@ -36,7 +39,7 @@ const ListEntity = () => {
 
         
 
-        getEntities(currentPage) 
+        getEntities(currentPage, wordToSearch, order) 
             .then((response) => {
                 setEntities(response.data.results);
                 // Pagination
@@ -54,7 +57,7 @@ const ListEntity = () => {
                 setLoading(false)
             })
         
-    }, [currentPage, isModify])
+    }, [currentPage, isModify, wordToSearch])
 
     // ------- SEARCH --------
     const action = () => {
@@ -73,7 +76,7 @@ return (
                     <Card.Header>
                         <Row>
                             <Col sm={12} lg={9}>
-                                <Search type="entidad" action={action} search={search} setSearch={setSearch}/> 
+                             <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                             </Col>
                             <Col sm={12} lg={3}>
                                 <Link to={{pathname:'/entities/create'}} >

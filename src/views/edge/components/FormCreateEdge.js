@@ -11,27 +11,37 @@ const FormCreateEdge = ({body, setBody, selectChild, setSelectChild, childernes,
   
   const completeChildernes=(event)=>{ 
 
-    console.log(event)
-        
+   if(event){
     setBody({...body,
         ["child"] : event.value}
     )
     setSelectChild(event)
-}
 
-const completeField=(event)=>{ 
+   }else{
+    setSelectChild("")
+
+   }
+        
+    
+  }
+
+  const completeField=(event)=>{ 
     setBody({...body,
         [event.target.name] : event.target.value}
     )     
-}
+  }
+  
   
   
   return (
       <React.Fragment>
+          
           <Form>
-              <Row>
+            <Row>
+              <Col>
+              
                 <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Nombre de la transición </Form.Label>
+                        <Form.Label>Nombre de la transición<b style={{color:"red"}}>*</b></Form.Label>
                         <Form.Control 
                             placeholder="Ingrese discriminador" 
                             maxlength="150" 
@@ -40,12 +50,12 @@ const completeField=(event)=>{
                             onChange={(e)=>completeField(e)}
                         />
                         {/*validateDescription(body.description) ? '' : <div className="invalid-feedback">Ingrese una descripcion que contenga hasta 250 caracteres y que no sea vacía</div>*/}
-            
                 </Form.Group>
-            </Row>
-            <Row>  
+            </Col>
+            <Col>
+                
                 <Form.Group controlId="formGridAddress1">
-                    <Form.Label>Hijo</Form.Label>
+                    <Form.Label>Estado siguiente <b style={{color:"red"}}>*</b></Form.Label>
                     <Select
                         value={selectChild} 
                         isClearable
@@ -56,10 +66,14 @@ const completeField=(event)=>{
                         options={childernes}
                     />
                 </Form.Group>
+            </Col>
             </Row>
-            <Row>
+            <Row className="justify-content-center">
                 <Form.Group>
-                    <><Button variant="primary" onClick={ifConfirm} >Guardar</Button></>
+                { body.discr.trim() !=="" && selectChild !=="" ?  
+                <><Button variant="primary" onClick={ifConfirm} >Guardar</Button></>
+                :<><Button variant="primary" disabled>Guardar</Button></> }
+                    
                 
                     <Button variant="primary" onClick={ifCancel}>Cancelar</Button>
                 </Form.Group>

@@ -3,73 +3,35 @@ import { useState, useEffect } from 'react';
 import { Button, Row, Form, Table, Spinner } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import { deleteCase } from '../../../api/services/cases';
-import { getAllPriorities } from '../../../api/services/priorities';
-import { getTLP } from '../../../api/services/tlp';
+import { getAllPriorities, getMinifiedPriority } from '../../../api/services/priorities';
+import { getTLP, getMinifiedTlp } from '../../../api/services/tlp';
+import { getAllStates, getMinifiedState } from '../../../api/services/states'; 
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import BadgeItem from '../../../components/Button/BadgeItem';
-import { getAllStates } from '../../../api/services/states'; 
+import CallBackendByName from '../../../components/CallBackendByName'; 
+import { getTLPSpecific } from '../../../api/services/tlp';
 import { getUser } from '../../../api/services/users';
 import GetUserName from './GetUserName';
 import Ordering from '../../../components/Ordering/Ordering'
 
-const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSelectedCases, setOrder , order, currentPage}) => {
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order, currentPage, priorityNames, stateNames}) => {
     
     const [url, setUrl] = useState(null) 
     const [modalDelete, setModalDelete] = useState(false)
     const [id, setId] = useState(null) 
         
-    const [prioritiesOption, setPrioritiesOption] = useState({}) 
-    const [tlpOption, setTlpOption] = useState({}) 
-    const [stateOption, setStateOption] = useState({}) 
-    
     //checkbox
     const [isCheckAll, setIsCheckAll] = useState(false);
+
+    const [list, setList] = useState([]);
   
     //ORDER
-
-    useEffect(() => {
-
-        getAllPriorities()
-            .then((response) => {
-                let priorityOp = {}
-                response.map((item) => {
-                    priorityOp[item.url] = {name: item.name, color: item.color}
-                })
-                setPrioritiesOption(priorityOp)
-                
-            })
-            .catch((error)=>{
-                console.log(error)
-            })
+    useEffect(() => { 
+        setList(cases)
         
-        getTLP()
-            .then((response) => {
-                let tlpOp = {}
-                response.data.results.map((item) => {
-                    tlpOp[item.url] = {name: item.name, color: item.color}
-                })
-                setTlpOption(tlpOp)
-            })
-            .catch((error)=>{
-                console.log(error)
-            })
-
-        getAllStates()
-            .then((response) => {
-                let stateOp = {}
-                response.map((item) => {
-                    stateOp[item.url] = {name: item.name}
-                })
-             
-                setStateOption(stateOp)
-            })
-            .catch((error)=>{
-                console.log(error)
-            })
-        
-    },[list]);
-
+       
+      }, [cases]);
     const storageCaseUrl = (url) => {
         localStorage.setItem('case', url);    
     }
@@ -80,6 +42,16 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
         setUrl(url)
         setModalDelete(true)
     }
+     
+    const callbackTlp = (url ,setPriority) => {
+        getTLPSpecific(url)
+        .then((response) => {
+          
+            setPriority(response.data)
+        })
+        .catch();
+    }
+    
     
     const removeCase = (url)=> {
         deleteCase(url)
@@ -109,6 +81,8 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
             setSelectedCases(selectedCases.filter(item => item !== id));
         }
     };
+    const letterSize= { fontSize: '1.1em' }
+    console.log(list)
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
@@ -128,13 +102,12 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
                                 </Form.Group>
                             </th>
                             }
-                            <th>#</th>
-                            <Ordering field="date" label="Fecha" order={order} setOrder={setOrder} setLoading={setLoading}/>
-                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading}/>
-                            <th>TLP</th>
-                            <th>Estado</th>
-                            <th>Asignado</th>
-                            <th>Accion</th>
+                            <Ordering field="date" label="Fecha" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}>TLP</th>
+                            <th style={letterSize}>Estado</th>
+                            <th style={letterSize}>Asignado</th>
+                            <th style={letterSize}>Accion</th>
                             
                         </tr>
                     </thead>
@@ -152,6 +125,11 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
                             let datetime = caseItem.date.split('T');
                             datetime = datetime[0] + ' ' + datetime[1].slice(0,8)
                             let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length-2]
+                            console.log(priorityNames)
+                            console.log(stateNames[caseItem.state])
+                            console.log(stateNames)
+                            console.log(caseItem.state)
+                            console.log(caseItem)
                              
                             return (
                                 list &&
@@ -163,15 +141,14 @@ const TableCase = ({setIfModify, list, loading, setLoading, selectedCases, setSe
                                                 onChange={handleClick} checked={selectedCases.includes(caseItem.url)} />
                                         </Form.Group>
                                     </td>
-                                    <th scope="row">{ 1+index+10*(currentPage-1) }</th>
                                     <td>{datetime}</td>
                                     <td>
-                                        <BadgeItem item={prioritiesOption[caseItem.priority]}/>
+                                        {priorityNames[caseItem.priority]}
                                     </td>
                                     <td>
-                                        <BadgeItem item={tlpOption[caseItem.tlp]}/>
+                                    <td><CallBackendByName url={caseItem.tlp} callback={callbackTlp } useBadge={true}/></td>
                                     </td>
-                                    <td>{stateOption[caseItem.state] ? stateOption[caseItem.state].name : "No se pudo asignar un estado"}</td>
+                                    <td>{stateNames[caseItem.state] ? stateNames[caseItem.state] : "No se pudo asignar un estado"}</td>
                                     {caseItem.assigned ? 
                                         <td>
                                             <GetUserName form={false} get={getUser} url={caseItem.assigned} key={index} />

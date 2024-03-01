@@ -3,6 +3,17 @@ import { COMPONENT_URL, PAGE } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
 
+const getMinifiedTaxonomy = () => {
+    let messageError = `No se pudo recuperar la informacion de las taxonomias`;
+    return apiInstance.get(COMPONENT_URL.taxonomyMinifiedList)
+        .then(response => {
+            return response.data;
+        }).catch(error => {
+            setAlert(messageError, "error");
+            return Promise.reject(error);
+        });
+}
+
 const getTaxonomies = (currentPage, filters,order) => {
     let messageError = `No se pudo recuperar la informacion de las taxonomias`;
     return apiInstance.get(COMPONENT_URL.taxonomy + PAGE + currentPage + '&ordering=' + order +'&' + filters )
@@ -130,7 +141,7 @@ const deleteTaxonomy = (url, name) => {
 }
 
 
-export { getTaxonomies, getTaxonomy, getAllTaxonomies, postTaxonomy, putTaxonomy, putActivationStatus, deleteTaxonomy }
+export { getTaxonomies, getTaxonomy, getAllTaxonomies, postTaxonomy, putTaxonomy, putActivationStatus, deleteTaxonomy,getMinifiedTaxonomy }
 
 
 

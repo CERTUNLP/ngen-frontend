@@ -33,13 +33,13 @@ const getEdge = (url) => {
     .then(response => {        
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error", "edge");
+        setAlert(messageError, "error", "state");
         return Promise.reject(error);
     });
 }
 
 const postEdge = (discr, parent, child) => {
-    let messageSuccess = `Se ha creado correctamente.`;
+    let messageSuccess = `Se ha creado correctamente la transición`;
     let messageError = `No se ha creado. `;
     return apiInstance.post(COMPONENT_URL.edge, {
         discr:discr,
@@ -47,10 +47,13 @@ const postEdge = (discr, parent, child) => {
         child:child
         
     }).then(response => {
-        setAlert(messageSuccess, "success", "edge");
+        setAlert(messageSuccess, "success", "state");
         return response;
     }).catch( error => { 
-        let statusText = error.response.statusText;
+        let statusText="" ;
+        if(error.response.data && error.response.data.non_field_errors[0] === "The fields parent, child must make a unique set."){
+            statusText = "Ya existe la transición ";
+        }
         messageError += statusText;
         setAlert(messageError , "error", "edge");
         return Promise.reject(error);
@@ -67,10 +70,13 @@ const putEdge = (url, discr ,parent , child) => {
         child:child
         
     }).then(response => {
-        setAlert(messageSuccess , "success", "edge");
+        setAlert(messageSuccess , "success", "state");
         return response;
     }).catch( error => { 
-        let statusText = error.response.statusText;
+        let statusText = ""
+        if(error.response.data && error.response.data.non_field_errors[0] === "The fields parent, child must make a unique set."){
+            statusText = "Ya existe la transición " ;
+        }
         messageError += statusText;
         setAlert(messageError , "error", "edge");
         return Promise.reject(error);
@@ -79,7 +85,7 @@ const putEdge = (url, discr ,parent , child) => {
 
 
 const deleteEdge = (url, name) => {
-    let messageSuccess = `Se ha eliminado correctamente. `;
+    let messageSuccess = `Se ha eliminado correctamente la transición `;
     let messageError = `No se ha eliminado. `;
     return apiInstance.delete(url)
     .then(response => {

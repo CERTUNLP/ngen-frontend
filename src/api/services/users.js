@@ -2,6 +2,16 @@ import  apiInstance  from "../api";
 import { COMPONENT_URL, PAGE } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
+const getMinifiedUser = () => {//el parametro es para completar la url con el numero de pagina
+    let messageError = `No se pudo recuperar la informacion de los usuarios`;
+    return apiInstance.get(COMPONENT_URL.userMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error");
+        return Promise.reject(error);
+    });
+}
 const getUsers = (currentPage, filters,order) => {//el parametro es para completar la url con el numero de pagina
     let messageError = `No se pudo recuperar la informacion de los usuarios`;
     return apiInstance.get(COMPONENT_URL.user + PAGE + currentPage + '&ordering=' + order +'&' + filters)
@@ -148,4 +158,4 @@ const deleteUser = (url) => {
         'Case.user_creator', 'Case.assigned', 'Event.reporter'.\", {<Case: 1>, <Event: 1:unlp.com>})"
     ]
 */
-export { getUsers, getUser, getAllUsers, postUser, putUser, deleteUser, isActive };
+export { getUsers, getUser, getAllUsers, postUser, putUser, deleteUser, isActive, getMinifiedUser};

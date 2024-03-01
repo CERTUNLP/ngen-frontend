@@ -18,6 +18,9 @@ const ListState = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
+    const [wordToSearch, setWordToSearch]= useState('')
+    const [order, setOrder] = useState("");
+
 
     const [showAlert, setShowAlert] = useState(false)
 
@@ -31,7 +34,7 @@ const ListState = () => {
 
     useEffect(() => {
 
-            getStates('?page='+currentPage)
+            getStates(currentPage, wordToSearch, order)
             .then((response) => {
                 setStates(response.data.results)
                 setCountItems(response.data.count)
@@ -48,7 +51,7 @@ const ListState = () => {
               })
     
     
-        }, [ currentPage])
+        }, [ currentPage, wordToSearch])
 
         
     console.log(states)
@@ -57,7 +60,7 @@ const ListState = () => {
       }
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="state"/>
       <Row>
         <Navigation actualPosition="Estados"/>
       </Row>
@@ -65,7 +68,7 @@ const ListState = () => {
         <Card.Header>
           <Row>
             <Col sm={12} lg={9}>
-                <Search type="Estado" action={action} />
+                <Search type="Estado" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
                 <Link to={{pathname:'/states/create', state:states}} >

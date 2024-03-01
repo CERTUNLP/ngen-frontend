@@ -132,7 +132,6 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Nombre</th>
                             <th>Taxonomias</th>
                             <th>Accion</th>
@@ -141,8 +140,7 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
                     <tbody>
                         { list.map((book, index) => {
                             return (
-                                <tr key={book.url}>
-                                    <th scope="row">{ 1+index+10*(currentPage-1) }</th>
+                                <tr key={index}>
                                     <td>{book.name}</td>
                                     <td>
                                     <CallBackendByName url={book.taxonomy} callback={callbackTaxonomy} useBadge={false}/>

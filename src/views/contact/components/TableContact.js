@@ -94,7 +94,6 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Nombre</th>
                             <th>Rol</th>
                             <th>Contacto</th>
@@ -106,7 +105,6 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
                         {list.map((contact, index) => {
                             return (
                                 <tr key={contact.url}>
-                                <th scope="row">{ 1+index+10*(currentPage-1) }</th>
                                 <td>{contact.name}</td>
                                 <td>{labelRole[contact.role]}</td>
                                 <td>{contact.username}</td>

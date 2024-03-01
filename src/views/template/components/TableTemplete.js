@@ -105,7 +105,6 @@ const handleDelete = () => {
                     <Table responsive hover className="text-center">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Fuentes de información</th>
                                 <th>Taxonomia </th>
                                 <th>Recurso afectado</th>
@@ -119,7 +118,6 @@ const handleDelete = () => {
                                 let itemNumber = parts[parts.length - 2];
                             return (
                                         <tr>
-                                            <th >{ 1+index+10*(currentPage-1) }</th>
                                             <td><CallBackendByName url={template.event_feed} callback={callbackFeed} useBadge={false}/></td>
                                             <td><CallBackendByName url={template.event_taxonomy} callback={callbackTaxonomy} useBadge={false}/> </td>
                                             <td>{template.address_value} </td>

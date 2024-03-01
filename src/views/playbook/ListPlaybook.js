@@ -21,13 +21,16 @@ const ListPlaybook = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
+    const [wordToSearch, setWordToSearch]= useState('')
+    const [order, setOrder] = useState("");
+
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }
 
     useEffect( ()=> {
 
-        getPlaybooks(currentPage)
+        getPlaybooks(currentPage, wordToSearch, order)
             .then((response) => {
                 setPlaybook(response.data.results);
                 // Pagination
@@ -45,7 +48,7 @@ const ListPlaybook = () => {
                 setLoading(false)
             })
         
-    }, [countItems, currentPage, isModify])
+    }, [countItems, currentPage, isModify, wordToSearch])
 
     // ------- SEARCH --------
     const action = () => {
@@ -63,7 +66,7 @@ const ListPlaybook = () => {
                     <Card.Header>
                         <Row>
                             <Col>
-                                <Search type="playbook" action={action} search={search} setSearch={setSearch}/> 
+                                <Search type="playbook" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading}/> 
                             </Col>
                             <Col sm={3} lg={3}>
                             <Link to={{pathname:'/playbooks/create'}} >

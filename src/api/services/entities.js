@@ -2,6 +2,20 @@ import apiInstance from "../api";
 import setAlert from '../../utils/setAlert';
 import { COMPONENT_URL, PAGE } from '../../config/constant';
 
+
+const getMinifiedEntity = () => {
+    let messageError = `No ha recuperado la informacion de entidades. `;
+    return apiInstance.get(COMPONENT_URL.entityMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        let statusText = error.response.statusText;
+        messageError += statusText;
+        setAlert(messageError , "error", "entity");
+        return Promise.reject(error);
+    });
+}
+
 const getEntities = (currentPage, filters,order) => {
     let messageError = `No ha recuperado la informacion de entidades. `;
     return apiInstance.get(COMPONENT_URL.entity + PAGE + currentPage + '&ordering=' + order +'&' + filters)
@@ -123,4 +137,4 @@ const isActive = (url, active, name) => {
     });
 }
 
-export { getEntities, getAllEntities, getEntity, postEntity, putEntity, deleteEntity, isActive };
+export { getEntities, getAllEntities, getEntity, postEntity, putEntity, deleteEntity, isActive, getMinifiedEntity };

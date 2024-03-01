@@ -2,9 +2,9 @@ import apiInstance from "../api";
 import setAlert from '../../utils/setAlert';
 import { COMPONENT_URL, PAGE } from '../../config/constant';
 
-const getPlaybooks = (currentPage) => {
+const getPlaybooks = (currentPage, filters,order) => {
     let messageError = `No se ha recuperado la informacion de playbooks. `;
-    return apiInstance.get(COMPONENT_URL.playbook + PAGE + currentPage)
+    return apiInstance.get(COMPONENT_URL.playbook + PAGE + currentPage + '&ordering=' + order +'&' + filters)
     .then(response => {        
         return response;
     }).catch( error => { 

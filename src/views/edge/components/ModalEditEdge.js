@@ -2,31 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Modal, CloseButton } from 'react-bootstrap';
 import { putEdge } from "../../../api/services/edges";
 import FormCreateEdge from './FormCreateEdge';
-
+import Alert from '../../../components/Alert/Alert';
 
 const ModalEditEdge = (props) => {
     const [error, setError] = useState(null);
     const [body, setBody] = useState(props.edge);
-    const [selectChild, setSelectChild] = useState({value:props.edge.child, label:props.urlByStateName[props.edge.child]});
+    const [selectChild, setSelectChild] = useState({});
+    const [showAlert, setShowAlert] = useState(false)
     
 
-
     useEffect(()=>{
+        setSelectChild({value:props.edge.child, label:props.nameState})
 
-    },[])
+    },[props.nameState])
 
     const editEdge = () => { 
 
         putEdge(body.url, body.discr ,body.parent , body.child)
             .then((response) => { 
-                console.log(response)
-                console.log('se edito una tarea')
                 props.ifEdit(response)
                 props.onHide()
             })
             .catch((error) => {
                 setError(error)
                 console.log(error)
+                setShowAlert(true)
             })
             .finally(() => {
                 props.setShowAlert(true)
@@ -40,6 +40,7 @@ const ModalEditEdge = (props) => {
                     <Row>    
                         <Col>                 
                             <Card>
+                            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="edge"/>
                             <Card.Header> 
                                     <Row>
                                         <Col>
@@ -53,10 +54,8 @@ const ModalEditEdge = (props) => {
                                 </Card.Header>
                                 <Card.Body>
                                 <FormCreateEdge
-                                    body={body} 
-                                    setBody={setBody}
-                                    selectChild={selectChild} 
-                                    setSelectChild={setSelectChild}
+                                    body={body}  setBody={setBody}
+                                    selectChild={selectChild}  setSelectChild={setSelectChild}
                                     childernes={props.childrens}
                                     ifConfirm={editEdge} 
                                     ifCancel={props.onHide} />

@@ -93,7 +93,6 @@ const TableStates = ({states, callback, loading, currentPage}) => {
                     <Table responsive hover className="text-center">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Nombre</th>
                                 <th>Estado</th>
                                 <th>Atendido</th>
@@ -105,7 +104,6 @@ const TableStates = ({states, callback, loading, currentPage}) => {
                             {states.map((state, index) => {
                             return (
                                         <tr>
-                                            <th >{ 1+index+10*(currentPage-1) }</th>
                                             <td>{state.name}</td>
                                             <td>
                                             <ActiveButton active={state.active} onClick={() => modalChangeState(state.url, state.name, state.active)} />
