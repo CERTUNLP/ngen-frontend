@@ -12,7 +12,6 @@ import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 const ListPriorities = () => {
   const [priorities, setPriorities] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error,setError]= useState()
   const [currentPage, setCurrentPage] = useState(1)
   const [countItems, setCountItems] = useState(0);
   const [showAlert, setShowAlert] = useState(false)
@@ -37,7 +36,7 @@ const ListPriorities = () => {
           setDisabledPagination(false)
            
       }).catch((error)=>{
-        setError(error)
+        console.log(error)
     })
     .finally(() => {
         setShowAlert(true)
@@ -53,7 +52,7 @@ const ListPriorities = () => {
   return (
     <div>
     
-    <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+    <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="priority"/>
     <Row>
       <Navigation actualPosition="Prioridades"/>
     </Row>

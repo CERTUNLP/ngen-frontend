@@ -14,7 +14,6 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
   const [remove, setRemove] = useState(false);
   const [deleteUsername, setDeleteUsername] = useState("");
   const [deleteUrl, setDeleteUrl] = useState("");
-  const [error, setError] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [user, setUser] = useState({});
   const [showState,setShowState] =useState(false);
@@ -36,7 +35,7 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
       })
       .catch((error) => {
         setShowAlert(true)
-        setError(error);
+        console.log(error)
       })
      .finally(()=>{
         setRemove(false)
@@ -70,7 +69,7 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
             window.location.href = '/users';
         })
         .catch((error) => {
-            setError(error);
+            console.log(error)
             setShowAlert(true)           
             })
         .finally(()=>{
@@ -92,18 +91,16 @@ function TableUsers({users, loading, order, setOrder, setLoading, currentPage}) 
                         <tr>
                             <Ordering field="username" label="Nombre de usuario" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <Ordering field="email" label="Email" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                            <th>Nombre</th>
-                            <th>Estado</th>
-                            <th>Ultimo login</th>
-                            <th>Opciones</th>
+                            <th style={letterSize}>Nombre</th>
+                            <th style={letterSize}>Estado</th>
+                            <th style={letterSize}>Ultimo login</th>
+                            <th style={letterSize}>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                        {users.map((user, index) => {
-                           const parts = user.url.split("/");
-                           let itemNumber = parts[parts.length - 2];
                         return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td>{user.username}</td>
                                         <td>{user.email}</td>
                                         <td>{user.first_name}</td>

@@ -11,9 +11,6 @@ const ModalEditTask = (props) => { //show, task, onHide, ifEdit, setShowAlert
     const [description, setDescription] = useState(props.task.description);
     const [playbook, setPlaybook] = useState(props.task.playbook); //required
 
-    const [error, setError] = useState(null);
-
-
     useEffect(()=>{
 
     },[])
@@ -28,7 +25,6 @@ const ModalEditTask = (props) => { //show, task, onHide, ifEdit, setShowAlert
                 props.onHide()
             })
             .catch((error) => {
-                setError(error)
                 console.log(error)
             })
             .finally(() => {

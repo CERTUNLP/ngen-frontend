@@ -1,6 +1,6 @@
 import React,{ useState} from 'react'
 import {
-    Button,Card, Table , Modal, Row,Col, Form, Badge,CloseButton, Spinner
+    Button,Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
   } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import {Link} from 'react-router-dom'
@@ -16,7 +16,6 @@ const TableStates = ({states, callback, loading, currentPage}) => {
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
     const [remove, setRemove] = useState()
-    const [error, setError] = useState(null);
     const [dataState,setDataState] = useState({})
     const [showState, setShowState] = useState()
     const [state, setState] = useState({});
@@ -43,7 +42,7 @@ const TableStates = ({states, callback, loading, currentPage}) => {
           })
           .catch((error) => {
             setShowAlert(true)
-            setError(error);
+            console.log(error)
           })
          .finally(()=>{
             setRemove(false)
@@ -70,7 +69,7 @@ const TableStates = ({states, callback, loading, currentPage}) => {
         })
         .catch((error) => {
             setShowAlert(true)
-            setError(error);           
+            console.log(error)         
           })
         .finally(()=>{
             setShowState(false)
@@ -103,7 +102,7 @@ const TableStates = ({states, callback, loading, currentPage}) => {
                         <tbody>
                             {states.map((state, index) => {
                             return (
-                                        <tr>
+                                        <tr key={index}>
                                             <td>{state.name}</td>
                                             <td>
                                             <ActiveButton active={state.active} onClick={() => modalChangeState(state.url, state.name, state.active)} />

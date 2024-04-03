@@ -12,8 +12,6 @@ const FormCreateTask = (props) => {
 
     //Dropdown
     const [priorityOption, setPriorityOption] = useState([])
-    
-    const [error, setError] = useState(false)
 
     useEffect(()=> {
 
@@ -23,7 +21,7 @@ const FormCreateTask = (props) => {
                 console.log(response.data.results)
             })
             .catch((error)=>{
-                setError(error)
+                console.log(error)
             })
 
         },[])

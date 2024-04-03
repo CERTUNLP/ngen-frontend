@@ -58,7 +58,7 @@ const postNetwork = (children, active, type, parent, network_entity, contacts, a
         setAlert(messageSuccess, "success", "network");
         return response;
     }).catch( error => { 
-         if (error.response.status == 400 ) { 
+         if (error.response.status === 400 ) { 
             if(error.response.data.domain[0] === "Already exists a network with this domain") {
                 messageError = 'El cidr o dominio ya existe ';
             }

@@ -5,7 +5,7 @@ import Alert from '../../components/Alert/Alert';
 import FormReport from './components/FormReport';
 import Navigation from '../../components/Navigation/Navigation'
 import { putReport } from '../../api/services/reports';
-import { getAllTaxonomies } from "../../api/services/taxonomies";
+import { getAllTaxonomies, getMinifiedTaxonomy } from "../../api/services/taxonomies";
 
 const EditReport = () => {
   
@@ -16,18 +16,20 @@ const EditReport = () => {
 
     const [alert, setAlert] = useState(null)
     const [stateAlert, setStateAlert] = useState(null)
-    const [error,setError]=useState()
     const [states, setStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
 
     useEffect( ()=> {
-        getAllTaxonomies().then((response) => { 
-    
-            setTaxonomies(response)
+        getMinifiedTaxonomy().then((response) => { 
+            let listTaxonomies = []
+            response.map((taxonomy) => {
+                listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+            })
+            setTaxonomies(listTaxonomies)
           })
           .catch((error) => {
-              setError(error)
+            console.log(error)
               
           }).finally(() => {
               setLoading(false)

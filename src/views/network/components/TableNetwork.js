@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalDetailNetwork from './ModalDetailNetwork';
-import { getEntity } from '../../../api/services/entities';
-import FormGetName from '../../../components/Form/FormGetName';
 import Ordering from '../../../components/Ordering/Ordering'
 
 const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading , currentPage, entityNames}) => {
@@ -93,20 +91,20 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>Direción de valor </th>
-                            <th>Dominio</th>
-                            <th>Cidr</th>
+                            <th style={letterSize}>Direción de valor </th>
+                            <th style={letterSize}>Dominio</th>
+                            <th style={letterSize}>Cidr</th>
                             {<Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>}
-                            <th>Activo</th>
-                            <th>Entidad</th>
-                            <th>Accion</th>
+                            <th style={letterSize}>Activo</th>
+                            <th style={letterSize}>Entidad</th>
+                            <th style={letterSize}>Accion</th>
                         </tr>
                     </thead>
                     <tbody>
                         {list.map((network, index) =>
                         {
                             return (
-                                <tr key={network.url}>
+                                <tr key={index}>
                                     <td>{network.address_value}</td>
                                     <td>{network.domain}</td>
                                     <td>{network.cidr}</td>

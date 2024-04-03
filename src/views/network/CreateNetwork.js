@@ -17,7 +17,6 @@ const CreateNetwork = () => {
     const [network_entity, setNetwork_entity] = useState(null);
     const [address_value, setAddress_value] = useState("");
     
-    const [error, setError] = useState(null);
 
     //Dropdown
     const [contactsOption, setContactsOption] = useState([])
@@ -38,7 +37,7 @@ const CreateNetwork = () => {
                 console.log(response)
             })
             .catch((error)=>{
-                setError(error)
+                console.log(error)
             })  
 
         },[contactCreated])

@@ -8,19 +8,29 @@ const getTemplates = (currentPage, filters,order) => {
   .then(response => {        
     return response;
 }).catch( error => { 
-    setAlert(messageError, "error");
+    setAlert(messageError, "error", "template");
     return Promise.reject(error);
 });
+}
+
+const createCases = (url) => { 
+  let messageError = `No se pudo recuperar la  plantilla`;
+  return apiInstance.get(url+"create-cases/").then(response => {        
+      return response;
+  }).catch( error => { 
+      setAlert(messageError, "error", "template");
+      return Promise.reject(error);
+  });
 }
 
 const getTemplate = (url) => { 
   let messageError = `No se pudo recuperar la  plantilla`;
   return apiInstance.get(url).then(response => {        
-    return response;
-}).catch( error => { 
-    setAlert(messageError, "error");
-    return Promise.reject(error);
-});
+      return response;
+  }).catch( error => { 
+      setAlert(messageError, "error", "template");
+      return Promise.reject(error);
+  });
 }
 
 const postTemplate = (address_value,active,priority,event_taxonomy,event_feed,case_lifecycle,case_tlp,case_state) => {
@@ -37,10 +47,11 @@ const postTemplate = (address_value,active,priority,event_taxonomy,event_feed,ca
     case_state: case_state
   } 
   return apiInstance.post(COMPONENT_URL.template, body).then(response => {
-    setAlert(messageSuccess, "success");
+    
+    setAlert(messageSuccess, "success", "template");
     return response;
 }).catch( error => { 
-    setAlert(messageError, "error");
+    setAlert(messageError, "error", "template");
     return Promise.reject(error);
 });
 }
@@ -58,10 +69,10 @@ const putTemplate = ( url, address_value,active,priority,event_taxonomy,event_fe
     case_tlp: case_tlp,
     case_state: case_state
   }).then(response => {
-    setAlert(messageSuccess , "success");
+    setAlert(messageSuccess , "success", "template");
     return response;
 }).catch( error => { 
-    setAlert(messageError, "error");
+    setAlert(messageError, "error", "template");
     return Promise.reject(error);
 });
 }
@@ -70,10 +81,10 @@ const deleteTemplate = (url) => {
   let messageSuccess = `La plantilla se pudo eliminar correctamente`;
   let messageError = `La plantilla no se pudo eliminar`;
   return apiInstance.delete(url).then(response => {
-    setAlert(messageSuccess , "success");
+    setAlert(messageSuccess , "success", "template");
     return response;
 }).catch( error => { 
-    setAlert(messageError, "error");
+    setAlert(messageError, "error", "template");
     return Promise.reject(error);
 })
 }
@@ -83,7 +94,7 @@ const getAllTemplate = (currentPage = 1, results = [], limit = 100) => {
   return apiInstance.get(COMPONENT_URL.template, { params: { page: currentPage, page_size: limit } })       
       .then((response) => {
           let res = [...results, ...response.data.results]                                    
-          if(response.data.next != undefined){                                
+          if(response.data.next !== null){                                
               return getAllTemplate(++currentPage, res, limit)
           }
           else{
@@ -102,12 +113,12 @@ const isActive = (url, active) =>{
   return apiInstance.patch(url, {
       active: active
   } ).then(response => {
-    setAlert(messageSuccess , "success");
+    setAlert(messageSuccess , "success", "template");
     return response;
 }).catch( error => { 
-    setAlert(messageError, "error");
+    setAlert(messageError, "error", "template");
     return Promise.reject(error);
 });
 }
 
-export  {getTemplates, getTemplate, postTemplate, putTemplate, deleteTemplate, isActive, getAllTemplate}
+export  {getTemplates, getTemplate, postTemplate, putTemplate, deleteTemplate, isActive, getAllTemplate, createCases}

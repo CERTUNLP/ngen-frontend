@@ -28,7 +28,6 @@ const ListEvent = () => {
   const [events, setEvents] = useState([])
   
   const [loading, setLoading] = useState(true)
-  const [error,setError]= useState()
 
   const [refresh,setRefresh]= useState(true)
 
@@ -36,6 +35,7 @@ const ListEvent = () => {
   // tlp feed
   const [taxonomyNames, setTaxonomyNames] = useState({});
   const [feedNames, setFeedNames] = useState({});
+  const [tlpNames, setTlpNames] = useState({});
 
   //pagination
   const [countItems, setCountItems] = useState(0);
@@ -50,7 +50,6 @@ const ListEvent = () => {
 
   //filters and search
   const [wordToSearch, setWordToSearch]= useState('')
-  const [isChecked, setChecked] = useState(false);
   const [taxonomyFilter, setTaxonomyFilter]= useState('')
   
   const [tlpFilter, setTlpFilter]= useState('')
@@ -60,7 +59,7 @@ const ListEvent = () => {
   const [taxonomies, setTaxonomies] = useState([]);  
   const [feeds, setFeeds] = useState([])
 
-  const [order, setOrder] = useState("");
+  const [order, setOrder] = useState("-date");
   const [starDateFilter, setStarDateFilter] = useState("")
   const [endDateFilter, setEndDateFilter] = useState("")
   const [starDate, setStarDate] = useState("")
@@ -102,22 +101,14 @@ const ListEvent = () => {
   function updatePage(chosenPage){
     setCurrentPage(chosenPage);
   }
-
-  const resetShowAlert = () => {
-    setShowAlert(false);
-  }
-
+  
   useEffect(() => {
 
     getAllCases().then((response) => { 
-      let list = []
-      response.map((item) => {
-        list.push({value:item.url, label:item.uuid})
-      })
-      setCases(list)
+      setCases(response.map(item => ({ value: item.url, label: item.uuid })));
     })
     .catch((error) => {
-        setError(error)
+        console.log(error)
         
     }).finally(() => {
         setLoading(false)
@@ -148,10 +139,13 @@ const ListEvent = () => {
 
     getMinifiedTlp().then((response) => {
       let listTlp = []
+      let dicTlp={}
         response.map((tlp) => {
           listTlp.push({value:tlp.url, label:tlp.name})
+          dicTlp[tlp.url]={name:tlp.name, color: tlp.color}
         })
       setTlpList(listTlp)
+      setTlpNames(dicTlp)
     })
     getEvents(currentPage, starDateFilter+endDateFilter+taxonomyFilter+tlpFilter+feedFilter+caseIsNull+wordToSearch, order).then((response) => {// por alguna razon lo tengo que poner a lo ultimo paar que el buscador funciones
         setEvents(response.data.results)
@@ -164,7 +158,7 @@ const ListEvent = () => {
         
     }).catch((error)=>{
         setShowAlert(true) //hace falta?
-        setError(error)
+        console.log(error)
     }).finally(() => {
       setLoading(false)
       setShowAlert(true)
@@ -257,11 +251,6 @@ const ListEvent = () => {
     setShowModalCase(false)
 
   };
-  const handleCheckboxChange = () => {
-    setCaseIsNull("&case__isnull="+!isChecked)
-    console.log("&case__isnull="+!isChecked)
-    setChecked(!isChecked); // Cambiamos el estado opuesto al actual
-  };
 
   //Create
   const createCase = () => {
@@ -341,7 +330,7 @@ const ListEvent = () => {
 
   return (
      <div>
-       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+       <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="event"/>
        <Row>
           <Navigation actualPosition="Eventos"/>
       </Row>
@@ -451,7 +440,7 @@ const ListEvent = () => {
         </Card.Header>
         <Card.Body>
            <TableEvents events={events} loading={loading} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} order={order} setOrder={setOrder} 
-           setLoading={setLoading} currentPage={currentPage} taxonomyNames={taxonomyNames} feedNames={feedNames}/> 
+           setLoading={setLoading} currentPage={currentPage} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}/> 
         </Card.Body>
         <Card.Footer >
           <Row className="justify-content-md-center">

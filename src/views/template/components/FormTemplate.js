@@ -1,13 +1,85 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import {Card, Form, Button,Row, Col} from 'react-bootstrap'
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
-import Select from 'react-select';
+import SelectComponent from '../../../components/Select/SelectComponent';
 
 const FormTemplate = (props) => {
 
-  const lifeCicle= ["manual","auto","auto_open","auto_close"]
+  const lifeCicle= [
+      {
+          value :"manual",
+          label :"Manual"
+      },
+      {
+          value :"auto",
+          label :"Auto"
+      },
+      {
+        value:"auto_open",
+        label:"auto_open"
+      },
+      {
+          value:"auto_close",
+          label: "auto_close"
+      }
+      
+      
+    ]
   const [showErrorMessage, setShowErrorMessage] = useState(false)
-  const [error,setError]=useState()
+
+  const [selectPriority, setSelectPriority] = useState()
+  const [selectTlp, setSelectTlp] = useState()
+  const [selectTaxonomy, setSelectTaxonomy] = useState()
+  const [selectFeed, setSelectFeed] = useState()
+  const [selectState, setSelectState] = useState()
+  const [selectLifeCicle, setSelectLifeCicle] = useState()
+
+  useEffect(()=> {
+        
+    if (props.tlp !== []) {
+        props.tlp.forEach(item => {
+            if(item.value === props.body.case_tlp){
+                setSelectTlp({label:item.label, value:item.value })
+            }
+        });
+    }
+    if (props.taxonomy !== []) {
+        props.taxonomy.forEach(item => {
+            if(item.value === props.body.event_taxonomy){
+                setSelectTaxonomy({label:item.label, value:item.value })
+            }
+        });
+    }
+    if (props.feeds !== []) {
+        props.feeds.forEach(item => {
+            if(item.value === props.body.event_feed){
+                setSelectFeed({label:item.label, value:item.value })
+            }
+        });
+    }
+    if (props.priorities !== []) {
+        props.priorities.forEach(item => {
+            if(item.value === props.body.priority){
+                setSelectPriority({label:item.label, value:item.value })
+            }
+        });
+    }
+    if (props.states !== []) {
+        props.states.forEach(item => {
+            if(item.value === props.body.case_state){
+                setSelectState({label:item.label, value:item.value })
+            }
+        });
+    }
+    if (lifeCicle !== []) {
+        lifeCicle.forEach(item => {
+            if(item.value === props.body.case_lifecycle){
+                setSelectLifeCicle({label:item.label, value:item.value })
+            }
+        });
+    }
+
+},[props.priorities, props.states, props.tlp, props.taxonomy, props.feeds])
 
   const completeField=(event)=>{ 
     props.setBody({...props.body,
@@ -24,7 +96,7 @@ const FormTemplate = (props) => {
             setShowErrorMessage(response.data.artifact_type === "OTHER" )        
         })
         .catch((error) => {
-            setError(error)
+            console.log(error)
         }).finally(() => {
             console.log("finalizo")
         })   
@@ -36,6 +108,19 @@ const FormTemplate = (props) => {
     props.setBody({...props.body,[event.target.name] : event.target.value}) 
   }
 
+  const completeField1=( nameField,event, setOption)=>{ 
+    if (event){
+        props.setBody({...props.body,
+            [nameField] :event.value }
+        )
+    }else{
+        props.setBody({...props.body,
+            [nameField] :"" }
+        )
+    }
+    setOption(event)
+  };
+
   return (
     <React.Fragment>
         <Card>
@@ -45,42 +130,13 @@ const FormTemplate = (props) => {
       <Card.Body>
         <Form>
         <Row>
-        
               <Col sm={12} lg={4}>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Taxonomia  <b style={{color:"red"}}>*</b></Form.Label>
-                <Form.Control  
-                    type="choice"
-                    as="select" 
-                    name="event_taxonomy" 
-                    value ={props.body.event_taxonomy} 
-                    onChange={(e)=>completeField(e)} >
-                    <option value="-1">Seleccione una taxonomia</option>
-                    {props.taxonomy.map((taxonomy) => {
-                        return(<option value={taxonomy.url}> {taxonomy.name} </option>)
-                    })}
-                 
-                </Form.Control>
-                
-                </Form.Group>
+                <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={props.taxonomy} value={selectTaxonomy} nameField="event_taxonomy" 
+                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}/>
               </Col>            
               <Col sm={12} lg={4}>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Fuente de Informacion  <b style={{color:"red"}}>*</b> </Form.Label>
-                <Form.Control  
-                    type="choice"
-                    as="select" 
-                    name="event_feed" 
-                    value ={props.body.event_feed} 
-                    onChange={(e)=>completeField(e)} 
-                    >
-                    <option value="-1">Seleccione una Fuente de Informacion</option>
-                    {props.feeds.map((feed) => {
-                        return(<option value={feed.url}> {feed.name} </option>)
-                    })}
-                 
-                </Form.Control>
-                </Form.Group>
+                <SelectComponent controlId="exampleForm.ControlSelect1" label="Fuente de Informacion" options={props.feeds} value={selectFeed} nameField="event_feed"
+                                            onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}/>
               </Col>
            
             </Row>
@@ -114,77 +170,27 @@ const FormTemplate = (props) => {
                 <Card.Title as="h5">Crear un caso</Card.Title>
             </Card.Header>
             <Card.Body>  
-<Form>
-    <Row>
-    <Col sm={12} lg={4}>
+        <Form>
+            <Row>
+                <Col sm={12} lg={4}>
             
-            <Form.Group controlId="exampleForm.ControlSelect1">
-                   <Form.Label>TLP  <b style={{color:"red"}}>*</b></Form.Label>
-                   <Form.Control  
-                       type="choice"
-                       as="select" 
-                       name="case_tlp" 
-                       value ={props.body.case_tlp} 
-                       onChange={(e)=>completeField(e)} >
-                       <option value="-1">Seleccione un tlp</option>
-                       {props.tlp.map((tlp) => {
-                           return(<option value={tlp.url}> {tlp.name} </option>)
-                       })}
-                   
-                   </Form.Control>
-               </Form.Group>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="case_tlp"
+                                        onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true}/>
                </Col>
-              
               <Col sm={12} lg={4}>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Prioridades  <b style={{color:"red"}}>*</b></Form.Label>
-                <Form.Control  
-                    type="choice"
-                    as="select" 
-                    name="priority" 
-                    value ={props.body.priority} 
-                    onChange={(e)=>completeField(e)} >
-                    <option value="-1">Seleccione una Prioridad</option>
-                    {props.priorities.map((priority) => {
-                        return(<option value={priority.url}> {priority.name} </option>)
-                    })}
-                 
-                </Form.Control>
-                </Form.Group>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
+                                     onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
               </Col>
               <Col sm={12} lg={4}>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Estado  <b style={{color:"red"}}>*</b></Form.Label>
-                <Form.Control  
-                    type="choice"
-                    as="select" 
-                    name="case_state" 
-                    value ={props.body.case_state} 
-                    onChange={(e)=>completeField(e)}>
-                    <option value="-1">Seleccione un Estado</option>
-                    {props.states.map((state) => {
-                        return(<option value={state.url}> {state.name} </option>)
-                    })}
-                </Form.Control>
-                </Form.Group>
+                <SelectComponent controlId="exampleForm.ControlSelect1" label="Estados" options={props.states} value={selectState} nameField="case_state"
+                                     onChange={completeField1} placeholder="Seleccione una Estado" setOption={setSelectState} required={true}/>
               </Col>
               </Row>
               <Row>
               <Col sm={12} lg={4}>
-              <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Ciclo de vida</Form.Label>
-                <Form.Control  
-                    type="choice"
-                    as="select" 
-                    name="case_lifecycle" 
-                    value ={props.body.case_lifecycle} 
-                    onChange={(e)=>completeField(e)} >
-                    {lifeCicle.map((type) => {
-                        return(<option value={type}> {type} </option>)
-                    })}
-                 
-                </Form.Control>
-                </Form.Group>
+              
+                <SelectComponent controlId="exampleForm.ControlSelect1" label="Ciclo de vida" options={lifeCicle} value={selectLifeCicle} nameField="case_lifecycle"
+                                     onChange={completeField1} placeholder="Seleccione una Ciclo de vida" setOption={setSelectLifeCicle} required={true}/>
               </Col>
               </Row>
         </Form>                  

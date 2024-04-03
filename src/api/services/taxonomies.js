@@ -9,7 +9,7 @@ const getMinifiedTaxonomy = () => {
         .then(response => {
             return response.data;
         }).catch(error => {
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "taxonomy");
             return Promise.reject(error);
         });
 }
@@ -20,7 +20,7 @@ const getTaxonomies = (currentPage, filters,order) => {
         .then(response => {
             return response;
         }).catch(error => {
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "taxonomy");
             return Promise.reject(error);
         });
 }
@@ -31,7 +31,7 @@ const getTaxonomy = (url) => {
         .then(response => {
             return response;
         }).catch(error => {
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "taxonomy");
             return Promise.reject(error);
         });
 }
@@ -53,7 +53,7 @@ const getAllTaxonomies = (currentPage = 1, results = [], limit = 100) => {
             }
         })
         .catch((error) => {
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "taxonomy");
             return Promise.reject(error);
         })
 
@@ -69,13 +69,13 @@ const postTaxonomy = (type, name, description, active, parent) => {
         active: active,
         parent: parent
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "taxonomy");
         return response;
     }).catch(error => { //"slug": ["Ya existe una entidad Taxonomy con slug=copyright." ],
         console.log(error.response)
 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             console.log("status 400")
             if (error.response.data.slug && error.response.data.slug[0].includes("Ya existe una entidad Taxonomy con slug")) {
                 statusText = "Ingrese un nombre diferente.";
@@ -84,7 +84,7 @@ const postTaxonomy = (type, name, description, active, parent) => {
         }
 
         messageError += statusText;
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "taxonomy");
         return Promise.reject(error);
     });
 }
@@ -100,10 +100,10 @@ const putTaxonomy = (url, type, name, description, active, parent) => {
         active: active,
         parent: parent
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "taxonomy");
         return response;
     }).catch(error => {
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "taxonomy");
         return Promise.reject(error);
     });
 }
@@ -115,10 +115,10 @@ const putActivationStatus = (url, state, name) => {
     return apiInstance.patch(url, {
         active: state
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "taxonomy");
         return response;
     }).catch(error => {
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "taxonomy");
         return Promise.reject(error);
     });
 }
@@ -129,13 +129,13 @@ const deleteTaxonomy = (url, name) => {
     let messageError = `La taxonomia ${name} no se ha encontrado.`;
     return apiInstance.delete(url)
         .then(response => {
-            setAlert(messageSuccess, "success");
+            setAlert(messageSuccess, "success", "taxonomy");
             return response;
         }).catch(error => {
             if(error.response.detail && error.response.detail === "Not found") {
                 messageError = `La taxonomia ${name} no se ha encontrado.`;
             }
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "taxonomy");
             return Promise.reject(error);
         });
 }

@@ -14,10 +14,8 @@ const ListEntity = () => {
     const [entities, setEntities] = useState([]);
     const [isModify, setIsModify] = useState(null);
     
-    const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
 
-    const [allEntities, setAllEntities] = useState([]);
     
     //Alert
     const [showAlert, setShowAlert] = useState(false);
@@ -58,11 +56,6 @@ const ListEntity = () => {
             })
         
     }, [currentPage, isModify, wordToSearch])
-
-    // ------- SEARCH --------
-    const action = () => {
-        console.log("llamada backend")
-    }
 
 return (
     <React.Fragment>

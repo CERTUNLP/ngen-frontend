@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Table, Spinner,Form } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Row, Table, Spinner, Form} from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import { getPlaybook, deletePlaybook } from '../../../api/services/playbooks'
-import CallBackendByName from '../../../components/CallBackendByName'; 
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ModalDetailPlaybook from './ModalDetailPlaybook';
 import { getTaxonomy } from '../../../api/services/taxonomies';
 import Alert from '../../../components/Alert/Alert';
 
-const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
+const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
     const [playbook, setPlaybook] = useState('')
 
     const [modalDelete, setModalDelete] = useState(false)
@@ -17,18 +16,12 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
 
     const [url, setUrl] = useState(null)
     const [name, setName] = useState(null)
-    const [listPlaybook, setlistPlaybook] = useState([])
+   
 
     
     //Alert
     const [showAlert, setShowAlert] = useState(false);
 
-    const textareaStyle = {
-        resize:"none", 
-        backgroundColor:"transparent", 
-        border:"none", 
-        boxShadow: "none"
-    }
 
     /*useEffect( ()=> { 
         async function processList(list) {
@@ -117,13 +110,12 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
             })
     };
 
-    const callbackTaxonomy = (url ,setPriority) => {
-        getTaxonomy(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
+    
+    const textareaStyle = {
+        resize:"none", 
+        backgroundColor:"transparent", 
+        border:"none", 
+        boxShadow: "none"
     }
 
     return (
@@ -143,7 +135,10 @@ const TablePlaybook = ({setIsModify, list, loading, currentPage}) => {
                                 <tr key={index}>
                                     <td>{book.name}</td>
                                     <td>
-                                    <CallBackendByName url={book.taxonomy} callback={callbackTaxonomy} useBadge={false}/>
+                                    {book.taxonomy.map((taxonomy) => {
+                                                
+                                                return  (<li>{taxonomyNames[taxonomy]}</li>)})}
+                                        
                                     </td>
                                     <td>
                                         <CrudButton type='read' onClick={() => showPlaybook(book.url)} />

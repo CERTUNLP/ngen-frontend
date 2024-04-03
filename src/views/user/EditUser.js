@@ -3,7 +3,7 @@ import { Card, Form} from 'react-bootstrap';
 import { putUser, getUser} from "../../api/services/users";
 import { useLocation } from "react-router-dom";
 import Alert from '../../components/Alert/Alert';
-import { getAllPriorities } from "../../api/services/priorities";
+import { getMinifiedPriority } from "../../api/services/priorities";
 import FormUser from './components/FormUser'
 import Navigation from '../../components/Navigation/Navigation'
 
@@ -13,10 +13,9 @@ const EditUser = () => {
     const location = useLocation();
     const fromState = location.state;
     const [user, setUser] = useState(fromState);
-    const[error,setError]=useState()
-    const[body,setBody]=useState({})
+    const [body,setBody]=useState({})
     const [loading, setLoading] = useState(true)
-    const [priorities, setPriorities] = useState()
+    const [priorities, setPriorities] = useState([])
     const [showAlert, setShowAlert] = useState(false)
 
     useEffect( ()=> {
@@ -28,11 +27,15 @@ const EditUser = () => {
         
         const fetchPosts = async () => {
             setLoading(true)
-            getAllPriorities().then((response) => { 
-                setPriorities(response)
+            getMinifiedPriority().then((response) => { 
+                let listPriority = []
+                response.map((priority) => {
+                    listPriority.push({value:priority.url, label:priority.name})
+                })
+                setPriorities(listPriority)
             })
             .catch((error) => {
-                setError(error)
+                console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
@@ -56,7 +59,7 @@ const EditUser = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)     
         })
               
     }

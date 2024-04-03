@@ -5,18 +5,17 @@ import Alert from '../../components/Alert/Alert';
 import FormTemplate from './components/FormTemplate'
 import Navigation from '../../components/Navigation/Navigation'
 import { putTemplate} from "../../api/services/templates";
-import { getTLP } from "../../api/services/tlp";
-import { getAllTaxonomies } from "../../api/services/taxonomies";
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllPriorities } from "../../api/services/priorities";
-import { getStates } from "../../api/services/states";
+import { getMinifiedTlp } from "../../api/services/tlp";
+import { getMinifiedTaxonomy } from "../../api/services/taxonomies";
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedPriority } from "../../api/services/priorities";
+import { getMinifiedState } from "../../api/services/states";
 
 const EditTemplate = () => {
     const location = useLocation();
     const fromState = location.state;
     const [template, setTemplate] = useState(fromState);
     const [body,setBody]=useState(template);
-    const [error,setError]=useState()
     const [TLP, setTLP] = useState([])
     const [feeds, setFeeds] = useState([])
     const [taxonomy, setTaxonomy] = useState([])
@@ -28,63 +27,74 @@ const EditTemplate = () => {
     useEffect( ()=> {
             setLoading(true)
     
-            getTLP().then((response) => { 
-              console.log(response.data.results)
-              setTLP(response.data.results)
+            getMinifiedTlp().then((response) => { 
+              let listTlp = []
+              response.map((tlp) => {
+                listTlp.push({value:tlp.url, label:tlp.name})
+              })
+              setTLP(listTlp)
             })
             .catch((error) => {
-                setError(error)
+              console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
             })
     
-            getAllTaxonomies().then((response) => { 
-              console.log(response)
-              setTaxonomy(response)
+            getMinifiedTaxonomy().then((response) => { 
+              let listTaxonomies = []
+              response.map((taxonomy) => {
+                listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+              })
+              setTaxonomy(listTaxonomies)
             })
             .catch((error) => {
-                setError(error)
+              console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
             })
     
-            getAllFeeds().then((response) => { //se hardcodea las paginas
-              console.log(response)
-              setFeeds(response)
+            getMinifiedFeed().then((response) => { //se hardcodea las paginas
+              let listFeed = []
+              response.map((feed) => {
+                listFeed.push({value:feed.url, label:feed.name})
+              })
+              setFeeds(listFeed)
             })
             .catch((error) => {
-                setError(error)
+              console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
             })
     
-            getAllPriorities().then((response) => { //se hardcodea las paginas
-              console.log(response)
-              setPriorities(response)
+            getMinifiedPriority().then((response) => { //se hardcodea las paginas
+              let listPriority = []
+              response.map((priority) => {
+                listPriority.push({value:priority.url, label:priority.name})
+              })
+              setPriorities(listPriority)
             })
             .catch((error) => {
-                setError(error)
+              console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
             })
     
-            getStates().then((response) => { 
-              console.log(response.data.results)
-              setStates(response.data.results)
+            getMinifiedState().then((response) => { 
+              let listStates = []
+              response.map((stateItem)=>{
+                  listStates.push({value:stateItem.url, label:stateItem.name})
+              })
+              setStates(listStates)
             })
             .catch((error) => {
-                setError(error)
                 
             }).finally(() => {
                 setLoading(false)
-            })
-
-        
-        
+            })       
       },[]);
 
       const resetShowAlert = () => {
@@ -98,14 +108,14 @@ const EditTemplate = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)       
         })
 
     }
 
   return (
     <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="template"/>
         <Row>
          <Navigation actualPosition="Editar Plantilla" path="/templates" index ="Plantilla"/> 
          </Row>

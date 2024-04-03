@@ -6,7 +6,8 @@ import Select from 'react-select';
 import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation'
 import { validateName, validateDescription, validateType, validateUnrequiredInput } from '../../utils/validators/taxonomy';
-import { putTaxonomy, getTaxonomy, getAllTaxonomies } from '../../api/services/taxonomies';
+import { putTaxonomy, getTaxonomy, getMinifiedTaxonomy } from '../../api/services/taxonomies';
+import SelectLabel from '../../components/Select/SelectLabel';
 
 
 const EditTaxonomy = () => {
@@ -21,11 +22,13 @@ const EditTaxonomy = () => {
     const [active, setActive] = useState(+taxonomy.active);
     const [taxonomies, setTaxonomies] = useState([]);      
     const [currentParent, setCurrentParent] = useState("")
-    const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false) 
 
+    const [selectTaxonomy, setSelectTaxonomy] = useState()
+    const [selectedType, setSelectedType] = useState()
+
     useEffect(() => {                 
-        getAllTaxonomies()
+        getMinifiedTaxonomy()
         .then((response) => {
             let listTaxonomies = []
             listTaxonomies.push({value:"", label:"Sin padre"})
@@ -42,7 +45,25 @@ const EditTaxonomy = () => {
             })          
             : setCurrentParent("Sin padre")    
         }          
-    }, []);      
+    }, []);  
+    
+    useEffect(() => {                 
+        if (taxonomies !== []) {
+            taxonomies.forEach(item => {
+                if(item.value === parent){
+                    setSelectTaxonomy({label:item.label, value:item.value })
+                }
+            });
+        }
+        if ( typeOption !== []) {
+            typeOption.forEach(item => {
+                if(item.value === type){
+                    setSelectedType({label:item.label, value:item.value })
+                }
+            });
+        }
+        
+    }, [taxonomies]); 
     
 
     const editTaxonomy = ()=> {        
@@ -51,20 +72,30 @@ const EditTaxonomy = () => {
             window.location.href = '/taxonomies';
         })
         .catch((error) => {
-            setError(error);            
-        })
-        .finally(() => {
+            console.log(error)           
             setShowAlert(true) 
-        })         
+        })
     };
 
     const resetShowAlert = () => {
         setShowAlert(false);
     }     
     
+    let typeOption = [
+        {
+            value : 'vulnerability',
+            label : 'Vulnerabilidad'
+        },
+        {
+            value : 'incident',
+            label : "Incidente"
+        }
+
+    ]
+
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="taxonomy"/>
             <Row>
                 <Navigation actualPosition="Editar taxonomia" path="/taxonomies" index ="Taxonomia"/> 
             </Row>
@@ -96,26 +127,12 @@ const EditTaxonomy = () => {
                                         </Form.Group>
                                     </Col>                                    
                                     <Col sm={12} lg={3}>
-                                        <Form.Group>
-                                            <Form.Label>Tipo <b style={{color:"red"}}>*</b></Form.Label>
-                                            <Form.Control 
-                                                type="choice" as="select" 
-                                                value={type} 
-                                                onChange={(e) => setType(e.target.value)} 
-                                                isInvalid={!validateType(type)} 
-                                            >                                                                     
-                                                <option key={0} value=''>Seleccione</option>
-                                                <option key={1} value='vulnerability'>Vulnerabilidad</option>
-                                                <option key={2} value='incident'>Incidente</option>
-                                            </Form.Control>
-                                            {validateType(type) ? '' : <div className="invalid-feedback">Ingrese un tipo de taxonomia</div>} 
-                                        </Form.Group>
+                                        <SelectLabel set={setType} setSelect={setSelectedType} options={typeOption}
+                                                value={selectedType} placeholder="Tipo" required={true}/> 
                                     </Col>
                                     <Col sm={12} lg={4}>
-                                        <Form.Group>
-                                            <Form.Label>Padre</Form.Label>                                   
-                                            <Select options={taxonomies} onChange={(e) => setParent(e.value)} placeholder={currentParent} />
-                                        </Form.Group>
+                                        <SelectLabel set={setParent} setSelect={setSelectTaxonomy} options={taxonomies}
+                                                value={selectTaxonomy} placeholder="Padre" required={true}/>  
                                     </Col>                                    
                                 </Row>
                                 <Row>                                

@@ -14,7 +14,6 @@ const EditState = () => {
     const fromState = location.state;
     const[body,setBody]=useState(fromState);
 
-    const [error,setError]=useState()
     const [states, setStates] = useState([])
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
@@ -39,8 +38,7 @@ const EditState = () => {
                 setStates(listChildren)
               })
               .catch((error) => {
-                  setError(error)
-                  
+                console.log(error)
               })
         }  
         fetchPosts()
@@ -57,7 +55,7 @@ const EditState = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)        
         })
     }
   return (

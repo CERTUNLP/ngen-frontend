@@ -2,74 +2,99 @@ import React, { useEffect, useState } from 'react';
 import {Button, Col, Row, Form} from 'react-bootstrap';
 import { validateName, validateContact, validateSelect } from '../../../utils/validators/contact'; 
 import FormContactSelectUsername from './FormContactSelectUSername';
-import { getAllPriorities } from '../../../api/services/priorities';
+import { getMinifiedPriority } from '../../../api/services/priorities';
+import SelectLabel from '../../../components/Select/SelectLabel';
 
 const FormCreateContact = (props) => { 
     // props: name, setName, role, setRole, priority, setPriority, type, setType, contact, setContact, keypgp, setKey, ifConfirm, ifCancel
     const [validContact, setValidContact] = useState(false) 
     const [prioritiesOption, setPrioritiesOption] = useState([])
-    const [error, setError] = useState(false)
+
+    const [selectPriority, setSelectPriority] = useState()
+    const [selectRole, setSelectRole] = useState()
+    const [selectType, setSelectType] = useState()
 
     useEffect(()=> {
 
-        getAllPriorities()
+        getMinifiedPriority()
             .then((response) => {
-                setPrioritiesOption(Object.values(response))
-                console.log(response.data.results)
+                let listPriority = []
+                response.map((priority) => {
+                    listPriority.push({value:priority.url, label:priority.name})
+                })
+                setPrioritiesOption(listPriority)
             })
             .catch((error)=>{
-                setError(error)
+                console.log(error)
             })
 
-        },[])
+    },[])
+
+    useEffect(()=> {
+        if (prioritiesOption !== []) {
+            prioritiesOption.forEach(item => {
+                if(item.value === props.priority){
+                    setSelectPriority({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (roleOptions !== []) {
+            roleOptions.forEach(item => {
+                if(item.value === props.role){
+                    setSelectRole({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (typeOptions !== []) {
+            typeOptions.forEach(item => {
+                if(item.value === props.type){
+                    setSelectType({label:item.label, value:item.value })
+                }
+            });
+        }
+
+
+    },[prioritiesOption])
     
     const roleOptions = [
         {
-            value : '',
-            name : 'Seleccione'
-        },
-        {
             value : 'technical',
-            name : 'Tecnico'
+            label : 'Tecnico'
         },
         {
             value : 'administrative',
-            name : 'Administrativo'
+            label : 'Administrativo'
         },
         {
             value : 'abuse',
-            name : 'Abuso'
+            label : 'Abuso'
         },
         {
             value : 'notifications',
-            name : 'Notificaciones'
+            label : 'Notificaciones'
         },
         {
             value : 'noc',
-            name : 'NOC'
-        },
+            label : 'NOC'
+        }
     ]
 
     const typeOptions = [
         {
-            value : '',
-            name : 'Seleccione'
-        },
-        {
             value : 'email',
-            name : 'Correo Electronico'
+            label : 'Correo Electronico'
         },
         {
             value : 'telegram',
-            name : 'Telegram'
+            label : 'Telegram'
         },
         {
             value : 'phone',
-            name : 'Telefono'
+            label : 'Telefono'
         },
         {
             value : 'uri',
-            name : 'URI'
+            label : 'URI'
         },
     ]
 
@@ -91,58 +116,18 @@ const FormCreateContact = (props) => {
                         </Form.Group>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="Form.Contact.Rol">
-                            <Form.Label>Rol <b style={{color:"red"}}>*</b></Form.Label>
-                            <Form.Control
-                                name="role"
-                                type="choice"
-                                as="select"
-                                value={props.role}                            
-                                onChange={(e) => props.setRole(e.target.value)}>
-                                {roleOptions.map((roleItem, index) => {                
-                                    return (
-                                        <option key={index} value={roleItem.value}>{roleItem.name}</option>
-                                    );
-                                })}
-                            </Form.Control>
-                        </Form.Group>
+                        <SelectLabel set={props.setRole} setSelect={setSelectRole} options={roleOptions}
+                                    value={selectRole} placeholder="Rol" required={true}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="Form.Contact.Priority" >
-                            <Form.Label>Prioridad <b style={{color:"red"}}>*</b></Form.Label>
-                            <Form.Control
-                                name="priority"
-                                type="choice"                                            
-                                as="select"
-                                value={props.priority}                             
-                                onChange={(e) =>  props.setPriority(e.target.value)}>
-                                <option value=''>Seleccione</option>
-                                {prioritiesOption.map((priorityItem, index) => {                
-                                    return (
-                                        <option key={index} value={priorityItem.url}>{priorityItem.name}</option>
-                                    );
-                                })}
-                            </Form.Control>
-                        </Form.Group>
+                        <SelectLabel set={props.setPriority} setSelect={setSelectPriority} options={prioritiesOption}
+                                    value={selectPriority} placeholder="Prioridad" required={true}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col lg={4}>
-                        <Form.Group controlId="Form.Contact.Type">
-                            <Form.Label>Tipo <b style={{color:"red"}}>*</b></Form.Label>
-                            <Form.Control
-                                name="type"
-                                type="choice"
-                                as="select"
-                                value={props.type}                               
-                                onChange={(e) =>  props.setType(e.target.value)}>
-                                {typeOptions.map((typeItem, index) => {                
-                                    return (
-                                        <option key={index} value={typeItem.value}>{typeItem.name}</option>
-                                    );
-                                })}
-                            </Form.Control>
-                        </Form.Group>
+                        <SelectLabel set={props.setType} setSelect={setSelectType} options={typeOptions}
+                                    value={selectType} placeholder="Tipo" required={true}/>
                     </Col>
                     <Col lg={8}>
                         <FormContactSelectUsername selectedType={props.type} 

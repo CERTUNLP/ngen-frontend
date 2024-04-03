@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Table, Form, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Table, Form } from 'react-bootstrap';
 import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation'
 import { getTLP } from '../../api/services/tlp';
@@ -8,9 +8,7 @@ import Ordering from '../../components/Ordering/Ordering'
 
 const ListTLP = () => {
 
-    const [tlp, setTLP] = useState([]);
-    const [error, setError] = useState(null);    
-    const [search, setSearch] = useState("");
+    const [tlp, setTLP] = useState([]); 
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
     const [wordToSearch, setWordToSearch]= useState('')
@@ -29,7 +27,7 @@ const ListTLP = () => {
             setTLP(response.data.results)         
         })
         .catch((error)=>{
-           setError(error)
+            console.log(error)
            setShowAlert(true)
         })
         .finally(() => {
@@ -67,9 +65,9 @@ const ListTLP = () => {
                                 <thead>
                                     <tr>
                                         <Ordering field="code" label="Codigo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                                        <th>Descripcion</th>
-                                        <th>¿Cuando utilizarlo?</th>
-                                        <th>¿Como compartirlo?</th>      
+                                        <th style={letterSize}>Descripcion</th>
+                                        <th style={letterSize}>¿Cuando utilizarlo?</th>
+                                        <th style={letterSize}>¿Como compartirlo?</th>      
                                     </tr>
                                 </thead>
                                 <tbody>

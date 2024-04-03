@@ -12,7 +12,6 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
     const [remove, setRemove] = useState(false);
     const [deleteName, setDeleteName] = useState("");
     const [deleteUrl, setDeleteUrl] = useState("");
-    const [error, setError] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [feed, setFeed] = useState({});
     const [showState,setShowState] =useState(false);
@@ -39,7 +38,7 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
             window.location.href = '/feeds';
         })
         .catch((error) => {
-            setError(error);
+            console.log(error)
             setShowAlert(true)           
             })
         .finally(()=>{
@@ -60,7 +59,7 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
           })
           .catch((error) => {
             setShowAlert(true)
-            setError(error);
+            console.log(error)
           })
          .finally(()=>{
             setRemove(false)
@@ -87,15 +86,13 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
                 <thead>
                     <tr>
                         <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                        <th>Activo</th>
-                        <th>Casos Asociados</th>                                                                                  
-                        <th>Acciones</th>
+                        <th style={letterSize}>Activo</th>
+                        <th style={letterSize}>Casos Asociados</th>                                                                                  
+                        <th style={letterSize}>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {feeds.map((feed, index) => {
-                        const parts = feed.url.split("/");
-                        let itemNumber = parts[parts.length - 2];
                         return (
                         <tr key={index}>
                             <td>{feed.name}</td>
@@ -157,7 +154,7 @@ const TableFeed = ({feeds, loading, order, setOrder, setLoading, currentPage}) =
                                             <ActiveButton active={feed.active} />
                                         </td>
                                     </tr>
-                                    { (feed.description == undefined) ? '' : 
+                                    { (feed.description === undefined) ? '' : 
                                             <tr>
                                                 <td>Descripcion</td>
                                                 <td>

@@ -11,7 +11,6 @@ const EditSetting = () => {
   const fromState = location.state;
   const [body, setBody] = useState(fromState);
   const [list, setList] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
   const [ifModify, setIfModify] = useState(null) 
@@ -32,7 +31,7 @@ const EditSetting = () => {
         setDisabledPagination(false)
       })
       .catch(error => {
-        setError(error);
+        console.log(error)
       })
       .finally(() => {
         setLoading(false);

@@ -1,19 +1,72 @@
+
+import React,{useState, useEffect} from 'react'
 import {Card, Form, Button, Row, Col} from 'react-bootstrap'
 import makeAnimated from 'react-select/animated';
 import { validateName, validateDescription, validateUnrequiredInput } from '../../../utils/validators/state';
-
+import SelectComponent from '../../../components/Select/SelectComponent';
 
 const animatedComponents = makeAnimated();
-
-
 const FormState = ({body, setBody, createState, type}) => {
+    const [selectAttended, setSelecAttended] = useState()
+    const [selectSolved, setSelectSolved] = useState()
+    let solvedOptions = [
+        {
+            value : true,
+            label : "Verdadero"
+        },
+        {
+            value : false,
+            label : "Falso"
+        }
+    ]
+    let attendedOptions = [
+        {
+            value : true,
+            label : "Verdadero"
+        },
+        {
+            value : false,
+            label : "Falso"
+        }
+    ]
+    useEffect(()=> {
+        
+        if (solvedOptions !== []) {
+            solvedOptions.forEach(item => {
+                if(item.value === body.solved){
+                    setSelectSolved({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (attendedOptions !== []) {
+            attendedOptions.forEach(item => {
+                if(item.value === body.attended){
+                    setSelecAttended({label:item.label, value:item.value })
+                }
+            });
+        }
+       
     
+    },[])
 
     const completeField=(event)=>{ 
         setBody({...body,
             [event.target.name] : event.target.value}
         )     
     } 
+
+    const completeField1=( nameField,event, setOption)=>{ 
+        if (event){
+            setBody({...body,
+                [nameField] :event.value }
+            )
+        }else{
+            setBody({...body,
+                [nameField] :"" }
+            )
+        }
+        setOption(event)
+    };
    
 
   return (
@@ -40,32 +93,12 @@ const FormState = ({body, setBody, createState, type}) => {
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Group controlId="exampleForm.ControlSelect1">
-                                <Form.Label>Atendido</Form.Label>
-                                <Form.Control  
-                                    type="choice"
-                                    as="select" 
-                                    name="attended" 
-                                    value ={body.attended}                          
-                                    onChange={(e)=>completeField(e)}>
-                                    <option value={true}>Verdadero</option>
-                                    <option value={false}>Falso</option>       
-                                </Form.Control>
-                            </Form.Group>
+                            <SelectComponent controlId="exampleForm.ControlSelect1" label="Atendido" options={attendedOptions} value={selectAttended} nameField="attended"
+                                        onChange={completeField1} placeholder="Seleccione una opcion" setOption={setSelecAttended} required={true}/>
                         </Col>
                         <Col>
-                            <Form.Group controlId="exampleForm.ControlSelect1">
-                                <Form.Label>Resuelto</Form.Label>
-                                <Form.Control  
-                                    type="choice"
-                                    as="select" 
-                                    name="solved" 
-                                    value ={body.solved} 
-                                    onChange={(e)=>completeField(e)}>
-                                    <option value={true}>Verdadero</option>
-                                    <option value={false}>Falso</option>       
-                                </Form.Control>
-                            </Form.Group>
+                            <SelectComponent controlId="exampleForm.ControlSelect1" label="Resuelto" options={attendedOptions} value={selectSolved} nameField="solved"
+                                        onChange={completeField1} placeholder="Seleccione una opcion" setOption={setSelectSolved} required={true}/>
                         </Col>
                     </Row>
 
@@ -83,7 +116,7 @@ const FormState = ({body, setBody, createState, type}) => {
                     </Form.Group>
 
                    
-                    {body.name !== "" && validateName(body.name) ?
+                    {body.name !== "" && validateName(body.name) && body.attended !== "" && body.solved !== ""?
                     <Button variant="primary" onClick={createState} >Guardar</Button>                             
                     : 
                     <Button variant="primary" disabled>Guardar</Button>                                    

@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Card } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import FormEvent from './components/FormEvent'
 import Navigation from '../../components/Navigation/Navigation'
 import { putEvent} from "../../api/services/events";
 import { useLocation } from "react-router-dom";
 import Alert from '../../components/Alert/Alert';
-import { getTLP } from "../../api/services/tlp";
-import { getAllTaxonomies } from "../../api/services/taxonomies";
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllPriorities } from "../../api/services/priorities";
+import { getMinifiedTlp } from "../../api/services/tlp";
+import { getMinifiedTaxonomy } from "../../api/services/taxonomies";
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedPriority } from "../../api/services/priorities";
 import { getEvidence, deleteEvidence} from "../../api/services/evidences";
-import { getAllUsers } from "../../api/services/users";
-import { getAllArtifacts } from "../../api/services/artifact";
-import { getAllCases } from "../../api/services/cases";
-import { set } from 'js-cookie';
+import { getMinifiedUser } from "../../api/services/users";
+import { getMinifiedArtifact } from "../../api/services/artifact";
+import { getMinifiedCase } from "../../api/services/cases";
 
 const EditEvent = () => {
   //const [date, setDate] = useState(caseItem.date  != null ? caseItem.date.substr(0,16) : '') //required
     const location = useLocation();
     const fromState = location.state;
     const [event, setEvent] = useState(fromState);  
-    const [error,setError]=useState()
     const [body,setBody]=useState(event)
     const [evidence, setEvidence] = useState([])
     const [TLP, setTLP] = useState([])
@@ -31,25 +29,13 @@ const EditEvent = () => {
     const [users, setUsers] = useState([])
     const [listArtifact, setListArtifact] = useState([])
     const [contactCreated, setContactsCreated ] = useState(null);
-    const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
     const [selectCase, setSelectCase] = useState()
-
   useEffect( ()=> {
-    event.date = event.date.substr(0,16)
-    //event.reporter = event.reporter == null ? "": event.reporter
-    //event.domain = event.domain == null ? "": event.domain
-    //event.cidr = event.cidr == null ? "": event.cidr
-    if (event.case !== null){
-      const parts = event.case.split("/");
-      let itemNumber = parts[parts.length - 2];
-      setSelectCase({value:event.case, label:itemNumber})
-    }
-   
-    setBody(event)
+    
+    let dicCase={}
 
     const fetchPosts = async () => {
-        setLoading(true)
 
 
         var list = []
@@ -63,73 +49,79 @@ const EditEvent = () => {
         setEvidence(list)
         
         
-        getTLP().then((response) => { 
-          setTLP(response.data.results)
+        getMinifiedTlp().then((response) => { 
+          let listTlp = []
+          response.map((tlp) => {
+            listTlp.push({value:tlp.url, label:tlp.name})
+          })
+          setTLP(listTlp)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllCases().then((response) => { 
+        getMinifiedCase().then((response) => { 
           let list = []
           response.map((item) => {
-            const parts = item.url.split("/");
-            let itemNumber = parts[parts.length - 2];
-            list.push({value:item.url, label:itemNumber})
+            list.push({value:item.url, label:item.name+": "+item.uuid})
+            dicCase[item.url]= item.name+": "+item.uuid
           })
           setCases(list)
         })
         .catch((error) => {
-            setError(error)
-            
-        }).finally(() => {
-            setLoading(false)
+          console.log(error)  
         })
 
-        getAllTaxonomies().then((response) => { 
-          setTaxonomy(response)
+        getMinifiedTaxonomy().then((response) => { 
+          let listTaxonomies = []
+          response.map((taxonomy) => {
+            listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+          })
+          setTaxonomy(listTaxonomies)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllFeeds().then((response) => { //se hardcodea las paginas
-          setFeeds(response)
+        getMinifiedFeed().then((response) => { //se hardcodea las paginas
+          let listFeed = []
+          response.map((feed) => {
+            listFeed.push({value:feed.url, label:feed.name})
+          })
+          setFeeds(listFeed)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllPriorities().then((response) => { //se hardcodea las paginas
-          setPriorities(response)
+        getMinifiedPriority().then((response) => { //se hardcodea las paginas
+          let listPriority = []
+          response.map((priority) => {
+            listPriority.push({value:priority.url, label:priority.name})
+          })
+          setPriorities(listPriority)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllUsers().then((response) => { //se hardcodea las paginas
-          setUsers(response)
+        getMinifiedUser().then((response) => { //se hardcodea las paginas
+          let listUser = []
+          response.map((user) => {
+            listUser.push({value:user.url, label:user.username})
+          })
+          setUsers(listUser)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllArtifacts()
+        getMinifiedArtifact()
         .then((response) => {
           var list= []
           response.map((artifact)=>{
@@ -138,11 +130,21 @@ const EditEvent = () => {
           setListArtifact(list)
         })
         .catch((error)=>{
-            setError(error)
+          console.log(error)
         })
         
     }  
     fetchPosts()
+    event.date = event.date.substr(0,16)
+    event.case =  event.case ? event.case : ""
+    //event.reporter = event.reporter == null ? "": event.reporter
+    //event.domain = event.domain == null ? "": event.domain
+    //event.cidr = event.cidr == null ? "": event.cidr
+    /*if (event.case !== null){
+      setSelectCase({value:event.case, label: dicCase[event.case]})
+    }*/
+   
+    setBody(event)
     
   },[contactCreated]);
   
@@ -151,7 +153,7 @@ const EditEvent = () => {
       setShowAlert(false);
     }
 
-
+    console.log(body)
     const editEvent=()=>{
       const formDataEvent = new FormData();
 
@@ -191,11 +193,6 @@ const EditEvent = () => {
       }else{
         formDataEvent.append("evidence", evidence)
       }
-
-
-      /*body.artifacts.forEach((item) => {
-        formDataEvent.append('artifacts', item);
-      });*/
       formDataEvent.append('artifacts',body.artifacts);
 
 
@@ -205,7 +202,7 @@ const EditEvent = () => {
       })
       .catch((error) => {
           setShowAlert(true) //hace falta?
-          setError(error);           
+          console.log(error)        
       }) 
       
          
@@ -213,7 +210,7 @@ const EditEvent = () => {
 
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event"/>
         <Row>
           <Navigation actualPosition="Editar Evento " path="/events" index ="Evento"/>
         </Row>

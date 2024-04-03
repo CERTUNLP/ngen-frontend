@@ -8,7 +8,6 @@ import { getEdge, deleteEdge } from "../../../api/services/edges";
 
 const RowEdge = (props) => {
     const [edge, setEdge] = useState('');
-    const [error, setError] = useState(null)
 
     const [modalShow, setModalShow] = useState(false)
     const [modalEdit, setModalEdit] = useState(false)
@@ -51,7 +50,6 @@ const RowEdge = (props) => {
             })
             .catch((error) => {
                 console.log(error)
-                setError(error)
             })
             .finally(() => {
                 setModalDelete(false)

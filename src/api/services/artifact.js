@@ -1,8 +1,19 @@
 import  apiInstance  from "../api";
 import { COMPONENT_URL } from '../../config/constant';
+import setAlert from '../../utils/setAlert';
 
-const getArtefacts = (page="") => {//el parametro es para completar la url con el numero de pagina
-    
+const getMinifiedArtifact = () => {//el parametro es para completar la url con el numero de pagina
+    let messageError = `No se pudo recuperar la informacion de los estados`;
+    return apiInstance.get(COMPONENT_URL.artifactMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error", "case");
+        return Promise.reject(error);
+    });
+}
+
+const getArtefacts = (page="") => {//el parametro es para completar la url con el numero de pagina  
     return apiInstance.get(COMPONENT_URL.artifact+page);
 }
 
@@ -20,7 +31,7 @@ const getAllArtifacts = (currentPage = 1, results = [], limit = 100) => {
     return apiInstance.get(COMPONENT_URL.artifact, { params: { page: currentPage, page_size: limit } })       
         .then((response) => {
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllArtifacts(++currentPage, res, limit)
             }
             else{
@@ -33,4 +44,4 @@ const getAllArtifacts = (currentPage = 1, results = [], limit = 100) => {
 }
 
 
-export { getArtefacts, postArtifact, getArtefact, getAllArtifacts};
+export { getArtefacts, postArtifact, getArtefact, getAllArtifacts, getMinifiedArtifact};

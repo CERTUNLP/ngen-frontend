@@ -4,8 +4,6 @@ import { Row, Col, Card } from 'react-bootstrap';
 import { getAllContacts } from '../../api/services/contacts';
 import { putNetwork } from '../../api/services/networks';
 import FormCreateNetwork from './components/FormCreateNetwork';
-import ModalConfirm from '../../components/Modal/ModalConfirm';
-import { isActive } from '../../api/services/networks'; 
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
 
@@ -25,7 +23,6 @@ const EditNetwork = () => {
     const [parent, setParent] = useState(network.parent);
     const [network_entity, setNetwork_entity] = useState(network.network_entity);
     const [contacts, setContacts] = useState(network.contacts); //* 
-    const [error, setError] = useState(null);
 
     //Dropdown
     const [contactsOption, setContactsOption] = useState([])
@@ -67,7 +64,7 @@ const EditNetwork = () => {
             .then((response) => { 
                 window.location.href = "/networks"
             })
-            .catch(() => {
+            .catch((error) => {
                 setShowAlert(true)
                 console.log(error)
                 });    

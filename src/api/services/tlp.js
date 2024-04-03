@@ -17,7 +17,6 @@ const getTLP = (filters,order) => {//hay que agregar pagiandor en tlp
     let messageError = `No se pudo recuperar la informacion de TLP`;
     return apiInstance.get(COMPONENT_URL.tlp+ '?ordering=' + order +'&' + filters)
     .then(response => {   
-        console.log(response)     
         return response;
     }).catch( error => { 
         setAlert(messageError, "error");

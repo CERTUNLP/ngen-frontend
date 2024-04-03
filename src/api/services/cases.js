@@ -2,6 +2,17 @@ import apiInstance from "../api";
 import { COMPONENT_URL, PAGE } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
+const getMinifiedCase = () => {//el parametro es para completar la url con el numero de pagina
+    let messageError = `No se pudo recuperar la informacion de los estados`;
+    return apiInstance.get(COMPONENT_URL.caseMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error", "case");
+        return Promise.reject(error);
+    });
+}
+
 const getCases = (currentPage, filters,order) => { //+- id, date, attend_date, priority
     let messageError = `No se ha recuperado informacion de casos. `;
     console.log()
@@ -65,25 +76,12 @@ const postCase = (formData) => {
     let messageSuccess = `El caso ha sido creado correctamente.`;
     let messageError = `El caso no ha sido creado. `;
     return apiInstance.post(COMPONENT_URL.case, formData)
-    /*    {
-        date: date, //
-        lifecycle: lifecycle, 
-        parent: parent,
-        priority: priority, //
-        tlp: tlp, //
-        assigned: assigned,
-        state: state, //
-        comments: comments,
-        evidence: evidence,
-        attend_date: attend_date,
-        solve_date: solve_date  
-    }*/
     .then(response => {
         setAlert(messageSuccess, "success", "case");
         return response;
     }).catch( error => { 
         console.log(error.response.data)
-        if (error.response.status == 400 ) { 
+        if (error.response.status === 400 ) { 
             if(error.response.data.parent !== null) {
                 messageError += 'La red padre no es valida. ';
             }
@@ -101,19 +99,7 @@ const postCase = (formData) => {
         let messageSuccess = `El caso se ha editado correctamente.`;
         let messageError = `El caso no se ha editado. `;
         return apiInstance.put(url, formData
-        /*{
-            date: date, //
-            lifecycle: lifecycle, 
-            parent: parent,
-            priority: priority, //
-            tlp: tlp, //
-            assigned: assigned,
-            state: state, //
-            comments: comments,
-            evidence: evidence,
-            attend_date: attend_date,
-            solve_date: solve_date  
-        }*/
+      
         ).then(response => {
             setAlert(messageSuccess , "success", "case");
             return response;
@@ -177,4 +163,4 @@ const mergeCase = (urlParent, urlChildren) => {
     });
 }
 
-export { getCases, getAllCases, getOrderingCases, getCase, postCase, putCase, deleteCase, mergeCase, patchCase };
+export { getCases, getAllCases, getOrderingCases, getCase, postCase, putCase, deleteCase, mergeCase, patchCase, getMinifiedCase };

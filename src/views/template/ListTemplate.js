@@ -5,9 +5,9 @@ import CrudButton from '../../components/Button/CrudButton';
 import TableTemplete from './components/TableTemplete';
 import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search'
-import { getTemplates, getAllTemplate } from '../../api/services/templates';
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllTaxonomies } from '../../api/services/taxonomies';
+import { getTemplates } from '../../api/services/templates';
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedTaxonomy  } from '../../api/services/taxonomies';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
@@ -15,7 +15,6 @@ import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
 
 const ListTemplete = () => {
   const [templete, setTemplete] = useState([])
-  const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [countItems, setCountItems] = useState(0);
@@ -30,37 +29,38 @@ const ListTemplete = () => {
 
   const [taxonomyFilter, setTaxonomyFilter]= useState('')
   const [feedFilter, setFeedFilter]= useState('')
-  const [addressValues, setAddressValues]= useState([])
   const [wordToSearch, setWordToSearch]= useState('')
   const [order, setOrder] = useState("");
+
+  const [taxonomyNames, setTaxonomyNames] = useState({});
+  const [feedNames, setFeedNames] = useState({});
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }
     
 
   useEffect( ()=> {
-    getAllTemplate().then((response) => {
-        let listAddressValue = []
-        response.map((template) => {
-            listAddressValue.push({value:template.address_value, label:template.address_value})
-        })
-        setAddressValues(listAddressValue)
-      })
 
-    getAllTaxonomies()
+    getMinifiedTaxonomy()
     .then((response) => {
         let listTaxonomies = []
+        let dicTaxonomy={}
         response.map((taxonomy) => {
             listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+            dicTaxonomy[taxonomy.url]=taxonomy.name
         })
+        setTaxonomyNames(dicTaxonomy)
         setTaxonomies(listTaxonomies)
     })
 
-    getAllFeeds().then((response) => {
+    getMinifiedFeed().then((response) => {
         let listFeeds = []
-        response.map((taxonomy) => {
-          listFeeds.push({value:taxonomy.url, label:taxonomy.name})
+        let dicFeed={}
+        response.map((feed) => {
+          listFeeds.push({value:feed.url, label:feed.name})
+          dicFeed[feed.url]=feed.name
         })
+      setFeedNames(dicFeed)
       setFeeds(listFeeds)
     })
 
@@ -75,7 +75,7 @@ const ListTemplete = () => {
             setDisabledPagination(false)
         })
         .catch((error)=>{
-            setError(error)
+            console.log(error)
           })
           .finally(() => {
               setShowAlert(true)
@@ -90,7 +90,7 @@ const ListTemplete = () => {
 
   return (
     <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="template"/>
       <Row>
             <Navigation actualPosition={'Plantilla'}/>  
         </Row>
@@ -128,7 +128,8 @@ const ListTemplete = () => {
                         </Collapse>
                     </Card.Header>
                     <Card.Body>
-                        <TableTemplete list={templete} loading={loading} order={order} setOrder={setOrder} setLoading={setLoading} currentPage={currentPage}/>
+                        <TableTemplete list={templete} loading={loading} order={order} setOrder={setOrder} setLoading={setLoading} currentPage={currentPage}
+                        taxonomyNames={taxonomyNames} feedNames={feedNames}/>
                     </Card.Body>
                     <Card.Footer >
                             <Row className="justify-content-md-center">

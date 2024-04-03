@@ -58,7 +58,7 @@ const postReport = (problem, derived_problem, verification, recommendations, mor
         return response;
     }).catch( error => { 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             if (error.response.data.non_field_errors && error.response.data.non_field_errors[0] === "The fields lang, taxonomy must make a unique set.") {
                 statusText = "Ya existe para esa taxonomia en ese idioma.";
             }  
@@ -86,7 +86,7 @@ const putReport = (url, problem, derived_problem, verification, recommendations,
         return response;
     }).catch( error => { 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             if (error.response.data.non_field_errors && error.response.data.non_field_errors[0] === "The fields lang, taxonomy must make a unique set.") {
                 statusText = "ya existe esa taxonomia con ese idioma ";
             }
