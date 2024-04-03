@@ -1,31 +1,34 @@
 import React,{useState,useEffect} from 'react'
-import { Card, Col, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import { useLocation } from "react-router-dom";
 import FormTemplate from './components/FormTemplate'
 import Navigation from '../../components/Navigation/Navigation'
 import { postTemplate} from "../../api/services/templates";
-import { getTLP } from "../../api/services/tlp";
-import { getAllTaxonomies } from "../../api/services/taxonomies";
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllPriorities } from "../../api/services/priorities";
-import { getAllStates } from "../../api/services/states";
+import { getMinifiedTlp } from "../../api/services/tlp";
+import { getMinifiedTaxonomy } from "../../api/services/taxonomies";
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedPriority } from "../../api/services/priorities";
+import { getMinifiedState } from "../../api/services/states";
 import Alert from '../../components/Alert/Alert';
 
 const CreateTemplate = () => {
+
+  const location = useLocation();
+  const formEvent = location.state ? location.state : "";
   const formEmpty={ 
     cidr: "",
     domain: "",
-    address_value: "",
+    address_value: formEvent.address_value ? formEvent.address_value: "",
     active: true,
     priority: "-1",
-    event_taxonomy: "-1",
-    event_feed: "-1",
+    event_taxonomy: formEvent.taxonomy ? formEvent.taxonomy: "",
+    event_feed: formEvent.feed ? formEvent.feed : "",
     case_lifecycle: "auto",
     case_tlp: "-1",
     case_state: "-1"
 
   }
   const [body, setBody] = useState(formEmpty)
-  const [error,setError]=useState()
   const [TLP, setTLP] = useState([])
   const [feeds, setFeeds] = useState([])
   const [taxonomy, setTaxonomy] = useState([])
@@ -40,53 +43,70 @@ const CreateTemplate = () => {
     const fetchPosts = async () => {
         setLoading(true)
 
-        getTLP().then((response) => { 
-          console.log(response.data.results)
-          setTLP(response.data.results)
+        getMinifiedTlp().then((response) => { 
+          let listTlp = []
+          response.map((tlp) => {
+            listTlp.push({value:tlp.url, label:tlp.name})
+          })
+          setTLP(listTlp)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
         }).finally(() => {
             setLoading(false)
         })
 
-        getAllTaxonomies().then((response) => { 
-          console.log(response)
-          setTaxonomy(response)
+        getMinifiedTaxonomy().then((response) => { 
+          let listTaxonomies = []
+          response.map((taxonomy) => {
+            listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+          })
+          setTaxonomy(listTaxonomies)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
         }).finally(() => {
             setLoading(false)
         })
 
-        getAllFeeds().then((response) => { //se hardcodea las paginas
-          setFeeds(response)
+        getMinifiedFeed().then((response) => { //se hardcodea las paginas
+          let listFeed = []
+          response.map((feed) => {
+            listFeed.push({value:feed.url, label:feed.name})
+          })
+          setFeeds(listFeed)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
         }).finally(() => {
             setLoading(false)
         })
 
-        getAllPriorities().then((response) => { //se hardcodea las paginas
-          setPriorities(response)
+        getMinifiedPriority().then((response) => { //se hardcodea las paginas
+          let listPriority = []
+          response.map((priority) => {
+            listPriority.push({value:priority.url, label:priority.name})
+          })
+          setPriorities(listPriority)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
         }).finally(() => {
             setLoading(false)
         })
 
-        getAllStates().then((response) => { 
-          setStates(response)
+        getMinifiedState().then((response) => { 
+          let listStates = []
+          response.map((stateItem)=>{
+              listStates.push({value:stateItem.url, label:stateItem.name})
+          })
+          setStates(listStates)
         })
         .catch((error) => {
-            setError(error)
             
         }).finally(() => {
             setLoading(false)
@@ -107,12 +127,12 @@ const CreateTemplate = () => {
     })
     .catch((error) => {
         setShowAlert(true) 
-        setError(error);           
+        console.log(error)        
     }) 
   }
   return (
     <React.Fragment>
-      <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+      <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="template"/>
       <Row>
         <Navigation actualPosition="Agregar Plantilla" path="/templates" index ="Plantillas"/>
       </Row>

@@ -100,6 +100,21 @@ const ModalFormCase = (props) => {
         </Card.Header>
         <Card.Body> 
             <Row>
+                 <Col lg={12} sm={12}>
+                            <Form.Group controlId="Form.Case.Comments">
+                                <Form.Label>Nombre del caso </Form.Label>
+                                <Form.Control 
+                                    type="text"
+                                    name="name" 
+                                    placeholder="Nombre del caso" 
+                                    maxlength="100"
+                                    value={props.body.name} 
+                                    onChange={(e) => completeField(e)} 
+                                />
+                            </Form.Group>
+                </Col>
+            </Row>
+            <Row>
                 <Col lg={6} sm={12}>                        
                     <Form.Group controlId="Form.Case.Priority">
                         <Form.Label>Prioridad <b style={{color:"red"}}>*</b></Form.Label>

@@ -31,7 +31,7 @@ const getAllStates = (currentPage = 1, results = [], limit = 100) => {
     return apiInstance.get(COMPONENT_URL.state, { params: { page: currentPage, page_size: limit } })       
         .then((response) => {
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllStates(++currentPage, res, limit)
             }
             else{
@@ -60,7 +60,7 @@ const postState = ( name,attended,solved,active,description,children) => {
     }).catch( error => { 
 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             console.log("status 400")
             if (error.response.data.attended && error.response.data.attended[0] === "Must be a valid boolean.") {
                 statusText = "Debe ingresar un valor en el campo 'Atendido'.";
@@ -94,7 +94,7 @@ const putState = ( url,name,attended,solved,active,description,children) => {
     }).catch( error => { 
 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             console.log("status 400")
             if (error.response.data.attended && error.response.data.attended[0] === "Must be a valid boolean.") {
                 statusText = "Debe ingresar un valor en el campo 'Atendido'.";

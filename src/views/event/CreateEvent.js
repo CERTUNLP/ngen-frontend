@@ -3,14 +3,15 @@ import { Row } from 'react-bootstrap';
 import FormEvent from './components/FormEvent'
 import Navigation from '../../components/Navigation/Navigation'
 import { postEvent} from "../../api/services/events";
-import { getTLP } from "../../api/services/tlp";
-import { getAllTaxonomies } from "../../api/services/taxonomies";
-import { getAllFeeds } from "../../api/services/feeds";
-import { getAllPriorities } from "../../api/services/priorities";
-import { getAllUsers } from "../../api/services/users";
-import { getAllArtifacts } from "../../api/services/artifact";
+import { getMinifiedTlp } from "../../api/services/tlp";
+import { getMinifiedTaxonomy } from "../../api/services/taxonomies";
+import { getMinifiedFeed } from "../../api/services/feeds";
+import { getMinifiedPriority } from "../../api/services/priorities";
+import { getMinifiedUser } from "../../api/services/users";
+import { getMinifiedArtifact } from "../../api/services/artifact";
+import { getMinifiedCase } from "../../api/services/cases";
 import Alert from '../../components/Alert/Alert';
-import { getAllCases } from "../../api/services/cases";
+
 
 const CreateEvent = () => {
   const formEmpty={   
@@ -18,21 +19,20 @@ const CreateEvent = () => {
     todos: [],
     artifacts: [], 
     comments: null, // verificar aca si escribo y borro todo, se envia "" lo mismo para notes
-    address_value:"",
-    date: "",
+    address_value:"", //requerido
+    date: "",       //requerido
     notes: "", 
-    parent: [],
-    priority: "-1",
-    tlp: "-1",
-    taxonomy: "-1",
-    feed: "-1",
+    parent: [], 
+    priority: "" ,  //requerido
+    tlp: "",        //requerido 
+    taxonomy: "",   //requerido
+    feed: "",       //requerido
     reporter: [],
     case: "",
     tasks:[]
   }  
   const [body, setBody] = useState(formEmpty)
   const [evidence, setEvidence] = useState([])
-  const [error,setError]=useState()
   const [TLP, setTLP] = useState([])
   const [feeds, setFeeds] = useState([])
   const [taxonomy, setTaxonomy] = useState([])
@@ -40,10 +40,8 @@ const CreateEvent = () => {
   const [users, setUsers] = useState([])
   const [cases, setCases] = useState([])
   const [listArtifact, setListArtifact] = useState([])
-  const [loading, setLoading] = useState(true)
   const [contactCreated, setContactsCreated ] = useState(null);
   const [showAlert, setShowAlert] = useState(false)
-  const [selectCase, setSelectCase] = useState("")
   const [updateCases, setUpdateCases] = useState("")
 
   const resetShowAlert = () => {
@@ -52,91 +50,90 @@ const CreateEvent = () => {
 
   useEffect( ()=> {
     const fetchPosts = async () => {
-        setLoading(true)
         
-        getTLP().then((response) => { 
-          console.log(response.data.results)
-          setTLP(response.data.results)
+        getMinifiedTlp().then((response) => {
+          let listTlp = []
+          response.map((tlp) => {
+            listTlp.push({value:tlp.url, label:tlp.name})
+          })
+          setTLP(listTlp)
         })
         .catch((error) => {
             setShowAlert(true) //hace falta?
-            setError(error)
+            console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllCases().then((response) => { 
+        getMinifiedCase().then((response) => { 
           let list = []
           response.map((item) => {
-            const parts = item.url.split("/");
-            let itemNumber = parts[parts.length - 2];
-            list.push({value:item.url, label:item.uuid})
+            list.push({value:item.url, label:item.name+": "+item.uuid})
           })
           setCases(list)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllTaxonomies().then((response) => { 
-
-          setTaxonomy(response)
+        getMinifiedTaxonomy().then((response) => { 
+          let listTaxonomies = []
+          response.map((taxonomy) => {
+            listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
+          })
+          setTaxonomy(listTaxonomies)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllFeeds().then((response) => { //se hardcodea las paginas
-          console.log(response)
-          setFeeds(response)
+        getMinifiedFeed().then((response) => { //se hardcodea las paginas
+          let listFeed = []
+          response.map((feed) => {
+            listFeed.push({value:feed.url, label:feed.name})
+          })
+          setFeeds(listFeed)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllPriorities().then((response) => { //se hardcodea las paginas
-          console.log(response)
-          setPriorities(response)
+        getMinifiedPriority().then((response) => { //se hardcodea las paginas
+          let listPriority = []
+          response.map((priority) => {
+            listPriority.push({value:priority.url, label:priority.name})
+          })
+          setPriorities(listPriority)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllUsers().then((response) => { //se hardcodea las paginas
-          console.log(response)
-          setUsers(response)
+        getMinifiedUser().then((response) => { //se hardcodea las paginas
+          let listUser = []
+          response.map((user) => {
+            listUser.push({value:user.url, label:user.username})
+          })
+          setUsers(listUser)
         })
         .catch((error) => {
-            setError(error)
+          console.log(error)
             
-        }).finally(() => {
-            setLoading(false)
         })
 
-        getAllArtifacts()
+        getMinifiedArtifact()
         .then((response) => {
           var list= []
-          console.log(response)
           response.map((artifact)=>{
             list.push({value:artifact.url, label:artifact.value})
           })
           setListArtifact(list)
         })
         .catch((error)=>{
-            setError(error)
+          console.log(error)
         }) 
         
     }  
@@ -150,7 +147,6 @@ const CreateEvent = () => {
     console.log(body.date)
 
     formDataEvent.append("date", body.date)// tengo que hacer esto porque solo me acepta este formato, ver a futuro
-   
     formDataEvent.append("priority",body.priority)
     formDataEvent.append("tlp", body.tlp)
     formDataEvent.append("taxonomy", body.taxonomy)
@@ -182,13 +178,13 @@ const CreateEvent = () => {
     })
     .catch((error) => {
         setShowAlert(true)
-        setError(error);            
+        console.log(error)         
     })  
   }
-  console.log(body)
+
   return (
     <div>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event"/>
         <Row>
           <Navigation actualPosition="Agregar evento" path="/events" index ="Evento"/>
         </Row>
@@ -196,7 +192,7 @@ const CreateEvent = () => {
                     feeds={feeds} taxonomy={taxonomy} tlp={TLP} priorities={priorities} 
                     users={users} listArtifact={listArtifact} setContactsCreated={setContactsCreated} 
                     evidence={evidence} setEvidence={setEvidence} cases={cases}
-                    selectCase={selectCase} setSelectCase={setSelectCase} setUpdateCases={setUpdateCases}/>
+                    setUpdateCases={setUpdateCases}/>
           
     </div>
   )

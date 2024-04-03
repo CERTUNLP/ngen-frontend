@@ -8,7 +8,7 @@ const getMinifiedPriority = () => {//el parametro es para completar la url con e
     .then(response => {        
         return response.data;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }
@@ -19,7 +19,7 @@ const getPriorities = (currentPage, filters,order) => {//el parametro es para co
     .then(response => {        
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }
@@ -30,7 +30,7 @@ const getPriority = (url) => {
     .then(response => {        
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }
@@ -40,7 +40,7 @@ const getAllPriorities = (currentPage = 1, results = [], limit = 100) => {
     return apiInstance.get(COMPONENT_URL.priority, { params: { page: currentPage, page_size: limit } })       
         .then((response) => {
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllPriorities(++currentPage, res, limit)
             }
             else{
@@ -48,7 +48,7 @@ const getAllPriorities = (currentPage = 1, results = [], limit = 100) => {
             }                  
         })
         .catch((error) => {
-            return Promise.reject(error);            
+            return Promise.reject(error, "priority");            
         })   
 
 }
@@ -63,34 +63,34 @@ const postPriority = (name, color, severity, attend_time, solve_time) => {
         attend_time: attend_time, 
         solve_time: solve_time
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "priority");
         return response;
     }).catch( error => {
         let statusText = ""; 
 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             console.log("status 400")
 
             //se informa que existe el username con ese nombre
-            if(error.response.data.slug && error.response.data.slug[0].substring(0, 39) == "Ya existe una entidad Priority con slug") {
+            if(error.response.data.slug && error.response.data.slug[0].substring(0, 39) === "Ya existe una entidad Priority con slug") {
                 statusText = "Ingrese un nombre diferente. "; 
                 console.log("SLUG")
-            } else if(error.response.data.severity && error.response.data.severity[0] == "priority with this severity already exists." ){
+            } else if(error.response.data.severity && error.response.data.severity[0] === "priority with this severity already exists." ){
                 statusText = `Ingrese una severidad diferente.`;   
                 console.log("SEVERIDAD")
-            } else if(error.response.data.color && error.response.data.color[0] == "Enter a valid hex color, eg. #000000") {
+            } else if(error.response.data.color && error.response.data.color[0] === "Enter a valid hex color, eg. #000000") {
                 statusText = "Ingrese un color valido. ";   
                 console.log("COLOR")
             } 
 
-        }else if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        }else if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             messageError = `El usuario ${name} no puede ser creado porque el servidor no responde`;
         } else{
             statusText = error.response.statusText;
         }
         messageError += statusText;
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }
@@ -106,30 +106,30 @@ const putPriority = ( url, name, color, severity, attend_time, solve_time) => {
         solve_time: solve_time
         
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "priority");
         return response;
     }).catch( error => { 
         let statusText = ""; 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             console.log("status 400")
 
             //se informa que existe el username con ese nombre
-            if(error.response.data.slug && error.response.data.slug[0].substring(0, 39) == "Ya existe una entidad Priority con slug") {
+            if(error.response.data.slug && error.response.data.slug[0].substring(0, 39) === "Ya existe una entidad Priority con slug") {
                 statusText = "Ingrese un nombre diferente. "; 
-            } else if(error.response.data.severity && error.response.data.severity[0] == "priority with this severity already exists." ){
+            } else if(error.response.data.severity && error.response.data.severity[0] === "priority with this severity already exists." ){
                 statusText = `Ingrese una severidad diferente.`;   
-            } else if(error.response.data.color && error.response.data.color[0] == "Enter a valid hex color, eg. #000000") {
+            } else if(error.response.data.color && error.response.data.color[0] === "Enter a valid hex color, eg. #000000") {
                 statusText = "Ingrese un color valido. ";   
             } 
 
-        }else if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        }else if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             messageError = `El usuario ${name} no puede ser creado porque el servidor no responde`;
         } else{
             statusText = error.response.statusText;
         }
         messageError += statusText;
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }
@@ -138,7 +138,7 @@ const deletePriority = (url) => {
     let messageSuccess = `La prioridad se pudo eliminar correctamente. `;
     let messageError = `La prioridad no se pudo eliminar`;
     return apiInstance.delete(url).then(response => {
-        setAlert(messageSuccess , "success");
+        setAlert(messageSuccess , "success", "priority");
         return response;
     }).catch( error => {
         let statusText = ""; 
@@ -146,7 +146,7 @@ const deletePriority = (url) => {
             statusText = ", esta referenciada.";
         }
         messageError += statusText;
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "priority");
         return Promise.reject(error);
     });
 }

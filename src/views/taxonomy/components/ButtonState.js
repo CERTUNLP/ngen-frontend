@@ -7,7 +7,6 @@ function ButtonState({taxonomy}) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [error, setError] = useState(null);
 
     const changeState = (taxonomy)=> {        
         putActivationStatus(taxonomy.url, !taxonomy.active, taxonomy.name).
@@ -15,7 +14,7 @@ function ButtonState({taxonomy}) {
             window.location.href = '/taxonomies';
         })
         .catch((error) => {
-            setError(error);           
+            console.log(error)     
           })
         .finally(()=>{
             handleClose();

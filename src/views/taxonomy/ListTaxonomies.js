@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Spinner } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CrudButton from '../../components/Button/CrudButton';
 import Alert from '../../components/Alert/Alert';
@@ -12,8 +12,6 @@ import TableTaxonomy from './components/TableTaxonomy';
 const ListTaxonomies = () => {
     const [taxonomies, setTaxonomies] = useState([]);
     const [isModify, setIsModify] = useState(null);
-
-    const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true)
 
     const [showAlert, setShowAlert] = useState(false);
@@ -24,7 +22,7 @@ const ListTaxonomies = () => {
     const [disabledPagination, setDisabledPagination] = useState(true)
     const [wordToSearch, setWordToSearch]= useState('')
 
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("-created");
 
 
     function updatePage(chosenPage){
@@ -50,15 +48,10 @@ const ListTaxonomies = () => {
         })
     }, [currentPage, isModify, order, wordToSearch,]); 
         
-    //valores ingresados
-    const searcher = (e) => {
-        setSearch(e.target.value) //actualizar
-    }
-      
 
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} />
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="taxonomy" />
             
             <Row>
                 <Navigation actualPosition={'Taxonomias'}/>  
@@ -80,7 +73,7 @@ const ListTaxonomies = () => {
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            <TableTaxonomy setIsModify={setIsModify} list={taxonomies} loading={loading} currentPage={currentPage} order={order} setOrder={setOrder} setLoading={setLoading}/>
+                            <TableTaxonomy setIsModify={setIsModify} list={taxonomies} loading={loading} order={order} setOrder={setOrder} setLoading={setLoading}/>
                         </Card.Body>
                         <Card.Footer >
                             <Row className="justify-content-md-center">

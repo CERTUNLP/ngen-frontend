@@ -12,7 +12,6 @@ import Alert from '../../components/Alert/Alert';
 const ListState = () => {
     const [loading, setLoading] = useState(true)
     const [states, setStates] = useState([])
-    const [error, setError] = useState()
     const [currentPage, setCurrentPage] = useState(1)
     const [countItems, setCountItems] = useState(0);
     const [updatePagination, setUpdatePagination] = useState(false)
@@ -23,10 +22,6 @@ const ListState = () => {
 
 
     const [showAlert, setShowAlert] = useState(false)
-
-    const resetShowAlert = () => {
-        setShowAlert(false);
-      }
 
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
@@ -43,7 +38,7 @@ const ListState = () => {
                 }
                 setDisabledPagination(false)
             }).catch((error)=>{
-                setError(error)
+                console.log(error)
               })
               .finally(() => {
                   setShowAlert(true)
@@ -54,10 +49,6 @@ const ListState = () => {
         }, [ currentPage, wordToSearch])
 
         
-    console.log(states)
-    const action = () => {
-        console.log("llamada backend")
-      }
   return (
     <div>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="state"/>

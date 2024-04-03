@@ -4,7 +4,8 @@ import CrudButton from '../../components/Button/CrudButton';
 import TableCase from './components/TableCase'; 
 import { getCases, mergeCase } from '../../api/services/cases';
 import { getMinifiedPriority } from "../../api/services/priorities";
-import {getTLP, getMinifiedTlp } from '../../api/services/tlp';
+import { getMinifiedTlp } from '../../api/services/tlp';
+import { getMinifiedUser } from '../../api/services/users';
 import { getMinifiedState } from '../../api/services/states'
 import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
@@ -33,7 +34,7 @@ const ListCase = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
     //filters
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("-created");
     const [wordToSearch, setWordToSearch]= useState('')
     const [open, setOpen] = useState(false);
 
@@ -50,6 +51,7 @@ const ListCase = () => {
     const [priorityNames, setPriorityNames] = useState({});
     const [tlpNames, setTlpNames] = useState({});
     const [stateNames, setStateNames] = useState({});
+    const [userNames, setUserNames] = useState({});
      
 
     const [refresh,setRefresh]= useState(true)
@@ -58,6 +60,19 @@ const ListCase = () => {
     }  
     //ORDER
     useEffect( ()=> {
+
+        getMinifiedUser()
+        .then((response) => {
+            let dicUser={}
+            response.map((user) => {
+                dicUser[user.url]= user.username
+            })
+            setUserNames(dicUser)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
         getMinifiedState()
         .then((response) => {
             let stateOp = []
@@ -72,6 +87,7 @@ const ListCase = () => {
         .catch((error)=>{
             console.log(error)
         })
+
         getMinifiedPriority()
         .then((response) => {
             let priorityOp = []
@@ -88,13 +104,13 @@ const ListCase = () => {
             console.log(error)
         })
 
-        getTLP()
+        getMinifiedTlp()
             .then((response) => {
                 let list = []
                 let dicTlp = {}
-                response.data.results.map((tlp) => {
+                response.map((tlp) => {
                     list.push({value: tlp.url, label: tlp.name})
-                    dicTlp[tlp.url]=tlp.name
+                    dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
                 })
                 setTlpNames(dicTlp) 
                 setTlps(list)
@@ -106,7 +122,6 @@ const ListCase = () => {
         getCases(currentPage,priorityFilter+tlpFilter+stateFilter+wordToSearch, order) 
             .then((response) => {
                 setCases(response.data.results)
-                console.log(response.data.results)
                 setCountItems(response.data.count);
                 // Pagination
                 if(currentPage === 1){
@@ -119,7 +134,6 @@ const ListCase = () => {
             })
             .finally(() => {
                 setShowAlert(true)
-                console.log("entro")
                 setLoading(false)
             })
         
@@ -134,7 +148,6 @@ const ListCase = () => {
     const merge = () => {
         const parent = selectedCases.shift();
         selectedCases.forEach(child => {
-            console.log(`MERGE --> parent: ${parent} \n          child:${child} `)
             mergeCase(parent, child)
                 .then(response => setIfModify(response))
                 .catch(error => console.log(error))
@@ -221,9 +234,8 @@ const ListCase = () => {
                         </Collapse> 
                     </Card.Header>
                     <Card.Body>
-                        <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} 
-                                order={order}  setOrder={setOrder} setIfModify={setIfModify} setLoading={setLoading} currentPage={currentPage}
-                                priorityNames={priorityNames}  stateNames={stateNames}/>
+                        <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order}  setOrder={setOrder} 
+                                setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames}  stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}/>
                     </Card.Body>
                     <Card.Footer >
                         <Row className="justify-content-md-center">

@@ -12,7 +12,6 @@ function ButtonView({taxonomy}) {
   const [created, setCreated] = useState(null) 
   const [modified, setModified] = useState(null) 
   const [parent, setParent] = useState(null);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     taxonomyParent()    
@@ -25,10 +24,11 @@ function ButtonView({taxonomy}) {
   const taxonomyParent = ()=> {
     getTaxonomy(taxonomy.parent)
     .then((response) => {
+        console.log(response.data.name)
         setParent(response.data.name)               
     })     
     .catch((error) => {
-        setError(error);            
+        console.log(error)       
     })  
     
   }

@@ -4,7 +4,8 @@ import Select from 'react-select';
 import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation'
 import { validateName, validateDescription, validateType, validateUnrequiredInput } from '../../utils/validators/taxonomy';
-import { postTaxonomy, getAllTaxonomies } from '../../api/services/taxonomies';
+import { postTaxonomy, getMinifiedTaxonomy } from '../../api/services/taxonomies';
+import SelectLabel from '../../components/Select/SelectLabel';
 
 const CreateTaxonomy = () => {
     const [type, setType] = useState("");
@@ -12,11 +13,13 @@ const CreateTaxonomy = () => {
     const [description, setDescription] = useState("");
     const [parent, setParent] = useState("");
     const [taxonomies, setTaxonomies] = useState([]);      
-    const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false)    
 
+    const [selectTaxonomy, setSelectTaxonomy] = useState()
+    const [selectedType, setSelectedType] = useState()
+
     useEffect(() => {          
-        getAllTaxonomies()
+        getMinifiedTaxonomy()
         .then((response) => {
             let listTaxonomies = []
             response.map((taxonomy) => {
@@ -49,21 +52,30 @@ const CreateTaxonomy = () => {
             window.location.href = '/taxonomies';
         })
         .catch((error) => {
-            setError(error);            
-        })
-        .finally(() => {
+            console.log(error)          
             setShowAlert(true) 
-        })        
+        })
     };
 
     const resetShowAlert = () => {
         setShowAlert(false);
     }    
 
+    let typeOption=[
+        {
+            value : 'vulnerability',
+            label : 'Vulnerabilidad'
+        },
+        {
+            value : 'incident',
+            label : "Incidente"
+        }
+
+    ]
 
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="taxonomy"/>
             <Row>
                 <Navigation actualPosition="Agregar taxonomia" path="/taxonomies" index ="Taxonomia"/>
             </Row>
@@ -89,25 +101,12 @@ const CreateTaxonomy = () => {
                                         </Form.Group>
                                     </Col>     
                                     <Col sm={12} lg={4}>
-                                        <Form.Group>
-                                            <Form.Label>Tipo <b style={{color:"red"}}>*</b></Form.Label>
-                                            <Form.Control 
-                                                type="choice" 
-                                                as="select" 
-                                                value={type} 
-                                                onChange={(e) => setType(e.target.value)} 
-                                            >                                                                     
-                                                <option key={0} value=''>Seleccione</option>
-                                                <option key={1} value='vulnerability'>Vulnerabilidad</option>
-                                                <option key={2} value='incident'>Incidente</option>
-                                            </Form.Control>
-                                        </Form.Group>
+                                        <SelectLabel set={setType} setSelect={setSelectedType} options={typeOption}
+                                                value={selectedType} placeholder="Tipo"required={true}/>  
                                     </Col>
                                     <Col sm={12} lg={4}>
-                                            <Form.Group>
-                                                <Form.Label>Padre</Form.Label>
-                                                <Select options={taxonomies} placeholder="Ingrese" onChange={(e) => setParent(e.value)} />
-                                            </Form.Group>
+                                            <SelectLabel set={setParent} setSelect={setSelectTaxonomy} options={taxonomies}
+                                                value={selectTaxonomy} placeholder="Padre"/>  
                                     </Col>                           
                                 </Row>
                                     <Row>

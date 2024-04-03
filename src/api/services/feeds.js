@@ -8,7 +8,7 @@ const getMinifiedFeed = () => { //+- id, name, slug, created, modified
     .then(response => {        
         return response.data;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -19,7 +19,7 @@ const getFeeds = (currentPage, filters,order) => { //+- id, name, slug, created,
     .then(response => {        
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -30,7 +30,7 @@ const getFeed = (url) => {
     .then(response => {        
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -41,7 +41,7 @@ const getAllFeeds = (currentPage = 1, results = [], limit = 100) => {
         .then((response) => {
             console.log(response)
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllFeeds(++currentPage, res, limit)
             }
             else{
@@ -49,7 +49,7 @@ const getAllFeeds = (currentPage = 1, results = [], limit = 100) => {
             }                  
         })
         .catch((error) => {
-            setAlert(messageError, "error");
+            setAlert(messageError, "error", "feed");
             return Promise.reject(error);            
         })   
 
@@ -63,10 +63,10 @@ const postFeed = (name, description, active) => {
         description: description,
         active: active
     }).then(response => {
-        setAlert(messageSuccess, "success");
+        setAlert(messageSuccess, "success", "feed");
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -80,10 +80,10 @@ const putFeed = (url, name, description, active) => {
         description: description,
         active: active
     }).then(response => {
-        setAlert(messageSuccess , "success");
+        setAlert(messageSuccess , "success", "feed");
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -95,10 +95,10 @@ const putActivationStatus= (url, state, name) => {
     return apiInstance.patch(url, {
         active: state
     }).then(response => {
-        setAlert(messageSuccess , "success");
+        setAlert(messageSuccess , "success", "feed");
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }
@@ -108,10 +108,10 @@ const deleteFeed = (url, name) => {
     let messageSuccess = `La fuente de informacion ${name} se pudo eliminar correctamente`;
     let messageError = `La fuente de informacion ${name} no se pudo eliminar`;
     return apiInstance.delete(url).then(response => {
-        setAlert(messageSuccess , "success");
+        setAlert(messageSuccess , "success", "feed");
         return response;
     }).catch( error => { 
-        setAlert(messageError, "error");
+        setAlert(messageError, "error", "feed");
         return Promise.reject(error);
     });
 }

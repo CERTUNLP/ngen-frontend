@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {Button, Card, CloseButton, Col, Row, Form, Modal} from 'react-bootstrap';
-import { getAllEntities } from '../../../api/services/entities';
+import { getMinifiedEntity } from '../../../api/services/entities';
 import { getAllNetworks } from '../../../api/services/networks';
 import CrudButton from '../../../components/Button/CrudButton';
 import FormCreateContact from '../../contact/components/FormCreateContact';
 import { postContact } from '../../../api/services/contacts';
-import { validateSelect, validateNetworkCIDR, validateNetworkDomain, validateUnrequiredInput } from '../../../utils/validators/network';
+import { validateSelect } from '../../../utils/validators/network';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import DropdownState from '../../../components/Dropdown/DropdownState';
 import Alert from '../../../components/Alert/Alert';
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
+import SelectLabel from '../../../components/Select/SelectLabel';
 
 
 const animatedComponents = makeAnimated();
@@ -23,7 +24,6 @@ const FormCreateNetwork = (props) => {
     //Dropdown
     const [entitiesOption, setEntitiesOption] = useState([])
     const [networksOption, setNetworksOption] = useState([])
-    const [error, setError] = useState(null)
 
     //Multiselect
     const [contactsValueLabel, setContactsValueLabel] = useState([])
@@ -38,18 +38,35 @@ const FormCreateNetwork = (props) => {
     const [selectType, setSelectType] = useState('');
     const [showErrorMessage, setShowErrorMessage] = useState(false)
 
+    const [selectEntity, setSelectEntity] = useState()
+    const [selectedType, setSelectedType] = useState()
+
     //Alert
     const [showAlert, setShowAlert] = useState(false);
 
+    let typeOption = [
+        {
+            value:'internal' , label:"Interna"
+        },
+        {
+            value:'external' , label:'External'
+        }
+    ]
+
     useEffect(()=> {
                 
-        getAllEntities()
+        getMinifiedEntity()
             .then((response) => {
-                setEntitiesOption(response)
+                let listEntity = []
+                response.map((entity) => {
+                    listEntity.push({value:entity.url, label:entity.name})
+                })
+
+                setEntitiesOption(listEntity)
                 console.log(response)
             })
             .catch((error)=>{
-                setError(error)
+                console.log(error)
             })
     
         getAllNetworks()
@@ -58,19 +75,33 @@ const FormCreateNetwork = (props) => {
                 console.log(response)
             })
             .catch((error)=>{
-                setError(error)
+                console.log(error)
             })
         
         },[])
 
     useEffect(()=> {
-    
+        if (entitiesOption !== []) {
+            entitiesOption.forEach(item => {
+                if(item.value === props.network_entity){
+                    setSelectEntity({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (typeOption !== []) {
+            typeOption.forEach(item => {
+                if(item.value === props.type){
+                    setSelectedType({label:item.label, value:item.value })
+                }
+            });
+        }
+
         //selected contacts 
         let listDefaultContact = props.allContacts.filter(elemento => props.contacts.includes(elemento.value))
         .map(elemento => ({value: elemento.value, label: elemento.label}));
         setContactsValueLabel(listDefaultContact)
         
-        },[props.contacts, props.allContacts])
+    },[props.contacts, props.allContacts, props.network_entity])
 
     //Multiselect    
     const selectContacts=(event)=>{ 
@@ -91,7 +122,7 @@ const FormCreateNetwork = (props) => {
                 setShowErrorMessage(response.data.artifact_type === "OTHER" || response.data.artifact_type === "EMAIL")        
             })
             .catch((error) => {
-                setError(error)
+                console.log(error)
             }).finally(() => {
                 console.log("finalizo")
             })   
@@ -113,13 +144,13 @@ const FormCreateNetwork = (props) => {
             setModalCreate(false) //
         })
         .catch((error) => {
-            setError(error)
             console.log(error)
         })
         .finally(()=> {
             setShowAlert(true);
         });
     };
+   
 
     return (
         <React.Fragment>
@@ -127,39 +158,12 @@ const FormCreateNetwork = (props) => {
             <Form>
                 <Row>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="Form.Network.Type">
-                            <Form.Label>Tipo <b style={{color:"red"}}>*</b></Form.Label>
-                            <Form.Control
-                                name="type"
-                                type="choice"
-                                as="select"
-                                value={props.type}
-                                onChange={(e) =>  props.setType(e.target.value)}>
-                                <option key={0} value=''>Seleccione</option>
-                                <option key={1} value='internal'>Interna</option>
-                                <option key={2} value='external'>Externa</option>                                
-                            </Form.Control>
-                        </Form.Group>
+                        <SelectLabel set={props.setType} setSelect={setSelectedType} options={typeOption}
+                                    value={selectedType} placeholder="Tipo" required={true}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="Form.Network.Entity">
-                            <Form.Label>Entidad</Form.Label>
-                            <Form.Control
-                                name="entity"
-                                type="choice"
-                                as="select"
-                                value={props.network_entity}
-                                onChange={(e) => props.setNetwork_entity(e.target.value)}>
-                                    {props.edit ? '' : <option key={0} value={null}>Seleccione una entidad </option>}
-                                    {entitiesOption.map((entityItem, index) => {                
-                                         
-                                        return (
-                                           
-                                            <option key={index} value={entityItem.url}>{entityItem.name}</option>
-                                        );
-                                    })}
-                            </Form.Control>
-                        </Form.Group>                        
+                        <SelectLabel set={props.setNetwork_entity} setSelect={setSelectEntity} options={entitiesOption}
+                                    value={selectEntity} placeholder="Entidad"/>                     
                     </Col>
                 </Row>
 

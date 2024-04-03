@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Spinner } from 'react-bootstrap';
+import { Row, Col, Card} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { getFeeds } from '../../api/services/feeds';
 import CrudButton from '../../components/Button/CrudButton';
@@ -11,7 +11,6 @@ import Search from '../../components/Search/Search'
 
 const ListFeed = () => {    
     const [feeds, setFeeds] = useState([]);
-    const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true);
     const [showAlert, setShowAlert] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
@@ -41,15 +40,19 @@ const ListFeed = () => {
             setDisabledPagination(false)
         })
         .catch((error)=>{
+            console.log(error)
+            setShowAlert(true)
         })
         .finally(() => {
             setLoading(false)
+            setShowAlert(true)
+            
         })
     }, [ currentPage, wordToSearch, order]);  
  
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)}/>
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="feed"/>
             <Row>
                 <Navigation actualPosition={'Fuentes de Información'}/>
             </Row>

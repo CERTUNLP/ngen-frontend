@@ -6,18 +6,14 @@ import CrudButton from '../../../components/Button/CrudButton';
 import {Link} from 'react-router-dom'
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
-import { deleteTemplate, isActive } from "../../../api/services/templates";
+import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
-import CallBackendByName from '../../../components/CallBackendByName'; 
-import { getTaxonomy } from '../../../api/services/taxonomies';
-import { getFeed } from '../../../api/services/feeds';
-import Ordering from '../../../components/Ordering/Ordering'
 
-const TableTemplete = ({list, loading, order, setOrder, setLoading, currentPage}) => {
+
+const TableTemplete = ({list, loading, order, setOrder, setLoading, currentPage , taxonomyNames, feedNames}) => {
   const [deleteName, setDeleteName] = useState()
   const [deleteUrl, setDeleteUrl] = useState()
   const [remove, setRemove] = useState()
-  const [error, setError] = useState(null);
   const [template, setTemplate] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [dataTemplate,setDataTemplate] = useState({})
@@ -43,7 +39,7 @@ const handleDelete = () => {
       })
       .catch((error) => {
         setShowAlert(true)
-        setError(error);
+        console.log(error)
       })
      .finally(()=>{
         setRemove(false)
@@ -60,7 +56,15 @@ const handleDelete = () => {
     setDataTemplate({url:url, name:name, state: active})
     setShowTemplate(true)
 }
-  const changeState=()=>{
+    const create = (url) =>{
+        createCases(url).then(() => {
+            window.location.href = '/templates';
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+    }
+    const changeState=()=>{
         
     isActive(dataTemplate.url, +!dataTemplate.state)
     .then(() => {
@@ -68,8 +72,8 @@ const handleDelete = () => {
     })
     .catch((error) => {
         setShowAlert(true)
-        setError(error);           
-      })
+        console.log(error)        
+        })
     .finally(()=>{ 
         setShowTemplate(false)
     })
@@ -78,24 +82,6 @@ const handleDelete = () => {
     const resetShowAlert = () => {
         setShowAlert(false);
     }
-
-    const callbackTaxonomy = (url ,setPriority) => {
-        getTaxonomy(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
-    }
-    const callbackFeed = (url ,setPriority) => {
-        getFeed(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
-    }
-
 
   return (
     <React.Fragment>
@@ -114,12 +100,10 @@ const handleDelete = () => {
                         </thead>
                         <tbody>
                             {list.map((template, index) => {
-                                const parts = template.url.split("/");
-                                let itemNumber = parts[parts.length - 2];
                             return (
-                                        <tr>
-                                            <td><CallBackendByName url={template.event_feed} callback={callbackFeed} useBadge={false}/></td>
-                                            <td><CallBackendByName url={template.event_taxonomy} callback={callbackTaxonomy} useBadge={false}/> </td>
+                                        <tr key={index}>
+                                            <td>{feedNames[template.event_feed]}</td>
+                                            <td>{taxonomyNames[template.event_taxonomy]} </td>
                                             <td>{template.address_value} </td>
                                             <td>
                                             <ActiveButton active={+template.active} onClick={() => modalChangeState(template.url, template.cidr, template.active)} />
@@ -130,6 +114,37 @@ const handleDelete = () => {
                                                 <CrudButton  type='edit' />
                                             </Link>
                                             <CrudButton  type='delete' onClick={()=>modalDelete(template.cidr, template.url)} />
+                                            { template.matching_events_without_case > 0 ? 
+                                             <Button  className="btn-icon btn-rounded" variant="outline-primary" onClick={() => create(template.url)}>
+                                             <svg
+                                               xmlns="http://www.w3.org/2000/svg"
+                                               width="16"
+                                               height="16"
+                                               fill="currentColor"
+                                               className="bi bi-play"
+                                               viewBox="0 0 16 16"
+                                             >
+                                               <path d="M12.645 8.235l-6.647-4.662a1 1 0 0 0-1.618.785v9.324a1 1 0 0 0 1.618.785l6.647-4.662a1 1 0 0 0 0-1.57z" />
+                                             </svg>
+                                           </Button> :
+                                           <Button disabled className="btn-icon btn-rounded" variant="outline-secundary"
+                                           style={{
+                                            border: "1px solid #555", 
+                                            borderRadius: "50px",
+                                            color: "#555", 
+                                          }}>
+                                           <svg
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             width="16"
+                                             height="16"
+                                             fill="currentColor"
+                                             className="bi bi-play"
+                                             viewBox="0 0 16 16"
+                                           >
+                                             <path d="M12.645 8.235l-6.647-4.662a1 1 0 0 0-1.618.785v9.324a1 1 0 0 0 1.618.785l6.647-4.662a1 1 0 0 0 0-1.57z" />
+                                           </svg>
+                                         </Button> }
+                                        
                                             </td>
                                         </tr>
                                     )

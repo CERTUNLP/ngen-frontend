@@ -1,6 +1,6 @@
 import React,{ useState} from 'react'
 import {
-  Button,Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
+  Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
 } from 'react-bootstrap';
 import {Link} from 'react-router-dom'
 import { deletePriority } from "../../../api/services/priorities";
@@ -14,7 +14,6 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
     const [remove, setRemove] = useState(false);
     const [deleteName, setDeleteName] = useState("");
     const [deleteUrl, setDeleteUrl] = useState("");
-    const [error, setError] = useState(null);
     const [priority, setPriority] = useState({});
     const [modalShow, setModalShow] = useState(false);
     const [showAlert, setShowAlert] = useState(false)
@@ -45,7 +44,7 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
           .catch((error) => {
             setRemove(false)
             setShowAlert(true)
-            setError(error);
+            console.log(error)
           })
     }
       const showModalPriority = (priority) => {
@@ -65,17 +64,15 @@ const TablePriorities = ({Priorities, loading, order, setOrder, setLoading, curr
                     <thead>
                         <tr>
                             <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th>Fecha limite de respuesta</th>
-                            <th>Fecha limite de resolucion </th>
-                            <th>Opciones</th>
+                            <th style={letterSize}>Fecha limite de respuesta</th>
+                            <th style={letterSize}>Fecha limite de resolucion </th>
+                            <th style={letterSize}>Opciones</th>
                         </tr>
                    </thead>
                     <tbody>
                        {Priorities.map((priority, index) => {
-                        const parts = priority.url.split("/");
-                        let itemNumber = parts[parts.length - 2];
                         return (
-                            <tr>
+                            <tr key={index}>
                                 <td>{priority.name}</td>
                                 <td>{priority.attend_time}</td>
                                 <td>{priority.solve_time}</td>

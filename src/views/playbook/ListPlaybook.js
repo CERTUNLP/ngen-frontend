@@ -7,12 +7,12 @@ import TablePlaybook from './components/TablePlaybook';
 import Search from '../../components/Search/Search';
 import { getPlaybooks } from '../../api/services/playbooks';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
+import { getMinifiedTaxonomy } from '../../api/services/taxonomies';
 
 const ListPlaybook = () => {
     const [playbook, setPlaybook] = useState('')
     const [isModify, setIsModify] = useState(null);
 
-    const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true)
 
     //AdvancedPagination
@@ -20,6 +20,7 @@ const ListPlaybook = () => {
     const [countItems, setCountItems] = useState(0);
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
+    const [taxonomyNames, setTaxonomyNames] = useState({});
 
     const [wordToSearch, setWordToSearch]= useState('')
     const [order, setOrder] = useState("");
@@ -42,18 +43,22 @@ const ListPlaybook = () => {
             })
             .catch((error) => {
                 // Show alert
+                console.log(error)
             })
             .finally(() => {
                 //setShowAlert(true)
                 setLoading(false)
             })
+        getMinifiedTaxonomy()
+            .then((response) => {
+                let dicTaxonomy={}
+                response.map((taxonomy) => {
+                    dicTaxonomy[taxonomy.url]=taxonomy.name
+                })
+                setTaxonomyNames(dicTaxonomy)
+            })
         
     }, [countItems, currentPage, isModify, wordToSearch])
-
-    // ------- SEARCH --------
-    const action = () => {
-        console.log("llamada backend")
-    }
 
     return (
     <React.Fragment>
@@ -76,7 +81,7 @@ const ListPlaybook = () => {
                         </Row>
                     </Card.Header>
                     <Card.Body>
-                        <TablePlaybook setIsModify={setIsModify} list={playbook} loading={loading} currentPage={currentPage}/>
+                        <TablePlaybook setIsModify={setIsModify} list={playbook} loading={loading} taxonomyNames={taxonomyNames}/>
                     </Card.Body>
                     <Card.Footer >
                         <Row className="justify-content-md-center">

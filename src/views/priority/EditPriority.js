@@ -14,7 +14,6 @@ const EditPriority = () => {
 
     const [alert, setAlert] = useState(null)
     const [stateAlert, setStateAlert] = useState(null)
-    const [error,setError]=useState()
     const [body,setBody]=useState(priority)
     const [showAlert, setShowAlert] = useState(false)
 
@@ -72,7 +71,7 @@ const EditPriority = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)      
         })
     }
     const resetShowAlert = () => {
@@ -80,7 +79,7 @@ const EditPriority = () => {
     }
   return (
     <>
-        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="priority"/>
         <Row>
             <Navigation actualPosition="Editar prioridad" path="/priorities" index ="Prioridades"/>
         </Row>     

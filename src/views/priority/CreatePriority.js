@@ -19,7 +19,6 @@ const AddPriority = () => {
         solve_time_minutes:""
         }
     const [body,setBody]=useState(formEmpty)
-    const [error,setError]=useState()
     const [showAlert, setShowAlert] = useState(false)
 
 
@@ -40,7 +39,7 @@ const AddPriority = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)        
         })
         
         
@@ -51,7 +50,7 @@ const AddPriority = () => {
 
     return (
         <>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="priority"/>
             <Row>
                 <Navigation actualPosition="Agregar Prioridad" path="/priorities" index ="Prioridades"/>
             </Row>

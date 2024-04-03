@@ -7,7 +7,7 @@ const getAllSetting = (currentPage = 1, results = [], limit = 100) => {
     return apiInstance.get(COMPONENT_URL.constance, { params: { page: currentPage, page_size: limit } })       
         .then((response) => {
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllSetting(++currentPage, res, limit)
             }
             else{

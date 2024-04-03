@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {Button, Card, Col, Form, Row} from 'react-bootstrap';
-import { getAllPriorities } from '../../../api/services/priorities';
-import { getTLP } from '../../../api/services/tlp';
-import { getAllUsers } from '../../../api/services/users';
+import { getMinifiedPriority } from '../../../api/services/priorities';
+import { getMinifiedTlp } from '../../../api/services/tlp';
+import { getMinifiedUser } from '../../../api/services/users';
 import ViewFiles from '../../../components/Button/ViewFiles';
 import FileUpload  from '../../../components/UploadFiles/FileUpload/FileUpload'
 import FileList from '../../../components/UploadFiles/FileList/FileList'
 import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
+import SelectLabel from '../../../components/Select/SelectLabel';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
@@ -19,6 +20,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle) 
     const [parent, setParent] = useState(props.caseItem.parent) 
     const [priority, setPriority] = useState(props.caseItem.priority) 
+    const [name, setName] = useState(props.caseItem.name) 
     const [tlp, setTlp] = useState(props.caseItem.tlp) 
     const [assigned, setAssigned] = useState(props.caseItem.assigned)
     const [state, setState] = useState(props.caseItem.state) 
@@ -41,30 +43,87 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     //commet
     const [ comm, setComm ] = useState();
 
+    const [selectPriority, setSelectPriority] = useState("")
+    const [selectTlp, setSelectTlp] = useState("")
+    const [selectLifecycle, setSelectLifecycle] = useState("") 
+    const [selectState, setSelectState] = useState("") 
+    const [selectAssigned, setSelectAssigned] = useState("") 
+
+
+    useEffect(()=> {
+        
+        if (allPriorities !== []) {
+            allPriorities.forEach(item => {
+                if(item.value === priority){
+                    setSelectPriority({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (allTlp !== []) {
+            allTlp.forEach(item => {
+                if(item.value === tlp){
+                    setSelectTlp({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (allUsers !== []) {
+            allUsers.forEach(item => {
+                if(item.value === assigned){
+                    setSelectAssigned({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.allStates !== []) {
+            props.allStates.forEach(item => {
+                if(item.value === state){
+                    setSelectState({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (allLifecycles !== []) {
+            allLifecycles.forEach(item => {
+                if(item.value === lifecycle){
+                    setSelectLifecycle({label:item.label, value:item.value })
+                }
+            });
+        }
+
+    },[allPriorities, allTlp, allUsers, props.allStates])
     useEffect(()=> {
       
-        getAllPriorities()
+        getMinifiedPriority()
         .then((response) => {
-            setAllPriorities (Object.values(response))
-            console.log(response)
+            let listPriority = []
+            response.map((priority) => {
+              listPriority.push({value:priority.url, label:priority.name})
+            })
+
+            setAllPriorities(listPriority)
         })
         .catch((error)=>{
             console.log(error)
         })
 
-        getTLP()
+        getMinifiedTlp()
         .then((response) => {
-            setAllTlp(response.data.results)
-            console.log(response.data.results)
+            let listTlp = []
+            response.map((tlp) => {
+              listTlp.push({value:tlp.url, label:tlp.name})
+            })
+            setAllTlp(listTlp)
         })
         .catch((error)=>{
             console.log(error)
         })
 
-        getAllUsers()
+        getMinifiedUser()
         .then((response) => {
-            setAllUsers(response)
-            console.log(response)
+            let listUser = []
+            response.map((user) => {
+                listUser.push({value:user.url, label:user.username})
+            })
+
+            setAllUsers(listUser)
         })
         .catch((error)=>{
             console.log(error)
@@ -77,33 +136,22 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const allLifecycles = [
         {
             value: "manual",
-            display_name: "Manual"
+            label: "Manual"
         },
         {
             value: "auto",
-            display_name: "Auto"
+            label: "Auto"
         },
         {
             value: "auto_open",
-            display_name: "Auto open"
+            label: "Auto open"
         },
         {
             value: "auto_close",
-            display_name: "Auto close"
+            label: "Auto close"
         }
     ]
     
-    //
-    const selectEvidences = (event) => {
-        const filesEvidence = event.target.files;
-        console.log(filesEvidence)
-        const evidence = [];
-        for (let i = 0; i < filesEvidence.length; i++) {
-          evidence.push(filesEvidence[i]);
-        }
-        setEvidences(evidence);
-      }
-
     /***************************************/
     const handleDragOver = (event) => {
         event.preventDefault();
@@ -186,6 +234,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             form.append("parent", parent)
         }
         form.append("priority", priority)
+        form.append("name", name)
         form.append("tlp", tlp)
         if(assigned !== null) {
             form.append("assigned", assigned)
@@ -199,8 +248,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 form.append("events", selectedEvent);
             });
         }
-        //form.append("evidence", "http://localhost:8000/api/event/1/")
-        //form.append("evidence", ["http://localhost:8000/api/event/1/", "http://localhost:8000/api/event/2/"])
         //form.append("evidence", evidences)
         if (evidences !== null){
             for (let index=0; index< evidences.length  ; index++){
@@ -294,113 +341,39 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 </Card.Header>
                 <Card.Body> 
                     <Row>
+                    <Col lg={6} sm={12}>
+                            <Form.Group controlId="Form.Case.Comments">
+                                <Form.Label>Nombre del caso </Form.Label>
+                                <Form.Control 
+                                    type="text"
+                                    name="name" 
+                                    placeholder="Nombre del caso" 
+                                    maxlength="100"
+                                    value={name} 
+                                    onChange={(e) => setName(e.target.value)} 
+                                />
+                            </Form.Group>
+                        </Col>
                         <Col lg={3} sm={12}>                        
-                            <Form.Group controlId="Form.Case.Priority">
-                                <Form.Label>Prioridad <b style={{color:"red"}}>*</b></Form.Label>
-                                <Form.Control
-                                    name="priority"
-                                    type="choice"                                            
-                                    as="select"
-                                    value={priority}
-                                    onChange={(e) => setPriority(e.target.value)}>
-                                    <option value='0'>Seleccione</option>
-                                    {allPriorities.map((priorityItem, index) => {                
-                                        return (
-                                            <option key={index} value={priorityItem.url}>{priorityItem.name}</option>
-                                        );
-                                    })}
-                                </Form.Control>
-                                {priority ? '' : <div className="invalid-feedback">Seleccione la prioridad</div>}
-                            </Form.Group>
+                                 <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
+                                    value={selectPriority} placeholder="Prioridad" required={true}/>
                         </Col>
-                        
-                        
-                        
                         <Col lg={3} sm={12}>
-                            <Form.Group controlId="Form.Case.Lifecycle">
-                                <Form.Label>Ciclo de vida <b style={{color:"red"}}>*</b></Form.Label>
-                                <Form.Control
-                                    name="lifecycle"
-                                    type="choice"                                            
-                                    as="select"
-                                    value={lifecycle}
-                                    onChange={(e) => setLifecycle(e.target.value)}>
-                                    <option value='0'>Seleccione</option>
-                                    {allLifecycles.map((lifecycleItem, index) => {                
-                                        return (
-                                            <option key={index} value={lifecycleItem.value}>{lifecycleItem.display_name}</option>
-                                        );
-                                    })}
-                                </Form.Control>
-                                {lifecycle ? '' : <div className="invalid-feedback">Seleccione el ciclo de vida</div>}
-                            </Form.Group>
+                                <SelectLabel set={setLifecycle} setSelect={setSelectLifecycle} options={allLifecycles}
+                                    value={selectLifecycle} placeholder="Ciclo de vida" required={true}/>
+                        </Col>
+                        <Col lg={3} sm={12}>
+                                <SelectLabel set={setTlp} setSelect={setSelectTlp} options={allTlp}
+                                    value={selectTlp} placeholder="TLP" required={true}/>
+                        </Col>
+                        <Col lg={3} sm={12}>
+                            <SelectLabel set={setState} setSelect={setSelectState} options={props.allStates}
+                                    value={selectState} placeholder="Estado" required={true}/>
                         </Col>
 
-
-
-
                         <Col lg={3} sm={12}>
-                            <Form.Group controlId="Form.Case.Tlp">
-                                <Form.Label>TLP <b style={{color:"red"}}>*</b></Form.Label>
-                                <Form.Control
-                                    name="tlp"
-                                    type="choice"                                            
-                                    as="select"
-                                    value={tlp}
-                                    onChange={(e) => setTlp(e.target.value)}>
-                                    <option value='0'>Seleccione</option>
-                                    {allTlp.map((tlpItem, index) => {                
-                                        return (
-                                            <option key={index} value={tlpItem.url}>{tlpItem.name}</option>
-                                        );
-                                    })}
-                                </Form.Control>
-                                {tlp ? '' : <div className="invalid-feedback">Seleccione</div>}
-                            </Form.Group>
-                        </Col>
-
-
-
-                        <Col lg={3} sm={12}>
-                            <Form.Group controlId="Form.Case.State">
-                                <Form.Label>Estado <b style={{color:"red"}}>*</b></Form.Label>
-                                <Form.Control
-                                    name="state"
-                                    type="choice"                                            
-                                    as="select"
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}>
-                                    <option value='0'>Seleccione</option>
-                                    {props.allStates.map((stateItem, index) => {                
-                                    return (
-                                        <option key={index} value={stateItem.value}>{stateItem.label}</option>
-                                    );
-                                })}
-                                </Form.Control>
-                                {state ? '' : <div className="invalid-feedback">Seleccione el estado</div>}
-                            </Form.Group>
-                        </Col>
-
-
-
-
-                        <Col lg={3} sm={12}>
-                            <Form.Group controlId="Form.Case.Assigned">
-                                <Form.Label>Asignado</Form.Label>
-                                <Form.Control
-                                    name="assigned"
-                                    type="choice"
-                                    as="select"
-                                    value={assigned}
-                                    onChange={(e) => setAssigned(e.target.value)}>
-                                    <option value={null}>Sin designar</option>
-                                    {allUsers.map((userItem, index) => {                
-                                        return (
-                                            <option key={index} value={userItem.url}>{userItem.username}</option>
-                                        );
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
+                            <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
+                                    value={selectAssigned} placeholder="Asignado"/>
                         </Col>
 
                         <Col lg={3} sm={12}>
@@ -451,7 +424,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             </Card>
 
             : 
-
             <Card>
                 <Card.Header>    
                     <Card.Title as="h5">Evidencias</Card.Title>              
@@ -474,7 +446,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             }
                  
             {/*!date || !lifecycle || !priority || !tlp || !state || ifClick ? */}
-            {  date !== "" &&  priority !== '0' && lifecycle !== '0' && tlp !=='0' && state !== '0'? 
+            {  date !== "" &&  priority !== '' && lifecycle !== '' && tlp !=='' && state !== ''? 
                 <><Button variant="primary" onClick={props.edit ? editCase : addCase}>{props.save}</Button></>:
                 <><Button variant="primary" disabled>{props.save}</Button></> 
                 

@@ -70,6 +70,8 @@ export const COMPONENT_URL = {
     entityMinifiedList: "minified/Entity",
     contactMinifiedList: "minified/Contact/",
     userMinifiedList: "minified/User/",
-    group: "api/groups/"
+    caseMinifiedList:"/minified/Case/",
+    artifactMinifiedList:"minified/Artifact/",
+    group: "groups/"
 
 };

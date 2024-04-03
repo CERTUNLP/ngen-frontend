@@ -8,7 +8,6 @@ function ButtonDelete({taxonomy}) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [error, setError] = useState(null);
 
   const removeTaxonomy = (taxonomy)=> {
     deleteTaxonomy(taxonomy.url, taxonomy.name)
@@ -17,7 +16,7 @@ function ButtonDelete({taxonomy}) {
       window.location.href = '/taxonomies';
     })
     .catch((error) => {
-      setError(error);
+      console.log(error)
     })
    .finally(()=>{
       handleClose();

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Card, Collapse } from 'react-bootstrap';
 import CrudButton from '../../components/Button/CrudButton';
 import { getNetworks } from '../../api/services/networks';
-import {  getAllEntities, getMinifiedEntity } from '../../api/services/entities';
+import {  getMinifiedEntity } from '../../api/services/entities';
 import TableNetwork from './components/TableNetwork';
 import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
@@ -16,7 +16,7 @@ import FilterSelect from '../../components/Filter/FilterSelect';
 const ListNetwork = () => {
     const [network, setNetwork] = useState([])
     const [entities, setEntities] = useState([])
-    const [types, setTypes] = useState([{ value: "internal", label: "Internal" },{ value: "external", label: "External" }])
+  
 
     const [isModify, setIsModify] = useState(null);
 
@@ -38,6 +38,8 @@ const ListNetwork = () => {
     const [order, setOrder] = useState("");
 
     const [entityNames, setEntityNames] = useState({});
+
+    const types= [{ value: "internal", label: "Internal" },{ value: "external", label: "External" }]
 
 
     function updatePage(chosenPage){
@@ -80,14 +82,6 @@ const ListNetwork = () => {
                 setLoading(false)
             })
         }, [ currentPage, isModify, wordToSearch, entitiesFilter, typeFilter, order])
-        const labelRole = {
-            technical : 'Tecnico',
-            administrative : 'Administrativo',
-            abuse : 'Abuso',
-            notifications : 'Notificaciones',
-            noc : 'NOC',
-        };
-
 
 
     return (

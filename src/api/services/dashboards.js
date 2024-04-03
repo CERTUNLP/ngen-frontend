@@ -1,6 +1,6 @@
 import apiInstance from "../api";
 import setAlert from '../../utils/setAlert';
-import { COMPONENT_URL, PAGE } from '../../config/constant';
+import { COMPONENT_URL } from '../../config/constant';
 
 const getDashboardFeed = (filter ) => {
     let messageError = `No ha recuperado la informacion de las fuentes de información. `;

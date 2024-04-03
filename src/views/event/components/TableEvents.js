@@ -1,20 +1,18 @@
 import React,{ useState, useEffect} from 'react'
-import { Table , Modal, Row,Col, Form,  Spinner } from 'react-bootstrap';
+import { Table , Modal, Row,Col, Form,  Spinner, Button } from 'react-bootstrap';
 import {Link} from 'react-router-dom'
 import CrudButton from '../../../components/Button/CrudButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
-import CallBackendByName from '../../../components/CallBackendByName'; 
-import { getTLPSpecific } from '../../../api/services/tlp';
 import { deleteEvent} from "../../../api/services/events";
 import Ordering from '../../../components/Ordering/Ordering'
+import LetterFormat from '../../../components/LetterFormat';
 
 
-const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames}) => {
+const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading,  taxonomyNames, feedNames, tlpNames}) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
     const [remove, setRemove] = useState()
-    const [error, setError] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     //checkbox
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -34,16 +32,6 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
         );    
     }
 
-    
-    const callbackTlp = (url ,setPriority) => {
-        getTLPSpecific(url)
-        .then((response) => {
-          
-            setPriority(response.data)
-        })
-        .catch();
-    }
-    
     const modalDelete = (name, url)=>{
         setDeleteName(name)
         setDeleteUrl(url) 
@@ -55,10 +43,9 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
             window.location.href = '/events';
           })
           .catch((error) => {
-            setError(error);
+              console.log(error)
           })
     }
-        ////////////////////////////////////////////////////
      
     const handleSelectAll = e => {
         setIsCheckAll(!isCheckAll);
@@ -76,8 +63,6 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
         }
       };
     
-      ////////////////////////////////////////////////////
-
       const letterSize= { fontSize: '1.1em' }
   return (
     <div>
@@ -89,11 +74,11 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                             <th>
                                 <Form.Group>
                                     <Form.Check type="checkbox" id={"selectAll"}  
-                                        onChange={handleSelectAll} checked={selectedEvent.length != 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
+                                        onChange={handleSelectAll} checked={selectedEvent.length !== 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
                                 </Form.Group>
                             </th>
                         
-                            <Ordering field="date" label="Fecha" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <Ordering field="date" label="Fecha del Evento" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th style={letterSize}>Identificador </th>
                             <th style={letterSize}>Dominio</th>
                             <th style={letterSize}>Cidr</th>
@@ -119,7 +104,9 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                 <td>{event.domain}</td>
                                 <td>{event.cidr}</td>
                                 
-                                <td><CallBackendByName url={event.tlp} callback={callbackTlp } useBadge={true}/></td>
+                                <td>
+                                    <LetterFormat useBadge={true} stringToDisplay={tlpNames[event.tlp].name} color={tlpNames[event.tlp].color}/>
+                                </td>
                                 
                                 <td>{taxonomyNames[event.taxonomy]}</td>
                                 
@@ -133,7 +120,24 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                 <Link to={{pathname:"/events/edit", state: event}} >
                                     <CrudButton  type='edit' />
                                 </Link>
-                                    <CrudButton  type='delete' onClick={()=>modalDelete(event.name, event.url)} />
+                                <CrudButton  type='delete' onClick={()=>modalDelete(event.name, event.url)} />
+
+                              
+                                { event.case ?  <Button className="btn-icon btn-rounded" disabled variant="outline-primary"
+                                  style={{
+                                    border: "1px solid #555", 
+                                    borderRadius: "50px",
+                                    color: "#555", 
+                                  }}
+                                   onClick={() => console.log("")}>
+                                    <i className="fa fa-plus" aria-hidden="true"></i>
+                                   </Button>:
+                                    <Link to={{pathname:"/templates/create", state: event}} >
+                                        <Button className="btn-icon btn-rounded" variant="outline-primary" onClick={() => console.log("")}>
+                                        <i className="fa fa-plus" aria-hidden="true"></i>
+                                    </Button> 
+                                   </Link>}
+                                
                                 </td>
                                 
                               </tr>

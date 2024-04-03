@@ -1,5 +1,5 @@
 import  apiInstance  from "../api";
-import { COMPONENT_URL , PAGE} from '../../config/constant';
+import { COMPONENT_URL } from '../../config/constant';
 import setAlert from '../../utils/setAlert';
 
 const getProfile = () => {

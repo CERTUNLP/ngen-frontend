@@ -39,7 +39,7 @@ const getAllUsers = (currentPage = 1, results = [], limit = 100) => {
         .then((response) => {
             console.log(response)
             let res = [...results, ...response.data.results]                                    
-            if(response.data.next != undefined){                                
+            if(response.data.next !== null){                                
                 return getAllUsers(++currentPage, res, limit)
             }
             else{
@@ -69,12 +69,12 @@ const postUser = (username, first_name, last_name, email, priority, is_active, p
         return response;
     }).catch( error => { 
         console.log(error.response)
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             //se informa que existe el username con ese nombre
-            if(error.response.data.username =="A user with that username already exists." ){
+            if(error.response.data.username === "A user with that username already exists." ){
                 messageError = `El usuario ${username} se pudo crear correctamente porque ya existe en el sistema`;   
             }
-        }else if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        }else if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             messageError = `El usuario ${username} no puede ser creado porque el servidor no responde`;
         }
@@ -97,12 +97,12 @@ const putUser = ( url,username, first_name, last_name, email, priority, is_activ
         setAlert(messageSuccess , "success");
         return response;
     }).catch( error => { 
-        if (error.response.status == 400){
+        if (error.response.status === 400){
             //se informa que existe el username con ese nombre
-            if(error.response.data.username =="A user with that username already exists." ){
+            if(error.response.data.username === "A user with that username already exists." ){
                 messageError = `El usuario ${username} se pudo edita correctamente porque ya existe en el sistema`;   
             }
-        }else if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        }else if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             messageError = `El usuario ${username} no puede ser editado porque el servidor no responde`;
         }
@@ -120,7 +120,7 @@ const isActive = (url, active) => {
         setAlert(messageSuccess , "success");
         return response;
     }).catch( error => { 
-        if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             messageError = !active ? `El usuario no pudo ser desactivado no pudo ser` : `El usuario no pudo ser activado no pudo ser`;
             setAlert(messageError, "error");
@@ -141,7 +141,7 @@ const deleteUser = (url) => {
         let statusText = ""; 
         if(error.response.data.error && error.response.data.error[0].includes("Cannot delete some instances of model 'User' because they are referenced through protected foreign keys")){
             statusText = ", esta referenciado.";
-        } else if(error.message == "Cannot read properties of undefined (reading 'code')"){
+        } else if(error.message === "Cannot read properties of undefined (reading 'code')"){
             //el backend o servidor no funciona
             statusText = `. El servidor no responde.`;
         }

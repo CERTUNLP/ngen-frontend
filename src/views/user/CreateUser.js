@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { postUser } from "../../api/services/users";
-import { getAllPriorities } from "../../api/services/priorities";
+import { getMinifiedPriority } from "../../api/services/priorities";
 import Alert from '../../components/Alert/Alert';
 import FormUser from './components/FormUser'
 import Navigation from '../../components/Navigation/Navigation'
@@ -19,20 +19,23 @@ const AddUser = () => {
         password: "",
         passwordConfirmation: ""}
 
-    const [error,setError]=useState()
     const [body,setBody]=useState(formEmpty)
-    const [priorities, setPriorities] = useState()
+    const [priorities, setPriorities] = useState([])
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
-        console.log(body)
+        
     useEffect( ()=> {
         const fetchPosts = async () => {
             setLoading(true)
-            getAllPriorities().then((response) => { 
-                setPriorities(response)
+            getMinifiedPriority().then((response) => { 
+                let listPriority = []
+                response.map((priority) => {
+                    listPriority.push({value:priority.url, label:priority.name})
+                })
+                setPriorities(listPriority)
             })
             .catch((error) => {
-                setError(error)
+                console.log(error)
                 
             }).finally(() => {
                 setLoading(false)
@@ -53,7 +56,7 @@ const AddUser = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)       
         }) 
           
     }

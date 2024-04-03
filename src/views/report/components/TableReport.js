@@ -1,6 +1,6 @@
 import React,{ useState} from 'react'
 import {
-    Card, Table , Modal, Row,Col, Form, Badge,CloseButton, Spinner
+    Card, Table , Modal, Row,Col, Form, CloseButton, Spinner
   } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import {Link} from 'react-router-dom'
@@ -11,7 +11,7 @@ import { getTaxonomy } from "../../../api/services/taxonomies";
 import { deleteReport } from "../../../api/services/reports";
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 
-const TableReport = ({list, loading, currentPage}) => {
+const TableReport = ({list, loading, taxonomyNames}) => {
  
     const [report,setReport] = useState({})
     const [modalShow, setModalShow] = useState(false);
@@ -19,8 +19,6 @@ const TableReport = ({list, loading, currentPage}) => {
 
     const [deleteUrl, setDeleteUrl] = useState()
     const [remove, setRemove] = useState()
-    const [deleteName, setDeleteName] = useState("")
-    const [error, setError] = useState(null);
 
     const language={
         en: "Ingles",
@@ -54,7 +52,7 @@ const TableReport = ({list, loading, currentPage}) => {
             window.location.href = '/reports';
           })
           .catch((error) => {
-            setError(error);
+            console.log(error)
           })
     }
 
@@ -84,9 +82,9 @@ const TableReport = ({list, loading, currentPage}) => {
                         <tbody>
                             {list.map((report, index) => {
                             return (
-                                        <tr>
+                                        <tr key={index}>
                                            
-                                            <td><CallBackendByName url={report.taxonomy} callback={callbackTaxonomy} useBadge={false}/></td>
+                                            <td> {taxonomyNames[report.taxonomy]}</td>
                                             <td>
                                             <CrudButton type='read' onClick={() => showModalReport(report)} />
                                             <Link to={{pathname:'/reports/edit', state: report}} >
@@ -99,7 +97,7 @@ const TableReport = ({list, loading, currentPage}) => {
                                 })}
                         </tbody>
                     </Table>
-                    <ModalConfirm type='delete' component='Reporte' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)}/> 
+                    <ModalConfirm type='delete' component='Reporte' name={""} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)}/> 
                     <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>            
             <Modal.Body>
                 <Row>    

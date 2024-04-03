@@ -15,7 +15,6 @@ const EditFeed = () => {
     const [name, setName] = useState("");
     const [active, setActive] = useState(true);
     const [description, setDescription] = useState("");
-    const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false)
 
     useEffect(() => {                
@@ -27,7 +26,7 @@ const EditFeed = () => {
             console.log(response.data)
         })
         .catch((error)=>{
-            setError(error)
+            console.log(error)
         })
         .finally(() => {
 
@@ -41,10 +40,7 @@ const EditFeed = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
-        })
-        .finally(() => {
-            setShowAlert(true) 
+            console.log(error)         
         })         
     };  
     
@@ -54,7 +50,7 @@ const EditFeed = () => {
    
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed"/>
             <Row>
                 <Navigation actualPosition="Editar fuente de información" path="/feeds" index ="Fuentes de Información"/> 
             </Row>

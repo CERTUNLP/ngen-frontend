@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Row, Form, Col } from 'react-bootstrap';
+import SelectComponent from '../../../components/Select/SelectComponent';
 
 
 const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
+
+    const [selectTaxonomy, setSelectTaxonomy] = useState()
+    const [selectLanguage, setSelectLanguage] = useState()
+
     const textareaRefs = {
         problem: useRef(null),
         derived_problem: useRef(null),
@@ -47,41 +52,61 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
                 window.removeEventListener('resize', () => updateMaxHeight(key)); // Limpiar el event listener al desmontar el componente
             });
         };
+        
     }, []); // Ejecutar una sola vez al montar el componente
+    
+    useEffect(() => {
+
+        if (languageOptions !== []) {
+            languageOptions.forEach(item => {
+                if(item.value === body.lang){
+                    setSelectLanguage({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (taxonomies !== []) {
+            taxonomies.forEach(item => {
+                if(item.value === body.taxonomy){
+                    setSelectTaxonomy({label:item.label, value:item.value })
+                }
+            });
+        }
+    }, [taxonomies]); 
+    const completeField1=( nameField,event, setOption)=>{ 
+        if (event){
+            setBody({...body,
+                [nameField] :event.value }
+            )
+        }else{
+            setBody({...body,
+                [nameField] :"" }
+            )
+
+        }
+        setOption(event)
+
+    };
+    let languageOptions = [
+        {
+            value :'en',
+            label : "Ingles"
+        },
+        {
+            value : 'es',
+            label : "Español"
+        }
+    ]    
 
     return (
         <Form>
             <Row>
                 <Col sm={12} lg={6}>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>Taxonomia<b style={{ color: "red" }}>*</b></Form.Label>
-                        <Form.Control
-                            type="choice"
-                            as="select"
-                            name="taxonomy"
-                            value={body.taxonomy}
-                            onChange={(e) => completeField(e)} >
-                            <option value="-1">Seleccione una taxonomia</option>
-                            {taxonomies.map((taxonomy) => {
-                                return (<option value={taxonomy.url}> {taxonomy.name} </option>)
-                            })}
-                        </Form.Control>
-                    </Form.Group>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={taxonomies} value={selectTaxonomy} nameField="taxonomy" 
+                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}/>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Group controlId="Form.Network.Type">
-                        <Form.Label>Idioma <b style={{ color: "red" }}>*</b></Form.Label>
-                        <Form.Control
-                            name="lang"
-                            type="choice"
-                            as="select"
-                            value={body.lang}
-                            onChange={(e) => completeField(e)}>
-                            <option key={0} value=''>Seleccione el lenguaje</option>
-                            <option key={1} value='en'>Ingles</option>
-                            <option key={2} value='es'>Español</option>
-                        </Form.Control>
-                    </Form.Group>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label="Idioma" options={languageOptions} value={selectLanguage} nameField="lang" 
+                                        onChange={completeField1} placeholder="Seleccione un lenguaje" setOption={setSelectLanguage} required={true}/>
                 </Col>
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">

@@ -9,7 +9,6 @@ const CreateFeed = () => {
     const [name, setName] = useState("");
     const [active, setActive] = useState(true);
     const [description, setDescription] = useState("");
-    const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false)
    
     const createFeed = ()=> {
@@ -18,12 +17,9 @@ const CreateFeed = () => {
             window.location.href = '/feeds';
         })
         .catch((error) => {
-            setError(error); 
+            console.log(error)
             setShowAlert(true)            
-        })  
-        .finally(() => {
-            setShowAlert(true) 
-        })      
+        })     
     };
 
     const resetShowAlert = () => {
@@ -32,7 +28,7 @@ const CreateFeed = () => {
     
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed"/>
             <Row>
                 <Navigation actualPosition="Agregar fuente de información" path="/feeds" index ="Fuentes de Información"/>
             </Row>

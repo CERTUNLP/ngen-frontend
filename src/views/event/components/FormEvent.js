@@ -3,6 +3,7 @@ import { Row, Card, Form, Button,Col, Modal, CloseButton } from 'react-bootstrap
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CrudButton from '../../../components/Button/CrudButton';
+import SelectComponent from '../../../components/Select/SelectComponent';
 import FormArtifact from '../../artifact/components/FormArtifact'
 import FileUpload  from '../../../components/UploadFiles/FileUpload/FileUpload'
 import FileList from '../../../components/UploadFiles/FileList/FileList'
@@ -12,14 +13,11 @@ import { postCase } from "../../../api/services/cases";
 import Alert from '../../../components/Alert/Alert';
 import ModalFormCase from './ModalFormCase';
 
-
-
 const animatedComponents = makeAnimated();
 //{createEvent, setBody, body, feeds, taxonomy, tlp, priorities, users, listArtifact, setContactsCreated}
 const FormEvent = (props) => {
     const [artifactsValueLabel, setArtifactsValueLabel] = useState([])
     const [modalCreate, setModalCreate] = useState(false)
-    const [error,setError]=useState()
     const [typeArtifact, setTypeArtifact] = useState('0')
     const [value, setValue] = useState("")
     const [showAlert, setShowAlert] = useState(false)
@@ -35,6 +33,7 @@ const FormEvent = (props) => {
         parent:"",
         priority:"",
         tlp:"",
+        name: "",
         assigned:"",
         state:"",
         attend_date:"",
@@ -43,24 +42,71 @@ const FormEvent = (props) => {
         comments:[],
           
       }) 
-      const [evidenceCase, setEvidenceCase] = useState([])
-      //commet
-      const [ comm, setComm ] = useState();
+    const [evidenceCase, setEvidenceCase] = useState([])
+    //commet
+    const [ comm, setComm ] = useState();
+    const [selectPriority, setSelectPriority] = useState()
+    const [selectTlp, setSelectTlp] = useState()
+    const [selectTaxonomy, setSelectTaxonomy] = useState()
+    const [selectFeed, setSelectFeed] = useState()
+    const [selectReporter, setSelectReporter] = useState()
+    const [selectCase, setSelectCase] = useState("")
 
     const resetShowAlert = () => {
         setShowAlert(false);
     } 
 
     useEffect(()=> {
+        
+        if (props.cases !== []) {
+            props.cases.forEach(item => {
+                if(item.value === props.body.case){
+                    setSelectCase({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.tlp !== []) {
+            props.tlp.forEach(item => {
+                if(item.value === props.body.tlp){
+                    setSelectTlp({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.taxonomy !== []) {
+            props.taxonomy.forEach(item => {
+                if(item.value === props.body.taxonomy){
+                    setSelectTaxonomy({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.feeds !== []) {
+            props.feeds.forEach(item => {
+                if(item.value === props.body.feed){
+                    setSelectFeed({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.priorities !== []) {
+            props.priorities.forEach(item => {
+                if(item.value === props.body.priority){
+                    setSelectPriority({label:item.label, value:item.value })
+                }
+            });
+        }
+        if (props.users !== []) {
+            props.users.forEach(item => {
+                if(item.value === props.body.reporter){
+                    setSelectReporter({label:item.label, value:item.value })
+                }
+            });
+        }
 
         let listDefaultArtifact = props.listArtifact.filter(elemento => props.body.artifacts.includes(elemento.value))
         .map(elemento => ({value: elemento.value, label:elemento.label}))
 
         setArtifactsValueLabel(listDefaultArtifact)
-
-        
     
-    },[props.body.artifacts, props.listArtifact, ])
+    },[props.body.artifacts, props.listArtifact, props.cases])
 
     const completeFieldStringIdentifier=(event)=>{ 
        
@@ -71,7 +117,7 @@ const FormEvent = (props) => {
                 setShowErrorMessage(response.data.artifact_type === "OTHER" || response.data.artifact_type === "EMAIL")        
             })
             .catch((error) => {
-                setError(error)
+                console.log(error)
             }).finally(() => {
                 
             })   
@@ -89,21 +135,13 @@ const FormEvent = (props) => {
         )       
     };
 
-    const complete=(event)=>{ 
-        console.log(event)
-        props.setBody({
-            ...props.body,
-            case: event.value,
-          });
-        props.setSelectCase(event)      
-    };
-
     const selectArtefact=(event)=>{ 
         props.setBody({...props.body,
             ["artifacts"] : event.map((e)=>{
                 return e.value
             })}
         )
+        console.log(props.body.artifacts)
     };
 
     const handleDragOver = (event) => {
@@ -133,7 +171,7 @@ const FormEvent = (props) => {
             setValue("")
         })
         .catch((error) => {
-            setError(error)
+            console.log(error)
         }).finally(() => {
             setModalCreate(false)
         })  
@@ -146,6 +184,7 @@ const FormEvent = (props) => {
   const createCase = () => {
     const form = new FormData();
     form.append("date",bodyCase.date)
+    form.append("name",bodyCase.name)
     form.append("lifecycle",bodyCase.lifecycle)
     if(bodyCase.parent !== null) {
         form.append("parent", bodyCase.parent)
@@ -159,10 +198,6 @@ const FormEvent = (props) => {
     form.append("attend_date", bodyCase.attend_date)
     form.append("solve_date", bodyCase.solve_date)
         
-    
-    //form.append("evidence", "http://localhost:8000/api/event/1/")
-    //form.append("evidence", ["http://localhost:8000/api/event/1/", "http://localhost:8000/api/event/2/"])
-    //form.append("evidence", evidences)
     if (evidenceCase !== null){
         for (let index=0; index< evidenceCase.length  ; index++){
         form.append("evidence", evidenceCase[index])
@@ -213,6 +248,21 @@ const FormEvent = (props) => {
         }); 
     };
 
+    const completeField1=( nameField,event, setOption)=>{ 
+        if (event){
+            props.setBody({...props.body,
+                [nameField] :event.value }
+            )
+        }else{
+            props.setBody({...props.body,
+                [nameField] :"" }
+            )
+
+        }
+        setOption(event)
+
+    };
+
   return (
     <div>
         <Card>
@@ -225,107 +275,43 @@ const FormEvent = (props) => {
                 <Row>
                     <Col sm={12} lg={4}>
                         
-                            <th></th>
                             <Form.Group controlId="formGridAddress1">
                             <Form.Label>Fecha <b style={{color:"red"}}>*</b></Form.Label>
                             <Form.Control 
                                 type ="datetime-local"
-                                maxlength="150" 
+                                maxLength="150" 
                                 value ={props.body.date} 
                                 onChange={(e)=>completeField(e)}
                                 name="date"/>
                             </Form.Group>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>TLP<b style={{color:"red"}}>*</b></Form.Label>
-                        <Form.Control  
-                            type="choice"
-                            as="select" 
-                            name="tlp" 
-                            value ={props.body.tlp} 
-                            onChange={(e)=>completeField(e)} >
-                            <option value="-1">Seleccione un tlp</option>
-                            {props.tlp.map((tlp) => {
-                                return(<option value={tlp.url}> {tlp.name} </option>)
-                            })}
-                        </Form.Control>
-                        </Form.Group>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="tlp"
+                                        onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>Taxonomia<b style={{color:"red"}}>*</b></Form.Label>
-                        <Form.Control  
-                            type="choice"
-                            as="select" 
-                            name="taxonomy" 
-                            value ={props.body.taxonomy} 
-                            onChange={(e)=>completeField(e)} >
-                            <option value="-1">Seleccione una taxonomia</option>
-                            {props.taxonomy.map((taxonomy) => {
-                                return(<option value={taxonomy.url}> {taxonomy.name} </option>)
-                            })}
-                        </Form.Control>
-                        </Form.Group>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy" 
+                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}/>
                     </Col>
                 </Row>       
                 <Row>
-                <Col sm={12} lg={4}>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                    <Form.Label>Fuente de Informacion<b style={{color:"red"}}>*</b></Form.Label>
-                    <Form.Control  
-                        type="choice"
-                        as="select" 
-                        name="feed" 
-                        value ={props.body.feed} 
-                        onChange={(e)=>completeField(e)} >
-                        <option value="-1">Seleccione una Fuente de Informacion</option>
-                        {props.feeds.map((feed) => {
-                            return(<option value={feed.url}> {feed.name} </option>)
-                        })}
-                    </Form.Control>
-                    </Form.Group>
-                </Col>
-                <Col sm={12} lg={4}>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                    <Form.Label>Prioridades<b style={{color:"red"}}>*</b></Form.Label>
-                    <Form.Control  
-                        type="choice"
-                        as="select" 
-                        name="priority" 
-                        value ={props.body.priority} 
-                        onChange={(e)=>completeField(e)} >
-                        <option value="-1">Seleccione una Prioridad</option>
-                        {props.priorities.map((priority) => {
-                            return(<option value={priority.url}> {priority.name} </option>)
-                        })}
-                    </Form.Control>
-                    </Form.Group>
+                    <Col sm={12} lg={4}>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Fuente de Informacion" options={props.feeds} value={selectFeed} nameField="feed"
+                                            onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                    <Form.Label>Usuario que reporta</Form.Label>
-                    <Form.Control  
-                        type="choice"
-                        as="select" 
-                        name="reporter" 
-                        value ={props.body.reporter} 
-                        onChange={(e)=>completeField(e)}>
-                        <option value="">Seleccione al usuario que reporta</option>
-                        {props.users.map((user) => {
-                            return(<option value={user.url}> {user.username} </option>)
-                        })}
-                    </Form.Control>
-                    {(props.body.reporter !== "-1") ? '' : <div className="invalid-feedback">Seleccione una Fuente de Informacion</div>}
-                    </Form.Group>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
+                                                onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
+                    </Col>
+                    <Col sm={12} lg={4}>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Usuario que reporta" options={props.users} value={selectReporter} nameField="reporter"
+                                            onChange={completeField1} placeholder="Usuario que reporta" setOption={setSelectReporter} required={false}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={4} lg={4}>
-                        <Form.Group>
-                            <Form.Label>Caso asociado</Form.Label>
-                            <Select options={props.cases} value={props.selectCase} isClearable placeholder={"Seleccione un caso"} onChange={(e) => complete(e)}  />
-                        </Form.Group>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Caso asociado" options={props.cases} value={selectCase} 
+                                            onChange={completeField1} placeholder="Seleccione un caso" setOption={setSelectCase} required={false}/>
                     </Col>
                     <Col sm={4} lg={4}>
                     <br></br>
@@ -342,7 +328,7 @@ const FormEvent = (props) => {
                 <Form.Label>Notas</Form.Label>
                 <Form.Control 
                     placeholder="Ingrese " 
-                    maxlength="150" 
+                    maxLength="150" 
                     value ={props.body.notes}
                     onChange={(e)=>completeField(e)}
                     name="notes"/>
@@ -388,7 +374,7 @@ const FormEvent = (props) => {
                     <Form.Group controlId="formGridAddress1">
                     <Form.Control 
                         placeholder="Ingrese IPv4,IPv6, Nombre de domino o Email" 
-                        maxlength="150" 
+                        maxLength="150" 
                         value ={props.body.address_value} 
                         onChange={(e)=>completeFieldStringIdentifier(e)}
                         isInvalid={showErrorMessage }
@@ -466,8 +452,8 @@ const FormEvent = (props) => {
         </Card.Body>
         </Card>
         
-        { props.body.date !== "" &&  props.body.tlp !== "-1" && props.body.taxonomy !== "-1" && props.body.feed !== "-1"
-            && props.body.priority !== "-1" && props.body.address_value !== "" && !showErrorMessage?
+        { props.body.date !== "" &&  props.body.tlp !== "" && props.body.taxonomy !== "" && props.body.feed !== ""
+            && props.body.priority !== "" && props.body.address_value !== "" && !showErrorMessage?
             <Button variant="primary" onClick={props.createEvent} >Guardar</Button> 
             : 
             <Button variant="primary" disabled>Guardar</Button>                                    

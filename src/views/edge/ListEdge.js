@@ -16,7 +16,6 @@ const ListEdge = (props) => {
     const [listChildren, setListChildren]=useState([])
     const [children, setChildren]=useState([])
     const [urlByStateName, setUrlByStateName]=useState({})
-    const [error,setError]=useState()
     const [edge, setEdge] = useState({
         discr: "",
         parent:"",
@@ -58,7 +57,7 @@ const ListEdge = (props) => {
                 setEdges(findElementsTheEdges(props.url, response))
               })
               .catch((error) => {
-                  setError(error)
+                  console.log(error)
                   
               })
         }
@@ -78,7 +77,7 @@ const ListEdge = (props) => {
             setUrlByStateName(dicState)
           })
           .catch((error) => {
-              setError(error)
+            console.log(error)
               
           })
         

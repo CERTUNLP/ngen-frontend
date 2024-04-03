@@ -1,9 +1,24 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import { Button, Row, Form, Spinner, Col} from 'react-bootstrap';
 import { validateSpaces} from '../../../utils/validators';
 import { validateUserName, validateName, validateSelect, validateUserMail, validatePassword, validateUnrequiredInput } from '../../../utils/validators/user';
+import SelectComponent from '../../../components/Select/SelectComponent';
 
 const FormUser= ({body, setBody, priorities, createUser, loading}) =>{
+
+    const [selectPriority, setSelectPriority] = useState()
+
+    useEffect(()=> {
+        
+        if (priorities !== []) {
+            priorities.forEach(item => {
+                if(item.value === body.priority){
+                    setSelectPriority({label:item.label, value:item.value })
+                }
+            });
+        }
+    
+    },[priorities,body.priority])
 
     if (loading) {
         return (
@@ -32,6 +47,20 @@ const FormUser= ({body, setBody, priorities, createUser, loading}) =>{
             [event.target.name] : event.target.value}
         )
     }
+    const completeField1=( nameField,event, setOption)=>{ 
+        if (event){
+            setBody({...body,
+                [nameField] :event.value }
+            )
+        }else{
+            setBody({...body,
+                [nameField] :"" }
+            )
+    
+        }
+        setOption(event)
+    
+    };
   return (
       <Form>
         <Row>
@@ -48,23 +77,9 @@ const FormUser= ({body, setBody, priorities, createUser, loading}) =>{
                     {validateUserName(body.username)  ? "" : <div className="invalid-feedback"> Solo se permiten letras, numeros y los cateacteres especiales '@', '.' , '+', '-', '_' </div>}
                 </Form.Group>
             </Col>      
-            <Col sm={12} lg={3}>
-                <Form.Group controlId="exampleForm.ControlSelect1">
-                    <Form.Label>Prioridad <b style={{color:"red"}}>*</b></Form.Label>
-                    <Form.Control  
-                        type="choice"
-                        as="select" 
-                        name="priority" 
-                        value ={body.priority} 
-                        onChange={(e)=>completeField(e)} >
-                        <option value=''>Seleccione una prioridad</option>
-                        {priorities.map((priority) => {
-                            return(<option value={priority.url}> {priority.name} </option>)
-                        })}
-                        
-                    </Form.Control>
-                    {(validateSelect(body.priority)) ? '' : <div className="invalid-feedback">Seleccione una prioridad</div>}
-                </Form.Group>                
+            <Col sm={12} lg={3}>               
+                <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={priorities} value={selectPriority} nameField="priority"
+                                     onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
             </Col>
             <Col sm={12} lg={5}>
                 <Form.Group controlId="formGridEmail">

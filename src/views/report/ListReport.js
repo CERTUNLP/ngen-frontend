@@ -6,18 +6,18 @@ import Navigation from '../../components/Navigation/Navigation'
 import Search from '../../components/Search/Search'
 import CrudButton from '../../components/Button/CrudButton';
 import TableReport from './components/TableReport'
+import { getMinifiedTaxonomy } from '../../api/services/taxonomies';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
 
 const ListReport = () => {
     const [loading, setLoading] = useState(true)
     const [reports, setReports] = useState([])
-    const [error, setError] = useState()
     const [currentPage, setCurrentPage] = useState(1)
     const [countItems, setCountItems] = useState(0);
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
-
+    const [taxonomyNames, setTaxonomyNames] = useState({});
 
     const [showAlert, setShowAlert] = useState(false)
 
@@ -37,11 +37,20 @@ const ListReport = () => {
                 }
                 setDisabledPagination(false)
             }).catch((error)=>{
-                setError(error)
+                console.log(error)
               })
               .finally(() => {
                   setShowAlert(true)
                   setLoading(false)
+              })
+
+              getMinifiedTaxonomy()
+              .then((response) => {
+                  let dicTaxonomy={}
+                  response.map((taxonomy) => {
+                      dicTaxonomy[taxonomy.url]=taxonomy.name
+                  })
+                  setTaxonomyNames(dicTaxonomy)
               })
     
     
@@ -70,7 +79,7 @@ const ListReport = () => {
           </Row>                                 
           </Card.Header>
           <Card.Body> 
-            <TableReport list={reports}  loading={loading} currentPage={currentPage} /> 
+            <TableReport list={reports}  loading={loading} taxonomyNames={taxonomyNames} /> 
           </Card.Body>
           <Card.Footer >
             <Row className="justify-content-md-center">

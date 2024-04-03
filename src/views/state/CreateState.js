@@ -10,8 +10,8 @@ const AddState = () => {
  
     const formEmpty={ 
         name: "",//requerido
-        attended: false,//requerido
-        solved: false,//requerido
+        attended: "",//requerido
+        solved: "",//requerido
         active: null,
         description: "",
         children: []
@@ -19,7 +19,6 @@ const AddState = () => {
     const [state, setState] = useState({});
     const [url, setUrl] = useState('');
     const [body, setBody] = useState(formEmpty)
-    const [error,setError]=useState()
     const [childernes, setChildernes]=useState([])
     const [showAlert, setShowAlert] = useState(false)
 
@@ -39,7 +38,7 @@ const AddState = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)     
         }).finally(() => {
             setShowAlert(true)
         })
@@ -54,7 +53,7 @@ const AddState = () => {
         })
         .catch((error) => {
             setShowAlert(true) 
-            setError(error);           
+            console.log(error)         
         }).finally(() => {
             setShowAlert(true)
         })

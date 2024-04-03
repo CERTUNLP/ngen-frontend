@@ -11,7 +11,6 @@ import ModalEditTask from './ModalEditTask';
 const RowTask = (props) => {  //url, key, taskDeleted,  setTaskDeleted, setTaskUpdated, setShowAlert
     
     const [task, setTask] = useState('');
-    const [error, setError] = useState(null)
 
     const [modalShow, setModalShow] = useState(false)
     const [modalEdit, setModalEdit] = useState(false)
@@ -49,7 +48,6 @@ const RowTask = (props) => {  //url, key, taskDeleted,  setTaskDeleted, setTaskU
             })
             .catch((error) => {
                 console.log(error)
-                setError(error)
             })
             .finally(() => {
                 setModalDelete(false)

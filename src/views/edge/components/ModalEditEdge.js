@@ -5,7 +5,6 @@ import FormCreateEdge from './FormCreateEdge';
 import Alert from '../../../components/Alert/Alert';
 
 const ModalEditEdge = (props) => {
-    const [error, setError] = useState(null);
     const [body, setBody] = useState(props.edge);
     const [selectChild, setSelectChild] = useState({});
     const [showAlert, setShowAlert] = useState(false)
@@ -24,7 +23,6 @@ const ModalEditEdge = (props) => {
                 props.onHide()
             })
             .catch((error) => {
-                setError(error)
                 console.log(error)
                 setShowAlert(true)
             })

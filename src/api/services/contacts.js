@@ -59,7 +59,14 @@ const postContact = (name, username, public_key, type, role, priority) => {
             return response;
         }).catch( error => {
 
-            let statusText = error.response.data.username;
+            let statusText = ""
+            console.log(error.response.data.username[0])
+            if (error.response.data.username[0] !== null){
+                if (error.response.data.username[0] === "contact with this username already exists." ){
+                    statusText = " El contacto ya existe"
+                }
+                
+            }
             messageError += statusText;
             setAlert(messageError , "error", "contact");
             return Promise.reject(error);
@@ -104,4 +111,15 @@ const deleteContact = (url, name) => {
     });
 }
 
-export { getContacts, getAllContacts, getContact, postContact, putContact, deleteContact };
+const getMinifiedContact = () => {
+    let messageError = `No se pudo recuperar la informacion del contacto`;
+    return apiInstance.get(COMPONENT_URL.contactMinifiedList)
+    .then(response => {        
+        return response.data;
+    }).catch( error => { 
+        setAlert(messageError, "error", "case");
+        return Promise.reject(error);
+    });
+}
+
+export { getContacts, getAllContacts, getContact, postContact, putContact, deleteContact, getMinifiedContact };

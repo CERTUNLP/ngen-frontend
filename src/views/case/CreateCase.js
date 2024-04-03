@@ -12,11 +12,12 @@ const CreateCase = () => {
     const [allStates, setAllStates] = useState([]) //multiselect
 
     const caseItem = {
-        lifecycle: '0',//required
-        priority: '0', //required
-        tlp: '0', //required
-        state: '0', //required
+        lifecycle: '',//required
+        priority: '', //required
+        tlp: '', //required
+        state: '', //required
         date: null, //required
+        name: "",
         parent: null,
         assigned: null,
         attend_date: null, //imprime la hora actual +3horas
@@ -35,8 +36,6 @@ const CreateCase = () => {
                     listStates.push({value:stateItem.url, label:stateItem.name, childrenUrl:stateItem.children})
                 })
                 setAllStates(listStates)
-
-                console.log(response.data.results)
             })
             .catch((error)=>{
                 console.log(error)

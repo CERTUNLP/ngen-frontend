@@ -10,7 +10,7 @@ import { deleteTaxonomy } from '../../../api/services/taxonomies';
 import Ordering from '../../../components/Ordering/Ordering'
 
 
-const TableTaxonomy = ({setIsModify, list, loading, order, setOrder, setLoading, currentPage}) => {
+const TableTaxonomy = ({setIsModify, list, loading, order, setOrder, setLoading}) => {
     const [modalDelete, setModalDelete] = useState(false) 
     const [url, setUrl] = useState(null) 
     const [name, setName] = useState(null) 
@@ -50,17 +50,15 @@ const TableTaxonomy = ({setIsModify, list, loading, order, setOrder, setLoading,
                     <thead>
                         <tr>
                             <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                            <th>Activo</th>     
-                            <th>Eventos</th>                                                                         
-                            <th>Acciones</th>
+                            <th style={letterSize}>Activo</th>     
+                            <th style={letterSize}>Eventos</th>                                                                         
+                            <th style={letterSize}>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {list.map((taxonomy,index) =>{ 
-                            const parts = taxonomy.url.split("/");
-                            let itemNumber = parts[parts.length - 2];
                         return(
-                            <tr key={itemNumber}>
+                            <tr key={index}>
                                 <td>{taxonomy.name}</td>
                                 <td>
                                     <ButtonState taxonomy={taxonomy}></ButtonState>
