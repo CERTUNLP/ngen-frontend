@@ -52,6 +52,9 @@ const FormEvent = (props) => {
     const [selectReporter, setSelectReporter] = useState()
     const [selectCase, setSelectCase] = useState("")
 
+    const [errorMessage, setErrorMessage] = useState('');
+
+
     const resetShowAlert = () => {
         setShowAlert(false);
     } 
@@ -262,6 +265,21 @@ const FormEvent = (props) => {
         setOption(event)
 
     };
+    //console.log(new Date(props.body.date) < new Date()) valido
+    //console.log(new Date())
+    console.log(props.body.date)
+    //console.log(props.body.date < getCurrentDateTime()) valido
+    
+    function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = '00';
+        const minutes = '00';
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    console.log(props.body.children)
 
   return (
     <div>
@@ -274,30 +292,36 @@ const FormEvent = (props) => {
             <Form>
                 <Row>
                     <Col sm={12} lg={4}>
+                        <Form.Group controlId="formGridAddress1">
+                        <Form.Label>Fecha <b style={{color:"red"}}>*</b></Form.Label>
+                        <Form.Control 
+                            type ="datetime-local"
+                            maxLength="150"
+                            max={getCurrentDateTime()} 
+                            value ={props.body.date}
+                            isInvalid={new Date(props.body.date) > new Date()} 
+                            onChange={(e)=>completeField(e)}
+                            name="date"/>
+                            {new Date(props.body.date) > new Date() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""  }
+                        </Form.Group>
                         
-                            <Form.Group controlId="formGridAddress1">
-                            <Form.Label>Fecha <b style={{color:"red"}}>*</b></Form.Label>
-                            <Form.Control 
-                                type ="datetime-local"
-                                maxLength="150" 
-                                value ={props.body.date} 
-                                onChange={(e)=>completeField(e)}
-                                name="date"/>
-                            </Form.Group>
                     </Col>
                     <Col sm={12} lg={4}>
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="tlp"
-                                        onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true}/>
+                                        onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true} 
+                                        />
                     </Col>
                     <Col sm={12} lg={4}>
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy" 
-                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}/>
+                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}
+                                        disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}/>
                     </Col>
                 </Row>       
                 <Row>
                     <Col sm={12} lg={4}>
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="Fuente de Informacion" options={props.feeds} value={selectFeed} nameField="feed"
-                                            onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}/>
+                                            onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}
+                                            disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}/>
                     </Col>
                     <Col sm={12} lg={4}>
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
@@ -376,6 +400,7 @@ const FormEvent = (props) => {
                         placeholder="Ingrese IPv4,IPv6, Nombre de domino o Email" 
                         maxLength="150" 
                         value ={props.body.address_value} 
+                        disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}
                         onChange={(e)=>completeFieldStringIdentifier(e)}
                         isInvalid={showErrorMessage }
                         name="address_value"/>
@@ -452,7 +477,7 @@ const FormEvent = (props) => {
         </Card.Body>
         </Card>
         
-        { props.body.date !== "" &&  props.body.tlp !== "" && props.body.taxonomy !== "" && props.body.feed !== ""
+        { !(new Date(props.body.date) > new Date()) &&  props.body.tlp !== "" && props.body.taxonomy !== "" && props.body.feed !== ""
             && props.body.priority !== "" && props.body.address_value !== "" && !showErrorMessage?
             <Button variant="primary" onClick={props.createEvent} >Guardar</Button> 
             : 

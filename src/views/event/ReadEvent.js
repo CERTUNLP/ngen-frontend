@@ -6,6 +6,7 @@ import CallBackendByName from '../../components/CallBackendByName';
 import CallBackendByType from '../../components/CallBackendByType'; 
 import { getTaxonomy } from '../../api/services/taxonomies';
 import { getPriority } from '../../api/services/priorities';
+import { getUser } from '../../api/services/users';
 import { getTLPSpecific } from '../../api/services/tlp';
 import { getFeed } from '../../api/services/feeds';
 import { getEvent } from '../../api/services/events';
@@ -58,6 +59,14 @@ const ReadEvent = () => {
         })
         .catch();
     }
+    const callbackReporter = (url ,set) => {
+        getUser(url)
+        .then((response) => {
+            console.log(response)
+            set(response.data)
+        })
+        .catch();
+    }
     const callbackArtefact = (url ,set) => {
         getArtefact(url)
         .then((response) => {
@@ -85,7 +94,7 @@ const ReadEvent = () => {
                             Fecha
                         </Col>
                         <Col sm={12} lg={4}>
-                            <Form.Control plaintext readOnly defaultValue={""} />
+                            <div> {body.date ? body.date.slice(0,10)+" "+body.date.slice(11,19): "--" }</div>
                         </Col>
                     </Row>
                     <p/>
@@ -95,7 +104,7 @@ const ReadEvent = () => {
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.tlp !== undefined ?
-                                <CallBackendByName url={body.tlp} callback={callbackTlp}/> : ""}
+                                <CallBackendByName url={body.tlp} callback={callbackTlp}/> : "-"}
                         </Col>
 
                     </Row>
@@ -106,7 +115,7 @@ const ReadEvent = () => {
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.taxonomy !== undefined ?
-                                <CallBackendByName url={body.taxonomy} callback={callbackTaxonomy}/> : ""}
+                                <CallBackendByName url={body.taxonomy} callback={callbackTaxonomy}/> : "-"}
                         </Col>
 
                     </Row>
@@ -117,7 +126,7 @@ const ReadEvent = () => {
                         </Col>
                         <Col sm={12} lg={4}>
                             { body.feed !== undefined ?
-                                <CallBackendByName url={body.feed} callback={callbackFeed}/> : ""}
+                                <CallBackendByName url={body.feed} callback={callbackFeed}/> : "-"}
                         </Col>
 
                     </Row>
@@ -128,7 +137,7 @@ const ReadEvent = () => {
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.priority !== undefined ?
-                                <CallBackendByName url={body.priority} callback={callbackPriority}/>: ""}
+                                <CallBackendByName url={body.priority} callback={callbackPriority}/>: "-"}
                         </Col>
 
                     </Row>
@@ -139,8 +148,18 @@ const ReadEvent = () => {
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.reporter !== undefined ?
-                                <CallBackendByName url={body.reporter} callback={callbackPriority}/>: ""}
+                                <CallBackendByName url={body.reporter} callback={callbackReporter}/>: "-"}
                         </Col>
+                    </Row>
+                    <br/>
+                    <Row>
+                        <Col sm={12} lg={2}>
+                            Notas
+                        </Col>
+                        <Col sm={12} lg={4}>
+                            {body.notes}
+                        </Col>
+
                     </Row>
                {/*</Table>*/}
                </Card.Body>

@@ -21,6 +21,7 @@ const ListReport = () => {
 
     const [showAlert, setShowAlert] = useState(false)
 
+    const [wordToSearch, setWordToSearch]= useState('')
 
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
@@ -28,7 +29,7 @@ const ListReport = () => {
 
     useEffect(() => {
 
-            getReports(currentPage, "", "")
+            getReports(currentPage, wordToSearch, "")
             .then((response) => {
                 setReports(response.data.results)
                 setCountItems(response.data.count)
@@ -54,7 +55,7 @@ const ListReport = () => {
               })
     
     
-        }, [ currentPage])
+        }, [ currentPage, wordToSearch])
 
         
     
@@ -68,7 +69,7 @@ const ListReport = () => {
         <Card.Header>
           <Row>
             <Col sm={12} lg={9}>
-                <Search  />
+                <Search type=".." setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
                 <Link to={{pathname:'/reports/create'}} >

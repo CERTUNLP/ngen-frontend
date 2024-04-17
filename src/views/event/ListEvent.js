@@ -14,7 +14,7 @@ import ModalConfirm from '../../components/Modal/ModalConfirm';
 import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
 import Select from 'react-select';
-import { getAllCases, patchCase, postCase } from "../../api/services/cases";
+import { getMinifiedCase, patchCase, postCase } from "../../api/services/cases";
 import ModalFormCase from './components/ModalFormCase';
 
 //filters
@@ -98,73 +98,79 @@ const ListEvent = () => {
   //commet
   const [ comm, setComm ] = useState();
 
+  useEffect(() => {
+    getMinifiedCase()
+        .then((response) => { 
+            setCases(response.map(item => ({ value: item.url, label: item.name + " " + item.uuid })));
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
+      getMinifiedTaxonomy()
+          .then((response) => {
+              let listTaxonomies = [];
+              let dicTaxonomy = {};
+              response.map((taxonomy) => {
+                  listTaxonomies.push({ value: taxonomy.url, label: taxonomy.name });
+                  dicTaxonomy[taxonomy.url] = taxonomy.name;
+              });
+              setTaxonomyNames(dicTaxonomy);
+              setTaxonomies(listTaxonomies);
+          });
+
+      getMinifiedFeed()
+          .then((response) => {
+              let listFeeds = [];
+              let dicFeed = {};
+              response.map((feed) => {
+                  listFeeds.push({ value: feed.url, label: feed.name });
+                  dicFeed[feed.url] = feed.name;
+              });
+              setFeedNames(dicFeed);
+              setFeeds(listFeeds);
+          });
+
+      getMinifiedTlp()
+          .then((response) => {
+              let listTlp = [];
+              let dicTlp = {};
+              response.map((tlp) => {
+                  listTlp.push({ value: tlp.url, label: tlp.name });
+                  dicTlp[tlp.url] = { name: tlp.name, color: tlp.color };
+              });
+              setTlpList(listTlp);
+              setTlpNames(dicTlp);
+          });
+  }, []);
+
+  useEffect(() => {
+      getEvents(currentPage, starDateFilter + endDateFilter + taxonomyFilter + tlpFilter + feedFilter + caseIsNull + wordToSearch, order)
+          .then((response) => {
+              setEvents(response.data.results);
+              setCountItems(response.data.count);
+              if (currentPage === 1) {
+                  setUpdatePagination(true);  
+              } 
+              setFilterDate(false);
+              setDisabledPagination(false);
+          })
+          .catch((error) => {
+              setShowAlert(true); // ¿Hace falta?
+              console.log(error);
+          })
+          .finally(() => {
+              setLoading(false);
+              setShowAlert(true);
+          });
+  }, [currentPage, ifModify, wordToSearch, taxonomyFilter, tlpFilter, feedFilter, filterDate, order, caseIsNull, refresh]);
+
+
   function updatePage(chosenPage){
     setCurrentPage(chosenPage);
   }
-  
-  useEffect(() => {
-
-    getAllCases().then((response) => { 
-      setCases(response.map(item => ({ value: item.url, label: item.uuid })));
-    })
-    .catch((error) => {
-        console.log(error)
-        
-    }).finally(() => {
-        setLoading(false)
-    })
-
-    getMinifiedTaxonomy()
-    .then((response) => {
-        let listTaxonomies = []
-        let dicTaxonomy={}
-        response.map((taxonomy) => {
-            listTaxonomies.push({value:taxonomy.url, label:taxonomy.name})
-            dicTaxonomy[taxonomy.url]=taxonomy.name
-        })
-        setTaxonomyNames(dicTaxonomy)
-        setTaxonomies(listTaxonomies)
-    })
-
-    getMinifiedFeed().then((response) => {
-        let listFeeds = []
-        let dicFeed={}
-        response.map((feed) => {
-          listFeeds.push({value:feed.url, label:feed.name})
-          dicFeed[feed.url]=feed.name
-        })
-      setFeedNames(dicFeed)
-      setFeeds(listFeeds)
-    })
-
-    getMinifiedTlp().then((response) => {
-      let listTlp = []
-      let dicTlp={}
-        response.map((tlp) => {
-          listTlp.push({value:tlp.url, label:tlp.name})
-          dicTlp[tlp.url]={name:tlp.name, color: tlp.color}
-        })
-      setTlpList(listTlp)
-      setTlpNames(dicTlp)
-    })
-    getEvents(currentPage, starDateFilter+endDateFilter+taxonomyFilter+tlpFilter+feedFilter+caseIsNull+wordToSearch, order).then((response) => {// por alguna razon lo tengo que poner a lo ultimo paar que el buscador funciones
-        setEvents(response.data.results)
-        setCountItems(response.data.count)
-        if(currentPage === 1){
-          setUpdatePagination(true)  
-        } 
-        setFilterDate(false)
-        setDisabledPagination(false)
-        
-    }).catch((error)=>{
-        setShowAlert(true) //hace falta?
-        console.log(error)
-    }).finally(() => {
-      setLoading(false)
-      setShowAlert(true)
-    })
-
-  }, [ currentPage, ifModify, wordToSearch, taxonomyFilter, tlpFilter, feedFilter, filterDate, order, caseIsNull, refresh])
 
   const reloadPage = () => {
     setRefresh(!refresh)

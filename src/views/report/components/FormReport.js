@@ -33,12 +33,16 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
     };
     // Función para actualizar la altura máxima del div visualizador
     const updateMaxHeight = (key) => {
-        const textareaHeight = textareaRefs[key].current.clientHeight;
-        setMaxHeights(prevState => ({
-            ...prevState,
-            [key]: textareaHeight + 'px'
-        }));
-    };
+        console.log(key)
+        if (textareaRefs[key].current){
+            const textareaHeight = textareaRefs[key].current.clientHeight;
+        
+            setMaxHeights(prevState => ({
+                ...prevState,
+                [key]: textareaHeight + 'px'
+            }));
+            };
+        }
 
     // Manejar el cambio de tamaño de cada textarea
     useEffect(() => {
