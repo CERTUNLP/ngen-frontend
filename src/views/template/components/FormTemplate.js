@@ -154,7 +154,7 @@ const FormTemplate = (props) => {
                     <Form.Group controlId="formGridAddress1">
                     <Form.Control 
                         placeholder="Ingrese IPv4,IPv6, Nombre de domino o Email" 
-                        maxlength="150" 
+                        maxLength="150" 
                         value ={props.body.address_value} 
                         onChange={(e)=>completeFieldStringIdentifier(e)}
                         isInvalid={showErrorMessage }

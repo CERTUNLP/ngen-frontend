@@ -93,6 +93,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
     const storageEntityUrl = (url) => {
         localStorage.setItem('entity', url);    
     }
+    console.log()
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
@@ -106,7 +107,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                     </thead>
                     <tbody>
                         {list.map((entity, index) => {
-
+                            
                             return (
                                 <tr key={index}>
                                     <td>{entity.name}</td>
@@ -184,7 +185,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                                                 <td>Informacion Relacionada</td>
                                                 <td>
                                                     <Button size="sm" variant='light' className="text-capitalize">
-                                                        Redes <Badge variant="light" className="ml-1">{7}</Badge>
+                                                        Redes <Badge variant="light" className="ml-1">{entity ? entity.networks.length: 0 }</Badge>
                                                     </Button>
                                                 </td>
                                             </tr>

@@ -375,15 +375,16 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
                                     value={selectAssigned} placeholder="Asignado"/>
                         </Col>
-
-                        <Col lg={3} sm={12}>
+                    </Row>
+                    <Row>
+                        <Col >
                             <Form.Group controlId="Form.Case.Comments">
                                 <Form.Label>Comentarios</Form.Label>
                                 <Form.Control 
-                                    type="text"
+                                    as="textarea"
                                     name="comment" 
                                     placeholder="Comentarios" 
-                                    maxlength="100"
+                                    maxlength="500"
                                     value={comm} 
                                     onChange={(e) => setComm(e.target.value)} 
                                 />

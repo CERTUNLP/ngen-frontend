@@ -51,6 +51,13 @@ const postTemplate = (address_value,active,priority,event_taxonomy,event_feed,ca
     setAlert(messageSuccess, "success", "template");
     return response;
 }).catch( error => { 
+  console.log(error)
+  //
+    if (error.response.status === 400 ) { 
+      if(error.response.data.__all__[0] === "CIDR, Domain, Taxonomy, Feed tuple must be unique") {
+            messageError += '. Ya existe una plantilla para eventos con esas caracteristicas ';
+        }
+    } 
     setAlert(messageError, "error", "template");
     return Promise.reject(error);
 });

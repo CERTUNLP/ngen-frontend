@@ -45,34 +45,34 @@ const ListNetwork = () => {
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }
-
-    useEffect( ()=> {
-
+    //Hay que ver si mejora el redimiento
+    useEffect(() => {
         getMinifiedEntity()
             .then((response) => {
                 let listEntities = []
-                let dicEntities={}
-                response.map((entitiesItem)=>{
-                    listEntities.push({value:entitiesItem.url, label:entitiesItem.name })
-                    dicEntities[entitiesItem.url]=entitiesItem.name
+                let dicEntities = {}
+                response.map((entitiesItem) => {
+                    listEntities.push({ value: entitiesItem.url, label: entitiesItem.name })
+                    dicEntities[entitiesItem.url] = entitiesItem.name
                 })
                 setEntities(listEntities)
                 setEntityNames(dicEntities)
             })
-            .catch((error)=>{
-                
+            .catch((error) => {
+                // Manejo de errores si es necesario
             })
-
-        getNetworks(currentPage, entitiesFilter +typeFilter+ wordToSearch, order)
+    }, [])
+    
+    useEffect(() => {
+        getNetworks(currentPage, entitiesFilter + typeFilter + wordToSearch, order)
             .then((response) => {
                 setNetwork(response.data.results);
-                // Pagination
+                // Paginación
                 setCountItems(response.data.count);
-                if(currentPage === 1){
-                    setUpdatePagination(true)  
+                if (currentPage === 1) {
+                    setUpdatePagination(true)
                 }
                 setDisabledPagination(false)
-
             })
             .catch((error) => {
                 console.log(error)
@@ -81,7 +81,8 @@ const ListNetwork = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-        }, [ currentPage, isModify, wordToSearch, entitiesFilter, typeFilter, order])
+    }, [currentPage, isModify, wordToSearch, entitiesFilter, typeFilter, order])
+    
 
 
     return (

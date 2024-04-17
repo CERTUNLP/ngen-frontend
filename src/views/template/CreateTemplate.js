@@ -139,7 +139,6 @@ const CreateTemplate = () => {
       
       <FormTemplate body={body} setBody={setBody} createTemplate={createTemplate} tlp={TLP} feeds={feeds} taxonomy={taxonomy} priorities={priorities} states={states}/>
           
-        
     </React.Fragment>
   )
 }
