@@ -18,8 +18,8 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
                     </button>
                 </div>
 
-                <p className="main">Supported files</p>
-                <p className="info">PDF, JPG, PNG</p>
+                <p className="main">Se pueden subir archivos de tipo</p>
+                <p className="info">PDF, JPG, PNG, TXT, DOC</p>
 
             </div>
         </>

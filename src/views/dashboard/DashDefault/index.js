@@ -23,6 +23,9 @@ const DashDefault = () => {
     const [endDate, setEndDate] = useState(getCurrentDate())
     const [starDateFilter, setStarDateFilter] = useState("")
     const [endDateFilter, setEndDateFilter] = useState("")
+    const [starDateNotification, setStarDateNotification] = useState(false)
+    const [endDateNotification, setEndDateNotification] = useState(false)
+
 
     const [loading, setLoading] = useState(true)
     useEffect( ()=> {
@@ -30,7 +33,6 @@ const DashDefault = () => {
         getDashboardFeed(starDateFilter + endDateFilter) 
             .then((response) => {
                 setDashboardFeed(response.data.feeds_in_events)
-                console.log(response)
             })
             .catch((error) => {
                 // Show alert
@@ -41,7 +43,6 @@ const DashDefault = () => {
         getDashboardEvent(starDateFilter + endDateFilter) 
             .then((response) => {
                 setDashboardEvent(response.data.events)
-                console.log(response)
             })
             .catch((error) => {
                 // Show alert
@@ -53,7 +54,6 @@ const DashDefault = () => {
             .then((response) => {
                
                 setDashboardCases(response.data.cases)
-                console.log(response.data.cases)
             })
             .catch((error) => {
                 // Show alert
@@ -76,7 +76,6 @@ const DashDefault = () => {
                 entitiesNetwork[0].values=entitiesWithEventCount
 
                 //console.log(entitiesWithEventCount)
-                console.log(entitiesNetwork)
                 setDashboardNetworkEntities(entitiesNetwork)
                 
             })
@@ -90,18 +89,26 @@ const DashDefault = () => {
         
     }, [starDateFilter, endDateFilter])
     const completeDateStar = (date) => {
-        console.log(date)
-        if (getCurrentDate() >= date){
+        //console.log(date)
+        if (getCurrentDate() >= date && date <= endDate){
             setStarDate(date)
             setStarDateFilter("date_from="+date+"T00:00:00Z"+'&')
+            setStarDateNotification(false)
+        }else{
+            setStarDateNotification(true)
         }
       }
     
       const completeDateEnd = (date) => {
-        console.log(date)
-        if (getCurrentDate() >= date){
+        console.log(endDate)
+        if (getCurrentDate() >= date && date >= starDate && endDate >= starDate){
+            console.log(endDate)
+            console.log(endDateFilter)
             setEndDate(date)
-            setEndDateFilter("date_to"+date+"T00:00:00Z"+'&')
+            setEndDateFilter("date_to="+date+"T00:00:00Z"+'&')
+            setEndDateNotification(false)
+        }else{
+            setEndDateNotification(true)
         }
     }
 
@@ -135,11 +142,11 @@ const DashDefault = () => {
                   placeholder="Fecha desde"
                   max={getCurrentDate()}
                   value={starDate} 
-                  isInvalid={starDate > getCurrentDate()} 
+                  isInvalid={starDateNotification} 
                   onChange={(e) => completeDateStar(e.target.value)}
                   name="date"
                 />
-                {starDate > getCurrentDate() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""  }
+                {starDateNotification ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de Fecha hasta</div> : ""  }
               </Form.Group>
             </Col>
             <Col sm={12} lg={6}>
@@ -150,11 +157,11 @@ const DashDefault = () => {
                   maxLength="150" 
                   max={getCurrentDate()}
                   value={endDate} 
-                  isInvalid={endDate > getCurrentDate()} 
+                  isInvalid={endDateNotification} 
                   onChange={(e) => completeDateEnd(e.target.value)}
                   name="date"
                 />
-                {endDate > getCurrentDate() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""  }
+                {endDateNotification ? <div className="invalid-feedback"> Se debe ingresar una fecha mayor a la de Fecha desde</div> : ""  }
               </Form.Group>
             </Col>
           </Row> 

@@ -13,7 +13,6 @@ const EntityGraph = ({list}) => {
         setEntity(filtrarEventosNoCero(list))
         
     }, [list])
-    console.log(list)
 
     return (
         <div>

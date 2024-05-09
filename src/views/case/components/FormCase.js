@@ -16,7 +16,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const location = useLocation();
     const fromState = location.state;
     const [url, setUrl] = useState(props.edit ? props.caseItem.url : null) 
-    const [date, setDate] = useState(props.caseItem.date  !== null ? props.caseItem.date.substr(0,16) : '') 
+    const [date, setDate] = useState(props.caseItem.date  !== null ? props.caseItem.date.substr(0,16) : getCurrentDateTime()) 
     const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle) 
     const [parent, setParent] = useState(props.caseItem.parent) 
     const [priority, setPriority] = useState(props.caseItem.priority) 
@@ -222,7 +222,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             setIfClick(false)
         });    
     };
-    console.log(fromState)
 
     //Create
     const addCase = () => {
@@ -293,46 +292,22 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             setIfClick(false)
         });    
     };
+    function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = '00';
+        const minutes = '00';
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    console.log(getCurrentDateTime())
+    console.log(date)
 
     return (
         <React.Fragment>  
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>
-            <Card>
-                <Card.Header>
-                    <Card.Title as="h5">Fechas</Card.Title>
-                </Card.Header>
-                <Card.Body> 
-                    <Row>
-                        <Col lg={4} sm={12}>
-                            <Form.Group controlId="Form.Case.Date">
-                                <Form.Label>Fecha de ocurrencia <b style={{color:"red"}}>*</b></Form.Label>
-                                <Form.Control type="datetime-local" //2023-03-24T01:40:14.181622Z 
-                                    value={date} //yyyy-mm-ddThh:mm
-                                    min="2000-01-01T00:00" max="2030-01-01T00:00" 
-                                    onChange={(e) => setDate(e.target.value)}/>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={4} sm={12}>
-                            <Form.Group controlId="Form.Case.Attend_date">
-                                <Form.Label>Fecha de atencion</Form.Label>
-                                <Form.Control type="datetime-local"
-                                    value={attend_date} //yyyy-mm-ddThh:mm
-                                    min="2000-01-01T00:00" max="2030-01-01T00:00" 
-                                    onChange={(e) => setAttend_date(e.target.value)}/>
-                            </Form.Group> 
-                        </Col>
-                        <Col sm={12} lg={4}>
-                            <Form.Group controlId="Form.Case.Solve_date">
-                                <Form.Label>Fecha de resolucion</Form.Label>
-                                <Form.Control type="datetime-local"
-                                    value={solve_date} //yyyy-mm-ddThh:mm
-                                    min="2000-01-01T00:00" max="2030-01-01T00:00" 
-                                    onChange={(e) => setSolve_date(e.target.value)}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                </Card.Body>
-            </Card>
+           
 
 
             <Card>
@@ -352,6 +327,16 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                                     value={name} 
                                     onChange={(e) => setName(e.target.value)} 
                                 />
+                            </Form.Group>
+                        </Col>
+                        <Col lg={3} sm={12}>
+                            <Form.Group controlId="Form.Case.Date">
+                                <Form.Label>Fecha de inicio de gestión </Form.Label>
+                                <Form.Control type="datetime-local" //2023-03-24T01:40:14.181622Z 
+                                    
+                                    value={date} //yyyy-mm-ddThh:mm
+                                    min="2000-01-01T00:00" max="2030-01-01T00:00" 
+                                    onChange={(e) => setDate(e.target.value)}/>
                             </Form.Group>
                         </Col>
                         <Col lg={3} sm={12}>                        
@@ -375,6 +360,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
                                     value={selectAssigned} placeholder="Asignado"/>
                         </Col>
+                        
                     </Row>
                     <Row>
                         <Col >
@@ -447,7 +433,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             }
                  
             {/*!date || !lifecycle || !priority || !tlp || !state || ifClick ? */}
-            {  date !== "" &&  priority !== '' && lifecycle !== '' && tlp !=='' && state !== ''? 
+            { priority !== '' && lifecycle !== '' && tlp !=='' && state !== ''? 
                 <><Button variant="primary" onClick={props.edit ? editCase : addCase}>{props.save}</Button></>:
                 <><Button variant="primary" disabled>{props.save}</Button></> 
                 
