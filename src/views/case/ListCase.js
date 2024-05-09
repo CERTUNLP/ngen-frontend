@@ -235,7 +235,8 @@ const ListCase = () => {
                     </Card.Header>
                     <Card.Body>
                         <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order}  setOrder={setOrder} 
-                                setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames}  stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}/>
+                                setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames}  stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}
+                                editColum={true} deleteColum={true}/>
                     </Card.Body>
                     <Card.Footer >
                         <Row className="justify-content-md-center">

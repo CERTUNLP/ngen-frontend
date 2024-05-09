@@ -8,7 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 
-const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames}) => {
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail}) => {
     
     const [url, setUrl] = useState(null) 
     const [modalDelete, setModalDelete] = useState(false)
@@ -94,7 +94,8 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                 </Form.Group>
                             </th>
                             }
-                            <Ordering field="created" label="Fecha de creación" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <Ordering field="created" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}>Nombre</th>
                             <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th style={letterSize}>TLP</th>
                             <th style={letterSize}>Estado</th>
@@ -124,6 +125,9 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                         {datetime}
                                     </td>
                                     <td>
+                                        {caseItem.name ? caseItem.name : "-"}
+                                    </td>
+                                    <td>
                                         {priorityNames[caseItem.priority]}
                                     </td>
                                 
@@ -144,11 +148,17 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                         </td> 
                                     }
                                     <td>
-                                        <Link to={{pathname:'/cases/view'}}>
-                                            <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)}/>
-                                        </Link>
+                                        {detailModal ?
+                                             <CrudButton type='read' onClick={() => modalCaseDetail(caseItem.url)}/>
+                                            :
+                                            <Link to={{pathname:'/cases/view'}}>
+                                                <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)}/>
+                                            </Link>
+                                        }
+                                        
                                           
-                                            {caseItem.solve_date == null ? 
+                                            {editColum ?
+                                            caseItem.solve_date == null ? 
                                               <Link to={{pathname:'/cases/edit', state: caseItem.url}} >
                                                 <CrudButton type='edit'/>
                                                 </Link>
@@ -166,9 +176,11 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                                       }}
                                                      >
                                                 <i className='fa fa-edit' style={{color: "#555"}}  ></i>
-                                                </Button>}
-
+                                                </Button>: ""}
+                                        {deleteColum ?
                                         <CrudButton type='delete' onClick={() => Delete(caseItem.url, idItem)} />
+                                        :""
+                                        }
                                     </td>
                                 </tr>
                             );

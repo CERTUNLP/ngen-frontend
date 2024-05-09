@@ -171,6 +171,12 @@ const ReadCase = () => {
                                             <Form.Control plaintext readOnly defaultValue={assigned} />
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>Nombre</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={caseItem.name ? caseItem.name : "-"} />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </Table>
                         </Card.Body>
@@ -184,7 +190,7 @@ const ReadCase = () => {
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>Fecha</td>
+                                        <td>Fecha de inicio de gestión</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={date} />
                                         </td>

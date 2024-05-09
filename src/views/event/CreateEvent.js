@@ -9,7 +9,7 @@ import { getMinifiedFeed } from "../../api/services/feeds";
 import { getMinifiedPriority } from "../../api/services/priorities";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
-import { getMinifiedCase } from "../../api/services/cases";
+import { getMinifiedCase, getCases } from "../../api/services/cases";
 import Alert from '../../components/Alert/Alert';
 
 
@@ -44,6 +44,20 @@ const CreateEvent = () => {
   const [showAlert, setShowAlert] = useState(false)
   const [updateCases, setUpdateCases] = useState("")
 
+  const [loading, setLoading] = useState(true)
+  const [order, setOrder] = useState("-created");
+  const [wordToSearch, setWordToSearch] = useState("");
+  const [selectedCases, setSelectedCases] = useState([]);
+  const [ifModify, setIfModify] = useState(null) 
+
+  const [priorityFilter, setPriorityFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [tlpNames, setTlpNames] = useState({});
+  const [priorityNames, setPriorityNames] = useState({});
+  const [stateNames, setStateNames] = useState({});
+  const [userNames, setUserNames] = useState({});
+
   const resetShowAlert = () => {
     setShowAlert(false);
   }  
@@ -53,26 +67,17 @@ const CreateEvent = () => {
         
         getMinifiedTlp().then((response) => {
           let listTlp = []
+          let dicTlp = {}
           response.map((tlp) => {
             listTlp.push({value:tlp.url, label:tlp.name})
+            dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
           })
           setTLP(listTlp)
+          setTlpNames(dicTlp) 
         })
         .catch((error) => {
             setShowAlert(true) //hace falta?
             console.log(error)
-            
-        })
-
-        getMinifiedCase().then((response) => { 
-          let list = []
-          response.map((item) => {
-            list.push({value:item.url, label:item.name+": "+item.uuid})
-          })
-          setCases(list)
-        })
-        .catch((error) => {
-          console.log(error)
             
         })
 
@@ -101,11 +106,14 @@ const CreateEvent = () => {
         })
 
         getMinifiedPriority().then((response) => { //se hardcodea las paginas
-          let listPriority = []
-          response.map((priority) => {
-            listPriority.push({value:priority.url, label:priority.name})
-          })
-          setPriorities(listPriority)
+          let priorityOp = []
+            let dicPriority={}
+            response.map((priority) => {
+                priorityOp.push({value: priority.url, label: priority.name})
+                dicPriority[priority.url]= priority.name
+            })
+            setPriorityNames(dicPriority)
+          setPriorities(priorityOp)
         })
         .catch((error) => {
           console.log(error)
@@ -114,10 +122,13 @@ const CreateEvent = () => {
 
         getMinifiedUser().then((response) => { //se hardcodea las paginas
           let listUser = []
+          let dicUser={}
           response.map((user) => {
             listUser.push({value:user.url, label:user.username})
+            dicUser[user.url]= user.username
           })
           setUsers(listUser)
+          setUserNames(dicUser)
         })
         .catch((error) => {
           console.log(error)
@@ -140,6 +151,27 @@ const CreateEvent = () => {
     fetchPosts()
     
   },[contactCreated, updateCases]);
+
+  useEffect( ()=> {
+    getCases(currentPage, priorityFilter+wordToSearch, order) 
+            .then((response) => {
+                setCases(response.data.results)
+                //setCountItems(response.data.count);
+                // Pagination
+                //if(currentPage === 1){
+                   // setUpdatePagination(true)  
+                //}
+                //setDisabledPagination(false)
+                
+            })
+            .catch((error) => {
+            })
+            .finally(() => {
+                setShowAlert(true)
+                setLoading(false)
+            })
+    
+  },[wordToSearch , priorityFilter, currentPage]);
 
   const createEvent=()=>{
     
@@ -192,7 +224,15 @@ const CreateEvent = () => {
                     feeds={feeds} taxonomy={taxonomy} tlp={TLP} priorities={priorities} 
                     users={users} listArtifact={listArtifact} setContactsCreated={setContactsCreated} 
                     evidence={evidence} setEvidence={setEvidence} cases={cases}
-                    setUpdateCases={setUpdateCases}/>
+                    setUpdateCases={setUpdateCases} loading={loading} setLoading={setLoading}
+                    order={order} setOrder={setOrder} setIfModify={setIfModify} tlpNames={tlpNames}
+                    selectedCases={selectedCases} setSelectedCases={setSelectedCases}
+                    setWordToSearch={setWordToSearch} wordToSearch={wordToSearch}
+                    priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter}
+                    currentPage={currentPage} setCurrentPage={setCurrentPage}
+                    priorityNames={priorityNames} setPriorityNames={setPriorityNames}
+                    stateNames={stateNames} setStateNames={setStateNames}
+                    userNames={userNames} setUserNames={setUserNames}/>
           
     </div>
   )

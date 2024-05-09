@@ -1,10 +1,12 @@
-import React,{useState} from 'react'
-import { Row, Card, Form, Button,Col } from 'react-bootstrap'
+import React,{useState, useEffect} from 'react'
+import { Card, Form, Button } from 'react-bootstrap'
 import { validateFieldText, validateNumber} from '../../../utils/validators';
 import FormArtifactsSelect from './FormArtifactsSelect';
 
 
 const FormArtifact = (props) => {
+
+
     const typeOptions = [
         {
             value : '0',
@@ -52,10 +54,7 @@ const FormArtifact = (props) => {
         }
     ]
     const [validArtifact, setValidArtifact] = useState(false) 
-    const activateBooton = ()=>{
-        
-        return false
-    }
+
   return (
     <div>
         <Card.Body>
@@ -83,10 +82,11 @@ const FormArtifact = (props) => {
                         setValidArtifact={setValidArtifact}/>
 
                 
-                {activateBooton() ?  
-                <><Button variant="primary" disabled>Guardar</Button></> 
-                : 
+                {props.type !== "0" && props.value !== ""?
                 <><Button variant="primary" onClick={props.ifConfirm} >Guardar</Button></>
+                :
+                <><Button variant="primary" disabled>Guardar</Button></> 
+  
                 }
                 <Button variant="primary" onClick={props.ifCancel}>Cancelar</Button>
             </Form>
