@@ -8,8 +8,10 @@ import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListContact = () => {
+    const { t } = useTranslation();
     const [contacts, setContacts] = useState([])
     const [isModify, setIsModify] = useState(null);
 
@@ -75,7 +77,7 @@ const ListContact = () => {
     <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="contact"/>
         <Row>
-            <Navigation actualPosition={'Contactos'}/>  
+            <Navigation actualPosition={t('Contactos')}/>  
         </Row>
         <Row>
             <Col>
@@ -83,11 +85,11 @@ const ListContact = () => {
                     <Card.Header>
                         <Row>
                             <Col>
-                                <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                <Search type={t('por nombre de entidad')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                             </Col>
                             <Col sm={3} lg={3}>
                                 <Link to={{pathname:'/contacts/create'}} >
-                                    <CrudButton type='create' name='Contacto' />
+                                    <CrudButton type='create' name={t('Contacto')}/>
                                 </Link>
                             </Col> 
                         </Row>

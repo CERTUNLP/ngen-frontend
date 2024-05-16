@@ -8,8 +8,10 @@ import {
 import { getTaxonomy } from '../../../../api/services/taxonomies';
 import { getTLPSpecific } from '../../../../api/services/tlp';
 import { getFeed } from '../../../../api/services/feeds';
+import { useTranslation, Trans } from 'react-i18next';
 
 const DashboardEvent = ({list}) => {
+    const { t } = useTranslation();    
 
     const callbackTaxonomy = (url ,setPriority) => {
         getTaxonomy(url)
@@ -39,7 +41,7 @@ const DashboardEvent = ({list}) => {
     <div>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Panel de eventos</Card.Title>
+                <Card.Title as="h5">{t('Panel de eventos')}</Card.Title>
             </Card.Header>
             <Card.Body className="text-center">
                 <ul className="list-group my-4">
@@ -47,13 +49,13 @@ const DashboardEvent = ({list}) => {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Fecha</th>
-                                <th>Fuente de Informacion</th>
-                                <th>Taxonomia</th>
-                                <th>Red</th>
+                                <th>{t('Fecha')}</th>
+                                <th>{t('Fuente de Informacion')}</th>
+                                <th>{t('Taxonomia')}</th>
+                                <th>{t('Red')}</th>
                                 
                                 
-                                <th>Opciones</th>
+                                <th>{t('Opciones')}</th>
                             </tr>
                     </thead>
                         <tbody>

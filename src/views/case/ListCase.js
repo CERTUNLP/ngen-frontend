@@ -15,9 +15,10 @@ import ModalConfirm from '../../components/Modal/ModalConfirm';
 import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
-
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListCase = () => {
+    
     const [cases, setCases] = useState([]) //lista de casos
     const [ifModify, setIfModify] = useState(null) 
     const [loading, setLoading] = useState(true)
@@ -55,9 +56,11 @@ const ListCase = () => {
      
 
     const [refresh,setRefresh]= useState(true)
+    
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
     }  
+    
     //ORDER
     useEffect( ()=> {
 
@@ -161,13 +164,15 @@ const ListCase = () => {
     const reloadPage = () => {
         setRefresh(!refresh)
       }
+
+    const { t } = useTranslation();
     
 
     return (
     <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>
         <Row>
-            <Navigation actualPosition={'Casos'}/>  
+        <Navigation actualPosition={t('Casos')} />
         </Row>
         <Row>
             <Col>
@@ -212,7 +217,10 @@ const ListCase = () => {
                             </Col>
                         </Row>                        
                         <Row>
-                            
+
+       
+
+        
                         </Row>
                         <br/>
                         <Collapse in={open}>

@@ -7,6 +7,8 @@ import CallBackendByName from '../../../components/CallBackendByName';
 import { getTaxonomy } from '../../../api/services/taxonomies';
 import { getTLPSpecific } from '../../../api/services/tlp';
 import { getFeed } from '../../../api/services/feeds';
+import { useTranslation, Trans } from 'react-i18next';
+
 
 const SmallEventTable = ({ list }) => {
     const [events, setEvents] = useState([])
@@ -38,12 +40,15 @@ const SmallEventTable = ({ list }) => {
             })
             .catch();
     }
+
+
+const { t } = useTranslation();
     console.log(events)
     return (
         <React.Fragment>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Eventos</Card.Title>
+                    <Card.Title as="h5">{t('Eventos')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
@@ -51,14 +56,14 @@ const SmallEventTable = ({ list }) => {
                             {events.length > 0 ? <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Fecha</th>
-                                    <th>Identificador </th>
-                                    <th>Dominio</th>
-                                    <th>Cidr</th>
-                                    <th>TLP</th>
-                                    <th>Taxonomia</th>
-                                    <th>Fuente de Informacion</th>
-                                    <th>Opciones</th>
+                                    <th>{t('Fecha')}</th>
+                                    <th>{t('Identificador')} </th>
+                                    <th>{t('Dominio')}</th>
+                                    <th>{t('Cidr')}</th>
+                                    <th>{t('TLP')}</th>
+                                    <th>{t('Taxonomia')}</th>
+                                    <th>{t('Fuente de Informacion')}</th>
+                                    <th>{t('Opciones')}</th>
                                 </tr>
                             </thead> : <></>}
                             <tbody>
@@ -88,7 +93,7 @@ const SmallEventTable = ({ list }) => {
 
                                         </tr>
                                     )
-                                }) : <tr><td colSpan="9">No hay eventos</td></tr>}
+                                }) : <tr><td colSpan="9">{t('No hay eventos')}</td></tr>}
 
                             </tbody>
                         </Table>

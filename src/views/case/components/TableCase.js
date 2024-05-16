@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
+import { useTranslation, Trans } from 'react-i18next';
+
+
 
 const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames}) => {
     
@@ -19,7 +22,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
 
     const [list, setList] = useState([]);
 
-    
+    const { t } = useTranslation();
   
     //ORDER
     useEffect(() => { 
@@ -74,7 +77,10 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             setSelectedCases(selectedCases.filter(item => item !== id));
         }
     };
+
     const letterSize= { fontSize: '1.1em' }
+
+
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
@@ -94,12 +100,12 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                 </Form.Group>
                             </th>
                             }
-                            <Ordering field="created" label="Fecha de creación" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>TLP</th>
-                            <th style={letterSize}>Estado</th>
-                            <th style={letterSize}>Asignado</th>
-                            <th style={letterSize}>Accion</th>
+                            <Ordering field="created" label={t('Fecha de creación')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <Ordering field="priority" label={t('Prioridad')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}> {t('TLP')} </th>
+                            <th style={letterSize}> {t('Estado')} </th>
+                            <th style={letterSize}> {t('Asignado')} </th>
+                            <th style={letterSize}> {t('Accion')} </th>
                             
                         </tr>
                     </thead>

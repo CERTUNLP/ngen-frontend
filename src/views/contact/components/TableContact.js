@@ -5,8 +5,11 @@ import { getContact, deleteContact } from '../../../api/services/contacts';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
+import { useTranslation, Trans } from 'react-i18next';
 
 const TableContact = ({setIsModify, list, loading ,currentPage}) => {
+    const { t } = useTranslation();
+
     const [contact, setContact] = useState('')
 
     const [modalShow, setModalShow] = useState(false)
@@ -94,11 +97,11 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Rol</th>
-                            <th>Contacto</th>
-                            <th>Prioridad</th>
-                            <th>Accion</th>
+                            <th>{t('Nombre')}</th>
+                            <th>{t('Rol')}</th>
+                            <th>{t('Contacto')}</th>
+                            <th>{t('Prioridad')}</th>
+                            <th>{t('Accion')}</th>
                         </tr>
                     </thead>
                     <tbody>

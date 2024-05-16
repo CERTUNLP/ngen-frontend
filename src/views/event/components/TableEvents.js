@@ -6,10 +6,10 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteEvent} from "../../../api/services/events";
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
-
+import { useTranslation, Trans } from 'react-i18next';
 
 const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading,  taxonomyNames, feedNames, tlpNames}) => {
-
+    const { t } = useTranslation(); 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
     const [remove, setRemove] = useState()
@@ -64,6 +64,7 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
       };
     
       const letterSize= { fontSize: '1.1em' }
+ 
   return (
     <div>
         
@@ -78,14 +79,14 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                 </Form.Group>
                             </th>
                         
-                            <Ordering field="date" label="Fecha del Evento" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>Identificador </th>
-                            <th style={letterSize}>Dominio</th>
-                            <th style={letterSize}>Cidr</th>
-                            <th style={letterSize}>TLP</th>
-                            <th style={letterSize}>Taxonomia</th>
-                            <th style={letterSize}>Fuente de Informacion</th>
-                            <th style={letterSize}>Opciones</th>
+                            <Ordering field="date" label={t('Fecha del Evento')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}>{t('Identificador')} </th>
+                            <th style={letterSize}>{t('Dominio')}</th>
+                            <th style={letterSize}>{t('Cidr')}</th>
+                            <th style={letterSize}>{t('TLP')}</th>
+                            <th style={letterSize}>{t('Taxonomia')}</th>
+                            <th style={letterSize}>{t('Fuente de Informacion')}</th>
+                            <th style={letterSize}>{t('Opciones')}</th>
                         </tr>
                    </thead>
                     <tbody>

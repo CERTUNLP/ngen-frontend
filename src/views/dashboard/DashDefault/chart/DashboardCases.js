@@ -13,11 +13,13 @@ import { Link } from 'react-router-dom';
 import GetUserName from '../../../case/components/GetUserName';
 import CrudButton from '../../../../components/Button/CrudButton';
 import { getUser } from '../../../../api/services/users';
+import { useTranslation, Trans } from 'react-i18next';
 
 const DashboardCases = ({list, loading}) => {
     const [prioritiesOption, setPrioritiesOption] = useState({}) 
     const [tlpOption, setTlpOption] = useState({}) 
     const [stateOption, setStateOption] = useState({}) 
+    const { t } = useTranslation();    
 
     useEffect(() => {
 
@@ -68,18 +70,18 @@ const DashboardCases = ({list, loading}) => {
     <div>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Panel de casos</Card.Title>
+                <Card.Title as="h5">{t('Panel de casos')}</Card.Title>
             </Card.Header>
             <Card.Body className="text-center">
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>uuid</th>
-                            <th>Estado</th>
-                            <th>Asignado</th>
-                            <th>Cantidad de eventos</th>
-                            <th>Accion</th>
+                            <th>{t('uuid')}</th>
+                            <th>{t('Estado')}</th>
+                            <th>{t('Asignado')}</th>
+                            <th>{t('Cantidad de eventos')}</th>
+                            <th>{t('Accion')}</th>
                             
                         </tr>
                     </thead>

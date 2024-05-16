@@ -4,8 +4,9 @@ import {
   } from 'react-bootstrap';
   import {Link} from 'react-router-dom'
   import CrudButton from '../../components/Button/CrudButton';
-
+  import { useTranslation, Trans } from 'react-i18next';
 const TableArtifact = ({artifact}) => {
+const { t } = useTranslation();
 
   return (
     <div>
@@ -16,9 +17,9 @@ const TableArtifact = ({artifact}) => {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Tipo</th>
-                            <th>valor</th>
-                            <th>Relacionado </th>
+                            <th>{t('Tipo')}</th>
+                            <th>{t('Valor')}</th>
+                            <th>{t('Relacionado')}</th>
                         </tr>
                    </thead>
                     <tbody>

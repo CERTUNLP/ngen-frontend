@@ -6,6 +6,7 @@ import CrudButton from '../../../components/Button/CrudButton';
 import { getEntity, deleteEntity, isActive } from '../../../api/services/entities';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const TableEntity = ({setIsModify, list, loading, currentPage }) => {
@@ -19,7 +20,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
     const [created, setCreated] = useState('') 
     const [modified, setModified] = useState('') 
     const [active,setActive] = useState('') 
-
+    const { t } = useTranslation();
     if (loading) {
         return (
             <Row className='justify-content-md-center'>
@@ -94,15 +95,17 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
         localStorage.setItem('entity', url);    
     }
     console.log()
+    
+
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Activo</th>
-                            <th>Redes Asociadas</th>
-                            <th>Accion</th>
+                            <th>{t('Nombre')}</th>
+                            <th>{t('Activo')}</th>
+                            <th>{t('Redes Asociadas')}</th>
+                            <th>{t('Accion')}</th>
                         </tr>
                     </thead>
                     <tbody>

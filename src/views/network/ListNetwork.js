@@ -12,11 +12,15 @@ import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
 import FilterSelect from '../../components/Filter/FilterSelect';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListNetwork = () => {
+    const { t } = useTranslation();
+
     const [network, setNetwork] = useState([])
     const [entities, setEntities] = useState([])
   
+
 
     const [isModify, setIsModify] = useState(null);
 
@@ -89,7 +93,7 @@ const ListNetwork = () => {
     <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="network"/>
         <Row>
-            <Navigation actualPosition={'Redes'}/>  
+            <Navigation actualPosition={t('Redes')}/>  
         </Row>
         <Row>
             <Col>
@@ -100,11 +104,11 @@ const ListNetwork = () => {
                               <ButtonFilter open={open} setOpen={setOpen} />
                             </Col>
                             <Col sm={12} lg={8}>
-                                <Search type="cidr o dominio" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} /> 
+                                <Search type={t('cidr o dominio')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} /> 
                             </Col>
                             <Col sm={12} lg={3}>
                                 <Link to={{pathname:'/networks/create'}} >
-                                    <CrudButton type='create' name='Red' />
+                                    <CrudButton type='create' name={t('Red')} />
                                 </Link>
                             </Col> 
                         </Row>

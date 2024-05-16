@@ -12,6 +12,7 @@ import { postStringIdentifier } from "../../../api/services/stringIdentifier";
 import { postCase } from "../../../api/services/cases";
 import Alert from '../../../components/Alert/Alert';
 import ModalFormCase from './ModalFormCase';
+import { useTranslation, Trans } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 //{createEvent, setBody, body, feeds, taxonomy, tlp, priorities, users, listArtifact, setContactsCreated}
@@ -281,11 +282,13 @@ const FormEvent = (props) => {
     }
     console.log(props.body.children)
 
+    const { t } = useTranslation();
+
   return (
     <div>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Principal</Card.Title>
+                <Card.Title as="h5">{t('Principal')}</Card.Title>
             </Card.Header>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
             <Card.Body>
@@ -293,7 +296,7 @@ const FormEvent = (props) => {
                 <Row>
                     <Col sm={12} lg={4}>
                         <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Fecha <b style={{color:"red"}}>*</b></Form.Label>
+                        <Form.Label>{t('Fecha')} <b style={{color:"red"}}>*</b></Form.Label>
                         <Form.Control 
                             type ="datetime-local"
                             maxLength="150"
@@ -302,40 +305,40 @@ const FormEvent = (props) => {
                             isInvalid={new Date(props.body.date) > new Date()} 
                             onChange={(e)=>completeField(e)}
                             name="date"/>
-                            {new Date(props.body.date) > new Date() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""  }
+                            {new Date(props.body.date) > new Date() ? <div className="invalid-feedback"> {t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""  }
                         </Form.Group>
                         
                     </Col>
                     <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="tlp"
-                                        onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true} 
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('TLP')} options={props.tlp} value={selectTlp} nameField="tlp"
+                                        onChange={completeField1} placeholder={t('Seleccione un TLP')} setOption={setSelectTlp} required={true} 
                                         />
                     </Col>
                     <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy" 
-                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Taxonomia')} options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy" 
+                                        onChange={completeField1} placeholder={t('Seleccione una taxonomia')} setOption={setSelectTaxonomy} required={true}
                                         disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}/>
                     </Col>
                 </Row>       
                 <Row>
                     <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Fuente de Informacion" options={props.feeds} value={selectFeed} nameField="feed"
-                                            onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Fuente de Informacion')} options={props.feeds} value={selectFeed} nameField="feed"
+                                            onChange={completeField1} placeholder={t('Seleccione una Fuente de Informacion')} setOption={setSelectFeed} required={true}
                                             disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
-                                                onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Prioridades')} options={props.priorities} value={selectPriority} nameField="priority"
+                                                onChange={completeField1} placeholder={t('Seleccione una Prioridad')} setOption={setSelectPriority} required={true}/>
                     </Col>
                     <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Usuario que reporta" options={props.users} value={selectReporter} nameField="reporter"
-                                            onChange={completeField1} placeholder="Usuario que reporta" setOption={setSelectReporter} required={false}/>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Usuario que reporta')} options={props.users} value={selectReporter} nameField="reporter"
+                                            onChange={completeField1} placeholder={t('Seleccione usuario que reporta')} setOption={setSelectReporter} required={false}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col sm={4} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Caso asociado" options={props.cases} value={selectCase} 
-                                            onChange={completeField1} placeholder="Seleccione un caso" setOption={setSelectCase} required={false}/>
+                        <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Caso asociado')} options={props.cases} value={selectCase} 
+                                            onChange={completeField1} placeholder={t('Seleccione un caso')} setOption={setSelectCase} required={false}/>
                     </Col>
                     <Col sm={4} lg={4}>
                     <br></br>
@@ -344,14 +347,14 @@ const FormEvent = (props) => {
                             variant="outline-dark"
                             onClick={() => modalCase()}
                             >
-                            Crear nuevo caso
+                            {t('Crear nuevo caso')}
                     </Button>
                     </Col>
                 </Row>
                 <Form.Group controlId="formGridAddress1">
-                <Form.Label>Notas</Form.Label>
+                <Form.Label>{t('Notas')}</Form.Label>
                 <Form.Control 
-                    placeholder="Ingrese " 
+                    placeholder={t('Ingrese notas aquí...')} 
                     maxLength="150" 
                     value ={props.body.notes}
                     onChange={(e)=>completeField(e)}
@@ -362,16 +365,16 @@ const FormEvent = (props) => {
         </Card>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Artefactos</Card.Title>
+                <Card.Title as="h5">{t('Artefactos')}</Card.Title>
             </Card.Header>
             <Card.Body>
             <Form>
                 <Form.Group controlId="formGridAddress1">
-                <Form.Label>Artefactos</Form.Label>
+                <Form.Label>{t('Artefactos')}</Form.Label>
                     <Row>
                         <Col sm={12} lg={9}>
                                 <Select
-                                    placeholder='Seleccione artefactos'
+                                    placeholder={t('Seleccione Artefactos')}
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     isMulti
@@ -380,7 +383,7 @@ const FormEvent = (props) => {
                                     options={props.listArtifact}/>
                         </Col>
                         <Col sm={12} lg={3}>
-                            <CrudButton type='create' name='Artefacto' onClick={() => setModalCreate(true)}/>
+                            <CrudButton type='create' name={t('Artifact')} onClick={() => setModalCreate(true)}/>
                         </Col>
                     </Row>
                 </Form.Group>
@@ -389,22 +392,22 @@ const FormEvent = (props) => {
         </Card>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Recursos afectados</Card.Title>
+                <Card.Title as="h5">{t('Recursos afectados')}</Card.Title>
             </Card.Header>
            <Card.Body>
-            <Form.Label>CIDR, Domino o Email<b style={{color:"red"}}>*</b></Form.Label>
+            <Form.Label>{t('CIDR, Domino o Email')}<b style={{color:"red"}}>*</b></Form.Label>
                 <Row>
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
                     <Form.Control 
-                        placeholder="Ingrese IPv4,IPv6, Nombre de domino o Email" 
+                        placeholder={t('Ingrese IPv4,IPv6, Nombre de domino o Email')} 
                         maxLength="150" 
                         value ={props.body.address_value} 
                         disabled={(props.body.children !== [] && props.body.children.length > 0 )? true: false}
                         onChange={(e)=>completeFieldStringIdentifier(e)}
                         isInvalid={showErrorMessage }
                         name="address_value"/>
-                        {showErrorMessage    ?  <div className="invalid-feedback"> Debe ingresar IPv4,IPv6, Nombre de domino o Email</div>  : "" }
+                        {showErrorMessage    ?  <div className="invalid-feedback"> {t('Debe ingresar IPv4,IPv6, Nombre de domino o Email')}</div>  : "" }
                     </Form.Group> 
                 </Col>
             </Row>
@@ -412,7 +415,7 @@ const FormEvent = (props) => {
                 </Card>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Evidencias</Card.Title>
+                <Card.Title as="h5">{t('Evidencias')}</Card.Title>
             </Card.Header>
         <Card.Body>
             <Form>   
@@ -434,8 +437,8 @@ const FormEvent = (props) => {
                             <Card.Header> 
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">Artefacto</Card.Title>
-                                            <span className="d-block m-t-5">Crear Artefacto</span>
+                                            <Card.Title as="h5">{t('Artefacto')}</Card.Title>
+                                            <span className="d-block m-t-5">{t('Crear Artefacto')}</span>
                                         </Col>
                                         <Col sm={12} lg={2}>                       
                                             <CloseButton aria-label='Cerrar' onClick={() => setModalCreate(false)} />
@@ -469,7 +472,7 @@ const FormEvent = (props) => {
                         Crear
                         </Button>
 
-                        <Button variant="outline-secondary" onClick={() => setShowModalCase(false)}>Cancelar</Button>
+                        <Button variant="outline-secondary" onClick={() => setShowModalCase(false)}>{t('Cancelar')}</Button>
                 </Modal.Footer>
                 </Modal.Body>
                 
@@ -481,9 +484,9 @@ const FormEvent = (props) => {
             && props.body.priority !== "" && props.body.address_value !== "" && !showErrorMessage?
             <Button variant="primary" onClick={props.createEvent} >Guardar</Button> 
             : 
-            <Button variant="primary" disabled>Guardar</Button>                                    
+            <Button variant="primary" disabled>{t('Guardar')}</Button>                                    
         }
-        <Button variant="primary" href="/events">Cancelar</Button>      
+        <Button variant="primary" href="/events">{t('Cancelar')}</Button>      
     </div>
   )
 }

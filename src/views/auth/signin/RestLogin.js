@@ -11,6 +11,7 @@ import { LOGIN } from './../../../store/actions';
 import { login } from '../../../api/services/auth';
 import { store } from './../../../store';
 import Alert from './../../../components/Alert/Alert'; 
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const RestLogin = ({ className, ...rest }) => {
@@ -21,6 +22,13 @@ const RestLogin = ({ className, ...rest }) => {
     const resetShowAlert = () => {
         setShowAlert(false);
     }
+    const { t } = useTranslation();
+
+    const validationMessages = {
+        un: t('El nombre de usuario es requerido'),
+        pw: t('La contraseña es requerida')
+      };
+      
 
     return (
         <React.Fragment>
@@ -32,8 +40,8 @@ const RestLogin = ({ className, ...rest }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    username: Yup.string().max(255).required('El nombre de usuario es requerido'),
-                    password: Yup.string().max(255).required('La constraseña es requerida')
+                    username: Yup.string().max(255).required(validationMessages.un),
+                    password: Yup.string().max(255).required(validationMessages.pw)
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
 
@@ -91,7 +99,7 @@ const RestLogin = ({ className, ...rest }) => {
                                     type="submit"
                                     variant="primary"
                                 >
-                                    Ingresar
+                                    {t('Ingresar')}
                                 </Button>
                             </Col>
                         </Row>
