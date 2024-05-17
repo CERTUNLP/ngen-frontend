@@ -2,10 +2,13 @@ import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import NavCollapse from '../NavCollapse';
 import NavItem from '../NavItem';
+import { useTranslation } from 'react-i18next';
+
 
 const NavGroup = ({ layout, group }) => {
     let navItems = '';
     let groupHeader = '';
+    const { t } = useTranslation();
 
     if (group.children) {
         const groups = group.children;
@@ -25,7 +28,7 @@ const NavGroup = ({ layout, group }) => {
     if (group.title !== '') {
         groupHeader = (
             <ListGroup.Item as="li" bsPrefix=" " key={group.id} className="nav-item pcoded-menu-caption">
-                <label>{group.title}</label>
+                <label>{t(group.title)}</label>
             </ListGroup.Item>
         );
     }

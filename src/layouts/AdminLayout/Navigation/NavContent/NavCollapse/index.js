@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import i18next from 'i18next';
 
 import NavItem from '../NavItem';
 import LoopNavCollapse from './index';
@@ -42,9 +43,9 @@ const NavCollapse = ({ collapse, type }) => {
         });
     }
 
-    let itemTitle = collapse.title;
+    let itemTitle = i18next.t(collapse.title);
     if (collapse.icon) {
-        itemTitle = <span className="pcoded-mtext">{collapse.title}</span>;
+        itemTitle = <span className="pcoded-mtext">{itemTitle}</span>;
     }
 
     let navLinkClass = ['nav-link'];

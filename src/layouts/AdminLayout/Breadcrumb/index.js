@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import navigation from '../../../menu-items';
 import { BASE_TITLE, BASENAME } from '../../../config/constant';
@@ -37,11 +38,12 @@ const Breadcrumb = () => {
     let mainContent, itemContent;
     let breadcrumbContent = '';
     let title = '';
+    const { t } = useTranslation();
 
     if (main && main.type === 'collapse') {
         mainContent = (
             <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-                <Link to="#">{main.title}</Link>
+                <Link to="#">{t(main.title)}</Link>
             </ListGroup.Item>
         );
     }
@@ -50,7 +52,7 @@ const Breadcrumb = () => {
         title = item.title;
         itemContent = (
             <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-                <Link to="#">{title}</Link>
+                <Link to="#">{t(title)}</Link>
             </ListGroup.Item>
         );
 
@@ -61,7 +63,7 @@ const Breadcrumb = () => {
                         <div className="row align-items-center">
                             <div className="col-md-12">
                                 <div className="page-header-title">
-                                    <h5 className="m-b-10">{title}</h5>
+                                    <h5 className="m-b-10">{t(title)}</h5>
                                 </div>
                                 <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
                                     <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
