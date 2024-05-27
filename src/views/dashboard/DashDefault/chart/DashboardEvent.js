@@ -1,91 +1,43 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import {
-    Card, Table 
+    Card
  } from 'react-bootstrap';
- import CrudButton from '../../../../components/Button/CrudButton';
- import CallBackendByName from '../../../../components/CallBackendByName'; 
-import { getTaxonomy } from '../../../../api/services/taxonomies';
-import { getTLPSpecific } from '../../../../api/services/tlp';
-import { getFeed } from '../../../../api/services/feeds';
+import { getMinifiedTaxonomy } from '../../../../api/services/taxonomies';
+import { getMinifiedFeed } from '../../../../api/services/feeds';
+import TableEvents from '../../../event/components/TableEvents';
 
 const DashboardEvent = ({list}) => {
 
-    const callbackTaxonomy = (url ,setPriority) => {
-        getTaxonomy(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
-    }
-    const callbackTlp = (url ,setPriority) => {
-        getTLPSpecific(url)
-        .then((response) => {
-          
-            setPriority(response.data)
-        })
-        .catch();
-    }
-    const callbackFeed = (url ,setPriority) => {
-        getFeed(url)
-        .then((response) => {
-         
-            setPriority(response.data)
-        })
-        .catch();
-    }
+    const [taxonomyNames, setTaxonomyNames] = useState({});
+    const [feedNames, setFeedNames] = useState({});
+
+
+    useEffect( ()=> {
+        getMinifiedTaxonomy().then((response) => {
+            let dicTaxonomy = {};
+            response.map((taxonomy) => {
+                dicTaxonomy[taxonomy.url] = taxonomy.name;
+            });
+            setTaxonomyNames(dicTaxonomy);
+        });
+        getMinifiedFeed().then((response) => {
+            let dicFeed = {};
+            response.map((feed) => {
+                dicFeed[feed.url] = feed.name;
+            });
+            setFeedNames(dicFeed);
+        });
+
+    }, [])
   return (
     <div>
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Panel de eventos</Card.Title>
+                <Card.Title as="h5">Ultimos 10 eventos en el periodo seleccionado</Card.Title>
             </Card.Header>
-            <Card.Body className="text-center">
-                <ul className="list-group my-4">
-                    <Table responsive hover className="text-center">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Fecha</th>
-                                <th>Fuente de Informacion</th>
-                                <th>Taxonomia</th>
-                                <th>Red</th>
-                                
-                                
-                                <th>Opciones</th>
-                            </tr>
-                    </thead>
-                        <tbody>
-                        {list.map((event, index) => {
-                            return (
-                                <tr>
-                                    
-                                    <td>{index +1 }</td>
-
-                                    <td>{event.date ? event.date.slice(0,10)+" "+event.date.slice(11,19): ""}</td>
-
-                                    <td><CallBackendByName url={event.feed} callback={callbackFeed} useBadge={false}/></td>
-
-                                    <td><CallBackendByName url={event.taxonomy} callback={callbackTaxonomy} useBadge={false}/></td>
-                                    
-                                    <td>{event.address_value}</td>
-                                    
-                                    <td>
-                                    <Link to={{pathname:"/events/view", state: event}} >
-                                        <CrudButton  type='read'   />
-                                    </Link>
-                                    
-                                    </td>
-                                    
-                                </tr>
-                                )
-                            })}
-
-                        </tbody>
-                    </Table>
-                </ul>
-            </Card.Body>
+            <TableEvents events={list}  taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true} 
+                    disableCheckbox={true} disableDomain={true} disableCidr={true} disableTlp={true} disableColumnEdit={true}
+                    disableColumnDelete={true} disableTemplate={true}/> 
         </Card>
     </div>
   )

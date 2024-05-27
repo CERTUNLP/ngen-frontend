@@ -65,7 +65,7 @@ const EditCase = () => {
             <Row>
                 <Navigation actualPosition="Editar Caso" path="/cases" index ="Casos"/>
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios'/>
+            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios' evidenceColum={true}/>
         </React.Fragment>
     );
 };

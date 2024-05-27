@@ -34,7 +34,7 @@ const ListCase = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
     //filters
-    const [order, setOrder] = useState("-created");
+    const [order, setOrder] = useState("date"); 
     const [wordToSearch, setWordToSearch]= useState('')
     const [open, setOpen] = useState(false);
 
@@ -236,7 +236,7 @@ const ListCase = () => {
                     <Card.Body>
                         <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order}  setOrder={setOrder} 
                                 setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames}  stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}
-                                editColum={true} deleteColum={true}/>
+                                editColum={true} deleteColum={true} navigationRow={true} buttonReturn={false} disableNubersOfEvents={true}/>
                     </Card.Body>
                     <Card.Footer >
                         <Row className="justify-content-md-center">

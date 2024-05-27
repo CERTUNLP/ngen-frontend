@@ -94,9 +94,9 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                             <th style={letterSize}>Direción de valor </th>
                             <th style={letterSize}>Dominio</th>
                             <th style={letterSize}>Cidr</th>
-                            {<Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>}
+                            <Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th style={letterSize}>Activo</th>
-                            <th style={letterSize}>Entidad</th>
+                            <Ordering field="network_entity__name" label="Entidad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th style={letterSize}>Accion</th>
                         </tr>
                     </thead>

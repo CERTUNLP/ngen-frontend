@@ -13,6 +13,8 @@ import { getEvent } from "../../api/services/events";
 const ReadCase = () => {
     const location = useLocation();
     const [caseItem, setCaseItem] = useState(location?.state?.item || null);
+    const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
+    const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
 
     const [id, setId] = useState('');
     const [date, setDate] = useState('');
@@ -124,15 +126,20 @@ const ReadCase = () => {
             }
         }
     }, [caseItem]);
+   
+    
 
-
+    
 
     return (
         caseItem &&
         <React.Fragment>
+            {navigationRow !=="false" ? 
             <Row>
                 <Navigation actualPosition="Detalle" path="/cases" index="Casos" />
             </Row>
+            :" "
+            }
             <Row>
                 <Col sm={12}>
 
@@ -281,8 +288,12 @@ const ReadCase = () => {
                         : <></>}
 
 
-
-                    <Button variant="primary" href="/cases">Volver</Button>
+                    {buttonReturn  !=="false" ?
+                        <Button variant="primary" href="/cases">Volver</Button>
+                    : 
+                    ""
+                    }
+                    
                 </Col>
             </Row>
 

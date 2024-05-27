@@ -5,8 +5,9 @@ import { getContact, deleteContact } from '../../../api/services/contacts';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
+import Ordering from '../../../components/Ordering/Ordering';
 
-const TableContact = ({setIsModify, list, loading ,currentPage}) => {
+const TableContact = ({setIsModify, list, loading, setLoading, currentPage, order, setOrder}) => {
     const [contact, setContact] = useState('')
 
     const [modalShow, setModalShow] = useState(false)
@@ -89,12 +90,14 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
         localStorage.setItem('contact', url);    
     }
 
+    const letterSize= { fontSize: '1.1em' }
+
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
+                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th>Rol</th>
                             <th>Contacto</th>
                             <th>Prioridad</th>

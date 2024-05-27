@@ -82,7 +82,7 @@ const ReadEvent = () => {
   return (
     <div>
         <Row>
-            <Navigation actualPosition="Agregar evento" path="/events" index ="Evento"/>
+            <Navigation actualPosition="Detalle" path="/events" index ="Evento"/>
         </Row>        
         <Card>
             <Card.Header> 

@@ -22,7 +22,7 @@ const ListTaxonomies = () => {
     const [disabledPagination, setDisabledPagination] = useState(true)
     const [wordToSearch, setWordToSearch]= useState('')
 
-    const [order, setOrder] = useState("-created");
+    const [order, setOrder] = useState("name");
 
 
     function updatePage(chosenPage){

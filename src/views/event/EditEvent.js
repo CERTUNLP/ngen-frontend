@@ -12,7 +12,6 @@ import { getMinifiedPriority } from "../../api/services/priorities";
 import { getEvidence, deleteEvidence} from "../../api/services/evidences";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
-import { getMinifiedCase } from "../../api/services/cases";
 
 const EditEvent = () => {
   //const [date, setDate] = useState(caseItem.date  != null ? caseItem.date.substr(0,16) : '') //required
@@ -24,20 +23,18 @@ const EditEvent = () => {
     const [TLP, setTLP] = useState([])
     const [feeds, setFeeds] = useState([])
     const [taxonomy, setTaxonomy] = useState([])
-    const [cases, setCases] = useState([])
     const [priorities, setPriorities] = useState([])
     const [users, setUsers] = useState([])
     const [listArtifact, setListArtifact] = useState([])
     const [contactCreated, setContactsCreated ] = useState(null);
     const [showAlert, setShowAlert] = useState(false)
-    const [selectCase, setSelectCase] = useState()
+
+    const [tlpNames, setTlpNames] = useState({});
+    const [priorityNames, setPriorityNames] = useState({});
+    const [userNames, setUserNames] = useState({});
   useEffect( ()=> {
-    
-    let dicCase={}
 
     const fetchPosts = async () => {
-
-
         var list = []
         event.evidence.forEach((url) => {
            
@@ -51,26 +48,17 @@ const EditEvent = () => {
         
         getMinifiedTlp().then((response) => { 
           let listTlp = []
+          let dicTlp = {}
           response.map((tlp) => {
             listTlp.push({value:tlp.url, label:tlp.name})
+            dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
           })
           setTLP(listTlp)
+          setTlpNames(dicTlp)
         })
         .catch((error) => {
           console.log(error)
             
-        })
-
-        getMinifiedCase().then((response) => { 
-          let list = []
-          response.map((item) => {
-            list.push({value:item.url, label:item.name+": "+item.uuid})
-            dicCase[item.url]= item.name+": "+item.uuid
-          })
-          setCases(list)
-        })
-        .catch((error) => {
-          console.log(error)  
         })
 
         getMinifiedTaxonomy().then((response) => { 
@@ -98,11 +86,14 @@ const EditEvent = () => {
         })
 
         getMinifiedPriority().then((response) => { //se hardcodea las paginas
-          let listPriority = []
+          let priorityOp = []
+          let dicPriority={}
           response.map((priority) => {
-            listPriority.push({value:priority.url, label:priority.name})
+              priorityOp.push({value: priority.url, label: priority.name})
+              dicPriority[priority.url]= priority.name
           })
-          setPriorities(listPriority)
+          setPriorityNames(dicPriority)
+          setPriorities(priorityOp)
         })
         .catch((error) => {
           console.log(error)
@@ -111,10 +102,13 @@ const EditEvent = () => {
 
         getMinifiedUser().then((response) => { //se hardcodea las paginas
           let listUser = []
+          let dicUser={}
           response.map((user) => {
             listUser.push({value:user.url, label:user.username})
+            dicUser[user.url]= user.username
           })
           setUsers(listUser)
+          setUserNames(dicUser)
         })
         .catch((error) => {
           console.log(error)
@@ -132,18 +126,10 @@ const EditEvent = () => {
         .catch((error)=>{
           console.log(error)
         })
-        
     }  
     fetchPosts()
     event.date = event.date.substr(0,16)
     event.case =  event.case ? event.case : ""
-    //event.reporter = event.reporter == null ? "": event.reporter
-    //event.domain = event.domain == null ? "": event.domain
-    //event.cidr = event.cidr == null ? "": event.cidr
-    /*if (event.case !== null){
-      setSelectCase({value:event.case, label: dicCase[event.case]})
-    }*/
-   
     setBody(event)
     
   },[contactCreated]);
@@ -203,7 +189,7 @@ const EditEvent = () => {
 
 
       putEvent(body.url,formDataEvent).then(() => {
-        //window.location.href = '/events';
+        window.location.href = '/events';
         console.log(body)
       })
       .catch((error) => {
@@ -276,8 +262,11 @@ const EditEvent = () => {
         <FormEvent createEvent={editEvent} setBody={setBody} body={body} feeds={feeds} 
                   taxonomy={taxonomy} tlp={TLP} priorities={priorities} users={users} 
                   listArtifact={listArtifact} setContactsCreated={setContactsCreated} 
-                  evidence={evidence} setEvidence={setEvidence} cases={cases} 
-                  selectCase={selectCase} setSelectCase={setSelectCase}/>
+                  evidence={evidence} setEvidence={setEvidence} 
+                  tlpNames={tlpNames}
+                    priorityNames={priorityNames} setPriorityNames={setPriorityNames}
+                    userNames={userNames} 
+                  />
     </div>
   )
 }

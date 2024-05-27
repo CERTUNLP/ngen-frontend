@@ -6,9 +6,10 @@ import CrudButton from '../../../components/Button/CrudButton';
 import { getEntity, deleteEntity, isActive } from '../../../api/services/entities';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
+import Ordering from '../../../components/Ordering/Ordering';
 
 
-const TableEntity = ({setIsModify, list, loading, currentPage }) => {
+const TableEntity = ({setIsModify, list, loading, setLoading, currentPage, order, setOrder}) => {
     const [entity, setEntity] = useState('') 
     const [modalShow, setModalShow] = useState(false) 
     const [modalDelete, setModalDelete] = useState(false) 
@@ -93,13 +94,14 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
     const storageEntityUrl = (url) => {
         localStorage.setItem('entity', url);    
     }
-    console.log()
+
+    const letterSize= { fontSize: '1.1em' }
     return (
             <React.Fragment>
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
+                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                             <th>Activo</th>
                             <th>Redes Asociadas</th>
                             <th>Accion</th>

@@ -1,24 +1,22 @@
 import React,{useState, useEffect} from 'react'
-import { Row, Card, Form, Button,Col, Modal, CloseButton } from 'react-bootstrap'
+import { Row, Card, Form, Button,Col } from 'react-bootstrap'
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CrudButton from '../../../components/Button/CrudButton';
 import SelectComponent from '../../../components/Select/SelectComponent';
-import FormArtifact from '../../artifact/components/FormArtifact'
 import FileUpload  from '../../../components/UploadFiles/FileUpload/FileUpload'
 import FileList from '../../../components/UploadFiles/FileList/FileList'
-import TableCase from "../../case/components/TableCase";
 import { postArtifact } from "../../../api/services/artifact";
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
-import { postCase } from "../../../api/services/cases";
 import Alert from '../../../components/Alert/Alert';
-import ModalFormCase from './ModalFormCase';
 import {getMinifiedState } from '../../../api/services/states';
-import Search from '../../../components/Search/Search';
-import FilterSelectUrl from '../../../components/Filter/FilterSelectUrl';
-import ReadCase from '../../case/ReadCase';
+import ModalCreateCase from '../../case/ModalCreateCase';
+import ModalReadCase from '../../case/ModalReadCase';
+import ModalListCase from '../../case/ModalListCase';
+import CreateArtifactModal from '../../artifact/CreateArtifactModal';
+import { getCase } from '../../../api/services/cases';
+
 const animatedComponents = makeAnimated();
-//{createEvent, setBody, body, feeds, taxonomy, tlp, priorities, users, listArtifact, setContactsCreated}
 const FormEvent = (props) => {
     const [artifactsValueLabel, setArtifactsValueLabel] = useState([])
     const [modalCreate, setModalCreate] = useState(false)
@@ -31,64 +29,69 @@ const FormEvent = (props) => {
     const [showModalCase, setShowModalCase] = useState(false);
     const [showModalListCase, setShowModalListCase] = useState(false);
 
-    //create case
-    const [bodyCase, setBodyCase] = useState({
-        date:"",
-        lifecycle:"",
-        parent:"",
-        priority:"",
-        tlp:"",
+    const [priorityFilter, setPriorityFilter] = useState("");
+    const [tlpFilter, setTlpFilter] = useState("");
+    const [stateFilter, setStateFilter] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [wordToSearch, setWordToSearch] = useState("");
+    const [updatePagination, setUpdatePagination] = useState(false)
+
+    const [selectedCases, setSelectedCases] = useState([]);
+
+    const caseItem = {
+        lifecycle: '',//required
+        priority: '', //required
+        tlp: '', //required
+        state: '', //required
+        date: null, //required
         name: "",
-        assigned:"",
-        state:"",
-        attend_date:"",
-        solve_date:"",
-        selectedEvent:"",
-        comments:[],
-          
-      }) 
-    const [evidenceCase, setEvidenceCase] = useState([])
-    //commet
-    const [ comm, setComm ] = useState();
+        parent: null,
+        assigned: null,
+        attend_date: null, //imprime la hora actual +3horas
+        solve_date: null,
+        comments: [], //?
+        evidence: [],
+    }
     const [selectPriority, setSelectPriority] = useState()
     const [selectTlp, setSelectTlp] = useState()
     const [selectTaxonomy, setSelectTaxonomy] = useState()
     const [selectFeed, setSelectFeed] = useState()
-    const [selectReporter, setSelectReporter] = useState()
     const [selectCase, setSelectCase] = useState("")
-    const [allStates, setAllStates] = useState([]) //multiselect
-
-    const [errorMessage, setErrorMessage] = useState('');
+    const [states, setStates] = useState([]) //multiselect
+    const [allStates, setAllStates] = useState({}) //multiselect
 
     const [modalShowCase, setModalShowCase] = useState(false);
-
-    const modalCaseDetail = (url) => {
-        localStorage.setItem('case', url);
-        setModalShowCase(true)
-    } 
-    const resetShowAlert = () => {
-        setShowAlert(false);
-    } 
+    const [caseToLink, setCaseToLink] = useState({});
 
     useEffect(()=> {
+        //Object.keys(props.priorityNames).length !== 0
+        if(Object.keys(props.priorityNames).length !== 0 && Object.keys(props.tlpNames).length !== 0 && Object.keys(allStates).length !== 0 
+        && Object.keys(props.userNames).length !== 0 && props.body.case !== ""){
+            getCase(props.body.case).then((response) => {
+                setCaseToLink({name:response.data.name, date:response.data.date, 
+                    priority:props.priorityNames[response.data.priority], tlp:props.tlpNames[response.data.tlp].name, 
+                    state:allStates[response.data.state], user:props.userNames[response.data.user_creator]})  
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }
+
         getMinifiedState()
         .then((response) => {
-            let listStates = []
+            let list = []
+            let dicState = {}
             response.map((stateItem)=>{
-                listStates.push({value:stateItem.url, label:stateItem.name, childrenUrl:stateItem.children})
+                list.push({value:stateItem.url, label:stateItem.name})
+                dicState[stateItem.url]= stateItem.name
             })
+            setAllStates(dicState)
+            setStates(list)
         })
         .catch((error)=>{
             console.log(error)
         })
-        
-        if (props.cases !== []) {
-            props.cases.forEach(item => {
-                if(item.value === props.body.case){
-                    setSelectCase({label:item.label, value:item.value })
-                }
-            });
-        }
+    
         if (props.tlp !== []) {
             props.tlp.forEach(item => {
                 if(item.value === props.body.tlp){
@@ -117,20 +120,13 @@ const FormEvent = (props) => {
                 }
             });
         }
-        if (props.users !== []) {
-            props.users.forEach(item => {
-                if(item.value === props.body.reporter){
-                    setSelectReporter({label:item.label, value:item.value })
-                }
-            });
-        }
 
         let listDefaultArtifact = props.listArtifact.filter(elemento => props.body.artifacts.includes(elemento.value))
         .map(elemento => ({value: elemento.value, label:elemento.label}))
 
         setArtifactsValueLabel(listDefaultArtifact)
     
-    },[props.body.artifacts, props.listArtifact, props.cases])
+    },[props.body.artifacts, props.listArtifact, props.priorityNames, props.tlpNames, props.userNames])
 
     const completeFieldStringIdentifier=(event)=>{ 
        
@@ -183,6 +179,39 @@ const FormEvent = (props) => {
             props.setEvidence(props.evidence.filter((file, index) => index !== position));
         }
     };
+
+    const modalCaseDetail = (url, name, date, priority, tlp, state, user) => {
+        localStorage.setItem('case', url);
+        setModalShowCase(true)
+        setShowModalListCase(false)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setCaseToLink({value:url,name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
+    }
+
+    const handleClickRadio = (event, url, name, date, priority, tlp, state, user) => {
+        
+        const selectedId = event.target.id;
+        console.log("entra22")
+        if (selectedCases) {
+            console.log("entra")
+            // Si es radio button, solo debe haber uno seleccionado
+            setSelectedCases([selectedId]);
+        } else {
+            // Si es checkbox, permitir selección múltiple
+            setSelectedCases(prevSelected =>
+                prevSelected.includes(selectedId)
+                    ? prevSelected.filter(id => id !== selectedId)
+                    : [...prevSelected, selectedId]
+            );
+        }
+        setCaseToLink({value:url, name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
+
+    };
+
+    const resetShowAlert = () => {
+        setShowAlert(false);
+    } 
     
     const createArtifact = () => {
         console.log(value)
@@ -200,81 +229,16 @@ const FormEvent = (props) => {
             setModalCreate(false)
         })  
     };
+
     const modalCase = () => {
         //setId
         setShowModalCase(true);
     }
+
     const modalListCase = () => {
-        //setId
+        setUpdatePagination(true)
         setShowModalListCase(true);
     }
-    //Create
-  const createCase = () => {
-    const form = new FormData();
-    form.append("date",bodyCase.date)
-    form.append("name",bodyCase.name)
-    form.append("lifecycle",bodyCase.lifecycle)
-    if(bodyCase.parent !== null) {
-        form.append("parent", bodyCase.parent)
-    }
-    form.append("priority", bodyCase.priority)
-    form.append("tlp", bodyCase.tlp)
-    if(bodyCase.assigned !== null) {
-        form.append("assigned", bodyCase.assigned)
-    }
-    form.append("state", bodyCase.state)
-    form.append("attend_date", bodyCase.attend_date)
-    form.append("solve_date", bodyCase.solve_date)
-        
-    if (evidenceCase !== null){
-        for (let index=0; index< evidenceCase.length  ; index++){
-        form.append("evidence", evidenceCase[index])
-        console.log(evidenceCase[index])
-        }
-    }/*else{
-        form.append("evidence", evidences)
-    }
-    */
-    if (comm !== null){
-        let array = bodyCase.comments;
-        array.push(comm)
-        setBodyCase((prevBodyCase) => ({
-          ...prevBodyCase,
-          comments: comm,
-        }));
-        //setComments((e) => [...e, comm])
-        console.log(comm);
-        console.log(array);
-        console.log(bodyCase.comments);
-        form.append("comments", array)   
-    }
-
-    console.log(form)
-    postCase(form)
-        .then((response) => { 
-          setBodyCase({
-            date:"",
-            lifecycle:"",
-            parent:"",
-            priority:"",
-            tlp:"",
-            assigned:"",
-            state:"",
-            attend_date:"",
-            solve_date:"",
-            selectedEvent:"",
-            comments:[],
-              
-          })
-          setShowModalCase(false)
-          props.setUpdateCases(response)
-            
-        })
-        .catch((error) => {
-            console.log(error.data)
-            setShowAlert(true)
-        }); 
-    };
 
     const completeField1=( nameField,event, setOption)=>{ 
         if (event){
@@ -290,10 +254,24 @@ const FormEvent = (props) => {
         setOption(event)
 
     };
-    //console.log(new Date(props.body.date) < new Date()) valido
-    //console.log(new Date())
-    //console.log(props.body.date)
-    //console.log(props.body.date < getCurrentDateTime()) valido
+
+    const returnToListOfCases=()=>{ 
+        setShowModalListCase(true)
+        setModalShowCase(false)
+        setUpdatePagination(true)
+    };
+
+    const linkCaseToEvent=()=>{
+        completeField1("case",caseToLink,setSelectCase)
+        setShowModalListCase(false)
+        setModalShowCase(false)
+        setCurrentPage(1);
+        setTlpFilter("")
+        setPriorityFilter("")
+        setStateFilter("")
+        setWordToSearch("")
+        setUpdatePagination(true)
+    };
     
     function getCurrentDateTime() {
         const now = new Date();
@@ -304,9 +282,28 @@ const FormEvent = (props) => {
         const minutes = '00';
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
-    const modalStyles = {
-        width: "100%",
-    };
+
+    function closeModal(){
+        setShowModalListCase(false)
+        setCurrentPage(1);
+        setTlpFilter("")
+        setPriorityFilter("")
+        setStateFilter("")
+        setWordToSearch("")
+    }
+
+    const renderRow = (label, value) => (
+        <Row>
+            <Col sm={12} lg={5}>
+                {label}
+            </Col>
+            <Col sm={12} lg={6}>
+                {value || "-"}
+            </Col>
+        </Row>
+    );
+
+    const letterSize= { fontSize: '1.2em' }
 
   return (
     <div>
@@ -331,7 +328,6 @@ const FormEvent = (props) => {
                             name="date"/>
                             {new Date(props.body.date) > new Date() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""  }
                         </Form.Group>
-                        
                     </Col>
                     <Col sm={12} lg={4}>
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="tlp"
@@ -354,15 +350,21 @@ const FormEvent = (props) => {
                         <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
                                                 onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
                     </Col>
-                    <Col sm={12} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Usuario que reporta" options={props.users} value={selectReporter} nameField="reporter"
-                                            onChange={completeField1} placeholder="Usuario que reporta" setOption={setSelectReporter} required={false}/>
-                    </Col>
                 </Row>
                 <Row>
                     <Col sm={4} lg={4}>
-                        <SelectComponent controlId="exampleForm.ControlSelect1" label="Caso asociado" options={props.cases} value={selectCase} nameField="case"
-                                            onChange={completeField1} placeholder="Seleccione un caso" setOption={setSelectCase} required={false}/>
+                        <Row>
+                            <Col sm={12} lg={6}>
+                                <Form.Label style={letterSize}>Caso relacionado</Form.Label>
+                            </Col>
+                        </Row>
+                        <p/>
+                        {renderRow('Fecha de inicio de gestión', caseToLink.date)}
+                        {renderRow('Nombre', caseToLink.name)}
+                        {renderRow('Prioridad', caseToLink.priority)}
+                        {renderRow('TLP', caseToLink.tlp)}
+                        {renderRow('Estado', caseToLink.state)}
+                        {renderRow('Asignado', caseToLink.user)}
                     </Col>
                     <Col sm={4} lg={4}>
                     <br></br>
@@ -376,15 +378,16 @@ const FormEvent = (props) => {
                     </Col>
                     <Col sm={4} lg={4}>
                     <br></br>
-                    {/*<Button 
+                    <Button 
                             size="lm"
                             variant="outline-dark"
                             onClick={() => modalListCase()}
                             >
                             Vincular a caso 
-                    </Button>*/}
+                    </Button>
                     </Col>
                 </Row>
+                <p/>
                 <Form.Group controlId="formGridAddress1">
                 <Form.Label>Notas</Form.Label>
                 <Form.Control 
@@ -463,94 +466,28 @@ const FormEvent = (props) => {
                     </div>
                 </Form.Group>    
             </Form>
-            <Modal size='lg' show={modalCreate} onHide={() => setModalCreate(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Body>
-                    <Row>    
-                        <Col>                 
-                            <Card>
-                            <Card.Header> 
-                                    <Row>
-                                        <Col>
-                                            <Card.Title as="h5">Artefacto</Card.Title>
-                                            <span className="d-block m-t-5">Crear Artefacto</span>
-                                        </Col>
-                                        <Col sm={12} lg={2}>                       
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalCreate(false)} />
-                                        </Col>
-                                    </Row>
-                                </Card.Header>
-                                <Card.Body>
-                                <FormArtifact 
-                                     value={value} setValue={setValue}
-                                     type={typeArtifact} setType={setTypeArtifact}
-                                    ifConfirm={createArtifact} ifCancel={() => setModalCreate(false)} />
-                                </Card.Body>
-                            </Card>
-                        </Col> 
-                    </Row>
-                </Modal.Body>
-            </Modal> 
-            <Modal show={showModalCase} onHide={() => setShowModalCase(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Agregar eventos a un caso</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                
-                  <div id="example-collapse-text">
-                   <ModalFormCase body={bodyCase} setBody={setBodyCase} 
-                                evidence={evidenceCase}  setEvidence={setEvidenceCase} 
-                                createCase={createCase} comm={comm} setComm={setComm} />
-                  </div>
-                <Modal.Footer>
-                        <Button variant="outline-primary" onClick={createCase  }>
-                        Crear
-                        </Button>
+            
+            <CreateArtifactModal show={modalCreate}  onHide={() => setModalCreate(false)} value={value} setValue={setValue} 
+                typeArtifact={typeArtifact} setTypeArtifact={setTypeArtifact} createArtifact={createArtifact}/>
 
-                        <Button variant="outline-secondary" onClick={() => setShowModalCase(false)}>Cancelar</Button>
-                </Modal.Footer>
-                </Modal.Body>
-                
-            </Modal>
-            <Modal show={showModalListCase} onHide={() => setShowModalListCase(false)} aria-labelledby="contained-modal-title-vcenter" centered style={modalStyles}>
-                <Modal.Header closeButton>
-                    <Col sm={1} lg={6}>
-                        <Search type="caso" setWordToSearch={props.setWordToSearch} wordToSearch={props.wordToSearch} setLoading={props.setLoading}/> 
-                    </Col>
-                    <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.priorities} itemName="prioridad" partOfTheUrl="priority" itemFilter={props.priorityFilter}  itemFilterSetter={props.setPriorityFilter} setLoading={props.setLoading} setCurrentPage={props.setCurrentPage}/>
-                    </Col>
-                </Modal.Header>
-                <Modal.Body>
-                    <div id="example-collapse-text">
-                        <TableCase cases={props.cases} loading={props.loading} selectedCases={props.selectedCases} 
-                            setSelectedCases={props.setSelectedCases} order={props.order}  setOrder={props.setOrder} 
-                            setIfModify={props.setIfModify} setLoading={props.setLoading} priorityNames={props.priorityNames}
-                            stateNames={props.stateNames} tlpNames={props.tlpNames} userNames={props.userNames}
-                            editColum={false} deleteColum={false} detailModal={true} modalCaseDetail={modalCaseDetail}/>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-primary" onClick={createCase  }>
-                        Vincular
-                    </Button>
-                    <Button variant="outline-secondary" onClick={() => setShowModalListCase(false)}>Cancelar</Button>
-                </Modal.Footer>
-            </Modal>
-            <Modal show={modalShowCase} onHide={() => setModalShowCase(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Header closeButton>
-                </Modal.Header>
-                <Modal.Body>
-                    <div id="example-collapse-text">
-                        <ReadCase />
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="outline-primary" onClick={createCase  }>
-                        Vincular
-                    </Button>
-                    <Button variant="outline-secondary" onClick={() => setModalShowCase(false)}>Cancelar</Button>
-                </Modal.Footer>
-            </Modal>
+            <ModalCreateCase showModalCase={showModalCase} setShowModalCase={setShowModalCase} caseItem={caseItem} 
+                states={states} setCaseToLink={setCaseToLink} setSelectCase={setSelectCase}
+                completeField1={completeField1} stateNames={allStates} />
+
+            <ModalListCase  stateNames={allStates} showModalListCase={showModalListCase} modalCaseDetail={modalCaseDetail} 
+                closeModal={closeModal} selectedCases={selectedCases} priorityNames={props.priorityNames} 
+                tlpNames={props.tlpNames} userNames={props.userNames} handleClickRadio={handleClickRadio} linkCaseToEvent={linkCaseToEvent}
+                completeField1={completeField1} caseToLink={caseToLink} setSelectCase={setSelectCase}
+                setShowModalListCase={setShowModalListCase} 
+                priorities={props.priorities} tlp={props.tlp} allStates={states} 
+                priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter}
+                tlpFilter={tlpFilter} setTlpFilter={setTlpFilter}
+                stateFilter={stateFilter} setStateFilter={setStateFilter}
+                currentPage={currentPage} setCurrentPage={setCurrentPage}
+                wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
+                updatePagination={updatePagination} setUpdatePagination={setUpdatePagination}/>
+    
+            <ModalReadCase modalShowCase={modalShowCase} returnToListOfCases={returnToListOfCases} linkCaseToEvent={linkCaseToEvent}/>
    
             </Card.Body>
         </Card>

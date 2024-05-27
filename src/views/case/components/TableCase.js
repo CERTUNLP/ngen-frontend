@@ -8,7 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 
-const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail}) => {
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents}) => {
     
     const [url, setUrl] = useState(null) 
     const [modalDelete, setModalDelete] = useState(false)
@@ -25,10 +25,13 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
     useEffect(() => { 
         setList(cases)
         
-       
       }, [cases]);
+
     const storageCaseUrl = (url) => {
-        localStorage.setItem('case', url);    
+        localStorage.setItem('case', url);
+        localStorage.setItem('navigation', navigationRow);   
+        localStorage.setItem('button return', navigationRow);  
+        
     }
 
     if (loading) {
@@ -73,120 +76,161 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         if (!checked) {
             setSelectedCases(selectedCases.filter(item => item !== id));
         }
+        console.log(e.target)
+        console.log(selectedCases)
+        console.log(e.target.value)
+        console.log(selectedCases.includes(id))
     };
-    const letterSize= { fontSize: '1.1em' }
+
+    
+    
+    const letterSize= { fontSize: '1.0em' }
     return (
             <React.Fragment>
-                <Table responsive hover className="text-center">
-                    <thead>
-                        <tr>
-                            {list.length > 0 ?
-                            <th>
-                                <Form.Group>
-                                    <Form.Check type="checkbox" id={"selectAll"} //lo que superpone es un parametro llamado custom
-                                        onChange={handleSelectAll} checked={selectedCases.length !== 0 ? isCheckAll : false} /> 
-                                </Form.Group>
-                            </th>
-                            :
-                            <th>
-                                <Form.Group>
-                                    <Form.Check custom type="checkbox" disabled />
-                                </Form.Group>
-                            </th>
-                            }
-                            <Ordering field="created" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>Nombre</th>
-                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>TLP</th>
-                            <th style={letterSize}>Estado</th>
-                            <th style={letterSize}>Asignado</th>
-                            <th style={letterSize}>Accion</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
+               <Table responsive hover className="text-center">
+            <thead>
+                <tr>
+                
                     {
-                        list.map((caseItem, index) => {
-                            let datetime = caseItem.date.split('T');
-                            datetime = datetime[0] + ' ' + datetime[1].slice(0,8)
-                            let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length-2]
-                             
-                            return (
-                                list &&
-                                <tr key={index}>
-                                    <td>
-                                        <Form.Group>
-                                            <Form.Check disabled={caseItem.solve_date !== null ? true : false} 
-                                                type="checkbox" id={caseItem.url} 
-                                                onChange={handleClick} checked={selectedCases.includes(caseItem.url)} />
-                                        </Form.Group>
-                                    </td>
-                                    <td>
-                                        {datetime}
-                                    </td>
-                                    <td>
-                                        {caseItem.name ? caseItem.name : "-"}
-                                    </td>
-                                    <td>
-                                        {priorityNames[caseItem.priority]}
-                                    </td>
-                                
-                                    <td>
-                                        <LetterFormat useBadge={true} stringToDisplay={tlpNames[caseItem.tlp].name} color={tlpNames[caseItem.tlp].color}/>
-                                    </td>
-                                    
-                                    <td>
-                                        {stateNames[caseItem.state] ? stateNames[caseItem.state] : "No se pudo asignar un estado"}
-                                    </td>
-                                    {userNames[caseItem.user_creator] ? 
-                                        <td>
-                                            {userNames[caseItem.user_creator]}
-                                        </td>
-                                        :
-                                        <td>
-                                            Sin asignar
-                                        </td> 
-                                    }
-                                    <td>
-                                        {detailModal ?
-                                             <CrudButton type='read' onClick={() => modalCaseDetail(caseItem.url)}/>
-                                            :
-                                            <Link to={{pathname:'/cases/view'}}>
-                                                <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)}/>
-                                            </Link>
-                                        }
-                                        
-                                          
-                                            {editColum ?
-                                            caseItem.solve_date == null ? 
-                                              <Link to={{pathname:'/cases/edit', state: caseItem.url}} >
-                                                <CrudButton type='edit'/>
-                                                </Link>
-                                                :   
-                                                <Button 
-                                                    id="button_hover"
-                                                    className='btn-icon btn-rounded' 
-                                                    variant='outline-warning'
-                                                    title='Caso resuelto'
-                                                    disabled
-                                                    style={{
-                                                        border: "1px solid #555", 
-                                                        borderRadius: "50px",
-                                                        color: "#555", 
-                                                      }}
-                                                     >
-                                                <i className='fa fa-edit' style={{color: "#555"}}  ></i>
-                                                </Button>: ""}
-                                        {deleteColum ?
-                                        <CrudButton type='delete' onClick={() => Delete(caseItem.url, idItem)} />
-                                        :""
-                                        }
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                    disableCheckbox? ""
+                    :
+                    selectCase ? (
+                        <th></th>
+                    ) : list.length > 0 ? (
+                        <th>
+                            <Form.Group>
+                                <Form.Check
+                                    type="checkbox"
+                                    id={"selectAll"}
+                                    onChange={handleSelectAll}
+                                    checked={selectedCases.length !== 0 ? selectedCases.length === list.length : false}
+                                />
+                            </Form.Group>
+                        </th>
+                    ) : (
+                        <th>
+                            <Form.Group>
+                                <Form.Check custom type="checkbox" disabled />
+                            </Form.Group>
+                        </th>
+                    )}
+                    {disableDateOrdering ?
+                    ""
+                    :
+                    <Ordering field="date" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                    }
+                    {disableName?"":
+                    <th style={letterSize}>Nombre</th>
+                    }
+                    {disablePriority?"":
+                    <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                    }
+                    {disableTlp ?"":
+                    <th style={letterSize}>TLP</th>
+                    }
+                    <th style={letterSize}>Estado</th>
+                    {disableNubersOfEvents?"":
+                    <th style={letterSize}>Cantidad de eventos</th>
+                    }
+                    <th style={letterSize}>Asignado</th>
+                    <th style={letterSize}>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {list.map((caseItem, index) => {
+                    let datetime = caseItem.date.split('T');
+                    datetime = datetime[0] + ' ' + datetime[1].slice(0, 8);
+                    let idItem = caseItem.url.split('/').slice(-2)[0];
+
+                    return (
+                        <tr key={index}>
+                            
+                            {
+                            disableCheckbox?""
+                            :
+                            selectCase ? (
+                                <td>
+                                    <Form.Group>
+                                        <Form.Check
+                                            type="radio"
+                                            id={caseItem.url}//Fecha de inicio de gestiónunfold_more	Nombre	Prioridadunfold_more	TLP	Estado	Asignado
+                                            onChange={(event) =>handleClickRadio(event, caseItem.url, caseItem.name, datetime, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])}
+                                            checked={selectedCases.includes(caseItem.url)}
+                                        />
+                                    </Form.Group>
+                                </td>
+                            ) : (
+                                <td>
+                                    <Form.Group>
+                                        <Form.Check
+                                            disabled={caseItem.solve_date !== null}
+                                            type="checkbox"
+                                            id={caseItem.url}
+                                            onChange={handleClick}
+                                            checked={selectedCases.includes(caseItem.url)}
+                                        />
+                                    </Form.Group>
+                                </td>
+                            )}
+                            {disableDateOrdering ?
+                            ""
+                            :
+                            <td>{datetime}</td>
+                            }
+
+                            {disableName?"":
+                            <td>{caseItem.name || "-"}</td>
+                            }
+
+                            {disablePriority?"":
+                            <td>{priorityNames[caseItem.priority]}</td>
+                            }
+                            {disableTlp ?"":
+                            <td>
+                                <LetterFormat useBadge={true} stringToDisplay={tlpNames[caseItem.tlp].name} color={tlpNames[caseItem.tlp].color} />
+                            </td>}
+                            <td>{stateNames[caseItem.state] || "-"}</td>
+                            {disableNubersOfEvents?"":
+                            <td>{caseItem.events_count}</td>
+                            }
+                            <td>{userNames[caseItem.assigned] || "-"}</td>
+                            <td>
+                                {detailModal ? (
+                                    <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, datetime, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
+                                ) : (
+                                    <Link to={{ pathname: '/cases/view' }}>
+                                        <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
+                                    </Link>
+                                )}
+                                {editColum && (
+                                    caseItem.solve_date == null ? (
+                                        <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
+                                            <CrudButton type="edit" />
+                                        </Link>
+                                    ) : (
+                                        <Button
+                                            id="button_hover"
+                                            className="btn-icon btn-rounded"
+                                            variant="outline-warning"
+                                            title="Caso resuelto"
+                                            disabled
+                                            style={{
+                                                border: "1px solid #555",
+                                                borderRadius: "50px",
+                                                color: "#555",
+                                            }}
+                                        >
+                                            <i className="fa fa-edit" style={{ color: "#555" }}></i>
+                                        </Button>
+                                    )
+                                )}
+                                {deleteColum && <CrudButton type="delete" onClick={() => Delete(caseItem.url, idItem)} />}
+                            </td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </Table>
             <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)}/>
         </React.Fragment> 
   );

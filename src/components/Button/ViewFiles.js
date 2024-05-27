@@ -6,17 +6,16 @@ const ViewFiles = (props) => {
     const [data, setData] = useState({})
 
     useEffect( ()=> { 
-    
+        getEvidence(props.url)
+        .then((response) => {
+            setData(response.data)
+        })
+        .catch();
 
     },[])
 
     const openFile = () => {
-        getEvidence(props.url)
-            .then((response) => {
-                console.log(response.data)
-                window.open(response.data.file, props.index);
-            })
-            .catch();
+        window.open(data.file, props.index);;
     }
 
     const deleteFile = () => {
@@ -37,17 +36,19 @@ const ViewFiles = (props) => {
                 onClick={openFile} 
                 size="sm">
                 <i className="fas fa-external-link-alt"/>
-                {'Abrir Evidencia '+ props.index + '  '} 
-                
+                <p>Nombre: {data.original_filename}</p>
+                <p>Mime:   {data.mime}</p>
+                <p>Tamaño: {data.size}</p>
+                <p>Fecha de creacion: {data.created ? data.created.slice(0,10)+" "+data.created.slice(11,19): ""}</p>
             </Button>
-    <Button 
-            size='sm'
-            className='btn-icon btn-rounded' 
-            variant='outline-danger'
-            title={'Eliminar evidencia '+ props.index}
-            onClick={deleteFile}>
-                <i className='fas fa-trash-alt' />
-        </Button> 
+            <Button 
+                size='sm'
+                className='btn-icon btn-rounded' 
+                variant='outline-danger'
+                title={'Eliminar evidencia '+ props.index}
+                onClick={deleteFile}>
+                    <i className='fas fa-trash-alt' />
+            </Button> 
         </>
         
     )
