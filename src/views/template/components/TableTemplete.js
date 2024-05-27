@@ -8,6 +8,7 @@ import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
+import Ordering from '../../../components/Ordering/Ordering';
 
 
 const TableTemplete = ({list, loading, order, setOrder, setLoading, currentPage , taxonomyNames, feedNames}) => {
@@ -82,7 +83,7 @@ const handleDelete = () => {
     const resetShowAlert = () => {
         setShowAlert(false);
     }
-
+    const letterSize= { fontSize: '1.1em' }
   return (
     <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>  
@@ -91,7 +92,8 @@ const handleDelete = () => {
                     <Table responsive hover className="text-center">
                         <thead>
                             <tr>
-                                <th>Fuentes de información</th>
+                                <Ordering field="event_feed__name" label="Fuentes de información" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                                <Ordering field="event_taxonomy__name" label="Taxonomia" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
                                 <th>Taxonomia </th>
                                 <th>Recurso afectado</th>
                                 <th>Estado</th>
@@ -225,9 +227,6 @@ const handleDelete = () => {
                 </Row>
             </Modal.Body>            
         </Modal>
-
-                        
-
                         </tbody>
                     </Table>
                 </ul> 

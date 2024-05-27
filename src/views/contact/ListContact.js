@@ -27,7 +27,7 @@ const ListContact = () => {
 
     const [wordToSearch, setWordToSearch]= useState('')
 
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("name");
 
     function updatePage(chosenPage){
         setCurrentPage(chosenPage);
@@ -54,7 +54,7 @@ const ListContact = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-        }, [currentPage, isModify, wordToSearch])
+        }, [currentPage, isModify, wordToSearch, order])
 
     // ------- SEARCH --------
     const action = () => {
@@ -93,7 +93,8 @@ const ListContact = () => {
                         </Row>
                     </Card.Header>
                     <Card.Body>
-                        <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage}/>
+                        <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage}
+                        order={order} setOrder={setOrder} setLoading={setLoading}/>
                     </Card.Body>
                     <Card.Footer>
                         <Row className="justify-content-md-center">

@@ -8,7 +8,7 @@ import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 
 
-const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading,  taxonomyNames, feedNames, tlpNames}) => {
+const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading,  taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit,disableColumnDelete, disableTemplate, disableNubersOfEvents}) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
@@ -71,18 +71,33 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>
-                                <Form.Group>
-                                    <Form.Check type="checkbox" id={"selectAll"}  
-                                        onChange={handleSelectAll} checked={selectedEvent.length !== 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
-                                </Form.Group>
-                            </th>
+                            {disableCheckbox ?
+                            ""
+                            : <th>
+                                    <Form.Group>
+                                        <Form.Check type="checkbox" id={"selectAll"}  
+                                            onChange={handleSelectAll} checked={selectedEvent.length !== 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
+                                    </Form.Group>
+                                </th>}
                         
-                            <Ordering field="date" label="Fecha del Evento" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            {disableDateOrdering ? 
+                                <th style={letterSize}>Fecha del Evento </th>
+                                :
+                                <Ordering field="date" label="Fecha del Evento" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            }
                             <th style={letterSize}>Identificador </th>
+                            { disableDomain?""
+                            :
                             <th style={letterSize}>Dominio</th>
+                            }
+                            {disableCidr ? ""
+                            :
                             <th style={letterSize}>Cidr</th>
+                            }
+                            {disableTlp ? ""
+                            :
                             <th style={letterSize}>TLP</th>
+                            }
                             <th style={letterSize}>Taxonomia</th>
                             <th style={letterSize}>Fuente de Informacion</th>
                             <th style={letterSize}>Opciones</th>
@@ -92,21 +107,31 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                     {list.map((event, index) => {
                         return (
                             <tr key={index}>
+                                {disableCheckbox ? ""
+                                :
                                 <th ><Form.Group>
                                             <Form.Check disabled={event.solve_date != null ? true : false} 
                                                 type="checkbox" id={event.url} 
                                                 onChange={handleClick} checked={selectedEvent.includes(event.url)} />
                                         </Form.Group>
                                 </th>
+                                }
 
                                 <td>{event.date ? event.date.slice(0,10)+" "+event.date.slice(11,19): ""}</td>
                                 <td>{event.address_value}</td>
-                                <td>{event.domain}</td>
+                                {disableDomain ? "" 
+                                : 
+                                <td>{event.domain}</td>}
+                                {disableCidr ? ""
+                                :
                                 <td>{event.cidr}</td>
-                                
+                                }
+                                {disableTlp ? ""
+                                :
                                 <td>
                                     <LetterFormat useBadge={true} stringToDisplay={tlpNames[event.tlp].name} color={tlpNames[event.tlp].color}/>
                                 </td>
+                                }
                                 
                                 <td>{taxonomyNames[event.taxonomy]}</td>
                                 
@@ -116,14 +141,21 @@ const TableEvents = ({events, loading, selectedEvent, setSelectedEvent, order, s
                                 <Link to={{pathname:"/events/view", state: event}} >
                                     <CrudButton  type='read'   />
                                 </Link>
-                                
+                                {disableColumnEdit ? ""
+                                :                                
                                 <Link to={{pathname:"/events/edit", state: event}} >
                                     <CrudButton  type='edit' />
                                 </Link>
+                                }
+                                {disableColumnDelete?""
+                                :
                                 <CrudButton  type='delete' onClick={()=>modalDelete(event.name, event.url)} />
+                                }
 
                               
-                                { event.case ?  <Button className="btn-icon btn-rounded" disabled variant="outline-primary"
+                                { disableTemplate?""
+                                :
+                                event.case ?  <Button className="btn-icon btn-rounded" disabled variant="outline-primary"
                                   style={{
                                     border: "1px solid #555", 
                                     borderRadius: "50px",

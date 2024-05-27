@@ -19,7 +19,7 @@ const ListPriorities = () => {
   const [updatePagination, setUpdatePagination] = useState(false)
   const [disabledPagination, setDisabledPagination] = useState(true)
 
-  const [order, setOrder] = useState("");
+  const [order, setOrder] = useState("name");
 
   function updatePage(chosenPage){
     setCurrentPage(chosenPage);

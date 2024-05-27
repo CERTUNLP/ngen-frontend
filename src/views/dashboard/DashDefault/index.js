@@ -10,6 +10,8 @@ import { getDashboardFeed } from '../../../api/services/dashboards';
 import { getDashboardEvent } from '../../../api/services/dashboards';
 import { getDashboardCases } from '../../../api/services/dashboards';
 import { getDashboardNetworkEntities } from '../../../api/services/dashboards';
+import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
+import { getMinifiedFeed } from '../../../api/services/feeds';
 
 
 const DashDefault = () => {
@@ -26,9 +28,27 @@ const DashDefault = () => {
     const [starDateNotification, setStarDateNotification] = useState(false)
     const [endDateNotification, setEndDateNotification] = useState(false)
 
+    const [taxonomyNames, setTaxonomyNames] = useState({});
+    const [feedNames, setFeedNames] = useState({});
+
 
     const [loading, setLoading] = useState(true)
     useEffect( ()=> {
+        getMinifiedTaxonomy().then((response) => {
+            let dicTaxonomy = {};
+            response.map((taxonomy) => {
+                dicTaxonomy[taxonomy.url] = taxonomy.name;
+            });
+            setTaxonomyNames(dicTaxonomy);
+        });
+        getMinifiedFeed().then((response) => {
+            let dicFeed = {};
+            response.map((feed) => {
+                dicFeed[feed.url] = feed.name;
+            });
+            setFeedNames(dicFeed);
+        });
+
 
         getDashboardFeed(starDateFilter + endDateFilter) 
             .then((response) => {
@@ -89,7 +109,7 @@ const DashDefault = () => {
         
     }, [starDateFilter, endDateFilter])
     const completeDateStar = (date) => {
-        //console.log(date)
+        console.log(date)
         if (getCurrentDate() >= date && date <= endDate){
             setStarDate(date)
             setStarDateFilter("date_from="+date+"T00:00:00Z"+'&')
@@ -105,7 +125,7 @@ const DashDefault = () => {
             console.log(endDate)
             console.log(endDateFilter)
             setEndDate(date)
-            setEndDateFilter("date_to="+date+"T00:00:00Z"+'&')
+            setEndDateFilter("date_to="+date+"T00:00:00Z")
             setEndDateNotification(false)
         }else{
             setEndDateNotification(true)
@@ -119,6 +139,7 @@ const DashDefault = () => {
         const day = now.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+    
     function getSevenDaysAgo() {
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000)); // Subtract 7 days worth of milliseconds
@@ -127,8 +148,6 @@ const DashDefault = () => {
         const day = sevenDaysAgo.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-     //console.log(props.body.date < getCurrentDate()) valido
-
 
     return (
         <React.Fragment>    
@@ -137,7 +156,7 @@ const DashDefault = () => {
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Fecha desde</Form.Label>
                 <Form.Control 
-                  type="date"
+                  type="datetime-local"
                   maxLength="150" 
                   placeholder="Fecha desde"
                   max={getCurrentDate()}
@@ -153,7 +172,7 @@ const DashDefault = () => {
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Fecha hasta</Form.Label>
                 <Form.Control 
-                  type="date"
+                  type="datetime-local"
                   maxLength="150" 
                   max={getCurrentDate()}
                   value={endDate} 
@@ -188,7 +207,7 @@ const DashDefault = () => {
                     
                 </Col>
                 <Col>
-                    <DashboardEvent list={dashboardEvent} />
+                    <DashboardEvent list={dashboardEvent} feedNames={feedNames} taxonomyNames={taxonomyNames}/>
                 </Col>
                 <Col>
                     <DashboardCases list={dashboardCases} loading={loading}/>

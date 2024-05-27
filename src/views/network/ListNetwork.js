@@ -35,7 +35,7 @@ const ListNetwork = () => {
     const [open, setOpen] = useState(false);
     const [typeFilter, setTypeFilter] = useState("");
     const [entitiesFilter, setEntitiesFilter] = useState("")
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("network_entity__name");
 
     const [entityNames, setEntityNames] = useState({});
 

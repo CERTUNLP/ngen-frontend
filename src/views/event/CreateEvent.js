@@ -9,9 +9,7 @@ import { getMinifiedFeed } from "../../api/services/feeds";
 import { getMinifiedPriority } from "../../api/services/priorities";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
-import { getMinifiedCase, getCases } from "../../api/services/cases";
 import Alert from '../../components/Alert/Alert';
-
 
 const CreateEvent = () => {
   const formEmpty={   
@@ -37,33 +35,20 @@ const CreateEvent = () => {
   const [feeds, setFeeds] = useState([])
   const [taxonomy, setTaxonomy] = useState([])
   const [priorities, setPriorities] = useState([])
-  const [users, setUsers] = useState([])
-  const [cases, setCases] = useState([])
+  
   const [listArtifact, setListArtifact] = useState([])
   const [contactCreated, setContactsCreated ] = useState(null);
-  const [showAlert, setShowAlert] = useState(false)
-  const [updateCases, setUpdateCases] = useState("")
-
-  const [loading, setLoading] = useState(true)
-  const [order, setOrder] = useState("-created");
-  const [wordToSearch, setWordToSearch] = useState("");
-  const [selectedCases, setSelectedCases] = useState([]);
-  const [ifModify, setIfModify] = useState(null) 
-
-  const [priorityFilter, setPriorityFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [tlpNames, setTlpNames] = useState({});
   const [priorityNames, setPriorityNames] = useState({});
-  const [stateNames, setStateNames] = useState({});
   const [userNames, setUserNames] = useState({});
+  const [showAlert, setShowAlert] = useState(false)
 
   const resetShowAlert = () => {
     setShowAlert(false);
   }  
 
   useEffect( ()=> {
-    const fetchPosts = async () => {
         
         getMinifiedTlp().then((response) => {
           let listTlp = []
@@ -106,14 +91,14 @@ const CreateEvent = () => {
         })
 
         getMinifiedPriority().then((response) => { //se hardcodea las paginas
-          let priorityOp = []
+            let priorityOp = []
             let dicPriority={}
             response.map((priority) => {
                 priorityOp.push({value: priority.url, label: priority.name})
                 dicPriority[priority.url]= priority.name
             })
             setPriorityNames(dicPriority)
-          setPriorities(priorityOp)
+            setPriorities(priorityOp)
         })
         .catch((error) => {
           console.log(error)
@@ -121,13 +106,10 @@ const CreateEvent = () => {
         })
 
         getMinifiedUser().then((response) => { //se hardcodea las paginas
-          let listUser = []
           let dicUser={}
           response.map((user) => {
-            listUser.push({value:user.url, label:user.username})
             dicUser[user.url]= user.username
           })
-          setUsers(listUser)
           setUserNames(dicUser)
         })
         .catch((error) => {
@@ -146,37 +128,12 @@ const CreateEvent = () => {
         .catch((error)=>{
           console.log(error)
         }) 
-        
-    }  
-    fetchPosts()
     
-  },[contactCreated, updateCases]);
-
-  useEffect( ()=> {
-    getCases(currentPage, priorityFilter+wordToSearch, order) 
-            .then((response) => {
-                setCases(response.data.results)
-                //setCountItems(response.data.count);
-                // Pagination
-                //if(currentPage === 1){
-                   // setUpdatePagination(true)  
-                //}
-                //setDisabledPagination(false)
-                
-            })
-            .catch((error) => {
-            })
-            .finally(() => {
-                setShowAlert(true)
-                setLoading(false)
-            })
-    
-  },[wordToSearch , priorityFilter, currentPage]);
+  },[contactCreated]);
 
   const createEvent=()=>{
     
     const formDataEvent = new FormData();
-    console.log(body.date)
 
     formDataEvent.append("date", body.date)// tengo que hacer esto porque solo me acepta este formato, ver a futuro
     formDataEvent.append("priority",body.priority)
@@ -222,20 +179,12 @@ const CreateEvent = () => {
         </Row>
         <FormEvent createEvent={createEvent} setBody={setBody} body={body} 
                     feeds={feeds} taxonomy={taxonomy} tlp={TLP} priorities={priorities} 
-                    users={users} listArtifact={listArtifact} setContactsCreated={setContactsCreated} 
-                    evidence={evidence} setEvidence={setEvidence} cases={cases}
-                    setUpdateCases={setUpdateCases} loading={loading} setLoading={setLoading}
-                    order={order} setOrder={setOrder} setIfModify={setIfModify} tlpNames={tlpNames}
-                    selectedCases={selectedCases} setSelectedCases={setSelectedCases}
-                    setWordToSearch={setWordToSearch} wordToSearch={wordToSearch}
-                    priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter}
-                    currentPage={currentPage} setCurrentPage={setCurrentPage}
+                    listArtifact={listArtifact} setContactsCreated={setContactsCreated} 
+                    evidence={evidence} setEvidence={setEvidence} 
+                    tlpNames={tlpNames}
                     priorityNames={priorityNames} setPriorityNames={setPriorityNames}
-                    stateNames={stateNames} setStateNames={setStateNames}
-                    userNames={userNames} setUserNames={setUserNames}/>
-          
+                    userNames={userNames} />
     </div>
   )
 }
-
 export default CreateEvent
