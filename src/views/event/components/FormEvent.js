@@ -15,6 +15,7 @@ import ModalReadCase from '../../case/ModalReadCase';
 import ModalListCase from '../../case/ModalListCase';
 import CreateArtifactModal from '../../artifact/CreateArtifactModal';
 import { getCase } from '../../../api/services/cases';
+import SmallCaseTable from '../../case/components/SmallCaseTable';
 
 const animatedComponents = makeAnimated();
 const FormEvent = (props) => {
@@ -68,7 +69,7 @@ const FormEvent = (props) => {
         if(Object.keys(props.priorityNames).length !== 0 && Object.keys(props.tlpNames).length !== 0 && Object.keys(allStates).length !== 0 
         && Object.keys(props.userNames).length !== 0 && props.body.case !== ""){
             getCase(props.body.case).then((response) => {
-                setCaseToLink({name:response.data.name, date:response.data.date, 
+                setCaseToLink({value:response.data.url,name:response.data.name, date:response.data.date, 
                     priority:props.priorityNames[response.data.priority], tlp:props.tlpNames[response.data.tlp].name, 
                     state:allStates[response.data.state], user:props.userNames[response.data.user_creator]})  
             })
@@ -304,6 +305,7 @@ const FormEvent = (props) => {
     );
 
     const letterSize= { fontSize: '1.2em' }
+    console.log([caseToLink])
 
   return (
     <div>
@@ -351,43 +353,7 @@ const FormEvent = (props) => {
                                                 onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true}/>
                     </Col>
                 </Row>
-                <Row>
-                    <Col sm={4} lg={4}>
-                        <Row>
-                            <Col sm={12} lg={6}>
-                                <Form.Label style={letterSize}>Caso relacionado</Form.Label>
-                            </Col>
-                        </Row>
-                        <p/>
-                        {renderRow('Fecha de inicio de gestión', caseToLink.date)}
-                        {renderRow('Nombre', caseToLink.name)}
-                        {renderRow('Prioridad', caseToLink.priority)}
-                        {renderRow('TLP', caseToLink.tlp)}
-                        {renderRow('Estado', caseToLink.state)}
-                        {renderRow('Asignado', caseToLink.user)}
-                    </Col>
-                    <Col sm={4} lg={4}>
-                    <br></br>
-                    <Button 
-                            size="lm"
-                            variant="outline-dark"
-                            onClick={() => modalCase()}
-                            >
-                            Crear nuevo caso
-                    </Button>
-                    </Col>
-                    <Col sm={4} lg={4}>
-                    <br></br>
-                    <Button 
-                            size="lm"
-                            variant="outline-dark"
-                            onClick={() => modalListCase()}
-                            >
-                            Vincular a caso 
-                    </Button>
-                    </Col>
-                </Row>
-                <p/>
+                
                 <Form.Group controlId="formGridAddress1">
                 <Form.Label>Notas</Form.Label>
                 <Form.Control 
@@ -397,9 +363,12 @@ const FormEvent = (props) => {
                     onChange={(e)=>completeField(e)}
                     name="notes"/>
                 </Form.Group>
+                <p/>
+                
                 </Form>
             </Card.Body>
         </Card>
+        <SmallCaseTable readCase={caseToLink.value} disableLink={true} modalCase={modalCase}  modalListCase={modalListCase} />
         <Card>
             <Card.Header>
                 <Card.Title as="h5">Artefactos</Card.Title>

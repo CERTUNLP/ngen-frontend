@@ -17,7 +17,6 @@ const ModalListCase = (props) => {
     const [showAlert, setShowAlert] = useState(false)
     
     const [disabledPagination, setDisabledPagination] = useState(true)
-console.log(countItems,props.updatePagination,  disabledPagination)
 
     useEffect( ()=> {
         getCases(props.currentPage, props.stateFilter+props.tlpFilter+props.priorityFilter+props.wordToSearch, order) 
@@ -34,6 +33,7 @@ console.log(countItems,props.updatePagination,  disabledPagination)
                     setDisabledPagination(false);
                 })
                 .catch((error) => {
+                    console.log(error)
                 })
                 .finally(() => {
                     setShowAlert(true)//este tiene que ser enviado por props
@@ -57,9 +57,15 @@ console.log(countItems,props.updatePagination,  disabledPagination)
                 </Row>
                 <br />
                 <Row>
-                    <FilterSelectUrl options={props.priorities} itemName="prioridad" partOfTheUrl="priority" itemFilter={props.priorityFilter} itemFilterSetter={props.setPriorityFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
-                    <FilterSelectUrl options={props.tlp} itemName="tlp" partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                    <Col sm={4} lg={4}>
+                        <FilterSelectUrl options={props.priorities} itemName="prioridad" partOfTheUrl="priority" itemFilter={props.priorityFilter} itemFilterSetter={props.setPriorityFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                    </Col>
+                    <Col sm={4} lg={4}>
+                        <FilterSelectUrl options={props.tlp} itemName="tlp" partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                    </Col>
+                    <Col sm={4} lg={4}>
                     <FilterSelectUrl options={props.allStates} itemName="estados" partOfTheUrl="state" itemFilter={props.stateFilter} itemFilterSetter={props.setStateFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                    </Col>
                 </Row>
                 <div id="example-collapse-text">
                     <TableCase cases={cases} loading={loading} selectedCases={props.selectedCases}
@@ -67,7 +73,8 @@ console.log(countItems,props.updatePagination,  disabledPagination)
                         setLoading={setLoading} priorityNames={props.priorityNames}
                         stateNames={props.stateNames} tlpNames={props.tlpNames} userNames={props.userNames}
                         editColum={false} deleteColum={false} detailModal={true} modalCaseDetail={props.modalCaseDetail}
-                        navigationRow={false} selectCase={true} handleClickRadio={props.handleClickRadio} setSelectCase={props.setSelectCase} />
+                        navigationRow={false} selectCase={true} handleClickRadio={props.handleClickRadio} setSelectCase={props.setSelectCase} 
+                        disableNubersOfEvents={true}/>
                 </div>
             </Modal.Body>
             <Modal.Footer>

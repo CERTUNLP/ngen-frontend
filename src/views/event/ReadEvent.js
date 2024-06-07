@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import Navigation from '../../components/Navigation/Navigation'
 import { getArtefact } from '../../api/services/artifact';
 import ViewFiles from '../../components/Button/ViewFiles';
+import SmallCaseTable from '../case/components/SmallCaseTable';
 
 const ReadEvent = () => {
     const location = useLocation();
@@ -164,6 +165,9 @@ const ReadEvent = () => {
                {/*</Table>*/}
                </Card.Body>
         </Card>
+
+        <SmallCaseTable readCase={body.case} />
+
         <Card>
             <Card.Header>      
                 <Card.Title as="h5">Artefactos</Card.Title>      

@@ -230,7 +230,7 @@ const ListEvent = () => {
 
   const modalCase = () => {
     //setId
-    //setShowModalCase(true);
+    //setUpdatePagination(true)
     setShowOptionsToAddCase(true)
   }
 
@@ -261,6 +261,7 @@ const ListEvent = () => {
   const closeOptionsList=()=>{ 
     setShowOptionsToAddCase(false)
     setShowModalListCase(true)
+    setUpdatePaginationCase(true)
   };
 
   const closeOptionsCreate=()=>{ 
@@ -270,6 +271,7 @@ const ListEvent = () => {
 
   function closeModal(){
     setShowModalListCase(false)
+    //setUpdatePagination(true)
     setCurrentPageCase(1);
     setTlpFilterCase("")
     setPriorityFilter("")
