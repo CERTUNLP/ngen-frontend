@@ -9,43 +9,43 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { useTranslation, Trans } from 'react-i18next';
 
 
-const TableEntity = ({setIsModify, list, loading, currentPage }) => {
-    const [entity, setEntity] = useState('') 
-    const [modalShow, setModalShow] = useState(false) 
-    const [modalDelete, setModalDelete] = useState(false) 
-    const [modalState, setModalState] = useState(false) 
-    const [url, setUrl] = useState('') 
-    const [id, setId] = useState('') 
-    const [name, setName] = useState('') 
-    const [created, setCreated] = useState('') 
-    const [modified, setModified] = useState('') 
-    const [active,setActive] = useState('') 
+const TableEntity = ({ setIsModify, list, loading, currentPage }) => {
+    const [entity, setEntity] = useState('')
+    const [modalShow, setModalShow] = useState(false)
+    const [modalDelete, setModalDelete] = useState(false)
+    const [modalState, setModalState] = useState(false)
+    const [url, setUrl] = useState('')
+    const [id, setId] = useState('')
+    const [name, setName] = useState('')
+    const [created, setCreated] = useState('')
+    const [modified, setModified] = useState('')
+    const [active, setActive] = useState('')
     const { t } = useTranslation();
     if (loading) {
         return (
             <Row className='justify-content-md-center'>
                 <Spinner animation='border' variant='primary' size='sm' />
             </Row>
-        );    
+        );
     }
-    
+
     //Read Entity
-    const showEntity = (url)=> {
-        setId(url.split('/')[(url.split('/')).length-2]);
+    const showEntity = (url) => {
+        setId(url.split('/')[(url.split('/')).length - 2]);
         setUrl(url)
         setEntity('')
         getEntity(url)
-        .then((response) => {
-            setEntity(response.data)
-            let datetime = response.data.created.split('T')
-            setCreated(datetime[0] + ' ' + datetime[1].slice(0,8))
-            datetime = response.data.modified.split('T');
-            setModified(datetime[0] + ' ' + datetime[1].slice(0,8))
-            setModalShow(true)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .then((response) => {
+                setEntity(response.data)
+                let datetime = response.data.created.split('T')
+                setCreated(datetime[0] + ' ' + datetime[1].slice(0, 8))
+                datetime = response.data.modified.split('T');
+                setModified(datetime[0] + ' ' + datetime[1].slice(0, 8))
+                setModalShow(true)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     };
 
     // Remove Entity
@@ -54,8 +54,8 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
         setName(name)
         setModalDelete(true)
     }
-    
-    const removeEntity = (url, name)=> {
+
+    const removeEntity = (url, name) => {
         deleteEntity(url, name)
             .then((response) => {
                 setIsModify(response)
@@ -66,8 +66,8 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
             .finally(() => {
                 setModalDelete(false)
             })
-        };
-    
+    };
+
     //Update Entity
     const pressActive = (url, active, name) => {
         setUrl(url)
@@ -76,7 +76,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
         setModalState(true)
     }
 
-    const switchState = (url, state, name)=> {
+    const switchState = (url, state, name) => {
         isActive(url, !state, name)
             .then((response) => {
                 console.log(response)
@@ -90,61 +90,61 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                 setModalShow(false)
             })
     };
-    
+
     const storageEntityUrl = (url) => {
-        localStorage.setItem('entity', url);    
+        localStorage.setItem('entity', url);
     }
     console.log()
-    
+
 
     return (
-            <React.Fragment>
-                <Table responsive hover className="text-center">
-                    <thead>
-                        <tr>
-                            <th>{t('Nombre')}</th>
-                            <th>{t('Activo')}</th>
-                            <th>{t('Redes Asociadas')}</th>
-                            <th>{t('Accion')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {list.map((entity, index) => {
-                            
-                            return (
-                                <tr key={index}>
-                                    <td>{entity.name}</td>
-                                    <td>
-                                        <ActiveButton active={entity.active} onClick={() => pressActive(entity.url, entity.active, entity.name)} />
-                                    </td>
-                                    <td>{entity.networks.length}</td>
-                                    <td>
-                                        <CrudButton type='read' onClick={() => showEntity(entity.url)} />
-                                        <Link to={{pathname:'/entities/edit', state: entity}}> 
-                                            <CrudButton type='edit' onClick={() => storageEntityUrl(entity.url)}/>
-                                        </Link>
-                                        <CrudButton type='delete' onClick={() => Delete(entity.url, entity.name)} />
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+        <React.Fragment>
+            <Table responsive hover className="text-center">
+                <thead>
+                    <tr>
+                        <th>{t('ngen.name_one')}</th>
+                        <th>{t('w.active')}</th>
+                        <th>{t('ngen.network.associated')}</th>
+                        <th>{t('ngen.action_one')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((entity, index) => {
 
-                <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>            
+                        return (
+                            <tr key={index}>
+                                <td>{entity.name}</td>
+                                <td>
+                                    <ActiveButton active={entity.active} onClick={() => pressActive(entity.url, entity.active, entity.name)} />
+                                </td>
+                                <td>{entity.networks.length}</td>
+                                <td>
+                                    <CrudButton type='read' onClick={() => showEntity(entity.url)} />
+                                    <Link to={{ pathname: '/entities/edit', state: entity }}>
+                                        <CrudButton type='edit' onClick={() => storageEntityUrl(entity.url)} />
+                                    </Link>
+                                    <CrudButton type='delete' onClick={() => Delete(entity.url, entity.name)} />
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </Table>
+
+            <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
-                    <Row>    
-                        <Col>                 
+                    <Row>
+                        <Col>
                             <Card>
-                                <Card.Header> 
+                                <Card.Header>
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">Entidades</Card.Title>
+                                            <Card.Title as="h5">ngen.entity_other</Card.Title>
                                             <span className="d-block m-t-5">Detalle de entidad</span>
                                         </Col>
-                                        <Col sm={12} lg={3}>                       
-                                            <Link to={{pathname:'/entities/edit', state: entity}} >
-                                                <CrudButton type='edit'/>
+                                        <Col sm={12} lg={3}>
+                                            <Link to={{ pathname: '/entities/edit', state: entity }} >
+                                                <CrudButton type='edit' />
                                             </Link>
                                             <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
                                         </Col>
@@ -188,7 +188,7 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                                                 <td>Informacion Relacionada</td>
                                                 <td>
                                                     <Button size="sm" variant='light' className="text-capitalize">
-                                                        Redes <Badge variant="light" className="ml-1">{entity ? entity.networks.length: 0 }</Badge>
+                                                        Redes <Badge variant="light" className="ml-1">{entity ? entity.networks.length : 0}</Badge>
                                                     </Button>
                                                 </td>
                                             </tr>
@@ -196,17 +196,17 @@ const TableEntity = ({setIsModify, list, loading, currentPage }) => {
                                     </Table>
                                 </Card.Body>
                             </Card>
-                        </Col> 
+                        </Col>
                     </Row>
                 </Modal.Body>
             </Modal>
-            
-            <ModalConfirm type='delete' component='Entidad' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeEntity(url, name)}/>
 
-            <ModalConfirm type='editState' component='Entidad' name={name} state={active} showModal={modalState} onHide={() => setModalState(false)} ifConfirm={() => switchState(url, active, name)}/>
+            <ModalConfirm type='delete' component='Entidad' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeEntity(url, name)} />
 
-        </React.Fragment> 
-  );
+            <ModalConfirm type='editState' component='Entidad' name={name} state={active} showModal={modalState} onHide={() => setModalState(false)} ifConfirm={() => switchState(url, active, name)} />
+
+        </React.Fragment>
+    );
 };
 
 export default TableEntity;

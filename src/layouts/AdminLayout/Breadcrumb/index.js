@@ -81,7 +81,7 @@ const Breadcrumb = () => {
             );
         }
 
-        document.title = title + BASE_TITLE;
+        document.title = t(title) + BASE_TITLE;
     }
 
     return <React.Fragment>{breadcrumbContent}</React.Fragment>;

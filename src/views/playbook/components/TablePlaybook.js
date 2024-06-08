@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Table, Spinner, Form} from 'react-bootstrap';
+import { Row, Table, Spinner, Form } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import { getPlaybook, deletePlaybook } from '../../../api/services/playbooks'
 import { Link } from 'react-router-dom';
@@ -7,8 +7,9 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ModalDetailPlaybook from './ModalDetailPlaybook';
 import { getTaxonomy } from '../../../api/services/taxonomies';
 import Alert from '../../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
-const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
+const TablePlaybook = ({ setIsModify, list, loading, taxonomyNames }) => {
     const [playbook, setPlaybook] = useState('')
 
     const [modalDelete, setModalDelete] = useState(false)
@@ -16,9 +17,9 @@ const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
 
     const [url, setUrl] = useState(null)
     const [name, setName] = useState(null)
-   
+    const { t } = useTranslation();
 
-    
+
     //Alert
     const [showAlert, setShowAlert] = useState(false);
 
@@ -68,23 +69,23 @@ const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
             <Row className='justify-content-md-center'>
                 <Spinner animation='border' variant='primary' size='sm' />
             </Row>
-        );    
-    } 
-    
+        );
+    }
+
 
     //Read Playbook
-    const showPlaybook = (url)=> {
+    const showPlaybook = (url) => {
         setUrl(url)
         setPlaybook('')
         getPlaybook(url)
-        .then((response) => {
-            setPlaybook(response.data)
-            console.log(response.data)
-            setModalShow(true)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+                setPlaybook(response.data)
+                console.log(response.data)
+                setModalShow(true)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     };
 
     //Remove Playbook
@@ -94,7 +95,7 @@ const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
         setModalDelete(true)
     }
 
-    const removePlaybook = (url, name)=> {
+    const removePlaybook = (url, name) => {
         deletePlaybook(url, name)
             .then((response) => {
                 console.log(response.data)
@@ -110,53 +111,54 @@ const TablePlaybook = ({setIsModify, list, loading, taxonomyNames}) => {
             })
     };
 
-    
+
     const textareaStyle = {
-        resize:"none", 
-        backgroundColor:"transparent", 
-        border:"none", 
+        resize: "none",
+        backgroundColor: "transparent",
+        border: "none",
         boxShadow: "none"
     }
 
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="playbook"/>
-                <Table responsive hover className="text-center">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Taxonomias</th>
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { list.map((book, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{book.name}</td>
-                                    <td>
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="playbook" />
+            <Table responsive hover className="text-center">
+                <thead>
+                    <tr>
+                        <th>{t('ngen.name_one')}</th>
+                        <th>{t('ngen.taxonomy_one')}</th>
+                        <th>{t('ngen.action_one')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((book, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>{book.name}</td>
+                                <td>
                                     {book.taxonomy.map((taxonomy) => {
-                                                
-                                                return  (<li>{taxonomyNames[taxonomy]}</li>)})}
-                                        
-                                    </td>
-                                    <td>
-                                        <CrudButton type='read' onClick={() => showPlaybook(book.url)} />
-                                        <Link to={{pathname:'/playbooks/edit', state: book}} >
-                                            <CrudButton type='edit'/>
-                                        </Link>
-                                        <CrudButton type='delete' onClick={() => Delete(book.url, book.name)} />
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-            <ModalDetailPlaybook show={modalShow} playbook={playbook} onHide={() => setModalShow(false)}/>
-            <ModalConfirm type='delete' component='Playbook' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removePlaybook(url, name)}/>
 
-        </React.Fragment> 
-  );
+                                        return (<li>{taxonomyNames[taxonomy]}</li>)
+                                    })}
+
+                                </td>
+                                <td>
+                                    <CrudButton type='read' onClick={() => showPlaybook(book.url)} />
+                                    <Link to={{ pathname: '/playbooks/edit', state: book }} >
+                                        <CrudButton type='edit' />
+                                    </Link>
+                                    <CrudButton type='delete' onClick={() => Delete(book.url, book.name)} />
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </Table>
+            <ModalDetailPlaybook show={modalShow} playbook={playbook} onHide={() => setModalShow(false)} />
+            <ModalConfirm type='delete' component='Playbook' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removePlaybook(url, name)} />
+
+        </React.Fragment>
+    );
 };
 
 export default TablePlaybook;

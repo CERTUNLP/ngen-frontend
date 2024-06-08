@@ -27,15 +27,15 @@ const ListContact = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
-    const [wordToSearch, setWordToSearch]= useState('')
+    const [wordToSearch, setWordToSearch] = useState('')
 
     const [order, setOrder] = useState("");
 
-    function updatePage(chosenPage){
+    function updatePage(chosenPage) {
         setCurrentPage(chosenPage);
     }
 
-    useEffect( ()=> {
+    useEffect(() => {
 
         setCurrentPage(currentPage)//?
 
@@ -44,8 +44,8 @@ const ListContact = () => {
                 setContacts(response.data.results);
                 //Pagination
                 setCountItems(response.data.count);
-                if(currentPage === 1){
-                    setUpdatePagination(true)  
+                if (currentPage === 1) {
+                    setUpdatePagination(true)
                 }
                 setDisabledPagination(false)
             })
@@ -56,7 +56,7 @@ const ListContact = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-        }, [currentPage, isModify, wordToSearch])
+    }, [currentPage, isModify, wordToSearch])
 
     // ------- SEARCH --------
     const action = () => {
@@ -68,45 +68,46 @@ const ListContact = () => {
     if (!search) {
         show = contacts
     } else {
-        show = contacts.filter( (item) => 
+        show = contacts.filter((item) =>
             item.name.toLowerCase().includes(search.toLocaleLowerCase())
         )
     }
 
     return (
-    <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="contact"/>
-        <Row>
-            <Navigation actualPosition={t('Contactos')}/>  
-        </Row>
-        <Row>
-            <Col>
-                <Card>
-                    <Card.Header>
-                        <Row>
-                            <Col>
-                                <Search type={t('por nombre de entidad')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
-                            </Col>
-                            <Col sm={3} lg={3}>
-                                <Link to={{pathname:'/contacts/create'}} >
-                                    <CrudButton type='create' name={t('Contacto')}/>
-                                </Link>
-                            </Col> 
-                        </Row>
-                    </Card.Header>
-                    <Card.Body>
-                        <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage}/>
-                    </Card.Body>
-                    <Card.Footer>
-                        <Row className="justify-content-md-center">
-                            <Col md="auto"> 
-                                <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination} setUpdatePagination={setUpdatePagination} setLoading={setLoading} setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination}/>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
-                </Card>
-            </Col>
-        </Row>
-    </React.Fragment>
-)}
+        <React.Fragment>
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="contact" />
+            <Row>
+                <Navigation actualPosition={t('ngen.contact_other')} />
+            </Row>
+            <Row>
+                <Col>
+                    <Card>
+                        <Card.Header>
+                            <Row>
+                                <Col>
+                                    <Search type={t('w.entityByName')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                </Col>
+                                <Col sm={3} lg={3}>
+                                    <Link to={{ pathname: '/contacts/create' }} >
+                                        <CrudButton type='create' name={t('ngen.contact_one')} />
+                                    </Link>
+                                </Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body>
+                            <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage} />
+                        </Card.Body>
+                        <Card.Footer>
+                            <Row className="justify-content-md-center">
+                                <Col md="auto">
+                                    <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination} setUpdatePagination={setUpdatePagination} setLoading={setLoading} setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination} />
+                                </Col>
+                            </Row>
+                        </Card.Footer>
+                    </Card>
+                </Col>
+            </Row>
+        </React.Fragment>
+    )
+}
 export default ListContact;

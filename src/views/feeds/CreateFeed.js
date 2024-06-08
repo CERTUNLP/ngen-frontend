@@ -4,45 +4,46 @@ import { postFeed } from '../../api/services/feeds';
 import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation'
 import FormFeed from './components/FormFeed'
+import { useTranslation, Trans } from 'react-i18next';
 
-const CreateFeed = () => {    
+const CreateFeed = () => {
     const [name, setName] = useState("");
     const [active, setActive] = useState(true);
     const [description, setDescription] = useState("");
     const [showAlert, setShowAlert] = useState(false)
-   
-    const createFeed = ()=> {
+    const { t } = useTranslation();
+    const createFeed = () => {
         postFeed(name, description, active)
-        .then(() => {
-            window.location.href = '/feeds';
-        })
-        .catch((error) => {
-            console.log(error)
-            setShowAlert(true)            
-        })     
+            .then(() => {
+                window.location.href = '/feeds';
+            })
+            .catch((error) => {
+                console.log(error)
+                setShowAlert(true)
+            })
     };
 
     const resetShowAlert = () => {
         setShowAlert(false);
-    }    
-    
+    }
+
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed"/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed" />
             <Row>
-                <Navigation actualPosition="Agregar fuente de información" path="/feeds" index ="Fuentes de Información"/>
+                <Navigation actualPosition={t('ngen.infoSource.add')} path="/feeds" index={t('ngen.infoSource')} />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Fuente de Informacion</Card.Title>
+                            <Card.Title as="h5">{t('ngen.infoSource')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
-                            <FormFeed  name={name} setName={setName} active={active} setActive={setActive} description={description} setDescription={setDescription} createFeed={createFeed}/>
+                            <FormFeed name={name} setName={setName} active={active} setActive={setActive} description={description} setDescription={setDescription} createFeed={createFeed} />
                         </Card.Body>
                     </Card>
-                </Col>                    
+                </Col>
             </Row>
         </React.Fragment>
     );

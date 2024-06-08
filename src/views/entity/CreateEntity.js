@@ -16,35 +16,35 @@ const CreateEntity = () => {
     //Create
     const addEntity = () => {
         postEntity(name, active)
-        .then((response) => { 
-            window.location.href = "/entities"
-        })
-        .catch((error) => {
-            console.log(error)
-            setShowAlert(true)
-        })
+            .then((response) => {
+                window.location.href = "/entities"
+            })
+            .catch((error) => {
+                console.log(error)
+                setShowAlert(true)
+            })
     };
-     
+
     const { t } = useTranslation();
 
     return (
         <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity"/>
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity" />
             <Row>
-                <Navigation actualPosition="Crear Entidad" path="/entities" index ="Entidades"/>
+                <Navigation actualPosition="Crear Entidad" path="/entities" index={t('ngen.entity_other')} />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('Entidades')}</Card.Title>
-                            <span className="d-block m-t-5">{t('Agregar Entidad')}</span>
+                            <Card.Title as="h5">{t('ngen.entity_other')}</Card.Title>
+                            <span className="d-block m-t-5">{t('ngen.entity_add')}</span>
                         </Card.Header>
                         <Card.Body>
                             <Row>
                                 <Col sm={12} lg={12}>
-                                    <FormEntity 
-                                        name={name} setName={setName} 
+                                    <FormEntity
+                                        name={name} setName={setName}
                                         ifConfirm={addEntity} edit={false} />
                                 </Col>
                             </Row>

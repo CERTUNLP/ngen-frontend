@@ -7,7 +7,7 @@ import Alert from '../../components/Alert/Alert';
 import { useTranslation, Trans } from 'react-i18next';
 
 const CreateCase = () => {
-        
+
     //Alert
     const [showAlert, setShowAlert] = useState(false);
     const [allStates, setAllStates] = useState([]) //multiselect
@@ -27,32 +27,32 @@ const CreateCase = () => {
         evidence: [],
     }
 
-    useEffect(()=> {
+    useEffect(() => {
 
         getAllStates()
             .then((response) => {
                 console.log(response);
                 let listStates = []
-                response.map((stateItem)=>{
-                    listStates.push({value:stateItem.url, label:stateItem.name, childrenUrl:stateItem.children})
+                response.map((stateItem) => {
+                    listStates.push({ value: stateItem.url, label: stateItem.name, childrenUrl: stateItem.children })
                 })
                 setAllStates(listStates)
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
             })
 
-        },[])
+    }, [])
 
     const { t } = useTranslation();
 
     return (
         <React.Fragment>
-            
+
             <Row>
-                <Navigation actualPosition={t('Crear caso')} path="/cases" index ="Casos"/>
+                <Navigation actualPosition={t('button.case_create')} path="/cases" index={t('ngen.case_other')} />
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save='Crear'/>
+            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save={t('button.case_create')} />
         </React.Fragment>
     );
 };

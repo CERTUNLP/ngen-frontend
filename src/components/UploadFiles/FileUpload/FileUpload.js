@@ -1,5 +1,6 @@
 import React from 'react'
 import './FileUpload.css'
+import { useTranslation, Trans } from 'react-i18next';
 
 const FileUpload = ({ files, setFiles, removeFile }) => {
     const uploadHandler = (event) => {
@@ -7,6 +8,7 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
         // se concatenan las 2 listas una lista con los archivos que fueron cargados (files)  y la otra lista con los que se agregaron recientemente
         setFiles([...files, ...filesToUpload]);
     }
+    const { t } = useTranslation();
 
     return (
         <>
@@ -14,7 +16,7 @@ const FileUpload = ({ files, setFiles, removeFile }) => {
                 <div className="file-inputs">
                     <input type="file" onChange={uploadHandler} multiple />
                     <button>
-                        Cargar archivo/s
+                        {t('file.upload')}
                     </button>
                 </div>
 

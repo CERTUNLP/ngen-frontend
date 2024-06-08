@@ -1,10 +1,10 @@
-import React,{ useState, useEffect }from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    Card, Table , Row , Spinner
- } from 'react-bootstrap';
+    Card, Table, Row, Spinner
+} from 'react-bootstrap';
 
- import { getAllStates } from '../../../../api/services/states'; 
- import { getAllPriorities } from '../../../../api/services/priorities';
+import { getAllStates } from '../../../../api/services/states';
+import { getAllPriorities } from '../../../../api/services/priorities';
 import { getTLP } from '../../../../api/services/tlp';
 
 import BadgeItem from '../../../../components/Button/BadgeItem';
@@ -15,11 +15,11 @@ import CrudButton from '../../../../components/Button/CrudButton';
 import { getUser } from '../../../../api/services/users';
 import { useTranslation, Trans } from 'react-i18next';
 
-const DashboardCases = ({list, loading}) => {
-    const [prioritiesOption, setPrioritiesOption] = useState({}) 
-    const [tlpOption, setTlpOption] = useState({}) 
-    const [stateOption, setStateOption] = useState({}) 
-    const { t } = useTranslation();    
+const DashboardCases = ({ list, loading }) => {
+    const [prioritiesOption, setPrioritiesOption] = useState({})
+    const [tlpOption, setTlpOption] = useState({})
+    const [stateOption, setStateOption] = useState({})
+    const { t } = useTranslation();
 
     useEffect(() => {
 
@@ -27,24 +27,24 @@ const DashboardCases = ({list, loading}) => {
             .then((response) => {
                 let priorityOp = {}
                 response.map((item) => {
-                    priorityOp[item.url] = {name: item.name, color: item.color}
+                    priorityOp[item.url] = { name: item.name, color: item.color }
                 })
                 setPrioritiesOption(priorityOp)
-                
+
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
             })
-        
+
         getTLP()
             .then((response) => {
                 let tlpOp = {}
                 response.data.results.map((item) => {
-                    tlpOp[item.url] = {name: item.name, color: item.color}
+                    tlpOp[item.url] = { name: item.name, color: item.color }
                 })
                 setTlpOption(tlpOp)
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
             })
 
@@ -52,88 +52,88 @@ const DashboardCases = ({list, loading}) => {
             .then((response) => {
                 let stateOp = {}
                 response.map((item) => {
-                    stateOp[item.url] = {name: item.name}
+                    stateOp[item.url] = { name: item.name }
                 })
                 setStateOption(stateOp)
-                
+
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
             })
-        
-    },[list]);
+
+    }, [list]);
 
     const storageCaseUrl = (url) => {
-        localStorage.setItem('case', url);    
+        localStorage.setItem('case', url);
     }
-  return (
-    <div>
-        <Card>
-            <Card.Header>
-                <Card.Title as="h5">{t('Panel de casos')}</Card.Title>
-            </Card.Header>
-            <Card.Body className="text-center">
-                <Table responsive hover className="text-center">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{t('uuid')}</th>
-                            <th>{t('Estado')}</th>
-                            <th>{t('Asignado')}</th>
-                            <th>{t('Cantidad de eventos')}</th>
-                            <th>{t('Accion')}</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                    
-                    { loading ? 
-                        <tr>
-                            <td colSpan="7">
-                                <Row className="justify-content-md-center">
-                                    <Spinner animation="border" variant="primary" size="sm" />
-                                </Row>
-                            </td>
-                        </tr>
-                        :
-                        list.map((caseItem, index) => {
-                            let datetime = caseItem.date.split('T');
-                            datetime = datetime[0] + ' ' + datetime[1].slice(0,8)
-                            let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length-2]
-                             
-                            return (
-                                list &&
-                                <tr key={index}>
-                                    
-                                    <th scope="row">{ index +1 }</th>
-                                    <td>{caseItem.uuid}</td>
-                                    <td>{stateOption[caseItem.state] ? stateOption[caseItem.state].name : "No se pudo asignar un estado"}</td>
-                                    {caseItem.assigned ? 
-                                        <td>
-                                            <GetUserName form={false} get={getUser} url={caseItem.assigned} key={index} />
-                                        </td>
-                                        :
-                                        <td>
-                                            Sin asignar
-                                        </td> 
-                                    }
-                                    <td>-</td>
-                                    <td>
-                                        <Link to={{pathname:'/cases/view'}}>
-                                            <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)}/>
-                                        </Link>
-                                            
+    return (
+        <div>
+            <Card>
+                <Card.Header>
+                    <Card.Title as="h5">{t('ngen.case_panel')}</Card.Title>
+                </Card.Header>
+                <Card.Body className="text-center">
+                    <Table responsive hover className="text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{t('UUID')}</th>
+                                <th>{t('ngen.state_one')}</th>
+                                <th>{t('status.assigned')}</th>
+                                <th>{t('ngen.event.quantity')}</th>
+                                <th>{t('ngen.action_one')}</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {loading ?
+                                <tr>
+                                    <td colSpan="7">
+                                        <Row className="justify-content-md-center">
+                                            <Spinner animation="border" variant="primary" size="sm" />
+                                        </Row>
                                     </td>
                                 </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-            </Card.Body>
-        </Card>
+                                :
+                                list.map((caseItem, index) => {
+                                    let datetime = caseItem.date.split('T');
+                                    datetime = datetime[0] + ' ' + datetime[1].slice(0, 8)
+                                    let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length - 2]
 
-    </div>
-  )
+                                    return (
+                                        list &&
+                                        <tr key={index}>
+
+                                            <th scope="row">{index + 1}</th>
+                                            <td>{caseItem.uuid}</td>
+                                            <td>{stateOption[caseItem.state] ? stateOption[caseItem.state].name : "No se pudo asignar un estado"}</td>
+                                            {caseItem.assigned ?
+                                                <td>
+                                                    <GetUserName form={false} get={getUser} url={caseItem.assigned} key={index} />
+                                                </td>
+                                                :
+                                                <td>
+                                                    Sin asignar
+                                                </td>
+                                            }
+                                            <td>-</td>
+                                            <td>
+                                                <Link to={{ pathname: '/cases/view' }}>
+                                                    <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)} />
+                                                </Link>
+
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                        </tbody>
+                    </Table>
+                </Card.Body>
+            </Card>
+
+        </div>
+    )
 }
 
 export default DashboardCases

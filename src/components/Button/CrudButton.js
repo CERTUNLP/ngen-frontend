@@ -1,45 +1,45 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 // type: {create, read, update, delete} 
-const CrudButton = ({type, name, onClick}) => {
+const CrudButton = ({ type, name, onClick }) => {
 
     const button = {
-        create: 
-        { 
+        create:
+        {
             class: 'text-capitalize',
-            variant: 'outline-primary', 
+            variant: 'outline-primary',
             title: `Agregar ${name}`,
             icon: 'fa fa-plus',
             text: `Agregar ${name}`,
         },
-        read: 
-        { 
+        read:
+        {
             class: 'btn-icon btn-rounded',
-            variant: 'outline-primary', 
+            variant: 'outline-primary',
             title: 'Detalle',
             icon: 'fa fa-eye mx-auto',
             text: '',
         },
-        edit: 
-        { 
+        edit:
+        {
             class: 'btn-icon btn-rounded',
-            variant: 'outline-warning', 
+            variant: 'outline-warning',
             title: 'Editar',
             icon: 'fa fa-edit',
             text: '',
         },
-        delete: 
-        { 
+        delete:
+        {
             class: 'btn-icon btn-rounded',
-            variant: 'outline-danger', 
+            variant: 'outline-danger',
             title: 'Eliminar',
             icon: 'fas fa-trash-alt',
             text: '',
         },
-        download: 
-        { 
+        download:
+        {
             class: 'text-capitalize',
-            variant: 'outline-danger', 
+            variant: 'outline-danger',
             title: `Descargar ${name}`,
             icon: 'fa fa-download',
             text: `Descargar ${name}`,
@@ -47,12 +47,12 @@ const CrudButton = ({type, name, onClick}) => {
     }
     return (
         <React.Fragment>
-            <Button 
-                className={button[type].class} 
-                variant={button[type].variant} 
+            <Button
+                className={button[type].class}
+                variant={button[type].variant}
                 tite={button[type].title}
                 onClick={onClick}>
-                    <i className={button[type].icon} />
+                <i className={button[type].icon} />
                 {button[type].text}
             </Button>
         </React.Fragment>

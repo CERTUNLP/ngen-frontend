@@ -1,9 +1,9 @@
 import NVD3Chart from 'react-nvd3';
-import React,{useState, useEffect} from 'react'
-import { useTranslation, Trans } from 'react-i18next';  
+import React, { useState, useEffect } from 'react'
+import { useTranslation, Trans } from 'react-i18next';
 
 
-const EntityGraph = ({list}) => {
+const EntityGraph = ({ list }) => {
 
     const [entity, setEntity] = useState([]);
 
@@ -11,19 +11,19 @@ const EntityGraph = ({list}) => {
         return datos.filter((objeto) => objeto.eventCount !== 0);
     };
 
-    useEffect( ()=> {
+    useEffect(() => {
         setEntity(filtrarEventosNoCero(list))
-        
+
     }, [list])
     console.log(list)
     const { t } = useTranslation();
     return (
         <div>
-        {
-            entity.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={entity} x="name" y="eventCount"  labelType="percent" /> :
-            t('No hay fuentes que esten asociadas a un evento')
-                
-        }
+            {
+                entity.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={entity} x="name" y="eventCount" labelType="percent" /> :
+                    t('sources_noEventsAssociated')
+
+            }
         </div>
     );
 }

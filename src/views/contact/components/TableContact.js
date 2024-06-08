@@ -7,7 +7,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
 import { useTranslation, Trans } from 'react-i18next';
 
-const TableContact = ({setIsModify, list, loading ,currentPage}) => {
+const TableContact = ({ setIsModify, list, loading, currentPage }) => {
     const { t } = useTranslation();
 
     const [contact, setContact] = useState('')
@@ -27,28 +27,28 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
             <Row className='justify-content-md-center'>
                 <Spinner animation='border' variant='primary' size='sm' />
             </Row>
-        );    
-    } 
+        );
+    }
 
     //Read Contact
-    const showContact = (url)=> {
-        setId(url.split('/')[(url.split('/')).length-2]);
+    const showContact = (url) => {
+        setId(url.split('/')[(url.split('/')).length - 2]);
         setUrl(url)
         setContact('')
         getContact(url)
-        .then((response) => {
-            setContact(response.data)
-            let datetime = response.data.created.split('T')
-            setCreated(datetime[0] + ' ' + datetime[1].slice(0,8))
-            datetime = response.data.modified.split('T');
-            setModified(datetime[0] + ' ' + datetime[1].slice(0,8))
-            let rol = labelRole[response.data.role];
-            setRole(rol)
-            let type = labelContact[response.data.type];
-            setType(type)
-            setModalShow(true)
-        })
-        .catch(console.log);
+            .then((response) => {
+                setContact(response.data)
+                let datetime = response.data.created.split('T')
+                setCreated(datetime[0] + ' ' + datetime[1].slice(0, 8))
+                datetime = response.data.modified.split('T');
+                setModified(datetime[0] + ' ' + datetime[1].slice(0, 8))
+                let rol = labelRole[response.data.role];
+                setRole(rol)
+                let type = labelContact[response.data.type];
+                setType(type)
+                setModalShow(true)
+            })
+            .catch(console.log);
     };
 
     //Remove Contact
@@ -58,7 +58,7 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
         setModalDelete(true)
     }
 
-    const removeContact = (url, name)=> {
+    const removeContact = (url, name) => {
         deleteContact(url, name)
             .then((response) => {
                 setIsModify(response)
@@ -73,72 +73,72 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
 
     const labelRole =
     {
-        technical : 'Tecnico',
-        administrative : 'Administrativo',
-        abuse : 'Abuso',
-        notifications : 'Notificaciones',
-        noc : 'NOC',
+        technical: 'Tecnico',
+        administrative: 'Administrativo',
+        abuse: 'Abuso',
+        notifications: 'Notificaciones',
+        noc: 'NOC',
     };
 
     const labelContact =
     {
-        email : 'Correo electrónico',
-        telegram : 'Telegram',
-        phone : 'Teléfono',
-        uri : 'URI',
+        email: 'Correo electrónico',
+        telegram: 'Telegram',
+        phone: 'Teléfono',
+        uri: 'URI',
     };
 
     const storageContactUrl = (url) => {
-        localStorage.setItem('contact', url);    
+        localStorage.setItem('contact', url);
     }
 
     return (
-            <React.Fragment>
-                <Table responsive hover className="text-center">
-                    <thead>
-                        <tr>
-                            <th>{t('Nombre')}</th>
-                            <th>{t('Rol')}</th>
-                            <th>{t('Contacto')}</th>
-                            <th>{t('Prioridad')}</th>
-                            <th>{t('Accion')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {list.map((contact, index) => {
-                            return (
-                                <tr key={contact.url}>
+        <React.Fragment>
+            <Table responsive hover className="text-center">
+                <thead>
+                    <tr>
+                        <th>{t('ngen.name_one')}</th>
+                        <th>{t('ngen.role_one')}</th>
+                        <th>{t('ngen.contact_other')}</th>
+                        <th>{t('ngen.priority_one')}</th>
+                        <th>{t('ngen.action_one')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((contact, index) => {
+                        return (
+                            <tr key={contact.url}>
                                 <td>{contact.name}</td>
                                 <td>{labelRole[contact.role]}</td>
                                 <td>{contact.username}</td>
-                                <td><PriorityButton url={contact.priority}/></td>
+                                <td><PriorityButton url={contact.priority} /></td>
                                 <td>
                                     <CrudButton type='read' onClick={() => showContact(contact.url)} />
-                                    <Link to={{pathname:'/contacts/edit', state: contact}} >
-                                        <CrudButton type='edit' onClick={() => storageContactUrl(contact.url)}/>
+                                    <Link to={{ pathname: '/contacts/edit', state: contact }} >
+                                        <CrudButton type='edit' onClick={() => storageContactUrl(contact.url)} />
                                     </Link>
                                     <CrudButton type='delete' onClick={() => Delete(contact.url, contact.name)} />
                                 </td>
                             </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                        );
+                    })}
+                </tbody>
+            </Table>
 
-                <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+            <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
-                    <Row>    
-                        <Col>                 
+                    <Row>
+                        <Col>
                             <Card>
-                                <Card.Header> 
+                                <Card.Header>
                                     <Row>
                                         <Col>
                                             <Card.Title as="h5">Contactos</Card.Title>
                                             <span className="d-block m-t-5">Detalle de contacto</span>
                                         </Col>
-                                        <Col sm={2} lg={2}>                       
-                                            <Link to={{pathname:'/contacts/edit', state: contact}} >
-                                                <CrudButton type='edit'/>
+                                        <Col sm={2} lg={2}>
+                                            <Link to={{ pathname: '/contacts/edit', state: contact }} >
+                                                <CrudButton type='edit' />
                                             </Link>
                                             <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
                                         </Col>
@@ -146,77 +146,77 @@ const TableContact = ({setIsModify, list, loading ,currentPage}) => {
                                 </Card.Header>
                                 <Card.Body>
                                     <Table responsive >
-                                    <tbody>
-                                        <tr>
-                                            <td>Id del sistema</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={id} />
-                                            </td>
-                                        </tr>
-                                        <tr> 
-                                            <td>Nombre</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={contact.name} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rol</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={role} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>{type}</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={contact.username} />
-                                            </td>
-                                        </tr>
-                                        {contact.public_key ? 
+                                        <tbody>
                                             <tr>
-                                                <td>Llave pública</td>
+                                                <td>Id del sistema</td>
                                                 <td>
-                                                    <Form.Control plaintext readOnly defaultValue={contact.public_key} />
+                                                    <Form.Control plaintext readOnly defaultValue={id} />
                                                 </td>
                                             </tr>
-                                            : 
-                                            <></>
-                                        }
-                                        <tr>
-                                            <td>Informacion Relacionada</td>
-                                            <td>
-                                                <Button size="sm" variant='light' className="text-capitalize">
-                                                    Redes
-                                                <Badge variant="light" className="ml-2">4</Badge>
-                                                </Button>
-                                                <Button size="sm" variant='light' className="text-capitalize">
-                                                    Prioridad&nbsp;
-                                                <PriorityButton url={contact.priority}/>
-                                                </Button>
-                                            </td>
-                                        </tr> 
-                                        <tr>
-                                            <td>Creación</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={created} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Actualización</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={modified} />
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={contact.name} />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Rol</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={role} />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{type}</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={contact.username} />
+                                                </td>
+                                            </tr>
+                                            {contact.public_key ?
+                                                <tr>
+                                                    <td>Llave pública</td>
+                                                    <td>
+                                                        <Form.Control plaintext readOnly defaultValue={contact.public_key} />
+                                                    </td>
+                                                </tr>
+                                                :
+                                                <></>
+                                            }
+                                            <tr>
+                                                <td>Informacion Relacionada</td>
+                                                <td>
+                                                    <Button size="sm" variant='light' className="text-capitalize">
+                                                        Redes
+                                                        <Badge variant="light" className="ml-2">4</Badge>
+                                                    </Button>
+                                                    <Button size="sm" variant='light' className="text-capitalize">
+                                                        Prioridad&nbsp;
+                                                        <PriorityButton url={contact.priority} />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Creación</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={created} />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Actualización</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={modified} />
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </Table>
                                 </Card.Body>
                             </Card>
-                        </Col> 
+                        </Col>
                     </Row>
                 </Modal.Body>
             </Modal>
-            <ModalConfirm type='delete' component='Contacto' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeContact(url, name)}/>
-        </React.Fragment> 
-  );
+            <ModalConfirm type='delete' component='Contacto' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeContact(url, name)} />
+        </React.Fragment>
+    );
 };
 
 export default TableContact;

@@ -42,13 +42,13 @@ const SmallEventTable = ({ list }) => {
     }
 
 
-const { t } = useTranslation();
+    const { t } = useTranslation();
     console.log(events)
     return (
         <React.Fragment>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">{t('Eventos')}</Card.Title>
+                    <Card.Title as="h5">{t('ngen.event_other')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
@@ -56,14 +56,14 @@ const { t } = useTranslation();
                             {events.length > 0 ? <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>{t('Fecha')}</th>
-                                    <th>{t('Identificador')} </th>
-                                    <th>{t('Dominio')}</th>
-                                    <th>{t('Cidr')}</th>
-                                    <th>{t('TLP')}</th>
-                                    <th>{t('Taxonomia')}</th>
-                                    <th>{t('Fuente de Informacion')}</th>
-                                    <th>{t('Opciones')}</th>
+                                    <th>{t('date.one')}</th>
+                                    <th>{t('ngen.identifier')} </th>
+                                    <th>{t('ngen.domain')}</th>
+                                    <th>{t('ngen.cidr')}</th>
+                                    <th>{t('ngen.TLP')}</th>
+                                    <th>{t('ngen.taxonomy_one')}</th>
+                                    <th>{t('ngen.infoSource')}</th>
+                                    <th>{t('ngen.options')}</th>
                                 </tr>
                             </thead> : <></>}
                             <tbody>
@@ -93,7 +93,7 @@ const { t } = useTranslation();
 
                                         </tr>
                                     )
-                                }) : <tr><td colSpan="9">{t('No hay eventos')}</td></tr>}
+                                }) : <tr><td colSpan="9">{t('ngen.event_noEvents')}</td></tr>}
 
                             </tbody>
                         </Table>

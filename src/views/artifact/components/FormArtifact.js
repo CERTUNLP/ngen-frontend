@@ -9,7 +9,7 @@ const FormArtifact = (props) => {
     const typeOptions = [
         {
             value: '0',
-            name: 'Seleccione una opcion'
+            name: t('ngen.option_select')
         },
         {
             value: 'ip',
@@ -66,7 +66,7 @@ const FormArtifact = (props) => {
             <Card.Body>
                 <Form>
                     <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>{t('Tipo')}</Form.Label>
+                        <Form.Label>{t('ngen.type')}</Form.Label>
                         <Form.Control
                             name="type"
                             type="choice"
@@ -90,11 +90,11 @@ const FormArtifact = (props) => {
 
 
                     {activateButton() ?
-                        <><Button variant="primary" disabled>{t('Guardar')}</Button></>
+                        <><Button variant="primary" disabled>{t('button.save')}</Button></>
                         :
-                        <><Button variant="primary" onClick={props.ifConfirm}>{t('Guardar')}</Button></>
+                        <><Button variant="primary" onClick={props.ifConfirm}>{t('button.save')}</Button></>
                     }
-                    <Button variant="primary" onClick={props.ifCancel}>{t('Cancelar')}</Button>
+                    <Button variant="primary" onClick={props.ifCancel}>{t('button.cancel')}</Button>
                 </Form>
             </Card.Body>
         </div>

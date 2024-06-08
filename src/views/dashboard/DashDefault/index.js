@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card,  Form } from 'react-bootstrap';
+import { Row, Col, Card, Form } from 'react-bootstrap';
 
 import FeedGraph from './chart/FeedGraph';
 import EntityGraph from './chart/EntityGraph';
@@ -27,9 +27,9 @@ const DashDefault = () => {
     const [endDateFilter, setEndDateFilter] = useState("")
 
     const [loading, setLoading] = useState(true)
-    useEffect( ()=> {
+    useEffect(() => {
 
-        getDashboardFeed(starDateFilter + endDateFilter) 
+        getDashboardFeed(starDateFilter + endDateFilter)
             .then((response) => {
                 setDashboardFeed(response.data.feeds_in_events)
                 console.log(response)
@@ -40,7 +40,7 @@ const DashDefault = () => {
             .finally(() => {
             })
 
-        getDashboardEvent(starDateFilter + endDateFilter) 
+        getDashboardEvent(starDateFilter + endDateFilter)
             .then((response) => {
                 setDashboardEvent(response.data.events)
                 console.log(response)
@@ -51,9 +51,9 @@ const DashDefault = () => {
             .finally(() => {
             })
 
-        getDashboardCases(starDateFilter + endDateFilter) 
+        getDashboardCases(starDateFilter + endDateFilter)
             .then((response) => {
-               
+
                 setDashboardCases(response.data.cases)
                 console.log(response.data.cases)
             })
@@ -63,24 +63,25 @@ const DashDefault = () => {
             .finally(() => {
                 setLoading(false)
             })
-        
-        getDashboardNetworkEntities(starDateFilter + endDateFilter) 
+
+        getDashboardNetworkEntities(starDateFilter + endDateFilter)
             .then((response) => {
-                let entitiesNetwork=[{key: 'Cumulative Return',
-                                    values: []
-                                    }]
+                let entitiesNetwork = [{
+                    key: 'Cumulative Return',
+                    values: []
+                }]
                 const entitiesWithEventCount = response.data.network_entities.map(entity => {
                     // Agregar la propiedad 'eventCount' con la cantidad de eventos
-                  
+
                     entity.eventCount = entity.events.length;
                     return entity;
                 });
-                entitiesNetwork[0].values=entitiesWithEventCount
+                entitiesNetwork[0].values = entitiesWithEventCount
 
                 //console.log(entitiesWithEventCount)
                 console.log(entitiesNetwork)
                 setDashboardNetworkEntities(entitiesNetwork)
-                
+
             })
             .catch((error) => {
                 // Show alert
@@ -89,21 +90,21 @@ const DashDefault = () => {
                 setLoading(false)
             })
 
-        
+
     }, [starDateFilter, endDateFilter])
     const completeDateStar = (date) => {
         console.log(date)
-        if (getCurrentDate() >= date){
+        if (getCurrentDate() >= date) {
             setStarDate(date)
-            setStarDateFilter("date_from="+date+"T00:00:00Z"+'&')
+            setStarDateFilter("date_from=" + date + "T00:00:00Z" + '&')
         }
-      }
-    
-      const completeDateEnd = (date) => {
+    }
+
+    const completeDateEnd = (date) => {
         console.log(date)
-        if (getCurrentDate() >= date){
+        if (getCurrentDate() >= date) {
             setEndDate(date)
-            setEndDateFilter("date_to"+date+"T00:00:00Z"+'&')
+            setEndDateFilter("date_to" + date + "T00:00:00Z" + '&')
         }
     }
 
@@ -122,74 +123,74 @@ const DashDefault = () => {
         const day = sevenDaysAgo.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-     //console.log(props.body.date < getCurrentDate()) valido
+    //console.log(props.body.date < getCurrentDate()) valido
 
     const { t } = useTranslation();
 
     return (
-        <React.Fragment>    
-        <Row>
-            <Col sm={12} lg={6}>
-                <Form.Group controlId="formGridAddress1">
-                    <Form.Label>{t('Fecha desde')}</Form.Label>
-                    <Form.Control 
-                        type="date"
-                        maxLength="150" 
-                        placeholder={t('Fecha desde')}
-                        max={getCurrentDate()}
-                        value={starDate} 
-                        isInvalid={starDate > getCurrentDate()} 
-                        onChange={(e) => completeDateStar(e.target.value)}
-                        name="date"
-                    />
-                    {starDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""  }
-                </Form.Group>
-            </Col>
-            <Col sm={12} lg={6}>
-                <Form.Group controlId="formGridAddress1">
-                    <Form.Label>{t('Fecha hasta')}</Form.Label>
-                    <Form.Control 
-                        type="date"
-                        maxLength="150" 
-                        max={getCurrentDate()}
-                        value={endDate} 
-                        isInvalid={endDate > getCurrentDate()} 
-                        onChange={(e) => completeDateEnd(e.target.value)}
-                        name="date"
-                    />
-                    {endDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""  }
-                </Form.Group>
-            </Col>
-        </Row> 
-        <Row>
-            <Col md={6}>
-                <Card>
-                    <Card.Header>
-                        <Card.Title as="h5">{t('Grafico de fuentes')}</Card.Title>
-                    </Card.Header>
-                    <Card.Body className="text-center">
-                        <FeedGraph dashboardFeed={dashboardFeed}/>
-                    </Card.Body>
-                </Card>
-            </Col>
-            <Col md={6}>
-                <Card>
-                    <Card.Header>
-                        <Card.Title as="h5">{t('Grafico de entidades afectadas')}</Card.Title>
-                    </Card.Header>
-                    <Card.Body className="text-center">
-                        <EntityGraph list={dashboardNetworkEntities.length > 0  ? dashboardNetworkEntities[0].values : []} />
-                    </Card.Body>
-                </Card>
-            </Col>
-            <Col>
-                <DashboardEvent list={dashboardEvent} />
-            </Col>
-            <Col>
-                <DashboardCases list={dashboardCases} loading={loading}/>
-            </Col>
-        </Row>
-    </React.Fragment>
+        <React.Fragment>
+            <Row>
+                <Col sm={12} lg={6}>
+                    <Form.Group controlId="formGridAddress1">
+                        <Form.Label>{t('date.condition_from')}</Form.Label>
+                        <Form.Control
+                            type="date"
+                            maxLength="150"
+                            placeholder={t('date.condition_from')}
+                            max={getCurrentDate()}
+                            value={starDate}
+                            isInvalid={starDate > getCurrentDate()}
+                            onChange={(e) => completeDateStar(e.target.value)}
+                            name="date"
+                        />
+                        {starDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""}
+                    </Form.Group>
+                </Col>
+                <Col sm={12} lg={6}>
+                    <Form.Group controlId="formGridAddress1">
+                        <Form.Label>{t('date.condition_to')}</Form.Label>
+                        <Form.Control
+                            type="date"
+                            maxLength="150"
+                            max={getCurrentDate()}
+                            value={endDate}
+                            isInvalid={endDate > getCurrentDate()}
+                            onChange={(e) => completeDateEnd(e.target.value)}
+                            name="date"
+                        />
+                        {endDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""}
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={6}>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title as="h5">{t('sources_graphic')}</Card.Title>
+                        </Card.Header>
+                        <Card.Body className="text-center">
+                            <FeedGraph dashboardFeed={dashboardFeed} />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6}>
+                    <Card>
+                        <Card.Header>
+                            <Card.Title as="h5">{t('ngen.entity_graphic')}</Card.Title>
+                        </Card.Header>
+                        <Card.Body className="text-center">
+                            <EntityGraph list={dashboardNetworkEntities.length > 0 ? dashboardNetworkEntities[0].values : []} />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <DashboardEvent list={dashboardEvent} />
+                </Col>
+                <Col>
+                    <DashboardCases list={dashboardCases} loading={loading} />
+                </Col>
+            </Row>
+        </React.Fragment>
     );
 };
 

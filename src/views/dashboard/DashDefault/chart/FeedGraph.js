@@ -1,8 +1,8 @@
 import NVD3Chart from 'react-nvd3';
-import React,{useState, useEffect} from 'react'
-import { useTranslation, Trans } from 'react-i18next';  
+import React, { useState, useEffect } from 'react'
+import { useTranslation, Trans } from 'react-i18next';
 
-const FeedGraph = ({dashboardFeed}) => {
+const FeedGraph = ({ dashboardFeed }) => {
 
     const [feed, setFeed] = useState([]);
 
@@ -10,19 +10,19 @@ const FeedGraph = ({dashboardFeed}) => {
         return datos.filter((objeto) => objeto.event_count !== 0);
     };
 
-    useEffect( ()=> {
+    useEffect(() => {
         setFeed(filtrarEventosNoCero(dashboardFeed))
-        
+
     }, [dashboardFeed])
     const { t } = useTranslation();
 
     return (
         <div>
-        {
-            feed.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={feed} x="feed_name" y="event_count" donut labelType="percent" /> :
-            t('No hay fuentes que esten asociadas a un evento')
-                
-        }
+            {
+                feed.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={feed} x="feed_name" y="event_count" donut labelType="percent" /> :
+                    t('sources_noEventsAssociated')
+
+            }
         </div>
     );
 }

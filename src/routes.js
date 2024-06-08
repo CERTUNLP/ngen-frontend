@@ -96,7 +96,7 @@ const routes = [
                 exact: true,
                 path: '/taxonomies/edit',
                 component: lazy(() => import('./views/taxonomy/EditTaxonomy'))
-            },            
+            },
             {
                 exact: true,
                 path: '/tlp',
@@ -159,7 +159,7 @@ const routes = [
             },
             {
                 exact: true,
-                path:'/priorities/edit',
+                path: '/priorities/edit',
                 component: lazy(() => import('./views/priority/EditPriority'))
             },
             {
@@ -204,7 +204,7 @@ const routes = [
             },
             {
                 exact: true,
-                path:"/events/edit" ,  
+                path: "/events/edit",
                 component: lazy(() => import('./views/event/EditEvent'))
             },
             {
