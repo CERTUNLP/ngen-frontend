@@ -186,6 +186,7 @@
     "ngen.user.is.superuser": "Its superuser",
     "ngen.user.is.staff": "Its part of the staff",
     "ngen.network": "Network",
+    "ngen.network.create": "Create network",
     "ngen.network.associated": "Associated Networks",
     "ngen.network_other": "Networks",
     "ngen.network_one": "Network",

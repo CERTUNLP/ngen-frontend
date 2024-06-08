@@ -31,7 +31,7 @@ const CreateEntity = () => {
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity" />
             <Row>
-                <Navigation actualPosition="Crear Entidad" path="/entities" index={t('ngen.entity_other')} />
+                <Navigation actualPosition={t('ngen.entity_add')} path="/entities" index={t('ngen.entity_other')} />
             </Row>
             <Row>
                 <Col sm={12}>

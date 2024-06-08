@@ -5,6 +5,7 @@ import { postNetwork } from '../../api/services/networks';
 import FormCreateNetwork from './components/FormCreateNetwork';
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const CreateNetwork = () => {
     const [cidr, setCidr] = useState(''); //required
@@ -16,68 +17,68 @@ const CreateNetwork = () => {
     const [parent, setParent] = useState(null);
     const [network_entity, setNetwork_entity] = useState(null);
     const [address_value, setAddress_value] = useState("");
-    
+    const { t } = useTranslation();
 
     //Dropdown
     const [contactsOption, setContactsOption] = useState([])
-    const [contactCreated, setContactsCreated ] = useState(null); // si creo se renderiza
+    const [contactCreated, setContactsCreated] = useState(null); // si creo se renderiza
 
     //Alert
     const [showAlert, setShowAlert] = useState(false);
 
-    useEffect(()=> {
+    useEffect(() => {
 
         getAllContacts()
             .then((response) => {
                 let listContact = []
-                response.map((contactsItem)=>{
-                    listContact.push({value:contactsItem.url, label:contactsItem.name + ' (' + labelRole[contactsItem.role] + ')'})
+                response.map((contactsItem) => {
+                    listContact.push({ value: contactsItem.url, label: contactsItem.name + ' (' + labelRole[contactsItem.role] + ')' })
                 })
                 setContactsOption(listContact)
                 console.log(response)
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
-            })  
+            })
 
-        },[contactCreated])
+    }, [contactCreated])
 
     const labelRole = {
-        technical : 'Tecnico',
-        administrative : 'Administrativo',
-        abuse : 'Abuso',
-        notifications : 'Notificaciones',
-        noc : 'NOC',
+        technical: 'Tecnico',
+        administrative: 'Administrativo',
+        abuse: 'Abuso',
+        notifications: 'Notificaciones',
+        noc: 'NOC',
     };
 
     const createNetwork = () => {
 
-        postNetwork (children, active, type, parent, network_entity, contacts, address_value) 
-            .then((response) => { 
-            window.location.href = "/networks"
-        })
-        .catch(() => {
-            setShowAlert(true)
-           
-        }); 
+        postNetwork(children, active, type, parent, network_entity, contacts, address_value)
+            .then((response) => {
+                window.location.href = "/networks"
+            })
+            .catch(() => {
+                setShowAlert(true)
+
+            });
 
     };
 
     return (
         <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="network"/>
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="network" />
             <Row>
-                <Navigation actualPosition="Crear Red" path="/networks" index ="Redes"/>
+                <Navigation actualPosition={t('ngen.network.create')} path="/networks" index="Redes" />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Redes</Card.Title>
-                            <span className="d-block m-t-5">Agregar Red</span>
+                            <Card.Title as="h5">{t('ngen.network_other')}</Card.Title>
+                            <span className="d-block m-t-5">{t('crud.add')} {t('ngen.network_one')}</span>
                         </Card.Header>
                         <Card.Body>
-                             <FormCreateNetwork 
+                            <FormCreateNetwork
                                 cidr={cidr} setCidr={setCidr}
                                 domain={domain} setDomain={setDomain}
                                 type={type} setType={setType}
@@ -88,7 +89,7 @@ const CreateNetwork = () => {
                                 ifConfirm={createNetwork} edit={false}
                                 allContacts={contactsOption}
                                 setContactsCreated={setContactsCreated}
-                                setShowAlert={setShowAlert} />                          
+                                setShowAlert={setShowAlert} />
                         </Card.Body>
                     </Card>
                 </Col>

@@ -423,7 +423,7 @@ const FormEvent = (props) => {
             </Card>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">{t('Evidencias')}</Card.Title>
+                    <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Form>
