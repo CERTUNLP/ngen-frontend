@@ -138,9 +138,9 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             </thead>
             <tbody>
                 {list.map((caseItem, index) => {
-                    let datetime = caseItem.date.split('T');
+                    /*let datetime = caseItem.date.split('T');
                     datetime = datetime[0] + ' ' + datetime[1].slice(0, 8);
-                    let idItem = caseItem.url.split('/').slice(-2)[0];
+                    let idItem = caseItem.url.split('/').slice(-2)[0];*/
 
                     return (
                         <tr key={index}>
@@ -152,9 +152,9 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                 <td>
                                     <Form.Group>
                                         <Form.Check
-                                            type="radio"
+                                            type="checkbox"
                                             id={caseItem.url}//Fecha de inicio de gestiónunfold_more	Nombre	Prioridadunfold_more	TLP	Estado	Asignado
-                                            onChange={(event) =>handleClickRadio(event, caseItem.url, caseItem.name, datetime, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])}
+                                            onChange={(event) =>handleClickRadio(event, caseItem.url, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])}
                                             checked={selectedCases.includes(caseItem.url)}
                                         />
                                     </Form.Group>
@@ -175,7 +175,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                             {disableDateOrdering ?
                             ""
                             :
-                            <td>{datetime}</td>
+                            <td>{ caseItem? caseItem.date.slice(0,10)+" "+caseItem.date.slice(11,19): ""}</td>
                             }
 
                             {disableName?"":
@@ -196,7 +196,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                             <td>{userNames[caseItem.assigned] || "-"}</td>
                             <td>
                                 {detailModal ? (
-                                    <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, datetime, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
+                                    <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
                                 ) : (
                                     <Link to={{ pathname: '/cases/view' }}>
                                         <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
@@ -224,7 +224,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                         </Button>
                                     )
                                 )}
-                                {deleteColum && <CrudButton type="delete" onClick={() => Delete(caseItem.url, idItem)} />}
+                                {deleteColum && <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />}
                             </td>
                         </tr>
                     );

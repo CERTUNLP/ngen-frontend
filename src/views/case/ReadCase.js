@@ -3,7 +3,7 @@ import { Button, Card, CloseButton, Col, Form, Modal, Row, Table } from 'react-b
 import { useLocation } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import ViewFiles from '../../components/Button/ViewFiles';
-import SmallEventTable from './components/SmallEventTable';
+import SmallEventTable from '../event/components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
@@ -35,7 +35,6 @@ const ReadCase = () => {
     useEffect(() => {
 
         if (caseItem !== null) {
-            const listEvents = []
             console.log(caseItem)
             const eventPromises = caseItem.events.map(url => getEvent(url));
 
@@ -49,11 +48,7 @@ const ReadCase = () => {
                     // Maneja cualquier error que ocurra durante las llamadas
                     console.error("Error al obtener eventos:", error);
                 });
-
-
         }
-
-
         if (!caseItem) {
             const caseUrl = localStorage.getItem('case');
             console.log("STORAGE")
@@ -127,10 +122,6 @@ const ReadCase = () => {
         }
     }, [caseItem]);
    
-    
-
-    
-
     return (
         caseItem &&
         <React.Fragment>
@@ -255,7 +246,11 @@ const ReadCase = () => {
                             </Card.Body>
                         </Card>
                         : <></>}
+
+
                     <SmallEventTable list={list} />
+
+
                     <Card>
                         <Card.Header>
                             <Card.Title as="h5">Informacion Adicional</Card.Title>

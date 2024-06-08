@@ -21,7 +21,6 @@ const AdvancedPagination = ({ countItems, updatePage, updatePagination, setUpdat
       setLastPage(Math.ceil(countItems / 10));
       setUpdatePagination(false)
       setInitPage(1)
-      setCurrentPage(1) 
       //setLoading(true)
     }
 
