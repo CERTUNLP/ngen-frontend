@@ -1,0 +1,22 @@
+import React from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import ReadCase from './ReadCase';
+
+const ModalReadCase = ({ modalShowCase, returnToListOfCases, linkCaseToEvent }) => {
+  return (
+    <Modal show={modalShowCase} size="lg" onHide={returnToListOfCases} aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal.Header closeButton />
+      <Modal.Body>
+        <div id="example-collapse-text">
+          <ReadCase />
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="outline-primary" onClick={linkCaseToEvent}>Vincular</Button>
+        <Button variant="outline-secondary" onClick={returnToListOfCases}>Volver al listado</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default ModalReadCase;

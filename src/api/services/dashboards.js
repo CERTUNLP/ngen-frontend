@@ -4,6 +4,7 @@ import { COMPONENT_URL } from '../../config/constant';
 
 const getDashboardFeed = (filter ) => {
     let messageError = `No ha recuperado la informacion de las fuentes de información. `;
+    console.log(COMPONENT_URL.dashboardFeed + "?" + filter)
     return apiInstance.get(COMPONENT_URL.dashboardFeed + "?" + filter)
     .then(response => {        
         return response;

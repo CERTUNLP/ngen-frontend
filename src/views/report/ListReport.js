@@ -24,6 +24,7 @@ const ListReport = () => {
   const [showAlert, setShowAlert] = useState(false)
 
   const [wordToSearch, setWordToSearch] = useState('')
+  const [order, setOrder] = useState("taxonomy__name");
 
   function updatePage(chosenPage) {
     setCurrentPage(chosenPage);
@@ -31,7 +32,8 @@ const ListReport = () => {
 
   useEffect(() => {
 
-    getReports(currentPage, wordToSearch, "")
+
+    getReports(currentPage, wordToSearch, order)
       .then((response) => {
         setReports(response.data.results)
         setCountItems(response.data.count)
@@ -57,9 +59,7 @@ const ListReport = () => {
       })
 
 
-  }, [currentPage, wordToSearch])
-
-
+  }, [currentPage, wordToSearch, order])
 
   return (
     <div>
@@ -82,7 +82,7 @@ const ListReport = () => {
           </Row>
         </Card.Header>
         <Card.Body>
-          <TableReport list={reports} loading={loading} taxonomyNames={taxonomyNames} />
+          <TableReport list={reports} loading={loading} taxonomyNames={taxonomyNames} order={order} setOrder={setOrder} setLoading={setLoading} />
         </Card.Body>
         <Card.Footer >
           <Row className="justify-content-md-center">
@@ -91,8 +91,8 @@ const ListReport = () => {
             </Col>
           </Row>
         </Card.Footer>
-      </Card>
-    </div>
+      </Card >
+    </div >
   )
 }
 

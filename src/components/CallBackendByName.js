@@ -11,8 +11,6 @@ const CallBackendByName = ({url, callback, useBadge}) => {
         callback(url, setData)
         
     }, [url]);
-    console.log(data.url)
-    console.log(data.name)
 return (
         data && 
         <React.Fragment>

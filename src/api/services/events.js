@@ -29,8 +29,21 @@ const putEvent = (url,formData) => {//el parametro es para completar la url con 
         return Promise.reject(error);
     });
 }
-const getEvent = (url) => {//el parametro es para completar la url con el numero de pagina
+
+const patchEvent = (url,formData) => {//el parametro es para completar la url con el numero de pagina
+    let messageSuccess = `El evento se pudo editar correctamente`;
+    let messageError = `El evento no se pudo editar`;
     
+    return apiInstance.patch(url,formData).then(response => {
+        setAlert(messageSuccess , "success", "event");
+        return response;
+    }).catch( error => { 
+        setAlert(messageError, "error", "event");
+        return Promise.reject(error);
+    });
+}
+
+const getEvent = (url) => {//el parametro es para completar la url con el numero de pagina
     return apiInstance.get(url);
 }
 
@@ -92,4 +105,4 @@ const getListEvents = (list) => {
     return list
 }
 
-export { getEvents , postEvent, putEvent, deleteEvent, mergeEvent, getEvent, getAllEvents, getListEvents};
+export { getEvents , postEvent, putEvent, deleteEvent, mergeEvent, getEvent, getAllEvents, getListEvents, patchEvent};

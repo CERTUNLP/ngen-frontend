@@ -9,9 +9,8 @@ import { getMinifiedFeed } from "../../api/services/feeds";
 import { getMinifiedPriority } from "../../api/services/priorities";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
-import { getMinifiedCase } from "../../api/services/cases";
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateEvent = () => {
   const formEmpty = {
@@ -37,12 +36,14 @@ const CreateEvent = () => {
   const [feeds, setFeeds] = useState([])
   const [taxonomy, setTaxonomy] = useState([])
   const [priorities, setPriorities] = useState([])
-  const [users, setUsers] = useState([])
-  const [cases, setCases] = useState([])
+
   const [listArtifact, setListArtifact] = useState([])
   const [contactCreated, setContactsCreated] = useState(null);
+
+  const [tlpNames, setTlpNames] = useState({});
+  const [priorityNames, setPriorityNames] = useState({});
+  const [userNames, setUserNames] = useState({});
   const [showAlert, setShowAlert] = useState(false)
-  const [updateCases, setUpdateCases] = useState("")
 
   const { t } = useTranslation();
 
@@ -51,102 +52,91 @@ const CreateEvent = () => {
   }
 
   useEffect(() => {
-    const fetchPosts = async () => {
 
-      getMinifiedTlp().then((response) => {
-        let listTlp = []
-        response.map((tlp) => {
-          listTlp.push({ value: tlp.url, label: tlp.name })
-        })
-        setTLP(listTlp)
+    getMinifiedTlp().then((response) => {
+      let listTlp = []
+      let dicTlp = {}
+      response.map((tlp) => {
+        listTlp.push({ value: tlp.url, label: tlp.name })
+        dicTlp[tlp.url] = { name: tlp.name, color: tlp.color }
       })
-        .catch((error) => {
-          setShowAlert(true) //hace falta?
-          console.log(error)
+      setTLP(listTlp)
+      setTlpNames(dicTlp)
+    })
+      .catch((error) => {
+        setShowAlert(true) //hace falta?
+        console.log(error)
 
-        })
-
-      getMinifiedCase().then((response) => {
-        let list = []
-        response.map((item) => {
-          list.push({ value: item.url, label: item.name + ": " + item.uuid })
-        })
-        setCases(list)
       })
-        .catch((error) => {
-          console.log(error)
 
-        })
-
-      getMinifiedTaxonomy().then((response) => {
-        let listTaxonomies = []
-        response.map((taxonomy) => {
-          listTaxonomies.push({ value: taxonomy.url, label: taxonomy.name })
-        })
-        setTaxonomy(listTaxonomies)
+    getMinifiedTaxonomy().then((response) => {
+      let listTaxonomies = []
+      response.map((taxonomy) => {
+        listTaxonomies.push({ value: taxonomy.url, label: taxonomy.name })
       })
-        .catch((error) => {
-          console.log(error)
+      setTaxonomy(listTaxonomies)
+    })
+      .catch((error) => {
+        console.log(error)
 
-        })
-
-      getMinifiedFeed().then((response) => { //se hardcodea las paginas
-        let listFeed = []
-        response.map((feed) => {
-          listFeed.push({ value: feed.url, label: feed.name })
-        })
-        setFeeds(listFeed)
       })
-        .catch((error) => {
-          console.log(error)
 
-        })
-
-      getMinifiedPriority().then((response) => { //se hardcodea las paginas
-        let listPriority = []
-        response.map((priority) => {
-          listPriority.push({ value: priority.url, label: priority.name })
-        })
-        setPriorities(listPriority)
+    getMinifiedFeed().then((response) => { //se hardcodea las paginas
+      let listFeed = []
+      response.map((feed) => {
+        listFeed.push({ value: feed.url, label: feed.name })
       })
-        .catch((error) => {
-          console.log(error)
+      setFeeds(listFeed)
+    })
+      .catch((error) => {
+        console.log(error)
 
-        })
-
-      getMinifiedUser().then((response) => { //se hardcodea las paginas
-        let listUser = []
-        response.map((user) => {
-          listUser.push({ value: user.url, label: user.username })
-        })
-        setUsers(listUser)
       })
-        .catch((error) => {
-          console.log(error)
 
+    getMinifiedPriority().then((response) => { //se hardcodea las paginas
+      let priorityOp = []
+      let dicPriority = {}
+      response.map((priority) => {
+        priorityOp.push({ value: priority.url, label: priority.name })
+        dicPriority[priority.url] = priority.name
+      })
+      setPriorityNames(dicPriority)
+      setPriorities(priorityOp)
+    })
+      .catch((error) => {
+        console.log(error)
+
+      })
+
+    getMinifiedUser().then((response) => { //se hardcodea las paginas
+      let dicUser = {}
+      response.map((user) => {
+        dicUser[user.url] = user.username
+      })
+      setUserNames(dicUser)
+    })
+      .catch((error) => {
+        console.log(error)
+
+      })
+
+    getMinifiedArtifact()
+      .then((response) => {
+        var list = []
+        response.map((artifact) => {
+          list.push({ value: artifact.url, label: artifact.value })
         })
+        setListArtifact(list)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
 
-      getMinifiedArtifact()
-        .then((response) => {
-          var list = []
-          response.map((artifact) => {
-            list.push({ value: artifact.url, label: artifact.value })
-          })
-          setListArtifact(list)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-
-    }
-    fetchPosts()
-
-  }, [contactCreated, updateCases]);
+  }, [contactCreated]);
 
   const createEvent = () => {
 
     const formDataEvent = new FormData();
-    console.log(body.date)
 
     formDataEvent.append("date", body.date)// tengo que hacer esto porque solo me acepta este formato, ver a futuro
     formDataEvent.append("priority", body.priority)
@@ -192,10 +182,11 @@ const CreateEvent = () => {
       </Row>
       <FormEvent createEvent={createEvent} setBody={setBody} body={body}
         feeds={feeds} taxonomy={taxonomy} tlp={TLP} priorities={priorities}
-        users={users} listArtifact={listArtifact} setContactsCreated={setContactsCreated}
-        evidence={evidence} setEvidence={setEvidence} cases={cases}
-        setUpdateCases={setUpdateCases} />
-
+        listArtifact={listArtifact} setContactsCreated={setContactsCreated}
+        evidence={evidence} setEvidence={setEvidence}
+        tlpNames={tlpNames}
+        priorityNames={priorityNames} setPriorityNames={setPriorityNames}
+        userNames={userNames} />
     </div>
   )
 }

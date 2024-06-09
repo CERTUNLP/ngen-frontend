@@ -17,7 +17,7 @@ const ListFeed = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [countItems, setCountItems] = useState(0);
 
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("name");
     const [wordToSearch, setWordToSearch] = useState('')
 
     const [updatePagination, setUpdatePagination] = useState(false)

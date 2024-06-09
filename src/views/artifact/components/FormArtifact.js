@@ -6,6 +6,8 @@ import { useTranslation, Trans } from 'react-i18next';
 
 
 const FormArtifact = (props) => {
+
+
     const typeOptions = [
         {
             value: '0',
@@ -54,9 +56,6 @@ const FormArtifact = (props) => {
     ];
 
     const [validArtifact, setValidArtifact] = useState(false);
-    const activateButton = () => {
-        return false;
-    };
 
     const { t } = useTranslation();
 
@@ -89,16 +88,17 @@ const FormArtifact = (props) => {
                         setValidArtifact={setValidArtifact} />
 
 
-                    {activateButton() ?
-                        <><Button variant="primary" disabled>{t('button.save')}</Button></>
+                    {props.type !== "0" && props.value !== "" ?
+                        <><Button variant="primary" onClick={props.ifConfirm} >{t('button.save')}</Button></>
                         :
-                        <><Button variant="primary" onClick={props.ifConfirm}>{t('button.save')}</Button></>
+                        <><Button variant="primary" disabled>{t('button.save')}</Button></>
+
                     }
                     <Button variant="primary" onClick={props.ifCancel}>{t('button.cancel')}</Button>
                 </Form>
             </Card.Body>
         </div>
-    );
-};
+    )
+}
 
 export default FormArtifact;

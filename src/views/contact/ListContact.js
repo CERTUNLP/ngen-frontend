@@ -29,7 +29,7 @@ const ListContact = () => {
 
     const [wordToSearch, setWordToSearch] = useState('')
 
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("name");
 
     function updatePage(chosenPage) {
         setCurrentPage(chosenPage);
@@ -56,7 +56,7 @@ const ListContact = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-    }, [currentPage, isModify, wordToSearch])
+    }, [currentPage, isModify, wordToSearch, order])
 
     // ------- SEARCH --------
     const action = () => {
@@ -85,17 +85,18 @@ const ListContact = () => {
                         <Card.Header>
                             <Row>
                                 <Col>
-                                    <Search type={t('w.entityByName')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                    <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                                 </Col>
                                 <Col sm={3} lg={3}>
                                     <Link to={{ pathname: '/contacts/create' }} >
-                                        <CrudButton type='create' name={t('ngen.contact_one')} />
+                                        <CrudButton type='create' name='Contacto' />
                                     </Link>
                                 </Col>
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage} />
+                            <TableContact setIsModify={setIsModify} list={contacts} loading={loading} currentPage={currentPage}
+                                order={order} setOrder={setOrder} setLoading={setLoading} />
                         </Card.Body>
                         <Card.Footer>
                             <Row className="justify-content-md-center">
@@ -110,4 +111,5 @@ const ListContact = () => {
         </React.Fragment>
     )
 }
+
 export default ListContact;

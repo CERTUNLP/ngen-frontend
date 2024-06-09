@@ -15,8 +15,8 @@ const EntityGraph = ({ list }) => {
         setEntity(filtrarEventosNoCero(list))
 
     }, [list])
-    console.log(list)
     const { t } = useTranslation();
+
     return (
         <div>
             {

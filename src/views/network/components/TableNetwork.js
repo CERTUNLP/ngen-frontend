@@ -96,9 +96,9 @@ const TableNetwork = ({ setIsModify, list, loading, order, setOrder, setLoading,
                         <th style={letterSize}>{t('ngen.addressvalue')}  </th>
                         <th style={letterSize}>{t('ngen.domain')}</th>
                         <th style={letterSize}>{t('ngen.cidr')}</th>
-                        {<Ordering field="type" label={t('ngen.type')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />}
+                        <Ordering field="type" label={t('ngen.type')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         <th style={letterSize}>{t('w.active')}</th>
-                        <th style={letterSize}>{t('ngen.entity')}</th>
+                        <Ordering field="network_entity__name" label={t('ngen.entity')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         <th style={letterSize}>{t('ngen.action_one')}</th>
                     </tr>
                 </thead>

@@ -10,9 +10,10 @@ import CallBackendByName from '../../../components/CallBackendByName';
 import { getTaxonomy } from "../../../api/services/taxonomies";
 import { deleteReport } from "../../../api/services/reports";
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
+import Ordering from '../../../components/Ordering/Ordering';
 import { useTranslation, Trans } from 'react-i18next';
 
-const TableReport = ({ list, loading, taxonomyNames }) => {
+const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading }) => {
 
     const [report, setReport] = useState({})
     const [modalShow, setModalShow] = useState(false);
@@ -59,16 +60,7 @@ const TableReport = ({ list, loading, taxonomyNames }) => {
             })
     }
 
-    const callbackTaxonomy = (url, setPriority) => {
-        getTaxonomy(url)
-            .then((response) => {
-
-                setPriority(response.data)
-            })
-            .catch();
-    }
-
-
+    const letterSize = { fontSize: '1.1em' }
 
     return (
         <div>
@@ -78,7 +70,7 @@ const TableReport = ({ list, loading, taxonomyNames }) => {
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>{t('ngen.taxonomy_one')}</th>
+                            <Ordering field="taxonomy__name" label={t('ngen.taxonomy_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th>{t('ngen.options')}</th>
                         </tr>
                     </thead>
@@ -88,6 +80,7 @@ const TableReport = ({ list, loading, taxonomyNames }) => {
                                 <tr key={index}>
 
                                     <td> {taxonomyNames[report.taxonomy]}</td>
+
                                     <td>
                                         <CrudButton type='read' onClick={() => showModalReport(report)} />
                                         <Link to={{ pathname: '/reports/edit', state: report }} >

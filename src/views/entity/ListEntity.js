@@ -27,7 +27,7 @@ const ListEntity = () => {
     const [disabledPagination, setDisabledPagination] = useState(true)
 
     const [wordToSearch, setWordToSearch] = useState('')
-    const [order, setOrder] = useState("");
+    const [order, setOrder] = useState("name");
 
     function updatePage(chosenPage) {
         setCurrentPage(chosenPage);
@@ -55,8 +55,7 @@ const ListEntity = () => {
                 setLoading(false)
             })
 
-    }, [currentPage, isModify, wordToSearch])
-    const { t } = useTranslation();
+    }, [currentPage, isModify, wordToSearch, order])
 
     return (
         <React.Fragment>
@@ -80,7 +79,8 @@ const ListEntity = () => {
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            <TableEntity setIsModify={setIsModify} list={entities} loading={loading} currentPage={currentPage} />
+                            <TableEntity setIsModify={setIsModify} list={entities} loading={loading} setLoading={setLoading}
+                                currentPage={currentPage} order={order} setOrder={setOrder} />
                         </Card.Body>
                         <Card.Footer >
                             <Row className="justify-content-md-center">

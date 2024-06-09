@@ -14,7 +14,9 @@ import { useLocation } from "react-router-dom";
 import Navigation from '../../components/Navigation/Navigation'
 import { getArtefact } from '../../api/services/artifact';
 import ViewFiles from '../../components/Button/ViewFiles';
-import { useTranslation, Trans } from 'react-i18next';
+import SmallCaseTable from '../case/components/SmallCaseTable';
+
+import { useTranslation } from 'react-i18next';
 
 const ReadEvent = () => {
     const location = useLocation();
@@ -166,6 +168,9 @@ const ReadEvent = () => {
                     {/*</Table>*/}
                 </Card.Body>
             </Card>
+
+            <SmallCaseTable readCase={body.case} />
+
             <Card>
                 <Card.Header>
                     <Card.Title as="h5">{t('ngen.artifact_other')}</Card.Title>
@@ -235,7 +240,7 @@ const ReadEvent = () => {
             <Table responsive >
                 <Card>
                     <Card.Header>
-                        <Card.Title as="h5">{t('ngen.evidences')}Datos adicionales</Card.Title>
+                        <Card.Title as="h5">Datos adicionales</Card.Title>
                     </Card.Header>
                     <Card.Body>
                         <tr>

@@ -3,12 +3,16 @@ import './FileItem.css'
 import {Button} from 'react-bootstrap';
 
 const FileItem = ({ index, file, deleteFile }) => {
+    console.log(file)
     return (
         <>
             <li
                 className="file-item"
                 key={index}>
-                <p>{file.name}</p>
+                <p>Nombre: {(file.original_filename||file.name)}</p>
+                <p>Mime:   {file.mime}</p>
+                <p>Tamaño: {file.size}</p>
+                <p>Fecha de creacion: {file.created ? file.created.slice(0,10)+" "+file.created.slice(11,19): ""}</p>
                 <div className="actions">
                     {!file.isUploading &&
                         <Button className='btn-icon btn-rounded' 

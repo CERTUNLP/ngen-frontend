@@ -8,6 +8,7 @@ import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
+import Ordering from '../../../components/Ordering/Ordering';
 import { useTranslation, Trans } from 'react-i18next';
 
 const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames }) => {
@@ -84,6 +85,8 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
         setShowAlert(false);
     }
 
+
+    const letterSize = { fontSize: '1.1em' }
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
@@ -92,8 +95,8 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th>{t('ngen.infoSource')}</th>
-                            <th>{t('ngen.taxonomy_one')} </th>
+                            <Ordering field="event_feed__name" label={t('ngen.infoSource')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="event_taxonomy__name" label={t('ngen.taxonomy_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th>{t('ngen.affectedResources')}</th>
                             <th>{t('ngen.state_one')}</th>
                             <th>{t('ngen.options')}</th>
@@ -150,7 +153,6 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                                 </tr>
                             )
                         })}
-
                         <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
                         <ModalConfirm type='editState' component={t('ngen.state_one')} name={dataTemplate.cidr} state={dataTemplate.state} showModal={showTemplate} onHide={() => setShowTemplate(false)} ifConfirm={() => changeState()} />
                         <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -226,14 +228,11 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                                 </Row>
                             </Modal.Body>
                         </Modal>
+                    </tbody >
+                </Table >
+            </ul >
 
-
-
-                    </tbody>
-                </Table>
-            </ul>
-
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 
