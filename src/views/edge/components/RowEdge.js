@@ -5,7 +5,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import CrudButton from '../../../components/Button/CrudButton';
 import ModalEditEdge from './ModalEditEdge';
 import { getEdge, deleteEdge } from "../../../api/services/edges";
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const RowEdge = (props) => {
     const [edge, setEdge] = useState('');

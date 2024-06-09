@@ -11,7 +11,7 @@ import { getTaxonomy } from "../../../api/services/taxonomies";
 import { deleteReport } from "../../../api/services/reports";
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading }) => {
 
@@ -48,8 +48,16 @@ const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading
     const showModalReport = (user) => {
         setReport(user)
         setModalShow(true)
-
     }
+
+    const callbackTaxonomy = (url, set) => {
+        getTaxonomy(url)
+            .then((response) => {
+                console.log(response);
+                set(response.data);
+            })
+            .catch();
+    };
 
     const handleDelete = () => {
         deleteReport(deleteUrl).then(() => {

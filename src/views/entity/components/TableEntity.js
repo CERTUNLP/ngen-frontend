@@ -7,7 +7,7 @@ import { getEntity, deleteEntity, isActive } from '../../../api/services/entitie
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, order, setOrder }) => {
@@ -21,6 +21,8 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
     const [created, setCreated] = useState('')
     const [modified, setModified] = useState('')
     const [active, setActive] = useState('')
+
+    const { t } = useTranslation();
 
     if (loading) {
         return (

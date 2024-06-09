@@ -8,7 +8,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import TableFeed from './components/TableFeed';
 import Search from '../../components/Search/Search'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListFeed = () => {
     const [feeds, setFeeds] = useState([]);

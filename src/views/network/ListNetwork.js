@@ -12,7 +12,7 @@ import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
 import FilterSelect from '../../components/Filter/FilterSelect';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListNetwork = () => {
     const { t } = useTranslation();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CrudButton from '../../../components/Button/CrudButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTaxonomy } from '../../../api/services/taxonomies';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function ButtonDelete({ taxonomy }) {
   const [show, setShow] = useState(false);

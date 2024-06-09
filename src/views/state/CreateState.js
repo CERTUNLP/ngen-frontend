@@ -4,7 +4,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import Alert from '../../components/Alert/Alert';
 import { postState, putState } from "../../api/services/states";
 import ListEdge from '../edge/ListEdge';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const AddState = () => {
 

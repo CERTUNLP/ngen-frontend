@@ -5,7 +5,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import { getTLP } from '../../api/services/tlp';
 import Search from '../../components/Search/Search'
 import Ordering from '../../components/Ordering/Ordering'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListTLP = () => {
 

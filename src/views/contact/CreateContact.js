@@ -4,7 +4,7 @@ import { postContact } from '../../api/services/contacts';
 import FormCreateContact from './components/FormCreateContact';
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateContact = () => {
     const [supportedName, setSupportedName] = useState('');

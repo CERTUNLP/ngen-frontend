@@ -1,6 +1,6 @@
 import React from 'react'
 import './FileUpload.css'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FileUpload = ({ files, setFiles, removeFile }) => {
     const uploadHandler = (event) => {

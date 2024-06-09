@@ -4,7 +4,7 @@ import { postFeed } from '../../api/services/feeds';
 import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation'
 import FormFeed from './components/FormFeed'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateFeed = () => {
     const [name, setName] = useState("");

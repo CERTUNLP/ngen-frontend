@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import CrudButton from '../../components/Button/CrudButton';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 const TableArtifact = ({ artifact }) => {
     const { t } = useTranslation();
 

@@ -11,7 +11,7 @@ import { LOGIN } from './../../../store/actions';
 import { login } from '../../../api/services/auth';
 import { store } from './../../../store';
 import Alert from './../../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const RestLogin = ({ className, ...rest }) => {

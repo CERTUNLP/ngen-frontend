@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Modal, CloseButton } from 'react-bootstrap';
 import { putTask } from '../../../api/services/tasks';
 import FormCreateTask from './FormCreateTask';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ModalEditTask = (props) => { //show, task, onHide, ifEdit, setShowAlert
 

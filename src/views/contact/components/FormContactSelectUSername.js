@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { validateContactMail, validateContactTelegram, validateContactPhone, validateContactURI } from '../../../utils/validators/contact';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormContactSelectUsername = (props) => {
     // props: selectedType, contact, setContact, setValidContact

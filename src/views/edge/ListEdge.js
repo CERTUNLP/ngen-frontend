@@ -7,7 +7,7 @@ import { getAllStates, getState } from "../../api/services/states";
 import { postEdge, getAllEdges } from "../../api/services/edges";
 import RowEdge from './components/RowEdge';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListEdge = (props) => {
 

@@ -8,7 +8,7 @@ import CrudButton from '../../components/Button/CrudButton';
 import TableStates from './components/TableStates'
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListState = () => {
   const [loading, setLoading] = useState(true)

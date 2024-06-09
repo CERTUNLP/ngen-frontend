@@ -6,7 +6,7 @@ import FormReport from './components/FormReport';
 import Navigation from '../../components/Navigation/Navigation'
 import { putReport } from '../../api/services/reports';
 import { getAllTaxonomies, getMinifiedTaxonomy } from "../../api/services/taxonomies";
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditReport = () => {
 

@@ -9,7 +9,7 @@ import { deleteTaxonomy, getTaxonomy } from '../../../api/services/taxonomies';
 import Ordering from '../../../components/Ordering/Ordering';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import CallBackendByName from '../../../components/CallBackendByName';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading }) => {
   const [modalDelete, setModalDelete] = useState(false);

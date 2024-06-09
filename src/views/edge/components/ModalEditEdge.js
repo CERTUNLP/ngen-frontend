@@ -3,7 +3,7 @@ import { Row, Col, Card, Modal, CloseButton } from 'react-bootstrap';
 import { putEdge } from "../../../api/services/edges";
 import FormCreateEdge from './FormCreateEdge';
 import Alert from '../../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ModalEditEdge = (props) => {
     const [body, setBody] = useState(props.edge);

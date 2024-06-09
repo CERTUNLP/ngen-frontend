@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Card, Form, Button, Col } from 'react-bootstrap';
 import { validateFieldText, validateNumber } from '../../../utils/validators';
 import FormArtifactsSelect from './FormArtifactsSelect';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const FormArtifact = (props) => {

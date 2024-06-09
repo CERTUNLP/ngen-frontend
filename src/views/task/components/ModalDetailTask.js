@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Form, Table, Modal, CloseButton } from 'react-bootstrap';
 import CrudButton from '../../../components/Button/CrudButton';
 import PriorityButton from '../../../components/Button/PriorityButton';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ModalDetailTask = (props) => {
 

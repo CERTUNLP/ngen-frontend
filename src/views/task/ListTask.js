@@ -6,7 +6,7 @@ import FormCreateTask from './components/FormCreateTask';
 import { postTask } from '../../api/services/tasks';
 import RowTask from './components/RowTask';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListTask = (props) => { //props setAlert
 

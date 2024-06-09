@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Row, Form, Col } from 'react-bootstrap';
 import SelectComponent from '../../../components/Select/SelectComponent';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {

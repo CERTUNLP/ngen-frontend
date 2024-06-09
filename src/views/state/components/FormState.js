@@ -4,7 +4,7 @@ import { Card, Form, Button, Row, Col } from 'react-bootstrap'
 import makeAnimated from 'react-select/animated';
 import { validateName, validateDescription, validateUnrequiredInput } from '../../../utils/validators/state';
 import SelectComponent from '../../../components/Select/SelectComponent';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 const FormState = ({ body, setBody, createState, type }) => {

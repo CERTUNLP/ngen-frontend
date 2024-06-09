@@ -6,7 +6,7 @@ import { putFeed } from '../../api/services/feeds';
 import Navigation from '../../components/Navigation/Navigation';
 import FormFeed from './components/FormFeed'
 import { getFeed } from '../../api/services/feeds';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditFeed = () => {
     const location = useLocation();

@@ -4,7 +4,7 @@ import FormPriority from './components/FormPriority'
 import Navigation from '../../components/Navigation/Navigation'
 import { postPriority } from "../../api/services/priorities";
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const AddPriority = () => {
 

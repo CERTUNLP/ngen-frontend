@@ -7,7 +7,7 @@ import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Alert from '../../../components/Alert/Alert';
 import Ordering from '../../../components/Ordering/Ordering'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage }) => {
     const [remove, setRemove] = useState(false);

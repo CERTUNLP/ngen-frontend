@@ -6,7 +6,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import { validateName, validateDescription, validateType, validateUnrequiredInput } from '../../utils/validators/taxonomy';
 import { postTaxonomy, getMinifiedTaxonomy } from '../../api/services/taxonomies';
 import SelectLabel from '../../components/Select/SelectLabel';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateTaxonomy = () => {
     const [type, setType] = useState("");

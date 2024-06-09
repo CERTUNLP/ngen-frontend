@@ -12,7 +12,7 @@ import { getDashboardCases } from '../../../api/services/dashboards';
 import { getDashboardNetworkEntities } from '../../../api/services/dashboards';
 import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
 import { getMinifiedFeed } from '../../../api/services/feeds';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const DashDefault = () => {

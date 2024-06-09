@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { validateName, validateDescription, validateUnrequiredInput } from '../../../utils/validators/feed';
 import DropdownState from '../../../components/Dropdown/DropdownState'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const FormFeed = (props) => {

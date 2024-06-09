@@ -12,7 +12,7 @@ import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
 import ButtonFilter from '../../components/Button/ButtonFilter';
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListTemplete = () => {
     const [templete, setTemplete] = useState([])

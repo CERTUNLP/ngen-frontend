@@ -3,7 +3,7 @@ import { Button, Row, Form, Spinner, Col } from 'react-bootstrap';
 import { validateSpaces } from '../../../utils/validators';
 import { validateUserName, validateName, validateSelect, validateUserMail, validatePassword, validateUnrequiredInput } from '../../../utils/validators/user';
 import SelectComponent from '../../../components/Select/SelectComponent';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormUser = ({ body, setBody, priorities, createUser, loading }) => {
 

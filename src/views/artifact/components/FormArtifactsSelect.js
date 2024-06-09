@@ -5,7 +5,7 @@ import {
     validateUserAgent, validateFQDN, validateDomain, validateHexadecimal32,
     validateHexadecimal40, validateHexadecimal64, validateHexadecimal128
 } from '../../../utils/validators';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormArtifactsSelect = (props) => {
     // props: selectedType,.value, setContact, setValidContact

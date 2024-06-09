@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
 import Ordering from '../../../components/Ordering/Ordering';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableContact = ({ setIsModify, list, loading, setLoading, currentPage, order, setOrder }) => {
     const [contact, setContact] = useState('')
@@ -20,6 +20,8 @@ const TableContact = ({ setIsModify, list, loading, setLoading, currentPage, ord
     const [modified, setModified] = useState('')
     const [type, setType] = useState('')
     const [role, setRole] = useState('')
+
+    const { t } = useTranslation();
 
     if (loading) {
         return (

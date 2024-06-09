@@ -3,7 +3,7 @@ import { Button, Col, Row, Form } from 'react-bootstrap';
 import { getAllPriorities } from '../../../api/services/priorities';
 import { validateSpace, validateAlphanumeric } from '../../../utils/validators';
 import { validateTaskName, validateTaskDescription, validateUnrequiredInput } from '../../../utils/validators/tasks';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 // props: name, setName, priority, setPriority, playbook, setPlaybook,
 // description, setDescription, ifConfirm, ifCancel 

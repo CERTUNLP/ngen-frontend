@@ -7,7 +7,7 @@ import CallBackendByName from '../../../components/CallBackendByName';
 import { getTaxonomy } from '../../../api/services/taxonomies';
 import { getTLPSpecific } from '../../../api/services/tlp';
 import { getFeed } from '../../../api/services/feeds';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const SmallEventTable = ({ list }) => {

@@ -16,7 +16,7 @@ import ModalListCase from '../../case/ModalListCase';
 import CreateArtifactModal from '../../artifact/CreateArtifactModal';
 import { getCase } from '../../../api/services/cases';
 import SmallCaseTable from '../../case/components/SmallCaseTable';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 const FormEvent = (props) => {

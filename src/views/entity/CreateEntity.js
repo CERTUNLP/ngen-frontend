@@ -4,7 +4,7 @@ import { postEntity } from '../../api/services/entities';
 import FormEntity from './components/FormEntity';
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateEntity = () => {
     const [name, setName] = useState('')

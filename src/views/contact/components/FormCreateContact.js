@@ -4,7 +4,7 @@ import { validateName, validateContact, validateSelect } from '../../../utils/va
 import FormContactSelectUsername from './FormContactSelectUSername';
 import { getMinifiedPriority } from '../../../api/services/priorities';
 import SelectLabel from '../../../components/Select/SelectLabel';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormCreateContact = (props) => {
     // props: name, setName, role, setRole, priority, setPriority, type, setType, contact, setContact, keypgp, setKey, ifConfirm, ifCancel

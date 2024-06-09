@@ -8,7 +8,7 @@ import CrudButton from '../../components/Button/CrudButton';
 import { getUsers } from "../../api/services/users";
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function ListUser() {
   const [users, setUsers] = useState([])

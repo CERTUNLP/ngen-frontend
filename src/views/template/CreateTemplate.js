@@ -10,7 +10,7 @@ import { getMinifiedFeed } from "../../api/services/feeds";
 import { getMinifiedPriority } from "../../api/services/priorities";
 import { getMinifiedState } from "../../api/services/states";
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateTemplate = () => {
 

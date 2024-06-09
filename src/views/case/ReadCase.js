@@ -7,7 +7,7 @@ import SmallEventTable from '../event/components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const ReadCase = () => {

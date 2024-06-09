@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import FormNetworkLabelCidr from './FormNetworkLabelCidr';
 import BadgeNetworkLabelContact from './BadgeNetworkLabelContact';
 import ActiveButton from '../../../components/Button/ActiveButton';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ModalDetailNetwork = (props) => {
 

@@ -8,7 +8,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListEntity = () => {
     const [entities, setEntities] = useState([]);
@@ -28,6 +28,8 @@ const ListEntity = () => {
 
     const [wordToSearch, setWordToSearch] = useState('')
     const [order, setOrder] = useState("name");
+
+    const { t } = useTranslation();
 
     function updatePage(chosenPage) {
         setCurrentPage(chosenPage);

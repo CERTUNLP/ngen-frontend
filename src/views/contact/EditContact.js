@@ -6,7 +6,7 @@ import { putContact } from '../../api/services/contacts';
 import FormCreateContact from './components/FormCreateContact';
 import Navigation from '../../components/Navigation/Navigation';
 import { getContact } from '../../api/services/contacts';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditContact = () => {
     const location = useLocation();

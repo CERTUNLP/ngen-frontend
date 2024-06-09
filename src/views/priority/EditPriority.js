@@ -6,7 +6,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import { putPriority } from "../../api/services/priorities";
 import { useLocation } from "react-router-dom";
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditPriority = () => {
     const location = useLocation();

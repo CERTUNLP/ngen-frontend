@@ -6,7 +6,7 @@ import Alert from '../../components/Alert/Alert';
 import { getMinifiedPriority } from "../../api/services/priorities";
 import FormUser from './components/FormUser'
 import Navigation from '../../components/Navigation/Navigation'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const EditUser = () => {

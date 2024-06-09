@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Form } from 'react-bootstrap';
 import Select from 'react-select';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const FormCreateEdge = ({ body, setBody, selectChild, setSelectChild, childernes, ifConfirm, ifCancel }) => {

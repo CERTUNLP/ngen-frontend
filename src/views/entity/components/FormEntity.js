@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { validateName } from '../../../utils/validators/entity';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormEntity = (props) => { // props: name, setName, ifConfirm, {edit:false | true -> active, setActive}
     const stateOptions = [

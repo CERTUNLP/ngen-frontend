@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import CrudButton from '../../../components/Button/CrudButton';
 import { getTaxonomy } from '../../../api/services/taxonomies';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function ButtonView({ taxonomy }) {
     const [show, setShow] = useState(false);

@@ -10,7 +10,7 @@ import { deleteState, isActive } from "../../../api/services/states";
 import Alert from '../../../components/Alert/Alert';
 import CallBackendByName from '../../../components/CallBackendByName';
 import { getState } from "../../../api/services/states";
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableStates = ({ states, callback, loading, currentPage }) => {
     const [deleteName, setDeleteName] = useState()

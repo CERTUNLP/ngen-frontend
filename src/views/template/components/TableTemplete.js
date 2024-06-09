@@ -9,7 +9,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
 import Ordering from '../../../components/Ordering/Ordering';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames }) => {
     const [deleteName, setDeleteName] = useState()

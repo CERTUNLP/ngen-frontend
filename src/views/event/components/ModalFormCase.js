@@ -7,7 +7,7 @@ import { getAllStates, getMinifiedState } from '../../../api/services/states';
 import { getAllPriorities, getMinifiedPriority } from '../../../api/services/priorities';
 import { getTLP, getMinifiedTlp } from '../../../api/services/tlp';
 import { getAllUsers, getMinifiedUser } from '../../../api/services/users';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ModalFormCase = (props) => {
     //select

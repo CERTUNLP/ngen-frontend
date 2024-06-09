@@ -7,7 +7,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import FormGetName from '../../components/Form/FormGetName';
 import { getPriority } from '../../api/services/priorities';
 import ActiveButton from '../../components/Button/ActiveButton';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
 

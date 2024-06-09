@@ -5,7 +5,7 @@ import Alert from '../../components/Alert/Alert';
 import Navigation from '../../components/Navigation/Navigation';
 import { patchSetting, getSetting } from '../../api/services/setting';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditSetting = () => {
   const location = useLocation();

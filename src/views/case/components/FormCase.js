@@ -10,7 +10,7 @@ import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
 import SelectLabel from '../../../components/Select/SelectLabel';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
@@ -49,12 +49,12 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectLifecycle, setSelectLifecycle] = useState("")
     const [selectState, setSelectState] = useState("")
     const [selectAssigned, setSelectAssigned] = useState("")
+    const [tlpNames, setTlpNames] = useState({});
+    const [priorityNames, setPriorityNames] = useState({});
+    const [userNames, setUserNames] = useState({});
     const { t } = useTranslation();
 
     useEffect(() => {
-        const [tlpNames, setTlpNames] = useState({});
-        const [priorityNames, setPriorityNames] = useState({});
-        const [userNames, setUserNames] = useState({});
 
 
         if (allPriorities !== []) {

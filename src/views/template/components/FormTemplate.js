@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, Form, Button, Row, Col } from 'react-bootstrap'
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
 import SelectComponent from '../../../components/Select/SelectComponent';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const FormTemplate = (props) => {
 

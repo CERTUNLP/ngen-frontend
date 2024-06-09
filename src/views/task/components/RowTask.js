@@ -7,7 +7,7 @@ import ModalDetailTask from './ModalDetailTask';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import CrudButton from '../../../components/Button/CrudButton';
 import ModalEditTask from './ModalEditTask';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const RowTask = (props) => {  //url, key, taskDeleted,  setTaskDeleted, setTaskUpdated, setShowAlert
 

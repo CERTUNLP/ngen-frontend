@@ -25,7 +25,7 @@ import { getMinifiedPriority } from '../../api/services/priorities';
 import ModalReadCase from '../case/ModalReadCase';
 import { getMinifiedUser } from '../../api/services/users';
 
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListEvent = () => {
   const [events, setEvents] = useState([])
@@ -109,6 +109,8 @@ const ListEvent = () => {
   const [priorityFilter, setPriorityFilter] = useState("");
   const [selectCase, setSelectCase] = useState("")//puede que se use en el multiselect, tengo ver bien cual es su utilidad
   const [updatePaginationCase, setUpdatePaginationCase] = useState(false)
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     getMinifiedUser().then((response) => { //se hardcodea las paginas

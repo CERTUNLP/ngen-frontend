@@ -7,7 +7,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import { putState } from "../../api/services/states";
 import { getAllStates } from "../../api/services/states";
 import ListEdge from '../edge/ListEdge';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const EditState = () => {
     const location = useLocation();

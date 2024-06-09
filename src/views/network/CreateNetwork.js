@@ -5,7 +5,7 @@ import { postNetwork } from '../../api/services/networks';
 import FormCreateNetwork from './components/FormCreateNetwork';
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateNetwork = () => {
     const [cidr, setCidr] = useState(''); //required

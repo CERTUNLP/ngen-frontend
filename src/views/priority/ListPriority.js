@@ -8,7 +8,7 @@ import CrudButton from '../../components/Button/CrudButton';
 import { getPriorities } from "../../api/services/priorities";
 import TablePriorities from './components/TablePriorities';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListPriorities = () => {
   const [priorities, setPriorities] = useState([])

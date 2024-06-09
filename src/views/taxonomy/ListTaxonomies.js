@@ -8,7 +8,7 @@ import Navigation from '../../components/Navigation/Navigation'
 import { getTaxonomies } from '../../api/services/taxonomies';
 import Search from '../../components/Search/Search';
 import TableTaxonomy from './components/TableTaxonomy';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const ListTaxonomies = () => {
     const [taxonomies, setTaxonomies] = useState([]);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { putActivationStatus } from '../../../api/services/taxonomies';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 function ButtonState({ taxonomy }) {
     const [show, setShow] = useState(false);

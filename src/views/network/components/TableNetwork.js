@@ -7,7 +7,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalDetailNetwork from './ModalDetailNetwork';
 import Ordering from '../../../components/Ordering/Ordering'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const TableNetwork = ({ setIsModify, list, loading, order, setOrder, setLoading, currentPage, entityNames }) => {
     const { t } = useTranslation();

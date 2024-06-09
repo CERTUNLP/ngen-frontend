@@ -12,7 +12,7 @@ import DropdownState from '../../../components/Dropdown/DropdownState';
 import Alert from '../../../components/Alert/Alert';
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
 import SelectLabel from '../../../components/Select/SelectLabel';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 

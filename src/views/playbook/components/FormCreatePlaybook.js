@@ -4,7 +4,7 @@ import { validateAlphanumeric, validateSpace } from '../../../utils/validators';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { validatePlaybookName, validateUnrequiredInput } from '../../../utils/validators/playbooks';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 
 const animatedComponents = makeAnimated();
