@@ -19,14 +19,22 @@ import SmallCaseTable from '../case/components/SmallCaseTable';
 const ReadEvent = () => {
     const location = useLocation();
     const [body,setBody]=useState({})
+    const [eventItem, setEventItem] = useState(location?.state?.item || null);
+    const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
+    const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
 
 
     useEffect( ()=> {
-        let event= location.state;
-        getEvent(event.url).then((responsive) =>{
-            setBody(responsive.data)
-        })
-      },[]);
+        console.log(body)
+        if (!eventItem){
+            const event = localStorage.getItem('event');
+            getEvent(event).then((responsive) =>{
+                setBody(responsive.data)
+                setEventItem(responsive.data)
+                console.log(responsive.data)
+            }).catch(error => console.log(error));
+        }
+      },[eventItem]);
 
     const callbackTaxonomy = (url ,setPriority) => {
         getTaxonomy(url)
@@ -82,9 +90,12 @@ const ReadEvent = () => {
   
   return (
     <div>
+        {navigationRow !== "false" ? 
         <Row>
             <Navigation actualPosition="Detalle" path="/events" index ="Evento"/>
         </Row>        
+        :""
+        }
         <Card>
             <Card.Header> 
                 <Card.Title as="h5">Principal</Card.Title>
@@ -263,7 +274,10 @@ const ReadEvent = () => {
                 
             </Card.Body>
         </Card>
+        {buttonReturn  !=="false" ?
         <Button variant="primary" onClick={() =>returnBack()}>Volver</Button>
+        :""
+        }
         
         </Table>
     </div>

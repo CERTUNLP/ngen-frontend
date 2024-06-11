@@ -37,7 +37,7 @@ const DashboardEvent = ({list}) => {
             </Card.Header>
             <TableEvents events={list}  taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true} 
                     disableCheckbox={true} disableDomain={true} disableCidr={true} disableTlp={true} disableColumnEdit={true}
-                    disableColumnDelete={true} disableTemplate={true}/> 
+                    disableColumnDelete={true} disableTemplate={true} disableCheckboxAll={true}/> 
         </Card>
     </div>
   )

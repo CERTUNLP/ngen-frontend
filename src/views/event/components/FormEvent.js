@@ -63,21 +63,10 @@ const FormEvent = (props) => {
 
     const [modalShowCase, setModalShowCase] = useState(false);
     const [caseToLink, setCaseToLink] = useState({});
-
+    const [caseSelectedFromTheList, setCaseSelectedFromTheList] = useState({});
+    const [tableDetail, setTableDetail] = useState(false);
+    
     useEffect(()=> {
-        //Object.keys(props.priorityNames).length !== 0
-        if(Object.keys(props.priorityNames).length !== 0 && Object.keys(props.tlpNames).length !== 0 && Object.keys(allStates).length !== 0 
-        && Object.keys(props.userNames).length !== 0 && props.body.case !== ""){
-            getCase(props.body.case).then((response) => {
-                setCaseToLink({value:response.data.url,name:response.data.name, date:response.data.date, 
-                    priority:props.priorityNames[response.data.priority], tlp:props.tlpNames[response.data.tlp].name, 
-                    state:allStates[response.data.state], user:props.userNames[response.data.user_creator]})  
-            })
-            .catch((error)=>{
-                console.log(error)
-            })
-        }
-
         getMinifiedState()
         .then((response) => {
             let list = []
@@ -93,6 +82,21 @@ const FormEvent = (props) => {
             console.log(error)
         })
     
+    },[])
+
+    useEffect(()=> {
+        if(Object.keys(props.priorityNames).length !== 0 && Object.keys(props.tlpNames).length !== 0 && Object.keys(allStates).length !== 0 
+        && Object.keys(props.userNames).length !== 0 && props.body.case !== ""){
+            getCase(props.body.case).then((response) => {
+                setCaseToLink({value:response.data.url,name:response.data.name, date:response.data.date, 
+                    priority:props.priorityNames[response.data.priority], tlp:props.tlpNames[response.data.tlp].name, 
+                    state:allStates[response.data.state], user:props.userNames[response.data.user_creator]})  
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }
+
         if (props.tlp !== []) {
             props.tlp.forEach(item => {
                 if(item.value === props.body.tlp){
@@ -121,13 +125,16 @@ const FormEvent = (props) => {
                 }
             });
         }
+    },[props.priorityNames, props.tlpNames, props.userNames, allStates])
+
+    useEffect(()=> {
 
         let listDefaultArtifact = props.listArtifact.filter(elemento => props.body.artifacts.includes(elemento.value))
         .map(elemento => ({value: elemento.value, label:elemento.label}))
 
         setArtifactsValueLabel(listDefaultArtifact)
     
-    },[props.body.artifacts, props.listArtifact, props.priorityNames, props.tlpNames, props.userNames])
+    },[props.body.artifacts, props.listArtifact])
 
     const completeFieldStringIdentifier=(event)=>{ 
        
@@ -187,7 +194,7 @@ const FormEvent = (props) => {
         setShowModalListCase(false)
         localStorage.setItem('navigation', false);  
         localStorage.setItem('button return', false);     
-        setCaseToLink({value:url,name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
+        setCaseSelectedFromTheList({value:url, name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
     }
 
     const handleClickRadio = (event, url, name, date, priority, tlp, state, user) => {
@@ -206,7 +213,7 @@ const FormEvent = (props) => {
                     : [...prevSelected, selectedId]
             );
         }
-        setCaseToLink({value:url, name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
+        setCaseSelectedFromTheList({value:url, name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
 
     };
 
@@ -264,6 +271,7 @@ const FormEvent = (props) => {
 
     const linkCaseToEvent=()=>{
         completeField1("case",caseToLink,setSelectCase)
+        setCaseToLink(caseSelectedFromTheList)
         setShowModalListCase(false)
         setModalShowCase(false)
         setCurrentPage(1);
@@ -293,19 +301,23 @@ const FormEvent = (props) => {
         setWordToSearch("")
     }
 
-    const renderRow = (label, value) => (
-        <Row>
-            <Col sm={12} lg={5}>
-                {label}
-            </Col>
-            <Col sm={12} lg={6}>
-                {value || "-"}
-            </Col>
-        </Row>
-    );
+    const tableCaseDetail = (url, name, date, priority, tlp, state, user) => {
+        localStorage.setItem('case', url);
+        setModalShowCase(true)
+        setTableDetail(true)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setCaseToLink({value:url,name:name, date:date, priority:priority, tlp:tlp, state:state, user:user})
+    }
 
-    const letterSize= { fontSize: '1.2em' }
-    console.log([caseToLink])
+    const closeModalDetail=()=>{ 
+        setModalShowCase(false)
+        setTableDetail(false)
+    };
+    const deleteCaseFromForm=()=>{ 
+        setCaseToLink({})
+        setSelectedCases([])
+    };
 
   return (
     <div>
@@ -368,7 +380,30 @@ const FormEvent = (props) => {
                 </Form>
             </Card.Body>
         </Card>
-        <SmallCaseTable readCase={caseToLink.value} disableLink={true} modalCase={modalCase}  modalListCase={modalListCase} />
+
+        <SmallCaseTable readCase={caseToLink.value} modalCaseDetail={tableCaseDetail} disableLink={true} 
+        modalCase={modalCase}  modalListCase={modalListCase} deleteCaseFromForm={deleteCaseFromForm} />
+
+        <ModalCreateCase showModalCase={showModalCase} setShowModalCase={setShowModalCase} caseItem={caseItem} 
+                states={states} setCaseToLink={setCaseToLink} setSelectCase={setSelectCase}
+                completeField1={completeField1} stateNames={allStates} />
+
+        <ModalListCase  stateNames={allStates} showModalListCase={showModalListCase} modalCaseDetail={modalCaseDetail} 
+            closeModal={closeModal} selectedCases={selectedCases} priorityNames={props.priorityNames} 
+            tlpNames={props.tlpNames} userNames={props.userNames} handleClickRadio={handleClickRadio} linkCaseToEvent={linkCaseToEvent}
+            completeField1={completeField1} caseToLink={caseToLink} setSelectCase={setSelectCase}
+            setShowModalListCase={setShowModalListCase} 
+            priorities={props.priorities} tlp={props.tlp} allStates={states} 
+            priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter}
+            tlpFilter={tlpFilter} setTlpFilter={setTlpFilter}
+            stateFilter={stateFilter} setStateFilter={setStateFilter}
+            currentPage={currentPage} setCurrentPage={setCurrentPage}
+            wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
+            updatePagination={updatePagination} setUpdatePagination={setUpdatePagination}/>
+
+        <ModalReadCase modalShowCase={modalShowCase} tableDetail={tableDetail} closeModalDetail={closeModalDetail}
+            returnToListOfCases={returnToListOfCases} linkCaseToEvent={linkCaseToEvent}/>
+        
         <Card>
             <Card.Header>
                 <Card.Title as="h5">Artefactos</Card.Title>
@@ -439,24 +474,7 @@ const FormEvent = (props) => {
             <CreateArtifactModal show={modalCreate}  onHide={() => setModalCreate(false)} value={value} setValue={setValue} 
                 typeArtifact={typeArtifact} setTypeArtifact={setTypeArtifact} createArtifact={createArtifact}/>
 
-            <ModalCreateCase showModalCase={showModalCase} setShowModalCase={setShowModalCase} caseItem={caseItem} 
-                states={states} setCaseToLink={setCaseToLink} setSelectCase={setSelectCase}
-                completeField1={completeField1} stateNames={allStates} />
-
-            <ModalListCase  stateNames={allStates} showModalListCase={showModalListCase} modalCaseDetail={modalCaseDetail} 
-                closeModal={closeModal} selectedCases={selectedCases} priorityNames={props.priorityNames} 
-                tlpNames={props.tlpNames} userNames={props.userNames} handleClickRadio={handleClickRadio} linkCaseToEvent={linkCaseToEvent}
-                completeField1={completeField1} caseToLink={caseToLink} setSelectCase={setSelectCase}
-                setShowModalListCase={setShowModalListCase} 
-                priorities={props.priorities} tlp={props.tlp} allStates={states} 
-                priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter}
-                tlpFilter={tlpFilter} setTlpFilter={setTlpFilter}
-                stateFilter={stateFilter} setStateFilter={setStateFilter}
-                currentPage={currentPage} setCurrentPage={setCurrentPage}
-                wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
-                updatePagination={updatePagination} setUpdatePagination={setUpdatePagination}/>
-    
-            <ModalReadCase modalShowCase={modalShowCase} returnToListOfCases={returnToListOfCases} linkCaseToEvent={linkCaseToEvent}/>
+            
    
             </Card.Body>
         </Card>

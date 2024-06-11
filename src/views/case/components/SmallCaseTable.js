@@ -5,10 +5,9 @@ import { getMinifiedPriority } from '../../../api/services/priorities';
 import { getMinifiedState } from '../../../api/services/states';
 import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedUser } from '../../../api/services/users';
-import CrudButton from '../../../components/Button/CrudButton';
 import TableCase from './TableCase'
 
-const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase}) => {
+const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, modalCaseDetail, deleteCaseFromForm}) => {
 
     const [userNames, setUserNames] = useState({});
     const [stateNames, setStateNames] = useState({});
@@ -28,6 +27,10 @@ const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase}) => 
             .catch((error)=>{
                 console.log(error)
             })
+        }
+        if(readCase === undefined){
+            setCaseItem([])
+              
         }
 
         getMinifiedTlp().then((response) => {
@@ -115,8 +118,9 @@ const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase}) => 
         <Card.Body>
             <TableCase cases={caseItem} disableCheckbox={true} disableDateOrdering={true} 
                priorityNames={priorityNames} stateNames={stateNames} userNames={userNames} tlpNames={tlpNames}
-                        editColum={false} deleteColum={false} detailModal={false} 
-                        navigationRow={false} selectCase={true}  disableNubersOfEvents={true} />
+                        editColum={false} deleteColum={true} deleteColumForm={true} detailModal={true} 
+                        navigationRow={false} selectCase={true}  disableNubersOfEvents={true} modalCaseDetail={modalCaseDetail}
+                        deleteCaseFromForm={deleteCaseFromForm}/>
         </Card.Body>
     </Card>
 </React.Fragment>

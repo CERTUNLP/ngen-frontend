@@ -32,7 +32,6 @@ const CreateCase = () => {
 
         getAllStates()
             .then((response) => {
-                console.log(response);
                 let listStates = []
                 let dicState={}
                 response.map((stateItem)=>{

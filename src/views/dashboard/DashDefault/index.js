@@ -21,10 +21,10 @@ const DashDefault = () => {
     const [dashboardCases, setDashboardCases] = useState([]);
     const [dashboardNetworkEntities, setDashboardNetworkEntities] = useState([]);
 
-    const [starDate, setStarDate] = useState(getSevenDaysAgo())
-    const [endDate, setEndDate] = useState(getCurrentDate())
-    const [starDateFilter, setStarDateFilter] = useState("")
-    const [endDateFilter, setEndDateFilter] = useState("")
+    const [starDate, setStarDate] = useState(getDateTimeSevenDaysAgo())
+    const [endDate, setEndDate] = useState(getCurrentDateTime())
+    const [starDateFilter, setStarDateFilter] = useState(getDateTimeSevenDaysAgoFilter())
+    const [endDateFilter, setEndDateFilter] = useState(getCurrentDateTimeFilter())
     const [starDateNotification, setStarDateNotification] = useState(false)
     const [endDateNotification, setEndDateNotification] = useState(false)
 
@@ -110,9 +110,9 @@ const DashDefault = () => {
     }, [starDateFilter, endDateFilter])
     const completeDateStar = (date) => {
         console.log(date)
-        if (getCurrentDate() >= date && date <= endDate){
+        if (getCurrentDateTime() >= date && date <= endDate){
             setStarDate(date)
-            setStarDateFilter("date_from="+date+"T00:00:00Z"+'&')
+            setStarDateFilter("date_from="+date+":00Z"+'&')
             setStarDateNotification(false)
         }else{
             setStarDateNotification(true)
@@ -121,32 +121,88 @@ const DashDefault = () => {
     
       const completeDateEnd = (date) => {
         console.log(endDate)
-        if (getCurrentDate() >= date && date >= starDate && endDate >= starDate){
+        if (getCurrentDateTime() >= date && date >= starDate && endDate >= starDate){
             console.log(endDate)
             console.log(endDateFilter)
             setEndDate(date)
-            setEndDateFilter("date_to="+date+"T00:00:00Z")
+            setEndDateFilter("date_to="+date+":00Z")
             setEndDateNotification(false)
         }else{
             setEndDateNotification(true)
         }
     }
 
-    function getCurrentDate() {
+    function getCurrentDateTime() {
+        // Create a new Date instance to get the current date and time
         const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
     
-    function getSevenDaysAgo() {
+        // Get the year, month, day, hour, and minute
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+        // Format the date and time in the desired format
+        const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+        return formattedDateTime;
+    }
+
+    function getDateTimeSevenDaysAgo() {
+        // Create a new Date instance and set it to 7 days ago
         const now = new Date();
-        const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000)); // Subtract 7 days worth of milliseconds
-        const year = sevenDaysAgo.getFullYear();
-        const month = (sevenDaysAgo.getMonth() + 1).toString().padStart(2, '0');
-        const day = sevenDaysAgo.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        now.setDate(now.getDate() - 7);
+    
+        // Get the year, month, day, hour, and minute
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+        // Format the date and time in the desired format
+        const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+        return formattedDateTime;
+    }
+    function getCurrentDateTimeFilter() {
+        // Create a new Date instance to get the current date and time
+        const now = new Date();
+    
+        // Get the year, month, day, hour, minute, and second
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+        // Format the date and time in the desired format
+        const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+    
+        return "date_to="+formattedDateTime;
+    }
+
+    function getDateTimeSevenDaysAgoFilter() {
+        // Create a new Date instance to get the current date and time
+        const now = new Date();
+        
+        // Subtract 7 days from the current date
+        now.setDate(now.getDate() - 7);
+    
+        // Get the year, month, day, hour, minute, and second
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+        // Format the date and time in the desired format
+        const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+    
+        return "date_from="+formattedDateTime+"&";
     }
 
     return (
@@ -159,7 +215,7 @@ const DashDefault = () => {
                   type="datetime-local"
                   maxLength="150" 
                   placeholder="Fecha desde"
-                  max={getCurrentDate()}
+                  max={getCurrentDateTime()}
                   value={starDate} 
                   isInvalid={starDateNotification} 
                   onChange={(e) => completeDateStar(e.target.value)}
@@ -174,7 +230,7 @@ const DashDefault = () => {
                 <Form.Control 
                   type="datetime-local"
                   maxLength="150" 
-                  max={getCurrentDate()}
+                  max={getCurrentDateTime()}
                   value={endDate} 
                   isInvalid={endDateNotification} 
                   onChange={(e) => completeDateEnd(e.target.value)}

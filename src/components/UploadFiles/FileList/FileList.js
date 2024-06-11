@@ -3,7 +3,6 @@ import React from 'react'
 import FileItem from '../FileItem/FileItem'
 
 const FileList = ({ files, removeFile }) => {
-    console.log(files)
     const deleteFileHandler = (_name) => {
         removeFile(_name)
     }

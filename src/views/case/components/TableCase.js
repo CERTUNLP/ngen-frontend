@@ -8,7 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 
-const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents}) => {
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm}) => {
     
     const [url, setUrl] = useState(null) 
     const [modalDelete, setModalDelete] = useState(false)
@@ -18,8 +18,6 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
     const [isCheckAll, setIsCheckAll] = useState(false);
 
     const [list, setList] = useState([]);
-
-    
   
     //ORDER
     useEffect(() => { 
@@ -76,10 +74,6 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         if (!checked) {
             setSelectedCases(selectedCases.filter(item => item !== id));
         }
-        console.log(e.target)
-        console.log(selectedCases)
-        console.log(e.target.value)
-        console.log(selectedCases.includes(id))
     };
 
     
@@ -138,10 +132,6 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             </thead>
             <tbody>
                 {list.map((caseItem, index) => {
-                    /*let datetime = caseItem.date.split('T');
-                    datetime = datetime[0] + ' ' + datetime[1].slice(0, 8);
-                    let idItem = caseItem.url.split('/').slice(-2)[0];*/
-
                     return (
                         <tr key={index}>
                             
@@ -224,7 +214,15 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                         </Button>
                                     )
                                 )}
-                                {deleteColum && <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />}
+                                {deleteColum ?
+                                    deleteColumForm ?
+                                        
+                                        <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)}/>
+                                        :
+                                        <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
+                                    :
+                                    ""
+                                }
                             </td>
                         </tr>
                     );

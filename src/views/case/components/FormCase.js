@@ -10,6 +10,12 @@ import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
 import SelectLabel from '../../../components/Select/SelectLabel';
+import SmallEventTable from '../../event/components/SmallEventTable';
+import ModalListEvent from '../../event/ModalListEvent';
+import { getMinifiedFeed } from '../../../api/services/feeds';
+import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
+import ModalReadEvent from '../../event/ModalReadEvent';
+import { getEvent } from '../../../api/services/events';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
@@ -24,6 +30,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [tlp, setTlp] = useState(props.caseItem.tlp) 
     const [assigned, setAssigned] = useState(props.caseItem.assigned)
     const [state, setState] = useState(props.caseItem.state) 
+    const [events, setEvents] = useState(props.caseItem.events !== [] ? props.caseItem.events : []) 
     const [comments, setComments] = useState([]) 
     const [evidences, setEvidences] = useState(props.caseItem.evidence)
     const [attend_date, setAttend_date] = useState(props.caseItem.attend_date !== null ? props.caseItem.attend_date.substr(0,16) : '') 
@@ -49,12 +56,66 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectState, setSelectState] = useState("") 
     const [selectAssigned, setSelectAssigned] = useState("") 
 
+    const [taxonomyNames, setTaxonomyNames] = useState({});
     const [tlpNames, setTlpNames] = useState({});
+    const [feedNames, setFeedNames] = useState({});
     const [priorityNames, setPriorityNames] = useState({});
     const [userNames, setUserNames] = useState({});
 
+    const [showModalListEvent, setShowModalListEvent] = useState(false);
+    const [updatePagination, setUpdatePagination] = useState(false)
+   
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedEvent, setSelectedEvent] = useState([]);
+    const [eventList, setEventList] = useState([]) 
+    const [taxonomyFilter, setTaxonomyFilter] = useState("");
+    const [tlpFilter, setTlpFilter] = useState("");
+    const [feedFilter, setFeedFilter] = useState("");
+    const [taxonomies, setTaxonomies] = useState([]);  
+    const [feeds, setFeeds] = useState([])
+    const [wordToSearch, setWordToSearch] = useState("");
+    const [modalShowEvent, setModalShowEvent] = useState(false);
+    const [selectedEventDetail, setSelectedEventDetail] = useState({});
+    const [updateList, setUpdateList] = useState(false)
+    const [selectFeedFilter, setSelectFeedFilter] = useState("");
+    const [selectTlpFilter, setSelectTlpFilter] = useState("")
+    const [selectTaxonomyFilter, setSelectTaxonomyFilter] = useState("");
+    const [tableDetail, setTableDetail] = useState(false);
 
     useEffect(()=> {
+        /*setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed})*/
+        if(Object.keys(taxonomyNames).length !== 0 && Object.keys(feedNames).length !== 0 && Object.keys(tlpNames).length !== 0 
+        && events !== []){
+            async function fetchAndSetEvents(events) {
+                try {
+                    const responses = await Promise.all(events.map(event => getEvent(event).then((response) => {return response.data})))
+                    console.log(responses)
+                    const newEventList = responses.map(response => ({
+                        url: response.url,
+                        date: response.date,
+                        address_value: response.address_value,
+                        domain: response.domain,
+                        cidr: response.cidr,
+                        tlp: response.tlp,
+                        taxonomy: response.taxonomy,
+                        feed: response.feed
+                    }));
+            
+                    setEventList(newEventList);
+                } catch (error) {
+                    console.error("Error fetching events:", error);
+                }
+            }
+            
+            // Llamada a la función
+            fetchAndSetEvents(events);
+        }
+
+    },[taxonomyNames, feedNames, tlpNames, events])
+
+    useEffect(()=> {
+        
         
         if (allPriorities !== []) {
             allPriorities.forEach(item => {
@@ -93,7 +154,37 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         }
 
     },[allPriorities, allTlp, allUsers, props.allStates])
+
     useEffect(()=> {
+        getMinifiedTaxonomy().then((response) => { 
+            let dicTaxonomy = {}
+            let listTaxonomies = [];
+            response.map((taxonomy) => {
+                dicTaxonomy[taxonomy.url] = taxonomy.name
+                listTaxonomies.push({ value: taxonomy.url, label: taxonomy.name });
+            })
+            setTaxonomyNames(dicTaxonomy)
+            setTaxonomies(listTaxonomies);
+          })
+          .catch((error) => {
+            console.log(error)
+              
+          })
+  
+          getMinifiedFeed().then((response) => { //se hardcodea las paginas
+            let dicFeed={}
+            let listFeeds = [];
+            response.map((feed) => {
+                dicFeed[feed.url]= feed.name
+                listFeeds.push({ value: feed.url, label: feed.name });
+            })
+            setFeedNames(dicFeed)
+            setFeeds(listFeeds);
+          })
+          .catch((error) => {
+            console.log(error)
+              
+          })
       
         getMinifiedPriority()
         .then((response) => {
@@ -166,14 +257,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     /***************************************/
     const handleDragOver = (event) => {
         event.preventDefault();
-        console.log('1-------------------------')
       }
     const handleDrop = (event) => {
-        console.log('2-------------------------')
         event.preventDefault();
         const filesToUpload = event.dataTransfer.files
         setEvidences([...evidences, ...filesToUpload]);
-        console.log('3-------------------------')
     };
     const removeFile = (position) => {
         if (evidences.length>0){
@@ -184,8 +272,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     //Edit
     const editCase = () => {
-        console.log(comments)
-        console.log(evidences)
         setIfClick(true);
         const form = new FormData();
         form.append("date", date)
@@ -205,7 +291,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (evidences !== null){
             for (let index=0; index< evidences.length  ; index++){
                 form.append("evidence", evidences[index])
-                console.log(evidences[index])
             }
         }/*else{
             form.append("evidence", evidences)
@@ -215,12 +300,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             let array = comments;
             array.push(comm)
             setComments((e) => [...e, comm])
-            console.log(comm);
-            console.log(array);
-            console.log(comments);
             form.append("comments", comm)   
         }
-        console.log(form)
 
         putCase(url, form)
         .then((response) => { 
@@ -233,7 +314,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             setIfClick(false)
         });    
     };
-    console.log(props.selectedEvent)
 
     //Create
     const addCase = () => {
@@ -259,33 +339,30 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 form.append("events", selectedEvent);
             });
         }
+        if (events !== []){
+            
+            events.forEach(selectedEvent => {
+                form.append("events", selectedEvent);
+            });
+        }
         //form.append("evidence", evidences)
         if (evidences !== null){
             for (let index=0; index< evidences.length  ; index++){
             form.append("evidence", evidences[index])
-            console.log(evidences[index])
             }
-        }/*else{
-            form.append("evidence", evidences)
         }
-        */
         if (comm !== null){
             let array = comments;
             array.push(comm)
             setComments((e) => [...e, comm])
-            console.log(comm);
-            console.log(array);
-            console.log(comments);
             form.append("comments", array)   
         }
 
         postCase(form)
         .then((response) => { 
-            console.log("entro aca23")
             if (props.createCaseModal){
                
                 if (props.setCaseToLink !== undefined){    
-                    console.log("entro aca3")
                     props.setCaseToLink({name:response.data.name, date:response.data.date, 
                         priority:priorityNames[response.data.priority], tlp:tlpNames[response.data.tlp].name, 
                         state:props.stateNames[response.data.state], user:userNames[response.data.user_creator]})
@@ -295,13 +372,10 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         state:props.stateNames[response.data.state], user:userNames[response.data.user_creator]}, props.setSelectCase)
                    
                 }
-                console.log("entro aca2")
                 if (props.selectedEvent !== undefined){
                     
                     props.setSelectedEvent([])
-                    console.log("entro aca1")
                     props.setSelectCase("")
-                    console.log("entro aca")
                     props.setRefresh(!props.refresh)
                 } 
                 props.setShowModalCase(false)
@@ -312,7 +386,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
            
         })
         .catch((error) => {
-            console.log(error.data)
+            console.log(error)
             setShowAlert(true)
             setIfClick(false)
         });    
@@ -327,12 +401,78 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
+    const modalListEvent = () => {
+        setUpdatePagination(true)
+        setShowModalListEvent(true);
+    }
+
+    function closeModal(){
+        setShowModalListEvent(false)
+        setCurrentPage(1);
+    }
+
+    function linkEventsToCase(){
+        setEvents(selectedEvent.map(event => event.url))
+        setEventList(selectedEvent)
+        setShowModalListEvent(false)
+        setCurrentPage(1);
+
+    }
+
+    const returnToListOfEvent=()=>{ 
+        setShowModalListEvent(true)
+        setModalShowEvent(false)
+        setUpdatePagination(true)
+    };
+
+    const linkCaseToEvent=()=>{
+        setSelectedEvent([...selectedEvent, selectedEventDetail]);
+        setShowModalListEvent(true)
+        setModalShowEvent(false)
+        setUpdatePagination(true)
+        setUpdateList(!updateList)
+        /*setShowModalListCase(false)
+        setModalShowCase(false)
+        setCurrentPage(1);
+        setTlpFilter("")
+        setWordToSearch("")
+        setUpdatePagination(true)*/
+    };
+
+    const modalEventDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
+        console.log(url)    
+        localStorage.setItem('event', url);
+        setModalShowEvent(true)
+        setShowModalListEvent(false)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed});
+    }
+    
+    const tableCaseDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
+        localStorage.setItem('event', url);
+        setModalShowEvent(true)
+        setTableDetail(true)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed});
+    }
+
+    const closeModalDetail=()=>{ 
+        setModalShowEvent(false)
+        setTableDetail(false)
+    };
+    
+    const deleteEventFromForm=(url)=>{ 
+        setEventList(eventList.filter(event => event.url !== url))
+        setSelectedEvent(selectedEvent.filter(event => event.url !== url))
+    };
+
     return (
         <React.Fragment>  
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>
-           
-
-
             <Card>
                 <Card.Header>
                     <Card.Title as="h5">Principal</Card.Title>
@@ -402,6 +542,26 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     </Row>
                 </Card.Body>
             </Card>
+            <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail} 
+                modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm}/>
+
+            <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail} 
+                selectFeedFilter={selectFeedFilter} setSelectFeedFilter={setSelectFeedFilter}
+                selectTlpFilter={selectTlpFilter} setSelectTlpFilter={setSelectTlpFilter}
+                selectTaxonomyFilter={selectTaxonomyFilter} setSelectTaxonomyFilter={setSelectTaxonomyFilter}
+                currentPage={currentPage}  setCurrentPage={setCurrentPage}
+                setUpdatePagination={setUpdatePagination} updatePagination={updatePagination} 
+                selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} 
+                taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
+                closeModal={closeModal} linkEventsToCase={linkEventsToCase}
+                wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
+                taxonomyFilter={taxonomyFilter} setTaxonomyFilter={setTaxonomyFilter}
+                tlpFilter={tlpFilter} setTlpFilter={setTlpFilter} feedFilter={feedFilter} setFeedFilter={setFeedFilter}
+                taxonomies={taxonomies} feeds={feeds}  tlpList={allTlp} updateList={updateList}/>
+
+            <ModalReadEvent modalShowCase={modalShowEvent} tableDetail={tableDetail} returnToListOfCases={returnToListOfEvent} 
+                linkCaseToEvent={linkCaseToEvent} closeModalDetail={closeModalDetail}/>
+
             {props.evidenceColum ?
             
             props.edit ?
@@ -412,7 +572,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 <Card.Body>
                     <Row>
                         {evidences.map((url, index) => {
-                            console.log(url)
                             return  (
                                 <Col>
                                     <ViewFiles url={url} index={index+1} /> {/*setIfDelete={setIfDelete} */}

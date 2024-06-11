@@ -35,7 +35,6 @@ const ReadCase = () => {
     useEffect(() => {
 
         if (caseItem !== null) {
-            console.log(caseItem)
             const eventPromises = caseItem.events.map(url => getEvent(url));
 
             Promise.all(eventPromises)
@@ -248,7 +247,7 @@ const ReadCase = () => {
                         : <></>}
 
 
-                    <SmallEventTable list={list} />
+                    <SmallEventTable list={list} disableLink={true}/>
 
 
                     <Card>
