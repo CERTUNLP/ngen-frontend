@@ -4,6 +4,7 @@ import FormCase from './components/FormCase';
 import Navigation from '../../components/Navigation/Navigation';
 import { getAllStates } from '../../api/services/states';
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const CreateCase = () => {
         
@@ -48,12 +49,13 @@ const CreateCase = () => {
 
         },[])
 
+    const { t } = useTranslation();
 
     return (
         <React.Fragment>
             
             <Row>
-                <Navigation actualPosition="Crear Caso" path="/cases" index ="Casos"/>
+                <Navigation actualPosition={t('Crear caso')} path="/cases" index ="Casos"/>
             </Row>
             <FormCase caseItem={caseItem} allStates={allStates} edit={false} save='Crear' evidenceColum={true} stateName={stateName} setStatesName={setStatesName}/>
         </React.Fragment>

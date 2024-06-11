@@ -7,7 +7,7 @@ import SmallEventTable from '../event/components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
-
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const ReadCase = () => {
@@ -32,6 +32,8 @@ const ReadCase = () => {
 
     const [list, setList] = useState([]);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
 
         if (caseItem !== null) {
@@ -46,7 +48,8 @@ const ReadCase = () => {
                 })
                 .catch(error => {
                     // Maneja cualquier error que ocurra durante las llamadas
-                    console.error("Error al obtener eventos:", error);
+                    const errorMessage = t('Error al obtener eventos:');
+                    console.error(errorMessage, error);
                 });
         }
         if (!caseItem) {

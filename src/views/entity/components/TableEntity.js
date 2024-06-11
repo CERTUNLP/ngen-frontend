@@ -7,6 +7,7 @@ import { getEntity, deleteEntity, isActive } from '../../../api/services/entitie
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const TableEntity = ({setIsModify, list, loading, setLoading, currentPage, order, setOrder}) => {
@@ -20,7 +21,7 @@ const TableEntity = ({setIsModify, list, loading, setLoading, currentPage, order
     const [created, setCreated] = useState('') 
     const [modified, setModified] = useState('') 
     const [active,setActive] = useState('') 
-
+    const { t } = useTranslation();
     if (loading) {
         return (
             <Row className='justify-content-md-center'>
@@ -101,10 +102,10 @@ const TableEntity = ({setIsModify, list, loading, setLoading, currentPage, order
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th>Activo</th>
-                            <th>Redes Asociadas</th>
-                            <th>Accion</th>
+                            <Ordering field="name" label={t('Nombre')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th>{t('Activo')}</th>
+                            <th>{t('Redes Asociadas')}</th>
+                            <th>{t('Accion')}</th>
                         </tr>
                     </thead>
                     <tbody>

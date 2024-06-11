@@ -10,6 +10,7 @@ import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
 import SelectLabel from '../../../components/Select/SelectLabel';
+import { useTranslation, Trans } from 'react-i18next';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
@@ -53,6 +54,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [priorityNames, setPriorityNames] = useState({});
     const [userNames, setUserNames] = useState({});
 
+    const { t } = useTranslation();
 
     useEffect(()=> {
         
@@ -330,22 +332,19 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     return (
         <React.Fragment>  
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>
-           
-
-
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Principal</Card.Title>
+                    <Card.Title as="h5">{t('Principal')}</Card.Title>
                 </Card.Header>
                 <Card.Body> 
                     <Row>
                     <Col lg={6} sm={12}>
                             <Form.Group controlId="Form.Case.Comments">
-                                <Form.Label>Nombre del caso </Form.Label>
+                                <Form.Label>{t('Nombre del caso')} </Form.Label>
                                 <Form.Control 
                                     type="text"
                                     name="name" 
-                                    placeholder="Nombre del caso" 
+                                    placeholder={t('Nombre del caso')} 
                                     maxlength="100"
                                     value={name} 
                                     onChange={(e) => setName(e.target.value)} 
@@ -364,31 +363,31 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         </Col>
                         <Col lg={3} sm={12}>                        
                                  <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
-                                    value={selectPriority} placeholder="Prioridad" required={true}/>
+                                    value={selectPriority} placeholder={t('Prioridad')} required={true}/>
                         </Col>
                         <Col lg={3} sm={12}>
                                 <SelectLabel set={setLifecycle} setSelect={setSelectLifecycle} options={allLifecycles}
-                                    value={selectLifecycle} placeholder="Ciclo de vida" required={true}/>
+                                    value={selectLifecycle} placeholder={t('Ciclo de vida')} required={true}/>
                         </Col>
                         <Col lg={3} sm={12}>
                                 <SelectLabel set={setTlp} setSelect={setSelectTlp} options={allTlp}
-                                    value={selectTlp} placeholder="TLP" required={true}/>
+                                    value={selectTlp} placeholder={t('TLP')} required={true}/>
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setState} setSelect={setSelectState} options={props.allStates}
-                                    value={selectState} placeholder="Estado" required={true}/>
+                                    value={selectState} placeholder={t('Estado')} required={true}/>
                         </Col>
 
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
-                                    value={selectAssigned} placeholder="Asignado"/>
+                                    value={selectAssigned} placeholder={t('Asignado')}/>
                         </Col>
                         
                     </Row>
                     <Row>
                         <Col >
                             <Form.Group controlId="Form.Case.Comments">
-                                <Form.Label>Comentarios</Form.Label>
+                                <Form.Label>{t('Comentarios')}</Form.Label>
                                 <Form.Control 
                                     as="textarea"
                                     name="comment" 
@@ -407,7 +406,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             props.edit ?
             <Card>
                 <Card.Header>    
-                    <Card.Title as="h5">Evidencias</Card.Title>              
+                    <Card.Title as="h5">{t('Evidencias')}</Card.Title>              
                 </Card.Header>
                 <Card.Body>
                     <Row>
@@ -438,7 +437,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             : 
             <Card>
                 <Card.Header>    
-                    <Card.Title as="h5">Evidencias</Card.Title>              
+                    <Card.Title as="h5">{t('Evidencias')}</Card.Title>              
                 </Card.Header>
                 <Card.Body>
                     <Form>   
@@ -465,9 +464,9 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 <><Button variant="primary" disabled>{props.save}</Button></> 
             }
             {props.buttonsModalColum ?
-            <Button variant="primary" href="/cases">Cancelar</Button>
+            <Button variant="primary" href="/cases">{t('Cancelar')}</Button>
             :
-            <Button variant="primary" onClick={()=>props.setShowModalCase(false)}>Cancelar</Button>
+            <Button variant="primary" onClick={()=>props.setShowModalCase(false)}>{t('Cancelar')}</Button>
             }
             
         </React.Fragment>

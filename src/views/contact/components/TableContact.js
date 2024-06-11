@@ -5,9 +5,11 @@ import { getContact, deleteContact } from '../../../api/services/contacts';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
+import { useTranslation, Trans } from 'react-i18next';
 import Ordering from '../../../components/Ordering/Ordering';
 
 const TableContact = ({setIsModify, list, loading, setLoading, currentPage, order, setOrder}) => {
+    const { t } = useTranslation();
     const [contact, setContact] = useState('')
 
     const [modalShow, setModalShow] = useState(false)
@@ -97,11 +99,11 @@ const TableContact = ({setIsModify, list, loading, setLoading, currentPage, orde
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th>Rol</th>
-                            <th>Contacto</th>
-                            <th>Prioridad</th>
-                            <th>Accion</th>
+                            <Ordering field="name" label={t('Nombre')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th>{t('Rol')}</th>
+                            <th>{t('Contacto')}</th>
+                            <th>{t('Prioridad')}</th>
+                            <th>{t('Accion')}</th>
                         </tr>
                     </thead>
                     <tbody>

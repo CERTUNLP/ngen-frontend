@@ -10,8 +10,13 @@ import { getDashboardFeed } from '../../../api/services/dashboards';
 import { getDashboardEvent } from '../../../api/services/dashboards';
 import { getDashboardCases } from '../../../api/services/dashboards';
 import { getDashboardNetworkEntities } from '../../../api/services/dashboards';
+<<<<<<< HEAD
 import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
 import { getMinifiedFeed } from '../../../api/services/feeds';
+=======
+import { useTranslation, Trans } from 'react-i18next';
+
+>>>>>>> i18n implementation + English translations for main menu views
 
 
 const DashDefault = () => {
@@ -148,11 +153,18 @@ const DashDefault = () => {
         const day = sevenDaysAgo.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+<<<<<<< HEAD
+=======
+     //console.log(props.body.date < getCurrentDate()) valido
+
+    const { t } = useTranslation();
+>>>>>>> i18n implementation + English translations for main menu views
 
     return (
         <React.Fragment>    
-            <Row>
+        <Row>
             <Col sm={12} lg={6}>
+<<<<<<< HEAD
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Fecha desde</Form.Label>
                 <Form.Control 
@@ -182,26 +194,58 @@ const DashDefault = () => {
                 />
                 {endDateNotification ? <div className="invalid-feedback"> Se debe ingresar una fecha mayor a la de Fecha desde</div> : ""  }
               </Form.Group>
+=======
+                <Form.Group controlId="formGridAddress1">
+                    <Form.Label>{t('Fecha desde')}</Form.Label>
+                    <Form.Control 
+                        type="date"
+                        maxLength="150" 
+                        placeholder={t('Fecha desde')}
+                        max={getCurrentDate()}
+                        value={starDate} 
+                        isInvalid={starDate > getCurrentDate()} 
+                        onChange={(e) => completeDateStar(e.target.value)}
+                        name="date"
+                    />
+                    {starDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""  }
+                </Form.Group>
             </Col>
-          </Row> 
-            <Row>
-                <Col md={6}>
-                    <Card>
-                        <Card.Header>
-                            <Card.Title as="h5">Grafico de fuentes</Card.Title>
-                        </Card.Header>
-                        <Card.Body className="text-center">
-                            <FeedGraph dashboardFeed={dashboardFeed}/>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={6}>
-                    <Card>
-                        <Card.Header>
-                            <Card.Title as="h5">Grafico de entidades afectadas</Card.Title>
-                        </Card.Header>
-                        <Card.Body className="text-center">
+            <Col sm={12} lg={6}>
+                <Form.Group controlId="formGridAddress1">
+                    <Form.Label>{t('Fecha hasta')}</Form.Label>
+                    <Form.Control 
+                        type="date"
+                        maxLength="150" 
+                        max={getCurrentDate()}
+                        value={endDate} 
+                        isInvalid={endDate > getCurrentDate()} 
+                        onChange={(e) => completeDateEnd(e.target.value)}
+                        name="date"
+                    />
+                    {endDate > getCurrentDate() ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""  }
+                </Form.Group>
+            </Col>
+        </Row> 
+        <Row>
+            <Col md={6}>
+                <Card>
+                    <Card.Header>
+                        <Card.Title as="h5">{t('Grafico de fuentes')}</Card.Title>
+                    </Card.Header>
+                    <Card.Body className="text-center">
+                        <FeedGraph dashboardFeed={dashboardFeed}/>
+                    </Card.Body>
+                </Card>
+>>>>>>> i18n implementation + English translations for main menu views
+            </Col>
+            <Col md={6}>
+                <Card>
+                    <Card.Header>
+                        <Card.Title as="h5">{t('Grafico de entidades afectadas')}</Card.Title>
+                    </Card.Header>
+                    <Card.Body className="text-center">
                         <EntityGraph list={dashboardNetworkEntities.length > 0  ? dashboardNetworkEntities[0].values : []} />
+<<<<<<< HEAD
                         </Card.Body>
                     </Card>
                     
@@ -214,6 +258,19 @@ const DashDefault = () => {
                 </Col>
             </Row>
         </React.Fragment>
+=======
+                    </Card.Body>
+                </Card>
+            </Col>
+            <Col>
+                <DashboardEvent list={dashboardEvent} />
+            </Col>
+            <Col>
+                <DashboardCases list={dashboardCases} loading={loading}/>
+            </Col>
+        </Row>
+    </React.Fragment>
+>>>>>>> i18n implementation + English translations for main menu views
     );
 };
 

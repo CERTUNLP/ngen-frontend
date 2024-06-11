@@ -4,6 +4,7 @@ import { postEntity } from '../../api/services/entities';
 import FormEntity from './components/FormEntity';
 import Navigation from '../../components/Navigation/Navigation';
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const CreateEntity = () => {
     const [name, setName] = useState('')
@@ -23,7 +24,9 @@ const CreateEntity = () => {
             setShowAlert(true)
         })
     };
-       
+     
+    const { t } = useTranslation();
+
     return (
         <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity"/>
@@ -34,8 +37,8 @@ const CreateEntity = () => {
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Entidades</Card.Title>
-                            <span className="d-block m-t-5">Agregar Entidad</span>
+                            <Card.Title as="h5">{t('Entidades')}</Card.Title>
+                            <span className="d-block m-t-5">{t('Agregar Entidad')}</span>
                         </Card.Header>
                         <Card.Body>
                             <Row>

@@ -5,6 +5,8 @@ import { getCase } from '../../api/services/cases';
 import FormCase from './components/FormCase';
 import Navigation from '../../components/Navigation/Navigation';
 import { getState } from '../../api/services/states';
+import { useTranslation, Trans } from 'react-i18next';
+
 
 const EditCase = () => {
 
@@ -58,12 +60,13 @@ const EditCase = () => {
 
     },[caseItem])
 
+    const { t } = useTranslation();
 
 
     return ( caseItem &&
         <React.Fragment>
             <Row>
-                <Navigation actualPosition="Editar Caso" path="/cases" index ="Casos"/>
+                <Navigation actualPosition={t('Editar caso')} path="/cases" index ="Casos"/>
             </Row>
             <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios' evidenceColum={true}/>
         </React.Fragment>

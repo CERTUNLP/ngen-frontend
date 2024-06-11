@@ -7,8 +7,10 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalDetailNetwork from './ModalDetailNetwork';
 import Ordering from '../../../components/Ordering/Ordering'
+import { useTranslation, Trans } from 'react-i18next';
 
 const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading , currentPage, entityNames}) => {
+    const { t } = useTranslation();
     const [network, setNetwork] = useState('')
 
     const [modalDelete, setModalDelete] = useState(false)
@@ -91,13 +93,13 @@ const TableNetwork = ({setIsModify, list, loading, order, setOrder, setLoading ,
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <th style={letterSize}>Direción de valor </th>
-                            <th style={letterSize}>Dominio</th>
-                            <th style={letterSize}>Cidr</th>
-                            <Ordering field="type" label="Tipo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>Activo</th>
-                            <Ordering field="network_entity__name" label="Entidad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                            <th style={letterSize}>Accion</th>
+                            <th style={letterSize}>{t('Direción de valor')}  </th>
+                            <th style={letterSize}>{t('Dominio')}</th>
+                            <th style={letterSize}>{t('Cidr')}</th>
+                            {<Ordering field="type" label={t('Tipo')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>}
+                            <th style={letterSize}>{t('Activo')}</th>
+                            <Ordering field="network_entity__name" label={t('Entidad')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th style={letterSize}>{t('Accion')}</th>
                         </tr>
                     </thead>
                     <tbody>

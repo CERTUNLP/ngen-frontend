@@ -15,6 +15,9 @@ import { store, persister } from './store';
 
 import setupInterceptors from './api/setupInterceptors';
 
+// import i18n (needs to be bundled ;)) 
+import './i18n';
+
 ReactDOM.render(
     <Provider store={store}>
         <ConfigProvider>

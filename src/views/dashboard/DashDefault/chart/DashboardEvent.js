@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import {
     Card
- } from 'react-bootstrap';
+} from 'react-bootstrap';
 import { getMinifiedTaxonomy } from '../../../../api/services/taxonomies';
 import { getMinifiedFeed } from '../../../../api/services/feeds';
 import TableEvents from '../../../event/components/TableEvents';
+import { useTranslation, Trans } from 'react-i18next';
 
-const DashboardEvent = ({list}) => {
+const DashboardEvent = ({ list }) => {
+    const { t } = useTranslation();
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
 
 
-    useEffect( ()=> {
+    useEffect(() => {
         getMinifiedTaxonomy().then((response) => {
             let dicTaxonomy = {};
             response.map((taxonomy) => {
@@ -29,18 +31,18 @@ const DashboardEvent = ({list}) => {
         });
 
     }, [])
-  return (
-    <div>
-        <Card>
-            <Card.Header>
-                <Card.Title as="h5">Ultimos 10 eventos en el periodo seleccionado</Card.Title>
-            </Card.Header>
-            <TableEvents events={list}  taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true} 
+    return (
+        <div>
+            <Card>
+                <Card.Header>
+                    <Card.Title as="h5">{t('Panel de eventos')}</Card.Title>
+                </Card.Header>
+                <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true}
                     disableCheckbox={true} disableDomain={true} disableCidr={true} disableTlp={true} disableColumnEdit={true}
-                    disableColumnDelete={true} disableTemplate={true}/> 
-        </Card>
-    </div>
-  )
+                    disableColumnDelete={true} disableTemplate={true} />
+            </Card>
+        </div>
+    )
 }
 
 export default DashboardEvent

@@ -24,6 +24,8 @@ import ModalListCase from '../case/ModalListCase';
 import { getMinifiedPriority } from '../../api/services/priorities';
 import ModalReadCase from '../case/ModalReadCase';
 import { getMinifiedUser } from '../../api/services/users';
+import { useTranslation, Trans } from 'react-i18next';  
+
 
 const ListEvent = () => {
   const [events, setEvents] = useState([])
@@ -326,11 +328,12 @@ const linkCaseToEvent=()=>{
   })
   
 };
+const { t } = useTranslation();
   return (
      <div>
        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="event"/>
        <Row>
-          <Navigation actualPosition="Eventos"/>
+          <Navigation actualPosition={t('Eventos')}/>
       </Row>
       <Card>
         <Card.Header>
@@ -339,11 +342,11 @@ const linkCaseToEvent=()=>{
           <ButtonFilter open={open} setOpen={setOpen} />
         </Col>
         <Col sm={8} lg={4} >
-              <Search type="por taxonomia, fuentes o recurso afectado" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+              <Search type={t('por taxonomia, fuentes o recurso afectado')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
         </Col>
         <Col> 
             <Link to={"/events/create"} >
-                <CrudButton type='create' name='Evento' /> 
+                <CrudButton type='create' name={t('Evento')} /> 
             </Link>
             <Button 
                 disabled={selectedEvent.length > 1 ? false : true}
@@ -353,7 +356,7 @@ const linkCaseToEvent=()=>{
                 title='Mergear'
                 onClick={() => mergeConfirm()}>
                 <i  className="fa fa-code-branch"/>
-                    Merge&nbsp;
+                {t('Merge')}&nbsp;
                 <Badge  
                     className="badge mr-1" >
                     {selectedEvent.length} 
@@ -364,7 +367,7 @@ const linkCaseToEvent=()=>{
                 size="lm"
                 variant="outline-dark"
                 onClick={() => modalCase()}>
-                Agregar a un caso
+                {t('Agregar a un caso')}
                 <Badge  
                     className="badge mr-1" >
                     {selectedEvent.length} 
@@ -387,11 +390,11 @@ const linkCaseToEvent=()=>{
         <Row>
             <Col sm={12} lg={6}>
               <Form.Group controlId="formGridAddress1">
-                <Form.Label>Fecha desde</Form.Label>
+                <Form.Label>{t('Fecha desde')}</Form.Label>
                 <Form.Control 
                   type="date"
                   maxLength="150" 
-                  placeholder="Fecha desde"
+                  placeholder={t('Fecha desde')}
                   value={starDate} 
                   onChange={(e) => completeDateStar(e.target.value)}
                   name="date"/>
@@ -399,7 +402,7 @@ const linkCaseToEvent=()=>{
             </Col>
             <Col sm={12} lg={6}>
               <Form.Group controlId="formGridAddress1">
-                <Form.Label>Fecha hasta</Form.Label>
+                <Form.Label>{t('Fecha hasta')}</Form.Label>
                 <Form.Control 
                   type="date"
                   maxLength="150" 

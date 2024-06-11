@@ -8,7 +8,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import Search from '../../components/Search/Search';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
-
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListEntity = () => {
     const [entities, setEntities] = useState([]);
@@ -57,11 +57,13 @@ const ListEntity = () => {
         
     }, [currentPage, isModify, wordToSearch, order])
 
+    const { t } = useTranslation();
+
 return (
     <React.Fragment>
         <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity"/>
         <Row>
-            <Navigation actualPosition={'Entidades'}/>  
+            <Navigation actualPosition={t('Entidades')}/>  
         </Row>
         <Row>
             <Col>
@@ -69,11 +71,11 @@ return (
                     <Card.Header>
                         <Row>
                             <Col sm={12} lg={9}>
-                             <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                             <Search type={t('por nombre de entidad')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                             </Col>
                             <Col sm={12} lg={3}>
                                 <Link to={{pathname:'/entities/create'}} >
-                                    <CrudButton type='create' name='Entidad' />
+                                    <CrudButton type='create' name={t('Entidad')}/>
                                 </Link>
                             </Col> 
                         </Row>
