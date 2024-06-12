@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import {
-    Button,Card, Table , Row,Col, Form
-  } from 'react-bootstrap';
-import CallBackendByName from '../../components/CallBackendByName'; 
-import CallBackendByType from '../../components/CallBackendByType'; 
+    Button, Card, Table, Row, Col, Form
+} from 'react-bootstrap';
+import CallBackendByName from '../../components/CallBackendByName';
+import CallBackendByType from '../../components/CallBackendByType';
 import { getTaxonomy } from '../../api/services/taxonomies';
 import { getPriority } from '../../api/services/priorities';
 import { getUser } from '../../api/services/users';
@@ -14,71 +14,89 @@ import { useLocation } from "react-router-dom";
 import Navigation from '../../components/Navigation/Navigation'
 import { getArtefact } from '../../api/services/artifact';
 import ViewFiles from '../../components/Button/ViewFiles';
+<<<<<<< HEAD
+import { useTranslation, Trans } from 'react-i18next';
+=======
 import SmallCaseTable from '../case/components/SmallCaseTable';
+>>>>>>> develop
 
 const ReadEvent = () => {
     const location = useLocation();
-    const [body,setBody]=useState({})
+    const [body, setBody] = useState({})
+    const { t } = useTranslation();
 
 
-    useEffect( ()=> {
-        let event= location.state;
-        getEvent(event.url).then((responsive) =>{
+    useEffect(() => {
+        let event = location.state;
+        getEvent(event.url).then((responsive) => {
             setBody(responsive.data)
         })
-      },[]);
+    }, []);
 
-    const callbackTaxonomy = (url ,setPriority) => {
+    const callbackTaxonomy = (url, setPriority) => {
         getTaxonomy(url)
-        .then((response) => {
-            console.log(response)
-            setPriority(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                setPriority(response.data)
+            })
+            .catch();
     }
-    const callbackTlp = (url ,setPriority) => {
+    const callbackTlp = (url, setPriority) => {
         getTLPSpecific(url)
-        .then((response) => {
-            console.log(response)
-            setPriority(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                setPriority(response.data)
+            })
+            .catch();
     }
-    const callbackFeed = (url ,setPriority) => {
+    const callbackFeed = (url, setPriority) => {
         getFeed(url)
-        .then((response) => {
-            console.log(response)
-            setPriority(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                setPriority(response.data)
+            })
+            .catch();
     }
-    const callbackPriority = (url ,set) => {
+    const callbackPriority = (url, set) => {
         getPriority(url)
-        .then((response) => {
-            console.log(response)
-            set(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                set(response.data)
+            })
+            .catch();
     }
-    const callbackReporter = (url ,set) => {
+    const callbackReporter = (url, set) => {
         getUser(url)
-        .then((response) => {
-            console.log(response)
-            set(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                set(response.data)
+            })
+            .catch();
     }
-    const callbackArtefact = (url ,set) => {
+    const callbackArtefact = (url, set) => {
         getArtefact(url)
-        .then((response) => {
-            console.log(response)
-            set(response.data)
-        })
-        .catch();
+            .then((response) => {
+                console.log(response)
+                set(response.data)
+            })
+            .catch();
     }
     const returnBack = () => {
         window.history.back()
     }
+<<<<<<< HEAD
+
+    return (
+        <div>
+            <Row>
+                <Navigation actualPosition={t('ngen.event.add')} path="/events" index="Evento" />
+            </Row>
+            <Card>
+                <Card.Header>
+                    <Card.Title as="h5">{t('w.main')}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+=======
   
   return (
     <div>
@@ -90,78 +108,94 @@ const ReadEvent = () => {
                 <Card.Title as="h5">Principal</Card.Title>
             </Card.Header>                           
             <Card.Body>
+>>>>>>> develop
                     <Row>
                         <Col sm={12} lg={2}>
-                            Fecha
+                            {t('date.one')}
                         </Col>
                         <Col sm={12} lg={4}>
-                            <div> {body.date ? body.date.slice(0,10)+" "+body.date.slice(11,19): "--" }</div>
+                            <div> {body.date ? body.date.slice(0, 10) + " " + body.date.slice(11, 19) : "--"}</div>
                         </Col>
                     </Row>
-                    <p/>
+                    <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                                Tlp
+                            {t('ngen.TLP')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.tlp !== undefined ?
-                                <CallBackendByName url={body.tlp} callback={callbackTlp}/> : "-"}
+                                <CallBackendByName url={body.tlp} callback={callbackTlp} /> : "-"}
                         </Col>
 
                     </Row>
-                    <p/>
+                    <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Taxonomia
+                            {t('ngen.taxonomy_one')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.taxonomy !== undefined ?
-                                <CallBackendByName url={body.taxonomy} callback={callbackTaxonomy}/> : "-"}
+                                <CallBackendByName url={body.taxonomy} callback={callbackTaxonomy} /> : "-"}
                         </Col>
 
                     </Row>
-                    <p/>
+                    <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Fuentes de informacion
+                            {t('ngen.infoSource')}
                         </Col>
                         <Col sm={12} lg={4}>
-                            { body.feed !== undefined ?
-                                <CallBackendByName url={body.feed} callback={callbackFeed}/> : "-"}
+                            {body.feed !== undefined ?
+                                <CallBackendByName url={body.feed} callback={callbackFeed} /> : "-"}
                         </Col>
 
                     </Row>
-                    <p/>
+                    <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Prioridad
+                            {t('ngen.priority_one')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.priority !== undefined ?
-                                <CallBackendByName url={body.priority} callback={callbackPriority}/>: "-"}
+                                <CallBackendByName url={body.priority} callback={callbackPriority} /> : "-"}
                         </Col>
 
                     </Row>
-                    <p/>
+                    <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Usuario que reporta
+                            {t('reporter')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.reporter !== undefined ?
-                                <CallBackendByName url={body.reporter} callback={callbackReporter}/>: "-"}
+                                <CallBackendByName url={body.reporter} callback={callbackReporter} /> : "-"}
                         </Col>
                     </Row>
-                    <br/>
+                    <br />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Notas
+                            {t('notes')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.notes}
                         </Col>
 
                     </Row>
+<<<<<<< HEAD
+                    {/*</Table>*/}
+                </Card.Body>
+            </Card>
+            <Card>
+                <Card.Header>
+                    <Card.Title as="h5">{t('ngen.artifact_other')}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <Row>
+                        {body.artifacts !== undefined ?
+                            body.artifacts.map((url) => {
+                                return (<CallBackendByType url={url} callback={callbackArtefact} useBadge={true} />)
+                            }) : ""
+=======
                {/*</Table>*/}
                </Card.Body>
         </Card>
@@ -227,47 +261,97 @@ const ReadEvent = () => {
                             body.evidence.map((url, index) => {
                                 return  (<ViewFiles url={url} index={index+1}  />)
                                 }): ""
+>>>>>>> develop
                         }
-                        
-                        </Row>
-        
-                    </Card.Body>
-                </Card>
-                
-                <Table responsive >
-                    <Card>
-                    <Card.Header> 
-                                <Card.Title as="h5">Datos adicionales</Card.Title>
+                    </Row>
+                </Card.Body>
+            </Card>
+            <Card>
+                <Card.Header>
+                    <Card.Title as="h5">{t('ngen.affectedResources')}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <Row>
+                        <p></p>
+
+                        <Col sm={12} lg={2}>{t('ngen.domain')}</Col>
+                        <p></p>
+
+                        <Col sm={12} lg={4}> <Form.Control plaintext readOnly defaultValue={body.domain} /></Col>
+
+
+
+                    </Row>
+                    <Row>
+
+                        <Col sm={12} lg={2}>{t('ngen.cidr')}</Col>
+
+                        <Col sm={12} lg={4}>  <Form.Control plaintext readOnly defaultValue={body.cidr} /></Col>
+
+
+
+                    </Row>
+                </Card.Body>
+            </Card>
+
+
+
+            <Card>
+                <Card.Header>
+
+                    <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
+
+
+                </Card.Header>
+
+                <Card.Body>
+                    <Row>
+
+                        {body.evidence !== undefined ?
+                            body.evidence.map((url, index) => {
+                                return (<ViewFiles url={url} index={index + 1} />)
+                            }) : ""
+                        }
+
+                    </Row>
+
+                </Card.Body>
+            </Card>
+
+            <Table responsive >
+                <Card>
+                    <Card.Header>
+                        <Card.Title as="h5">{t('ngen.evidences')}Datos adicionales</Card.Title>
                     </Card.Header>
                     <Card.Body>
-                    <tr>
-                        <td>Comentarios</td>
-                        <td>
-                            <Form.Control plaintext readOnly defaultValue="" />
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Creación</td>
-                        <td>
-                            <Form.Control plaintext readOnly defaultValue={body.created !== undefined ?  body.created.slice(0,10)+" "+body.date.slice(11,19) : ""} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Actualización</td>
-                        <td>
-                            <Form.Control plaintext readOnly defaultValue={ body.modified !== undefined ? body.modified.slice(0,10)+" "+body.date.slice(11,19) : ""} />
-                        </td>
-                    </tr>
-                    
-                
-            </Card.Body>
-        </Card>
-        <Button variant="primary" onClick={() =>returnBack()}>Volver</Button>
-        
-        </Table>
-    </div>
-  )
+                        <tr>
+                            <td>{t('ngen.comments')}</td>
+                            <td>
+                                <Form.Control plaintext readOnly defaultValue="" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>{t('w.creation')}</td>
+                            <td>
+                                <Form.Control plaintext readOnly defaultValue={body.created !== undefined ? body.created.slice(0, 10) + " " + body.date.slice(11, 19) : ""} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{t('w.update')}</td>
+                            <td>
+                                <Form.Control plaintext readOnly defaultValue={body.modified !== undefined ? body.modified.slice(0, 10) + " " + body.date.slice(11, 19) : ""} />
+                            </td>
+                        </tr>
+
+
+                    </Card.Body>
+                </Card>
+                <Button variant="primary" onClick={() => returnBack()}>{t('w.return')}</Button>
+
+            </Table>
+        </div>
+    )
 }
 
 export default ReadEvent

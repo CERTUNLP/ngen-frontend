@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Row, Form, Col } from 'react-bootstrap';
 import SelectComponent from '../../../components/Select/SelectComponent';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
     const [selectTaxonomy, setSelectTaxonomy] = useState()
     const [selectLanguage, setSelectLanguage] = useState()
+    const { t } = useTranslation();
 
     const textareaRefs = {
         problem: useRef(null),
@@ -34,15 +36,15 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
     // Función para actualizar la altura máxima del div visualizador
     const updateMaxHeight = (key) => {
         console.log(key)
-        if (textareaRefs[key].current){
+        if (textareaRefs[key].current) {
             const textareaHeight = textareaRefs[key].current.clientHeight;
-        
+
             setMaxHeights(prevState => ({
                 ...prevState,
                 [key]: textareaHeight + 'px'
             }));
-            };
-        }
+        };
+    }
 
     // Manejar el cambio de tamaño de cada textarea
     useEffect(() => {
@@ -56,34 +58,38 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
                 window.removeEventListener('resize', () => updateMaxHeight(key)); // Limpiar el event listener al desmontar el componente
             });
         };
-        
+
     }, []); // Ejecutar una sola vez al montar el componente
-    
+
     useEffect(() => {
 
         if (languageOptions !== []) {
             languageOptions.forEach(item => {
-                if(item.value === body.lang){
-                    setSelectLanguage({label:item.label, value:item.value })
+                if (item.value === body.lang) {
+                    setSelectLanguage({ label: item.label, value: item.value })
                 }
             });
         }
         if (taxonomies !== []) {
             taxonomies.forEach(item => {
-                if(item.value === body.taxonomy){
-                    setSelectTaxonomy({label:item.label, value:item.value })
+                if (item.value === body.taxonomy) {
+                    setSelectTaxonomy({ label: item.label, value: item.value })
                 }
             });
         }
-    }, [taxonomies]); 
-    const completeField1=( nameField,event, setOption)=>{ 
-        if (event){
-            setBody({...body,
-                [nameField] :event.value }
+    }, [taxonomies]);
+    const completeField1 = (nameField, event, setOption) => {
+        if (event) {
+            setBody({
+                ...body,
+                [nameField]: event.value
+            }
             )
-        }else{
-            setBody({...body,
-                [nameField] :"" }
+        } else {
+            setBody({
+                ...body,
+                [nameField]: ""
+            }
             )
 
         }
@@ -92,43 +98,43 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
     };
     let languageOptions = [
         {
-            value :'en',
-            label : "Ingles"
+            value: 'en',
+            label: "Ingles"
         },
         {
-            value : 'es',
-            label : "Español"
+            value: 'es',
+            label: "Español"
         }
-    ]    
+    ]
 
     return (
         <Form>
             <Row>
                 <Col sm={12} lg={6}>
-                    <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={taxonomies} value={selectTaxonomy} nameField="taxonomy" 
-                                        onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}/>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.taxonomy_one')} options={taxonomies} value={selectTaxonomy} nameField="taxonomy"
+                        onChange={completeField1} placeholder={t('ngen.taxonomy.one.select')} setOption={setSelectTaxonomy} required={true} />
                 </Col>
                 <Col sm={12} lg={6}>
-                    <SelectComponent controlId="exampleForm.ControlSelect1" label="Idioma" options={languageOptions} value={selectLanguage} nameField="lang" 
-                                        onChange={completeField1} placeholder="Seleccione un lenguaje" setOption={setSelectLanguage} required={true}/>
+                    <SelectComponent controlId="exampleForm.ControlSelect1" label={t('w.lang')} options={languageOptions} value={selectLanguage} nameField="lang"
+                        onChange={completeField1} placeholder={t('w.lang.select')} setOption={setSelectLanguage} required={true} />
                 </Col>
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Problema <b style={{ color: "red" }}>*</b></Form.Label>
+                        <Form.Label>{t('w.issue')} <b style={{ color: "red" }}>*</b></Form.Label>
                         <Form.Control
                             as="textarea"
                             name="problem"
                             value={body.problem}
-                            placeholder="Ingrese el problema"
+                            placeholder={t('w.issue.placeholder')}
                             onChange={(e) => completeField(e)}
                             ref={textareaRefs.problem}
                             onInput={() => updateMaxHeight('problem')}
                         />
-                        <span style={{ color: "gray", fontSize: "0.8em" }}>El texto ingresado se parseará como código HTML.</span>
+                        <span style={{ color: "gray", fontSize: "0.8em" }}>{t('w.text.as.html')}</span>
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Label>Vista previa problema</Form.Label>
+                    <Form.Label>{t('w.preview.issue')}</Form.Label>
                     <div
                         style={{
                             backgroundColor: "white",
@@ -146,21 +152,21 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Problema derivado</Form.Label>
+                        <Form.Label>{t('w.problem.derived')}</Form.Label>
                         <Form.Control
                             as="textarea"
                             name="derived_problem"
                             value={body.derived_problem}
-                            placeholder="Ingrese el Problema derivado"
+                            placeholder={t('w.problem.derived.placeholder')}
                             onChange={(e) => completeField(e)}
                             ref={textareaRefs.derived_problem}
                             onInput={() => updateMaxHeight('derived_problem')}
                         />
-                        <span style={{ color: "gray", fontSize: "0.8em" }}>El texto ingresado se parseará como código HTML.</span>
+                        <span style={{ color: "gray", fontSize: "0.8em" }}>{t('w.text.as.html')}</span>
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Label>Vista previa problema derivado</Form.Label>
+                    <Form.Label>{t('derived.issue.preview')}</Form.Label>
                     <div
                         style={{
                             backgroundColor: "white",
@@ -179,21 +185,21 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Verificación</Form.Label>
+                        <Form.Label>{t('w.verification')}</Form.Label>
                         <Form.Control
                             as="textarea"
                             name="verification"
                             value={body.verification}
-                            placeholder="Ingrese la verificación"
+                            placeholder={t('w.verification.placeholder')}
                             onChange={(e) => completeField(e)}
                             ref={textareaRefs.verification}
                             onInput={() => updateMaxHeight('verification')}
                         />
-                        <span style={{ color: "gray", fontSize: "0.8em" }}>El texto ingresado se parseará como código HTML.</span>
+                        <span style={{ color: "gray", fontSize: "0.8em" }}>{t('w.text.as.html')}</span>
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Label>Vista previa verificación</Form.Label>
+                    <Form.Label>{t('w.verification.preview')}</Form.Label>
                     <div
                         style={{
                             backgroundColor: "white",
@@ -212,21 +218,21 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Recomendaciones</Form.Label>
+                        <Form.Label>{t('w.recommendation.other')}</Form.Label>
                         <Form.Control
                             as="textarea"
                             name="recommendations"
                             value={body.recommendations}
-                            placeholder="Ingrese las recomendaciones"
+                            placeholder={t('w.recommendation.placeholder')}
                             onChange={(e) => completeField(e)}
                             ref={textareaRefs.recommendations}
                             onInput={() => updateMaxHeight('recommendations')}
                         />
-                        <span style={{ color: "gray", fontSize: "0.8em" }}>El texto ingresado se parseará como código HTML.</span>
+                        <span style={{ color: "gray", fontSize: "0.8em" }}>{t('w.text.as.html')}</span>
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Label>Vista previa recomendaciones</Form.Label>
+                    <Form.Label>{t('w.recommendation.preview')}</Form.Label>
                     <div
                         style={{
                             backgroundColor: "white",
@@ -259,7 +265,7 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
-                    <Form.Label>Vista previa más información</Form.Label>
+                    <Form.Label>{t('w.info')}</Form.Label>
                     <div
                         style={{
                             backgroundColor: "white",
@@ -280,11 +286,11 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
 
             {body.problem !== "" & body.lang !== "" & body.taxonomy !== "-1" ?
-                <Button variant="primary" onClick={createOrEdit}>Guardar</Button>
+                <Button variant="primary" onClick={createOrEdit}>{t('button.save')} </Button>
                 :
-                <><Button variant="primary" disabled>Guardar</Button></>
+                <><Button variant="primary" disabled>{t('button.save')}</Button></>
             }
-            <Button variant="primary" href="/reports">Cancelar</Button>
+            <Button variant="primary" href="/reports">{t('button.cancel')}</Button>
 
 
         </Form>

@@ -5,23 +5,25 @@ import { Link } from 'react-router-dom';
 import FormGetName from '../../../components/Form/FormGetName';
 import { getTask } from '../../../api/services/tasks';
 import { getTaxonomy } from '../../../api/services/taxonomies';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ModalDetailPlaybook = (props) => {
-    
+
     const [created, setCreated] = useState('');
     const [modified, setModified] = useState('');
+    const { t } = useTranslation();
 
-    useEffect(()=>{
-        if(props.playbook){
+    useEffect(() => {
+        if (props.playbook) {
 
             formatDate(props.playbook.created, setCreated)
             formatDate(props.playbook.modified, setModified)
         }
-    },[props.playbook])
+    }, [props.playbook])
 
     const formatDate = (datetime, set) => {
         datetime = datetime.split('T')
-        let format = datetime[0] + ' ' + datetime[1].slice(0,8); 
+        let format = datetime[0] + ' ' + datetime[1].slice(0, 8);
         set(format)
     }
 
@@ -29,81 +31,83 @@ const ModalDetailPlaybook = (props) => {
         <React.Fragment>
             <Modal size='lg' show={props.show} onHide={props.onHide} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
-                    <Row>    
-                        <Col>                 
+                    <Row>
+                        <Col>
                             <Card>
-                                <Card.Header> 
+                                <Card.Header>
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">Playbook</Card.Title>
-                                            <span className="d-block m-t-5">Detalle de playbook</span>
+                                            <Card.Title as="h5">{t('ngen.playbook')}</Card.Title>
+                                            <span className="d-block m-t-5">{t('ngen.playbook.details')}</span>
                                         </Col>
-                                        <Col sm={12} lg={2}>                       
-                                            <Link to={{pathname:'/playbooks/edit', state: props.playbook}} >
-                                                <CrudButton type='edit'/>
+                                        <Col sm={12} lg={2}>
+                                            <Link to={{ pathname: '/playbooks/edit', state: props.playbook }} >
+                                                <CrudButton type='edit' />
                                             </Link>
-                                            <CloseButton aria-label='Cerrar' onClick={props.onHide} />
+                                            <CloseButton aria-label={t('button.close')} onClick={props.onHide} />
                                         </Col>
                                     </Row>
                                 </Card.Header>
                                 <Card.Body>
                                     <Table responsive >
-                                    <tbody>
-                                        {props.playbook.name ? 
-                                            <tr>
-                                                <td>Nombre</td>
-                                                <td>
-                                                    <Form.Control plaintext readOnly defaultValue={props.playbook.name} />
-                                                </td>
-                                            </tr>
-                                            : 
-                                            <></>
-                                        }                                     
-                                        {props.playbook.taxonomy && props.playbook.taxonomy.length > 0  ? 
-                                            <tr>
-                                                <td>Taxonomias</td>
-                                                <td>
-                                                    {Object.values(props.playbook.taxonomy).map((taxonomyItem, index)=>{
-                                                        return (
-                                                            <FormGetName form={true} get={getTaxonomy} url={taxonomyItem} key={index} />
-                                                            )})
+                                        <tbody>
+                                            {props.playbook.name ?
+                                                <tr>
+                                                    <td>{t('ngen.name_one')}</td>
+                                                    <td>
+                                                        <Form.Control plaintext readOnly defaultValue={props.playbook.name} />
+                                                    </td>
+                                                </tr>
+                                                :
+                                                <></>
+                                            }
+                                            {props.playbook.taxonomy && props.playbook.taxonomy.length > 0 ?
+                                                <tr>
+                                                    <td>{t('ngen.taxonomy_other')}</td>
+                                                    <td>
+                                                        {Object.values(props.playbook.taxonomy).map((taxonomyItem, index) => {
+                                                            return (
+                                                                <FormGetName form={true} get={getTaxonomy} url={taxonomyItem} key={index} />
+                                                            )
+                                                        })
                                                         }
-                                                </td>
-                                            </tr>
-                                            : 
-                                            <></>
-                                        }
-                                        {props.playbook.tasks && props.playbook.tasks.length > 0  ? 
+                                                    </td>
+                                                </tr>
+                                                :
+                                                <></>
+                                            }
+                                            {props.playbook.tasks && props.playbook.tasks.length > 0 ?
+                                                <tr>
+                                                    <td>{t('ngen.tasks')}</td>
+                                                    <td>
+                                                        {Object.values(props.playbook.tasks).map((taskItem, index) => {
+                                                            return (
+                                                                <FormGetName form={true} get={getTask} url={taskItem} key={index} />
+                                                            )
+                                                        })
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                :
+                                                <></>
+                                            }
                                             <tr>
-                                                <td>Tareas</td>
+                                                <td>{t('w.creation')}</td>
                                                 <td>
-                                                    {Object.values(props.playbook.tasks).map((taskItem, index)=>{
-                                                        return (
-                                                            <FormGetName form={true} get={getTask} url={taskItem} key={index} />
-                                                            )})
-                                                    }
+                                                    <Form.Control plaintext readOnly defaultValue={created} />
                                                 </td>
                                             </tr>
-                                            : 
-                                            <></>
-                                        }
-                                        <tr>
-                                            <td>Creación</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={created} />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Actualización</td>
-                                            <td>
-                                                <Form.Control plaintext readOnly defaultValue={modified} />
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                            <tr>
+                                                <td>{t('w.update')}</td>
+                                                <td>
+                                                    <Form.Control plaintext readOnly defaultValue={modified} />
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </Table>
                                 </Card.Body>
                             </Card>
-                        </Col> 
+                        </Col>
                     </Row>
                 </Modal.Body>
             </Modal>

@@ -5,91 +5,93 @@ import Navigation from '../../components/Navigation/Navigation'
 import { getTLP } from '../../api/services/tlp';
 import Search from '../../components/Search/Search'
 import Ordering from '../../components/Ordering/Ordering'
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListTLP = () => {
 
-    const [tlp, setTLP] = useState([]); 
+    const { t } = useTranslation();
+    const [tlp, setTLP] = useState([]);
     const [loading, setLoading] = useState(true)
     const [showAlert, setShowAlert] = useState(false)
-    const [wordToSearch, setWordToSearch]= useState('')
+    const [wordToSearch, setWordToSearch] = useState('')
 
     const [order, setOrder] = useState("");
 
     const textareaStyle = {
-        resize:"none", 
-        backgroundColor:"transparent", 
-        border:"none", 
+        resize: "none",
+        backgroundColor: "transparent",
+        border: "none",
         boxShadow: "none"
     }
 
     useEffect(() => {
         getTLP(wordToSearch, order).then((response) => {
-            setTLP(response.data.results)         
+            setTLP(response.data.results)
         })
-        .catch((error)=>{
-            console.log(error)
-           setShowAlert(true)
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+            .catch((error) => {
+                console.log(error)
+                setShowAlert(true)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }, [wordToSearch, order]);
 
     const resetShowAlert = () => {
         setShowAlert(false);
-    }   
+    }
 
-    const letterSize= { fontSize: '1.1em' }
+    const letterSize = { fontSize: '1.1em' }
 
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
             <Row>
-                <Navigation actualPosition="TLP"/>
+                <Navigation actualPosition="TLP" />
             </Row>
             <Row>
-                <Col>             
+                <Col>
                     <Card>
                         <Card.Header>
                             <Row>
                                 <Col>
 
                                     <div className="input-group">
-                                        <Search type="por codigo" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                        <Search type={t('por codigo')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                                     </div>
-                                </Col>                                  
-                            </Row>                                                                           
+                                </Col>
+                            </Row>
                         </Card.Header>
-                        <Card.Body>                            
+                        <Card.Body>
                             <Table responsive hover className="text-center">
                                 <thead>
                                     <tr>
-                                        <Ordering field="code" label="Codigo" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
-                                        <th style={letterSize}>Descripcion</th>
-                                        <th style={letterSize}>¿Cuando utilizarlo?</th>
-                                        <th style={letterSize}>¿Como compartirlo?</th>      
+                                        <Ordering field="code" label={t('Codigo')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                                        <th style={letterSize}>{t('ngen.description')}</th>
+                                        <th style={letterSize}>{t('when.use')}</th>
+                                        <th style={letterSize}>{t('when.share')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tlp.map((item) => 
-                                    {
+                                    {tlp.map((item) => {
                                         const parts = item.url.split("/");
                                         let itemNumber = parts[parts.length - 2];
 
-                                    return(
-                                        <tr key={itemNumber}>
-                                            <td><p className="p-3 mb-2 bg-dark rounded" style={{color: item.color}}><b>{item.information}</b></p></td>
-                                            <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.description} /></td>
-                                            <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.when} /></td>
-                                            <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.why} /></td> 
-                                        </tr>
-                                     )})}
+                                        return (
+                                            <tr key={itemNumber}>
+                                                <td><p className="p-3 mb-2 bg-dark rounded" style={{ color: item.color }}><b>{item.information}</b></p></td>
+                                                <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.description} /></td>
+                                                <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.when} /></td>
+                                                <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={item.why} /></td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </Card.Body>
                     </Card>
                 </Col>
-            </Row>            
+            </Row>
         </React.Fragment>
     );
 };

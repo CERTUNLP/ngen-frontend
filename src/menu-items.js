@@ -1,24 +1,24 @@
 import { handleLogout } from './layouts/AdminLayout/NavBar/NavRight/index';
 
 const menuItems = {
-    items: [ 
+    items: [
         {
             id: 'principal',
-            title: 'Principal',
+            title: 'menu.main',
             type: 'group',
             children: [
                 {
                     id: 'dashboard',
-                    title: 'Métricas',
+                    title: 'menu.metrics',
                     type: 'item',
                     url: '/metrics',
                     icon: 'feather icon-home',
                     breadcrumbs: false
                 },
-                
+
                 {
                     id: 'Eventos',
-                    title: 'Eventos',
+                    title: 'menu.events',
                     type: 'item',
                     url: '/events',
                     classes: '',
@@ -27,7 +27,7 @@ const menuItems = {
                 },
                 {
                     id: 'case',
-                    title: 'Casos',
+                    title: 'menu.cases',
                     type: 'item',
                     url: '/cases',
                     icon: 'feather icon-search',
@@ -37,13 +37,13 @@ const menuItems = {
         },
         {
             id: 'constituency',
-            title: 'Constituencias',
+            title: 'menu.constituency',
             type: 'group',
             icon: 'fas fa-network-wired',
             children: [
                 {
                     id: 'entity',
-                    title: 'Entidades',
+                    title: 'menu.entities',
                     type: 'item',
                     url: '/entities',
                     icon: 'fas fa-cubes',
@@ -51,7 +51,7 @@ const menuItems = {
                 },
                 {
                     id: 'networks',
-                    title: 'Redes',
+                    title: 'menu.networks',
                     type: 'item',
                     url: '/networks',
                     icon: 'feather icon-share-2',
@@ -59,7 +59,7 @@ const menuItems = {
                 },
                 {
                     id: 'contacts',
-                    title: 'Contactos',
+                    title: 'menu.contacts',
                     type: 'item',
                     url: '/contacts',
                     icon: 'far fa-address-book',
@@ -69,54 +69,54 @@ const menuItems = {
         },
         {
             id: 'config',
-            title: 'Configuración',
+            title: 'menu.config',
             type: 'group',
             icon: 'icon-pages',
             children: [
                 {
                     id: 'platform',
-                    title: 'Plataforma',
+                    title: 'menu.platform',
                     type: 'collapse',
                     icon: 'feather icon-settings',
                     link: false,
                     children: [
                         {
                             id: 'tlp',
-                            title: 'TLP',
+                            title: 'menu.tlp',
                             type: 'item',
                             url: '/tlp',
                             icon: '',
                             breadcrumbs: false
-                        }, 
+                        },
                         {
                             id: 'reporte',
-                            title: 'Reporte',
+                            title: 'menu.report',
                             type: 'item',
                             url: '/reports',
                             icon: '',
                             breadcrumbs: false
-                        }, 
+                        },
                         {
                             id: 'feeds',
-                            title: 'Fuentes',
+                            title: 'menu.sources',
                             type: 'item',
                             url: '/feeds',
                             icon: '',
                             breadcrumbs: false
-                        },         
+                        },
                         {
                             id: 'priority',
-                            title: 'Prioridades',
+                            title: 'menu.priorities',
                             type: 'item',
                             url: '/priorities',
                             classes: '',
                             icon: '',
                             breadcrumbs: false
-            
+
                         },
                         {
                             id: 'playbook',
-                            title: 'Playbooks',
+                            title: 'menu.playbooks',
                             type: 'item',
                             url: '/playbooks',
                             icon: '',
@@ -124,7 +124,7 @@ const menuItems = {
                         },
                         {
                             id: 'taxonomy',
-                            title: 'Taxonomia',
+                            title: 'menu.taxonomies',
                             type: 'item',
                             url: '/taxonomies',
                             icon: '',
@@ -132,7 +132,7 @@ const menuItems = {
                         },
                         {
                             id: 'Estados',
-                            title: 'Estados',
+                            title: 'menu.states',
                             type: 'item',
                             url: '/states',
                             classes: '',
@@ -141,7 +141,7 @@ const menuItems = {
                         },
                         {
                             id: 'Plantilla',
-                            title: 'Plantilla',
+                            title: 'menu.templates',
                             type: 'item',
                             url: '/templates',
                             classes: '',
@@ -150,7 +150,7 @@ const menuItems = {
                         },
                         {
                             id: 'users',
-                            title: 'Usuarios',
+                            title: 'menu.users',
                             type: 'item',
                             url: '/users',
                             classes: '',
@@ -159,7 +159,7 @@ const menuItems = {
                         },
                         {
                             id: 'Configuración',
-                            title: 'Configuración',
+                            title: 'menu.config',
                             type: 'item',
                             url: '/setting',
                             classes: '',

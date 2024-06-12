@@ -1,7 +1,14 @@
+<<<<<<< HEAD
+import React, { useState } from 'react';
+import { Row, Card, Form, Button, Col } from 'react-bootstrap';
+import { validateFieldText, validateNumber } from '../../../utils/validators';
+=======
 import React,{useState, useEffect} from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
 import { validateFieldText, validateNumber} from '../../../utils/validators';
+>>>>>>> develop
 import FormArtifactsSelect from './FormArtifactsSelect';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const FormArtifact = (props) => {
@@ -9,49 +16,69 @@ const FormArtifact = (props) => {
 
     const typeOptions = [
         {
-            value : '0',
-            name : 'Seleccione una opcion'
+            value: '0',
+            name: t('ngen.option_select')
         },
         {
-            value : 'ip',
-            name : 'Ip'
+            value: 'ip',
+            name: 'Ip'
         },
         {
-            value : 'domain',
-            name : 'Domain'
+            value: 'domain',
+            name: 'Domain'
         },
         {
-            value : 'fqdn',
-            name : 'Fqdn'
+            value: 'fqdn',
+            name: 'Fqdn'
         },
         {
-            value : 'url',
-            name : 'Url'
+            value: 'url',
+            name: 'Url'
         },
         {
-            value : 'mail',
-            name : 'Mail'
-        },        
-        {
-            value : 'hash',
-            name : 'Hash'
+            value: 'mail',
+            name: 'Mail'
         },
         {
-            value : 'file',
-            name : 'File'
+            value: 'hash',
+            name: 'Hash'
         },
         {
-            value : 'other',
-            name : 'Other'
+            value: 'file',
+            name: 'File'
         },
         {
-            value : 'user-agent',
-            name : 'User-agent'
+            value: 'other',
+            name: 'Other'
         },
         {
-            value : 'autonomous-system',
-            name : 'Autonomous-system'
+            value: 'user-agent',
+            name: 'User-agent'
+        },
+        {
+            value: 'autonomous-system',
+            name: 'Autonomous-system'
         }
+<<<<<<< HEAD
+    ];
+
+    const [validArtifact, setValidArtifact] = useState(false);
+    const activateButton = () => {
+        return false;
+    };
+
+    const { t } = useTranslation();
+
+
+    return (
+        <div>
+            <Card.Body>
+                <Form>
+                    <Form.Group controlId="exampleForm.ControlSelect1">
+                        <Form.Label>{t('ngen.type')}</Form.Label>
+                        <Form.Control
+                            name="type"
+=======
     ]
     const [validArtifact, setValidArtifact] = useState(false) 
 
@@ -63,24 +90,28 @@ const FormArtifact = (props) => {
                         <Form.Label>Tipo</Form.Label>
                         <Form.Control  
                             name="type" 
+>>>>>>> develop
                             type="choice"
-                            as="select" 
-                            value ={props.type} 
-                            onChange={(e)=>props.setType(e.target.value)} 
+                            as="select"
+                            value={props.type}
+                            onChange={(e) => props.setType(e.target.value)}
                             isInvalid={props.type === "-1"}>
-                         
+
                             {typeOptions.map((t) => {
-                                return(<option value={t.value}> {t.name} </option>)
+                                return (<option value={t.value}>{t.name}</option>);
                             })}
-                            
+
                         </Form.Control>
-                </Form.Group>
+                    </Form.Group>
 
-                <FormArtifactsSelect 
-                        value={props.value} setValue={props.setValue}
-                        type={props.type} 
-                        setValidArtifact={setValidArtifact}/>
+                    <FormArtifactsSelect
+                        value={props.value}
+                        setValue={props.setValue}
+                        type={props.type}
+                        setValidArtifact={setValidArtifact} />
 
+<<<<<<< HEAD
+=======
                 
                 {props.type !== "0" && props.value !== ""?
                 <><Button variant="primary" onClick={props.ifConfirm} >Guardar</Button></>
@@ -94,5 +125,18 @@ const FormArtifact = (props) => {
     </div>
   )
 }
+>>>>>>> develop
 
-export default FormArtifact
+                    {activateButton() ?
+                        <><Button variant="primary" disabled>{t('button.save')}</Button></>
+                        :
+                        <><Button variant="primary" onClick={props.ifConfirm}>{t('button.save')}</Button></>
+                    }
+                    <Button variant="primary" onClick={props.ifCancel}>{t('button.cancel')}</Button>
+                </Form>
+            </Card.Body>
+        </div>
+    );
+};
+
+export default FormArtifact;

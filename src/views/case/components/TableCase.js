@@ -7,23 +7,39 @@ import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
+import { useTranslation, Trans } from 'react-i18next';
 
+<<<<<<< HEAD
+
+
+const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder, order, priorityNames, stateNames, tlpNames, userNames }) => {
+
+    const [url, setUrl] = useState(null)
+=======
 const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents}) => {
     
     const [url, setUrl] = useState(null) 
+>>>>>>> develop
     const [modalDelete, setModalDelete] = useState(false)
-    const [id, setId] = useState(null) 
-        
+    const [id, setId] = useState(null)
+
     //checkbox
     const [isCheckAll, setIsCheckAll] = useState(false);
 
     const [list, setList] = useState([]);
 
-    
-  
+    const { t } = useTranslation();
+
     //ORDER
-    useEffect(() => { 
+    useEffect(() => {
         setList(cases)
+<<<<<<< HEAD
+
+
+    }, [cases]);
+    const storageCaseUrl = (url) => {
+        localStorage.setItem('case', url);
+=======
         
       }, [cases]);
 
@@ -32,6 +48,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         localStorage.setItem('navigation', navigationRow);   
         localStorage.setItem('button return', navigationRow);  
         
+>>>>>>> develop
     }
 
     if (loading) {
@@ -39,7 +56,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             <Row className='justify-content-md-center'>
                 <Spinner animation='border' variant='primary' size='sm' />
             </Row>
-        );    
+        );
     }
 
     //Remove Case
@@ -48,8 +65,8 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         setUrl(url)
         setModalDelete(true)
     }
-    
-    const removeCase = (url)=> {
+
+    const removeCase = (url) => {
         deleteCase(url)
             .then((response) => {
                 setIfModify(response)
@@ -60,7 +77,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             .finally(() => {
                 setModalDelete(false)
             })
-        };
+    };
 
     //Checkbox 
     const handleSelectAll = e => {
@@ -70,7 +87,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             setSelectedCases([]);
         }
     };
-    const handleClick = e => { 
+    const handleClick = e => {
         const { id, checked } = e.target;
         setSelectedCases([...selectedCases, id]);
         if (!checked) {
@@ -82,6 +99,114 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         console.log(selectedCases.includes(id))
     };
 
+<<<<<<< HEAD
+    const letterSize = { fontSize: '1.1em' }
+
+
+    return (
+        <React.Fragment>
+            <Table responsive hover className="text-center">
+                <thead>
+                    <tr>
+                        {list.length > 0 ?
+                            <th>
+                                <Form.Group>
+                                    <Form.Check type="checkbox" id={"selectAll"} //lo que superpone es un parametro llamado custom
+                                        onChange={handleSelectAll} checked={selectedCases.length !== 0 ? isCheckAll : false} />
+                                </Form.Group>
+                            </th>
+                            :
+                            <th>
+                                <Form.Group>
+                                    <Form.Check custom type="checkbox" disabled />
+                                </Form.Group>
+                            </th>
+                        }
+                        <Ordering field="created" label={t('date.creation')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                        <Ordering field="priority" label={t('ngen.priority_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                        <th style={letterSize}> {t('ngen.TLP')} </th>
+                        <th style={letterSize}> {t('ngen.state_one')} </th>
+                        <th style={letterSize}> {t('status.assigned')} </th>
+                        <th style={letterSize}> {t('ngen.action_one')} </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        list.map((caseItem, index) => {
+                            let datetime = caseItem.date.split('T');
+                            datetime = datetime[0] + ' ' + datetime[1].slice(0, 8)
+                            let idItem = caseItem.url.split('/')[(caseItem.url.split('/')).length - 2]
+
+                            return (
+                                list &&
+                                <tr key={index}>
+                                    <td>
+                                        <Form.Group>
+                                            <Form.Check disabled={caseItem.solve_date !== null ? true : false}
+                                                type="checkbox" id={caseItem.url}
+                                                onChange={handleClick} checked={selectedCases.includes(caseItem.url)} />
+                                        </Form.Group>
+                                    </td>
+                                    <td>
+                                        {datetime}
+                                    </td>
+                                    <td>
+                                        {priorityNames[caseItem.priority]}
+                                    </td>
+
+                                    <td>
+                                        <LetterFormat useBadge={true} stringToDisplay={tlpNames[caseItem.tlp].name} color={tlpNames[caseItem.tlp].color} />
+                                    </td>
+
+                                    <td>
+                                        {stateNames[caseItem.state] ? stateNames[caseItem.state] : t('ngen.state_ErrorAssign')}
+                                    </td>
+                                    {userNames[caseItem.user_creator] ?
+                                        <td>
+                                            {userNames[caseItem.user_creator]}
+                                        </td>
+                                        :
+                                        <td>
+                                            Sin asignar
+                                        </td>
+                                    }
+                                    <td>
+                                        <Link to={{ pathname: '/cases/view' }}>
+                                            <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)} />
+                                        </Link>
+
+                                        {caseItem.solve_date == null ?
+                                            <Link to={{ pathname: '/cases/edit', state: caseItem.url }} >
+                                                <CrudButton type='edit' />
+                                            </Link>
+                                            :
+                                            <Button
+                                                id="button_hover"
+                                                className='btn-icon btn-rounded'
+                                                variant='outline-warning'
+                                                title='Caso resuelto'
+                                                disabled
+                                                style={{
+                                                    border: "1px solid #555",
+                                                    borderRadius: "50px",
+                                                    color: "#555",
+                                                }}
+                                            >
+                                                <i className='fa fa-edit' style={{ color: "#555" }}  ></i>
+                                            </Button>}
+
+                                        <CrudButton type='delete' onClick={() => Delete(caseItem.url, idItem)} />
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                </tbody>
+            </Table>
+            <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
+        </React.Fragment>
+    );
+=======
     
     
     const letterSize= { fontSize: '1.0em' }
@@ -234,6 +359,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)}/>
         </React.Fragment> 
   );
+>>>>>>> develop
 };
 
 export default TableCase;
