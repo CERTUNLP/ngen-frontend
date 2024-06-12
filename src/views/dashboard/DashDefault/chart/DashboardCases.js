@@ -42,7 +42,7 @@ const DashboardCases = ({ list, loading }) => {
         <div>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">{t('CAMBIARNGEN')}Ultimos 10 casos en el periodo seleccionado</Card.Title>
+                    <Card.Title as="h5">{t('case.last10')}</Card.Title>
                 </Card.Header>
                 <TableCase cases={list} loading={loading} disableCheckbox={true} disableDateOrdering={true} disableName={true}
                     disablePriority={true} disableTlp={true}

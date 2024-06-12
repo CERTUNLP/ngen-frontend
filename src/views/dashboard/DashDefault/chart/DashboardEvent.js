@@ -35,7 +35,7 @@ const DashboardEvent = ({ list }) => {
         <div>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">{t('CAMBIARNGEN')}Ultimos 10 eventos en el periodo seleccionado</Card.Title>
+                    <Card.Title as="h5">{t('event.last10')}</Card.Title>
                 </Card.Header>
                 <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true}
                     disableCheckbox={true} disableDomain={true} disableCidr={true} disableTlp={true} disableColumnEdit={true}

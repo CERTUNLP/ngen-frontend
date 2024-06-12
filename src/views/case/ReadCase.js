@@ -191,7 +191,7 @@ const ReadCase = () => {
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>{t('CAMBIARNGEN')}Fecha de inicio de gestión</td>
+                                        <td>{t('date.management.start')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={date} />
                                         </td>
