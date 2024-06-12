@@ -66,9 +66,9 @@ const EditCase = () => {
     return (caseItem &&
         <React.Fragment>
             <Row>
-                <Navigation actualPosition={t('Editar caso')} path="/cases" index={t('ngen.case_other')} />
+                <Navigation actualPosition={t('ngen.case_edit')} path="/cases" index={t('ngen.case_other')} />
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios' />
+            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save={t('button.savechanges')} evidenceColum={true} />
         </React.Fragment>
     );
 };

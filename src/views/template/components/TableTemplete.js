@@ -8,7 +8,11 @@ import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
+<<<<<<< HEAD
 import { useTranslation, Trans } from 'react-i18next';
+=======
+import Ordering from '../../../components/Ordering/Ordering';
+>>>>>>> develop
 
 const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames }) => {
     const [deleteName, setDeleteName] = useState()
@@ -83,10 +87,81 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
     const resetShowAlert = () => {
         setShowAlert(false);
     }
+<<<<<<< HEAD
 
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
+=======
+    const letterSize= { fontSize: '1.1em' }
+  return (
+    <React.Fragment>
+        <Alert showAlert={showAlert} resetShowAlert={resetShowAlert}/>  
+    
+               <ul className="list-group my-4"> 
+                    <Table responsive hover className="text-center">
+                        <thead>
+                            <tr>
+                                <Ordering field="event_feed__name" label="Fuentes de información" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                                <Ordering field="event_taxonomy__name" label="Taxonomia" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                                <th>Taxonomia </th>
+                                <th>Recurso afectado</th>
+                                <th>Estado</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list.map((template, index) => {
+                            return (
+                                        <tr key={index}>
+                                            <td>{feedNames[template.event_feed]}</td>
+                                            <td>{taxonomyNames[template.event_taxonomy]} </td>
+                                            <td>{template.address_value} </td>
+                                            <td>
+                                            <ActiveButton active={+template.active} onClick={() => modalChangeState(template.url, template.cidr, template.active)} />
+                                            </td>
+                                            <td>
+                                            <CrudButton  type='read' onClick={() => showModalTemplate(template) }/>
+                                            <Link to={{pathname:"/templates/edit", state: template}} >
+                                                <CrudButton  type='edit' />
+                                            </Link>
+                                            <CrudButton  type='delete' onClick={()=>modalDelete(template.cidr, template.url)} />
+                                            { template.matching_events_without_case > 0 ? 
+                                             <Button  className="btn-icon btn-rounded" variant="outline-primary" onClick={() => create(template.url)}>
+                                             <svg
+                                               xmlns="http://www.w3.org/2000/svg"
+                                               width="16"
+                                               height="16"
+                                               fill="currentColor"
+                                               className="bi bi-play"
+                                               viewBox="0 0 16 16"
+                                             >
+                                               <path d="M12.645 8.235l-6.647-4.662a1 1 0 0 0-1.618.785v9.324a1 1 0 0 0 1.618.785l6.647-4.662a1 1 0 0 0 0-1.57z" />
+                                             </svg>
+                                           </Button> :
+                                           <Button disabled className="btn-icon btn-rounded" variant="outline-secundary"
+                                           style={{
+                                            border: "1px solid #555", 
+                                            borderRadius: "50px",
+                                            color: "#555", 
+                                          }}>
+                                           <svg
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             width="16"
+                                             height="16"
+                                             fill="currentColor"
+                                             className="bi bi-play"
+                                             viewBox="0 0 16 16"
+                                           >
+                                             <path d="M12.645 8.235l-6.647-4.662a1 1 0 0 0-1.618.785v9.324a1 1 0 0 0 1.618.785l6.647-4.662a1 1 0 0 0 0-1.57z" />
+                                           </svg>
+                                         </Button> }
+                                        
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+>>>>>>> develop
 
             <ul className="list-group my-4">
                 <Table responsive hover className="text-center">
@@ -223,11 +298,79 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                                             </Card.Body>
                                         </Card>
                                     </Col>
+<<<<<<< HEAD
                                 </Row>
                             </Modal.Body>
                         </Modal>
 
 
+=======
+                                    <Col sm={12} lg={4}>                       
+                                        <Link to={{pathname:"/templates/edit", state: template}} >
+                                            <CrudButton  type='edit' />
+                                        </Link>
+                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                    </Col>
+                                </Row>         
+                            </Card.Header>
+                            <Card.Body>
+                                <Table responsive >
+                                    <tr>
+                                        <td>Cidr</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={template.cidr} />
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dominio</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={template.domain} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ciclo de vida</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={template.case_lifecycle} />
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>activo</td>
+                                        <td>
+                                        <Button 
+                                            className="btn-icon btn-rounded" 
+                                            variant={template.active ? 'outline-success' : 'outline-danger'} 
+                                            title={template.active ? 'Activo' : 'Inactivo'}>
+                                                <i className={template.active ? 'feather icon-check-circle' : 'feather icon-alert-triangle'}/>
+                                        </Button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Creación</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={template.created ? template.created.slice(0,10)+" "+template.created.slice(11,19) : ""} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Actualización</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={template.modified ? template.modified.slice(0,10)+" "+ template.modified.slice(11,19): ""} />
+                                        </td>
+                                    </tr>
+                                    
+                                    
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                    </Col> 
+                </Row>
+            </Modal.Body>            
+        </Modal>
+                        </tbody>
+                    </Table>
+                </ul> 
+>>>>>>> develop
 
                     </tbody>
                 </Table>

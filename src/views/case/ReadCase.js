@@ -3,7 +3,7 @@ import { Button, Card, CloseButton, Col, Form, Modal, Row, Table } from 'react-b
 import { useLocation } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import ViewFiles from '../../components/Button/ViewFiles';
-import SmallEventTable from './components/SmallEventTable';
+import SmallEventTable from '../event/components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
@@ -13,6 +13,8 @@ import { useTranslation, Trans } from 'react-i18next';
 const ReadCase = () => {
     const location = useLocation();
     const [caseItem, setCaseItem] = useState(location?.state?.item || null);
+    const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
+    const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
 
     const [id, setId] = useState('');
     const [date, setDate] = useState('');
@@ -35,7 +37,6 @@ const ReadCase = () => {
     useEffect(() => {
 
         if (caseItem !== null) {
-            const listEvents = []
             console.log(caseItem)
             const eventPromises = caseItem.events.map(url => getEvent(url));
 
@@ -50,11 +51,7 @@ const ReadCase = () => {
                     const errorMessage = t('error.event');
                     console.error(errorMessage, error);
                 });
-
-
         }
-
-
         if (!caseItem) {
             const caseUrl = localStorage.getItem('case');
             console.log("STORAGE")
@@ -128,14 +125,15 @@ const ReadCase = () => {
         }
     }, [caseItem]);
 
-
-
     return (
         caseItem &&
         <React.Fragment>
-            <Row>
-                <Navigation actualPosition="Detalle" path="/cases" index={t('ngen.case_other')} />
-            </Row>
+            {navigationRow !== "false" ?
+                <Row>
+                    <Navigation actualPosition="Detalle" path="/cases" index={t('ngen.case_other')} />
+                </Row>
+                : " "
+            }
             <Row>
                 <Col sm={12}>
 
@@ -174,6 +172,12 @@ const ReadCase = () => {
                                             <Form.Control plaintext readOnly defaultValue={assigned} />
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>Nombre</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={caseItem.name ? caseItem.name : "-"} />
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </Table>
                         </Card.Body>
@@ -187,7 +191,7 @@ const ReadCase = () => {
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>{t('date.one')}</td>
+                                        <td>{t('CAMBIARNGEN')}Fecha de inicio de gestión</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={date} />
                                         </td>
@@ -245,7 +249,11 @@ const ReadCase = () => {
                             </Card.Body>
                         </Card>
                         : <></>}
+
+
                     <SmallEventTable list={list} />
+
+
                     <Card>
                         <Card.Header>
                             <Card.Title as="h5">{t('w.info')}</Card.Title>
@@ -278,10 +286,14 @@ const ReadCase = () => {
                         : <></>}
 
 
+                    {buttonReturn !== "false" ?
+                        <Button variant="primary" href="/cases">{t('w.return')}</Button>
+                        :
+                        ""
+                    }
 
-                    <Button variant="primary" href="/cases">{t('w.return')}</Button>
-                </Col>
-            </Row>
+                </Col >
+            </Row >
 
             <Modal size='lg' show={modalShowEvent} onHide={() => setModalShowEvent(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
@@ -295,7 +307,7 @@ const ReadCase = () => {
                                             <span className="d-block m-t-5">{t('ngen.event.detail')}</span>
                                         </Col>
                                         <Col sm={12} lg={4}>
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalShowEvent(false)} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => setModalShowEvent(false)} />
                                         </Col>
                                     </Row>
                                 </Card.Header>
@@ -305,7 +317,7 @@ const ReadCase = () => {
                     </Row>
                 </Modal.Body>
             </Modal>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

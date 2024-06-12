@@ -35,7 +35,7 @@ const ListCase = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
     //filters
-    const [order, setOrder] = useState("-created");
+    const [order, setOrder] = useState("date");
     const [wordToSearch, setWordToSearch] = useState('')
     const [open, setOpen] = useState(false);
 
@@ -216,12 +216,33 @@ const ListCase = () => {
                                     </Button>
                                 </Col>
                             </Row>
-                            <Row>
+                            <br />
+                        </div>
+                    </Collapse>
+                </Card.Header>
+                <Card.Body>
+                    <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order} setOrder={setOrder}
+                        setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames} stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}
+                        editColum={true} deleteColum={true} navigationRow={true} buttonReturn={false} disableNubersOfEvents={true} />
+                </Card.Body>
+                <Card.Footer >
+                    <Row className="justify-content-md-center">
+                        <Col md="auto">
+                            <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination}
+                                setUpdatePagination={setUpdatePagination} setLoading={setLoading}
+                                setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination} />
+                        </Col>
+                    </Row>
+                </Card.Footer>
+            </Card>
+        </Col>
+        </Row >
+    <ModalConfirm type='merge' component='casos' name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
 
 
 
 
-                            </Row>
+                            </Row >
                             <br />
                             <Collapse in={open}>
                                 <div id="example-collapse-text">
@@ -240,7 +261,7 @@ const ListCase = () => {
                                     <br />
                                 </div>
                             </Collapse>
-                        </Card.Header>
+                        </Card.Header >
                         <Card.Body>
                             <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order} setOrder={setOrder}
                                 setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames} stateNames={stateNames} tlpNames={tlpNames} userNames={userNames} />
@@ -254,12 +275,12 @@ const ListCase = () => {
                                 </Col>
                             </Row>
                         </Card.Footer>
-                    </Card>
-                </Col>
-            </Row>
-            <ModalConfirm type='merge' component={t('ngen.case_other')} name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
+                    </Card >
+                </Col >
+            </Row >
+    <ModalConfirm type='merge' component={t('ngen.case_other')} name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
 
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 

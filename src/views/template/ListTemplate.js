@@ -29,10 +29,17 @@ const ListTemplete = () => {
     const [taxonomies, setTaxonomies] = useState([]);
     const [feeds, setFeeds] = useState([])
 
+<<<<<<< HEAD
     const [taxonomyFilter, setTaxonomyFilter] = useState('')
     const [feedFilter, setFeedFilter] = useState('')
     const [wordToSearch, setWordToSearch] = useState('')
     const [order, setOrder] = useState("");
+=======
+  const [taxonomyFilter, setTaxonomyFilter]= useState('')
+  const [feedFilter, setFeedFilter]= useState('')
+  const [wordToSearch, setWordToSearch]= useState('')
+  const [order, setOrder] = useState("event_feed__name");
+>>>>>>> develop
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});

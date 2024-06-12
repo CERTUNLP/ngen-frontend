@@ -5,11 +5,10 @@ import { getContact, deleteContact } from '../../../api/services/contacts';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import PriorityButton from '../../../components/Button/PriorityButton';
+import Ordering from '../../../components/Ordering/Ordering';
 import { useTranslation, Trans } from 'react-i18next';
 
-const TableContact = ({ setIsModify, list, loading, currentPage }) => {
-    const { t } = useTranslation();
-
+const TableContact = ({ setIsModify, list, loading, setLoading, currentPage, order, setOrder }) => {
     const [contact, setContact] = useState('')
 
     const [modalShow, setModalShow] = useState(false)
@@ -21,6 +20,7 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
     const [modified, setModified] = useState('')
     const [type, setType] = useState('')
     const [role, setRole] = useState('')
+    const { t } = useTranslation();
 
     if (loading) {
         return (
@@ -92,12 +92,14 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
         localStorage.setItem('contact', url);
     }
 
+    const letterSize = { fontSize: '1.1em' }
+
     return (
         <React.Fragment>
             <Table responsive hover className="text-center">
                 <thead>
                     <tr>
-                        <th>{t('ngen.name_one')}</th>
+                        <Ordering field="name" label={t('ngen.name_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         <th>{t('ngen.role_one')}</th>
                         <th>{t('ngen.contact_other')}</th>
                         <th>{t('ngen.priority_one')}</th>
@@ -133,14 +135,14 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
                                 <Card.Header>
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">Contactos</Card.Title>
-                                            <span className="d-block m-t-5">Detalle de contacto</span>
+                                            <Card.Title as="h5">{t('ngen.contact_other')}</Card.Title>
+                                            <span className="d-block m-t-5">{t('ngen.contact.detail')}</span>
                                         </Col>
                                         <Col sm={2} lg={2}>
                                             <Link to={{ pathname: '/contacts/edit', state: contact }} >
                                                 <CrudButton type='edit' />
                                             </Link>
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                         </Col>
                                     </Row>
                                 </Card.Header>
@@ -148,19 +150,19 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
                                     <Table responsive >
                                         <tbody>
                                             <tr>
-                                                <td>Id del sistema</td>
+                                                <td>{t('ngen.system.id')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={id} />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Nombre</td>
+                                                <td>{t('ngen.name_one')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={contact.name} />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Rol</td>
+                                                <td>{t('ngen.role_one')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={role} />
                                                 </td>
@@ -173,7 +175,7 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
                                             </tr>
                                             {contact.public_key ?
                                                 <tr>
-                                                    <td>Llave pública</td>
+                                                    <td>{t('ngen.public.key')}</td>
                                                     <td>
                                                         <Form.Control plaintext readOnly defaultValue={contact.public_key} />
                                                     </td>
@@ -182,26 +184,26 @@ const TableContact = ({ setIsModify, list, loading, currentPage }) => {
                                                 <></>
                                             }
                                             <tr>
-                                                <td>Informacion Relacionada</td>
+                                                <td>{t('info.related')}</td>
                                                 <td>
                                                     <Button size="sm" variant='light' className="text-capitalize">
                                                         Redes
                                                         <Badge variant="light" className="ml-2">4</Badge>
                                                     </Button>
                                                     <Button size="sm" variant='light' className="text-capitalize">
-                                                        Prioridad&nbsp;
+                                                        {t('ngen.priority_one')}
                                                         <PriorityButton url={contact.priority} />
                                                     </Button>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Creación</td>
+                                                <td>{t('w.creation')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={created} />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Actualización</td>
+                                                <td>{t('w.update')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={modified} />
                                                 </td>

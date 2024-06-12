@@ -14,7 +14,11 @@ import { useLocation } from "react-router-dom";
 import Navigation from '../../components/Navigation/Navigation'
 import { getArtefact } from '../../api/services/artifact';
 import ViewFiles from '../../components/Button/ViewFiles';
+<<<<<<< HEAD
 import { useTranslation, Trans } from 'react-i18next';
+=======
+import SmallCaseTable from '../case/components/SmallCaseTable';
+>>>>>>> develop
 
 const ReadEvent = () => {
     const location = useLocation();
@@ -80,6 +84,7 @@ const ReadEvent = () => {
     const returnBack = () => {
         window.history.back()
     }
+<<<<<<< HEAD
 
     return (
         <div>
@@ -91,6 +96,19 @@ const ReadEvent = () => {
                     <Card.Title as="h5">{t('w.main')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
+=======
+  
+  return (
+    <div>
+        <Row>
+            <Navigation actualPosition="Detalle" path="/events" index ="Evento"/>
+        </Row>        
+        <Card>
+            <Card.Header> 
+                <Card.Title as="h5">Principal</Card.Title>
+            </Card.Header>                           
+            <Card.Body>
+>>>>>>> develop
                     <Row>
                         <Col sm={12} lg={2}>
                             {t('date.one')}
@@ -163,6 +181,7 @@ const ReadEvent = () => {
                         </Col>
 
                     </Row>
+<<<<<<< HEAD
                     {/*</Table>*/}
                 </Card.Body>
             </Card>
@@ -176,6 +195,73 @@ const ReadEvent = () => {
                             body.artifacts.map((url) => {
                                 return (<CallBackendByType url={url} callback={callbackArtefact} useBadge={true} />)
                             }) : ""
+=======
+               {/*</Table>*/}
+               </Card.Body>
+        </Card>
+
+        <SmallCaseTable readCase={body.case} />
+
+        <Card>
+            <Card.Header>      
+                <Card.Title as="h5">Artefactos</Card.Title>      
+            </Card.Header>
+            <Card.Body>
+                <Row>
+                    { body.artifacts !== undefined ? 
+                       body.artifacts.map((url) => {
+                        return  (<CallBackendByType url={url} callback={callbackArtefact} useBadge={true}/>)
+                        }): ""
+                    }
+                </Row>
+            </Card.Body>
+        </Card>
+                    <Card>
+                    <Card.Header> 
+                        <Card.Title as="h5">Recursos afectados</Card.Title>
+            </Card.Header>
+            <Card.Body>
+            <Row>
+            <p></p>
+                    
+                    <Col sm={12} lg={2}>Dominio</Col>
+                    <p></p>
+                            
+                    <Col sm={12} lg={4}> <Form.Control plaintext readOnly defaultValue={body.domain} /></Col>
+                    
+                        
+
+                </Row>
+                <Row>
+                    
+                    <Col sm={12} lg={2}>Cidr</Col>
+                            
+                    <Col sm={12} lg={4}>  <Form.Control plaintext readOnly defaultValue={body.cidr}  /></Col>
+                    
+                        
+
+                </Row>
+                    </Card.Body>
+                </Card>
+            
+
+            
+                    <Card>
+                    <Card.Header> 
+                        
+                        <Card.Title as="h5">Evidencias</Card.Title>
+                                        
+
+                    </Card.Header>
+            
+                    <Card.Body>
+                        <Row>
+                        
+                        { body.evidence !== undefined ?
+                            body.evidence.map((url, index) => {
+                                return  (<ViewFiles url={url} index={index+1}  />)
+                                }): ""
+>>>>>>> develop
                         }
                     </Row>
                 </Card.Body>

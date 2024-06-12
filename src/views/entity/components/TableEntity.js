@@ -6,6 +6,7 @@ import CrudButton from '../../../components/Button/CrudButton';
 import { getEntity, deleteEntity, isActive } from '../../../api/services/entities';
 import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
+<<<<<<< HEAD
 import { useTranslation, Trans } from 'react-i18next';
 
 
@@ -21,6 +22,23 @@ const TableEntity = ({ setIsModify, list, loading, currentPage }) => {
     const [modified, setModified] = useState('')
     const [active, setActive] = useState('')
     const { t } = useTranslation();
+=======
+import Ordering from '../../../components/Ordering/Ordering';
+
+
+const TableEntity = ({setIsModify, list, loading, setLoading, currentPage, order, setOrder}) => {
+    const [entity, setEntity] = useState('') 
+    const [modalShow, setModalShow] = useState(false) 
+    const [modalDelete, setModalDelete] = useState(false) 
+    const [modalState, setModalState] = useState(false) 
+    const [url, setUrl] = useState('') 
+    const [id, setId] = useState('') 
+    const [name, setName] = useState('') 
+    const [created, setCreated] = useState('') 
+    const [modified, setModified] = useState('') 
+    const [active,setActive] = useState('') 
+
+>>>>>>> develop
     if (loading) {
         return (
             <Row className='justify-content-md-center'>
@@ -94,7 +112,45 @@ const TableEntity = ({ setIsModify, list, loading, currentPage }) => {
     const storageEntityUrl = (url) => {
         localStorage.setItem('entity', url);
     }
+<<<<<<< HEAD
     console.log()
+=======
+
+    const letterSize= { fontSize: '1.1em' }
+    return (
+            <React.Fragment>
+                <Table responsive hover className="text-center">
+                    <thead>
+                        <tr>
+                            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize}/>
+                            <th>Activo</th>
+                            <th>Redes Asociadas</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {list.map((entity, index) => {
+                            
+                            return (
+                                <tr key={index}>
+                                    <td>{entity.name}</td>
+                                    <td>
+                                        <ActiveButton active={entity.active} onClick={() => pressActive(entity.url, entity.active, entity.name)} />
+                                    </td>
+                                    <td>{entity.networks.length}</td>
+                                    <td>
+                                        <CrudButton type='read' onClick={() => showEntity(entity.url)} />
+                                        <Link to={{pathname:'/entities/edit', state: entity}}> 
+                                            <CrudButton type='edit' onClick={() => storageEntityUrl(entity.url)}/>
+                                        </Link>
+                                        <CrudButton type='delete' onClick={() => Delete(entity.url, entity.name)} />
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
+>>>>>>> develop
 
 
     return (

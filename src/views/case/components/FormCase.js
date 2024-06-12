@@ -16,6 +16,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     const location = useLocation();
     const fromState = location.state;
+<<<<<<< HEAD
     const [url, setUrl] = useState(props.edit ? props.caseItem.url : null)
     const [date, setDate] = useState(props.caseItem.date !== null ? props.caseItem.date.substr(0, 16) : '')
     const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle)
@@ -23,6 +24,15 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [priority, setPriority] = useState(props.caseItem.priority)
     const [name, setName] = useState(props.caseItem.name)
     const [tlp, setTlp] = useState(props.caseItem.tlp)
+=======
+    const [url, setUrl] = useState(props.edit ? props.caseItem.url : null) 
+    const [date, setDate] = useState(props.caseItem.date  !== null ? props.caseItem.date.substr(0,16) : getCurrentDateTime()) 
+    const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle) 
+    const [parent, setParent] = useState(props.caseItem.parent) 
+    const [priority, setPriority] = useState(props.caseItem.priority) 
+    const [name, setName] = useState(props.caseItem.name) 
+    const [tlp, setTlp] = useState(props.caseItem.tlp) 
+>>>>>>> develop
     const [assigned, setAssigned] = useState(props.caseItem.assigned)
     const [state, setState] = useState(props.caseItem.state)
     const [comments, setComments] = useState([])
@@ -51,7 +61,14 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectAssigned, setSelectAssigned] = useState("")
     const { t } = useTranslation();
 
+<<<<<<< HEAD
     useEffect(() => {
+=======
+    const [tlpNames, setTlpNames] = useState({});
+    const [priorityNames, setPriorityNames] = useState({});
+    const [userNames, setUserNames] = useState({});
+
+>>>>>>> develop
 
         if (allPriorities !== []) {
             allPriorities.forEach(item => {
@@ -89,6 +106,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             });
         }
 
+<<<<<<< HEAD
     }, [allPriorities, allTlp, allUsers, props.allStates])
     useEffect(() => {
 
@@ -130,6 +148,55 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 console.log(error)
             })
 
+=======
+    },[allPriorities, allTlp, allUsers, props.allStates])
+    useEffect(()=> {
+      
+        getMinifiedPriority()
+        .then((response) => {
+            let listPriority = []
+            let dicPriority={}
+            response.map((priority) => {
+              listPriority.push({value:priority.url, label:priority.name})
+              dicPriority[priority.url]= priority.name
+            })
+            setPriorityNames(dicPriority)
+            setAllPriorities(listPriority)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
+        getMinifiedTlp()
+        .then((response) => {
+            let listTlp = []
+            let dicTlp = {}
+            response.map((tlp) => {
+              listTlp.push({value:tlp.url, label:tlp.name})
+              dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
+            })
+            setAllTlp(listTlp)
+            setTlpNames(dicTlp)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
+        getMinifiedUser()
+        .then((response) => {
+            let listUser = []
+            let dicUser={}
+            response.map((user) => {
+                listUser.push({value:user.url, label:user.username})
+                dicUser[user.url]= user.username
+            })
+            setAllUsers(listUser)
+            setUserNames(dicUser)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+>>>>>>> develop
 
     }, [props.allStates])
 
@@ -170,7 +237,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             setEvidences(evidences.filter((file, index) => index !== position));
         }
     }
+<<<<<<< HEAD
     /********************************************** */
+=======
+/********************************************** */
+>>>>>>> develop
 
     //Edit
     const editCase = () => {
@@ -223,7 +294,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 setIfClick(false)
             });
     };
-    console.log(fromState)
+    console.log(props.selectedEvent)
 
     //Create
     const addCase = () => {
@@ -269,9 +340,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             form.append("comments", array)
         }
 
-        console.log(form)
-
         postCase(form)
+<<<<<<< HEAD
             .then((response) => {
                 console.log(response)
                 if (fromState === "redirecToCreateEvent") {
@@ -293,9 +363,57 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 setShowAlert(true)
                 setIfClick(false)
             });
+=======
+        .then((response) => { 
+            console.log("entro aca23")
+            if (props.createCaseModal){
+               
+                if (props.setCaseToLink !== undefined){    
+                    console.log("entro aca3")
+                    props.setCaseToLink({name:response.data.name, date:response.data.date, 
+                        priority:priorityNames[response.data.priority], tlp:tlpNames[response.data.tlp].name, 
+                        state:props.stateNames[response.data.state], user:userNames[response.data.user_creator]})
+                        
+                    props.completeField1("case", {value:response.data.url ,name:response.data.name, date:response.data.date, 
+                        priority:priorityNames[response.data.priority], tlp:tlpNames[response.data.tlp].name, 
+                        state:props.stateNames[response.data.state], user:userNames[response.data.user_creator]}, props.setSelectCase)
+                   
+                }
+                console.log("entro aca2")
+                if (props.selectedEvent !== undefined){
+                    
+                    props.setSelectedEvent([])
+                    console.log("entro aca1")
+                    props.setSelectCase("")
+                    console.log("entro aca")
+                    props.setRefresh(!props.refresh)
+                } 
+                props.setShowModalCase(false)
+                //props.setUpdateCases(response)
+            }else{
+                window.location.href = "/cases"           
+            }
+           
+        })
+        .catch((error) => {
+            console.log(error.data)
+            setShowAlert(true)
+            setIfClick(false)
+        });    
+>>>>>>> develop
     };
+    function getCurrentDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = '00';
+        const minutes = '00';
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
 
     return (
+<<<<<<< HEAD
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case" />
             <Card>
@@ -334,6 +452,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     </Row>
                 </Card.Body>
             </Card>
+=======
+        <React.Fragment>  
+            <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case"/>
+           
+>>>>>>> develop
 
 
             <Card>
@@ -356,8 +479,23 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                             </Form.Group>
                         </Col>
                         <Col lg={3} sm={12}>
+<<<<<<< HEAD
                             <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
                                 value={selectPriority} placeholder={t('ngen.priority_one')} required={true} />
+=======
+                            <Form.Group controlId="Form.Case.Date">
+                                <Form.Label>Fecha de inicio de gestión </Form.Label>
+                                <Form.Control type="datetime-local" //2023-03-24T01:40:14.181622Z 
+                                    
+                                    value={date} //yyyy-mm-ddThh:mm
+                                    min="2000-01-01T00:00" max="2030-01-01T00:00" 
+                                    onChange={(e) => setDate(e.target.value)}/>
+                            </Form.Group>
+                        </Col>
+                        <Col lg={3} sm={12}>                        
+                                 <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
+                                    value={selectPriority} placeholder="Prioridad" required={true}/>
+>>>>>>> develop
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setLifecycle} setSelect={setSelectLifecycle} options={allLifecycles}
@@ -376,6 +514,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
                                 value={selectAssigned} placeholder={t('status.assigned')} />
                         </Col>
+                        
                     </Row>
                     <Row>
                         <Col >
@@ -394,6 +533,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     </Row>
                 </Card.Body>
             </Card>
+<<<<<<< HEAD
             {props.edit ?
                 <Card>
                     <Card.Header>
@@ -454,6 +594,76 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
             }
             <Button variant="primary" href="/cases">{t('button.cancel')}</Button>
+=======
+            {props.evidenceColum ?
+            
+            props.edit ?
+            <Card>
+                <Card.Header>    
+                    <Card.Title as="h5">Evidencias</Card.Title>              
+                </Card.Header>
+                <Card.Body>
+                    <Row>
+                        {evidences.map((url, index) => {
+                            console.log(url)
+                            return  (
+                                <Col>
+                                    <ViewFiles url={url} index={index+1} /> {/*setIfDelete={setIfDelete} */}
+                                </Col> )
+                        })}
+                    </Row>
+                </Card.Body>
+                <Card.Body>
+                    <Form>   
+                        <Form.Group controlId="Form.Case.Evidences.Drag&Drop">
+                            <div
+                                className="dropzone"
+                                onDragOver={handleDragOver}
+                                onDrop={handleDrop}>
+                                <FileUpload files={evidences} setFiles={setEvidences} removeFile={removeFile} />
+                                <FileList files={evidences} removeFile={removeFile} />
+                            </div>
+                        </Form.Group>
+                    </Form>
+                </Card.Body>
+            </Card>
+
+            : 
+            <Card>
+                <Card.Header>    
+                    <Card.Title as="h5">Evidencias</Card.Title>              
+                </Card.Header>
+                <Card.Body>
+                    <Form>   
+                        <Form.Group controlId="Form.Case.Evidences.Drag&Drop">
+                            <div
+                                className="dropzone"
+                                onDragOver={handleDragOver}
+                                onDrop={handleDrop}>
+                                <FileUpload files={evidences} setFiles={setEvidences} removeFile={removeFile} />
+                                <FileList files={evidences} removeFile={removeFile} />
+                            </div>
+                        </Form.Group>
+                    </Form>
+                </Card.Body>
+            </Card>
+            : 
+            ""
+
+            }
+            
+            {
+                 priority !== '' && lifecycle !== '' && tlp !=='' && state !== ''? 
+                <><Button variant="primary" onClick={props.edit ? editCase : addCase}>{props.save}</Button></>:
+                <><Button variant="primary" disabled>{props.save}</Button></> 
+            }
+            {props.buttonsModalColum ?
+            <Button variant="primary" href="/cases">Cancelar</Button>
+            :
+            <Button variant="primary" onClick={()=>props.setShowModalCase(false)}>Cancelar</Button>
+            }
+            
+>>>>>>> develop
         </React.Fragment>
     );
 };

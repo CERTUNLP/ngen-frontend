@@ -21,7 +21,7 @@ const ListPriorities = () => {
   const [disabledPagination, setDisabledPagination] = useState(true)
   const { t } = useTranslation();
 
-  const [order, setOrder] = useState("");
+  const [order, setOrder] = useState("name");
 
   function updatePage(chosenPage) {
     setCurrentPage(chosenPage);

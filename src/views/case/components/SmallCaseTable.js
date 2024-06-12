@@ -1,0 +1,126 @@
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Col, Row } from 'react-bootstrap'
+import { getCase } from '../../../api/services/cases';
+import { getMinifiedPriority } from '../../../api/services/priorities';
+import { getMinifiedState } from '../../../api/services/states';
+import { getMinifiedTlp } from '../../../api/services/tlp';
+import { getMinifiedUser } from '../../../api/services/users';
+import CrudButton from '../../../components/Button/CrudButton';
+import TableCase from './TableCase'
+
+const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase}) => {
+
+    const [userNames, setUserNames] = useState({});
+    const [stateNames, setStateNames] = useState({});
+    const [priorityNames, setPriorityNames] = useState({});
+    const [caseItem, setCaseItem] = useState([]);
+    const [tlpNames, setTlpNames] = useState({});
+
+    console.log(readCase)
+
+    useEffect(() => {
+
+        if(readCase){
+            getCase(readCase).then((response) => {
+                setCaseItem([response.data])
+                
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }
+
+        getMinifiedTlp().then((response) => {
+            let dicTlp = {};
+            response.map((tlp) => {
+                dicTlp[tlp.url] = { name: tlp.name, color: tlp.color };
+            });
+            setTlpNames(dicTlp);
+        });
+
+
+        getMinifiedPriority()
+        .then((response) => {
+            let dicPriority={}
+            response.map((priority) => {
+                dicPriority[priority.url]= priority.name
+            })
+            setPriorityNames(dicPriority)
+            
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
+        getMinifiedUser()
+        .then((response) => {
+            let dicUser={}
+            response.map((user) => {
+                dicUser[user.url]= user.username
+            })
+            setUserNames(dicUser)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+
+        getMinifiedState()
+        .then((response) => {
+            let dicState={}
+            response.map((state) => {
+                dicState[state.url]= state.name
+            })
+            setStateNames(dicState)
+        })
+        
+    },[readCase]);
+
+  return (
+    <React.Fragment>
+    <Card>
+        <Card.Header>
+            <Row>
+            
+                <Col sm={12} lg={8}>
+                    <Card.Title as="h5">Caso</Card.Title>
+                </Col>
+                {disableLink  ?
+                <Col sm={12} lg={2}>
+                    <Button 
+                            size="lm"
+                            variant="outline-dark"
+                            onClick={() => modalCase()}
+                            >
+                            Crear nuevo caso
+                    </Button>
+                </Col>
+                :  ""
+                }
+                {disableLink ?
+                <Col sm={12} lg={2}>
+                    <Button 
+                            size="lm"
+                            variant="outline-dark"
+                            onClick={() => modalListCase()}
+                            >
+                            Vincular a caso 
+                    </Button>
+                </Col>
+                :""
+                }
+                
+                 
+            </Row>
+        </Card.Header>
+        <Card.Body>
+            <TableCase cases={caseItem} disableCheckbox={true} disableDateOrdering={true} 
+               priorityNames={priorityNames} stateNames={stateNames} userNames={userNames} tlpNames={tlpNames}
+                        editColum={false} deleteColum={false} detailModal={false} 
+                        navigationRow={false} selectCase={true}  disableNubersOfEvents={true} />
+        </Card.Body>
+    </Card>
+</React.Fragment>
+  )
+}
+
+export default SmallCaseTable

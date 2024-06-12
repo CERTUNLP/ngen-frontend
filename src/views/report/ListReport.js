@@ -23,7 +23,12 @@ const ListReport = () => {
 
   const [showAlert, setShowAlert] = useState(false)
 
+<<<<<<< HEAD
   const [wordToSearch, setWordToSearch] = useState('')
+=======
+    const [wordToSearch, setWordToSearch]= useState('')
+    const [order, setOrder] = useState("taxonomy__name"); 
+>>>>>>> develop
 
   function updatePage(chosenPage) {
     setCurrentPage(chosenPage);
@@ -59,7 +64,37 @@ const ListReport = () => {
 
   }, [currentPage, wordToSearch])
 
+<<<<<<< HEAD
 
+=======
+            getReports(currentPage, wordToSearch, order)
+            .then((response) => {
+                setReports(response.data.results)
+                setCountItems(response.data.count)
+                if(currentPage === 1){
+                  setUpdatePagination(true)  
+                }
+                setDisabledPagination(false)
+            }).catch((error)=>{
+                console.log(error)
+              })
+              .finally(() => {
+                  setShowAlert(true)
+                  setLoading(false)
+              })
+
+              getMinifiedTaxonomy()
+              .then((response) => {
+                  let dicTaxonomy={}
+                  response.map((taxonomy) => {
+                      dicTaxonomy[taxonomy.url]=taxonomy.name
+                  })
+                  setTaxonomyNames(dicTaxonomy)
+              })
+    
+    
+        }, [ currentPage, wordToSearch, order])
+>>>>>>> develop
 
   return (
     <div>
@@ -74,6 +109,7 @@ const ListReport = () => {
               <Search type=".." setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
+<<<<<<< HEAD
               <Link to={{ pathname: '/reports/create' }} >
                 <CrudButton type='create' name='reporte' />
               </Link>
@@ -91,6 +127,25 @@ const ListReport = () => {
             </Col>
           </Row>
         </Card.Footer>
+=======
+                <Link to={{pathname:'/reports/create'}} >
+                    <CrudButton type='create' name='reporte' />
+                </Link>
+          
+            </Col> 
+          </Row>                                 
+          </Card.Header>
+          <Card.Body> 
+            <TableReport list={reports}  loading={loading}  taxonomyNames={taxonomyNames} order={order} setOrder={setOrder} setLoading={setLoading}/> 
+          </Card.Body>
+          <Card.Footer >
+            <Row className="justify-content-md-center">
+                <Col md="auto"> 
+                  <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination} setUpdatePagination={setUpdatePagination} setLoading={setLoading} setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination}/>
+                </Col>
+            </Row>
+          </Card.Footer>
+>>>>>>> develop
       </Card>
     </div>
   )
