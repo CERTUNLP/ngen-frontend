@@ -13,6 +13,8 @@ const DashboardCases = ({ list, loading }) => {
     const [userNames, setUserNames] = useState({});
     const [stateNames, setStateNames] = useState({});
 
+    const { t } = useTranslation();
+
     useEffect(() => {
 
         getMinifiedUser()
@@ -38,6 +40,7 @@ const DashboardCases = ({ list, loading }) => {
 
     }, [list]);
 
+
     return (
         <div>
             <Card>
@@ -52,38 +55,7 @@ const DashboardCases = ({ list, loading }) => {
 
             </Card>
 
-            return (
-            list &&
-            <tr key={index}>
-
-                <th scope="row">{index + 1}</th>
-                <td>{caseItem.uuid}</td>
-                <td>{stateOption[caseItem.state] ? stateOption[caseItem.state].name : "No se pudo asignar un estado"}</td>
-                {caseItem.assigned ?
-                    <td>
-                        <GetUserName form={false} get={getUser} url={caseItem.assigned} key={index} />
-                    </td>
-                    :
-                    <td>
-                        Sin asignar
-                    </td>
-                }
-                <td>-</td>
-                <td>
-                    <Link to={{ pathname: '/cases/view' }}>
-                        <CrudButton type='read' onClick={() => storageCaseUrl(caseItem.url)} />
-                    </Link>
-
-                </td>
-            </tr>
-            );
-                                })}
-        </tbody>
-                    </Table >
-                </Card.Body >
-            </Card >
-
-        </div >
+        </div>
     )
 }
 

@@ -9,10 +9,8 @@ import TableReport from './components/TableReport'
 import { getMinifiedTaxonomy } from '../../api/services/taxonomies';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
-import { useTranslation, Trans } from 'react-i18next';
 
 const ListReport = () => {
-  const { t } = useTranslation();
   const [loading, setLoading] = useState(true)
   const [reports, setReports] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -23,12 +21,8 @@ const ListReport = () => {
 
   const [showAlert, setShowAlert] = useState(false)
 
-<<<<<<< HEAD
   const [wordToSearch, setWordToSearch] = useState('')
-=======
-    const [wordToSearch, setWordToSearch]= useState('')
-    const [order, setOrder] = useState("taxonomy__name"); 
->>>>>>> develop
+  const [order, setOrder] = useState("taxonomy__name");
 
   function updatePage(chosenPage) {
     setCurrentPage(chosenPage);
@@ -36,7 +30,7 @@ const ListReport = () => {
 
   useEffect(() => {
 
-    getReports(currentPage, wordToSearch, "")
+    getReports(currentPage, wordToSearch, order)
       .then((response) => {
         setReports(response.data.results)
         setCountItems(response.data.count)
@@ -62,45 +56,15 @@ const ListReport = () => {
       })
 
 
-  }, [currentPage, wordToSearch])
+  }, [currentPage, wordToSearch, order])
 
-<<<<<<< HEAD
 
-=======
-            getReports(currentPage, wordToSearch, order)
-            .then((response) => {
-                setReports(response.data.results)
-                setCountItems(response.data.count)
-                if(currentPage === 1){
-                  setUpdatePagination(true)  
-                }
-                setDisabledPagination(false)
-            }).catch((error)=>{
-                console.log(error)
-              })
-              .finally(() => {
-                  setShowAlert(true)
-                  setLoading(false)
-              })
-
-              getMinifiedTaxonomy()
-              .then((response) => {
-                  let dicTaxonomy={}
-                  response.map((taxonomy) => {
-                      dicTaxonomy[taxonomy.url]=taxonomy.name
-                  })
-                  setTaxonomyNames(dicTaxonomy)
-              })
-    
-    
-        }, [ currentPage, wordToSearch, order])
->>>>>>> develop
 
   return (
     <div>
       <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report" />
       <Row>
-        <Navigation actualPosition={t('ngen.report')} />
+        <Navigation actualPosition="Reporte" />
       </Row>
       <Card>
         <Card.Header>
@@ -109,7 +73,6 @@ const ListReport = () => {
               <Search type=".." setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
-<<<<<<< HEAD
               <Link to={{ pathname: '/reports/create' }} >
                 <CrudButton type='create' name='reporte' />
               </Link>
@@ -118,7 +81,7 @@ const ListReport = () => {
           </Row>
         </Card.Header>
         <Card.Body>
-          <TableReport list={reports} loading={loading} taxonomyNames={taxonomyNames} />
+          <TableReport list={reports} loading={loading} taxonomyNames={taxonomyNames} order={order} setOrder={setOrder} setLoading={setLoading} />
         </Card.Body>
         <Card.Footer >
           <Row className="justify-content-md-center">
@@ -127,25 +90,6 @@ const ListReport = () => {
             </Col>
           </Row>
         </Card.Footer>
-=======
-                <Link to={{pathname:'/reports/create'}} >
-                    <CrudButton type='create' name='reporte' />
-                </Link>
-          
-            </Col> 
-          </Row>                                 
-          </Card.Header>
-          <Card.Body> 
-            <TableReport list={reports}  loading={loading}  taxonomyNames={taxonomyNames} order={order} setOrder={setOrder} setLoading={setLoading}/> 
-          </Card.Body>
-          <Card.Footer >
-            <Row className="justify-content-md-center">
-                <Col md="auto"> 
-                  <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination} setUpdatePagination={setUpdatePagination} setLoading={setLoading} setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination}/>
-                </Col>
-            </Row>
-          </Card.Footer>
->>>>>>> develop
       </Card>
     </div>
   )

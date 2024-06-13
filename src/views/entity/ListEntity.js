@@ -26,13 +26,9 @@ const ListEntity = () => {
     const [updatePagination, setUpdatePagination] = useState(false)
     const [disabledPagination, setDisabledPagination] = useState(true)
 
-<<<<<<< HEAD
     const [wordToSearch, setWordToSearch] = useState('')
-    const [order, setOrder] = useState("");
-=======
-    const [wordToSearch, setWordToSearch]= useState('')
     const [order, setOrder] = useState("name");
->>>>>>> develop
+    const { t } = useTranslation();
 
     function updatePage(chosenPage) {
         setCurrentPage(chosenPage);
@@ -59,10 +55,8 @@ const ListEntity = () => {
                 setShowAlert(true)
                 setLoading(false)
             })
-<<<<<<< HEAD
 
-    }, [currentPage, isModify, wordToSearch])
-    const { t } = useTranslation();
+    }, [currentPage, isModify, wordToSearch, order])
 
     return (
         <React.Fragment>
@@ -86,7 +80,8 @@ const ListEntity = () => {
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            <TableEntity setIsModify={setIsModify} list={entities} loading={loading} currentPage={currentPage} />
+                            <TableEntity setIsModify={setIsModify} list={entities} loading={loading} setLoading={setLoading}
+                                currentPage={currentPage} order={order} setOrder={setOrder} />
                         </Card.Body>
                         <Card.Footer >
                             <Row className="justify-content-md-center">
@@ -96,44 +91,6 @@ const ListEntity = () => {
                             </Row>
                         </Card.Footer>
                     </Card>
-=======
-        
-    }, [currentPage, isModify, wordToSearch, order])
-
-return (
-    <React.Fragment>
-        <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity"/>
-        <Row>
-            <Navigation actualPosition={'Entidades'}/>  
-        </Row>
-        <Row>
-            <Col>
-                <Card>
-                    <Card.Header>
-                        <Row>
-                            <Col sm={12} lg={9}>
-                             <Search type="por nombre de entidad" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
-                            </Col>
-                            <Col sm={12} lg={3}>
-                                <Link to={{pathname:'/entities/create'}} >
-                                    <CrudButton type='create' name='Entidad' />
-                                </Link>
-                            </Col> 
-                        </Row>
-                    </Card.Header>
-                    <Card.Body>
-                        <TableEntity setIsModify={setIsModify} list={entities} loading={loading} setLoading={setLoading}
-                        currentPage={currentPage} order={order}  setOrder={setOrder}/>
-                    </Card.Body>
-                    <Card.Footer >
-                        <Row className="justify-content-md-center">
-                            <Col md="auto"> 
-                                <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination} setUpdatePagination={setUpdatePagination} setLoading={setLoading} setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination}/> 
-                            </Col>
-                        </Row>
-                    </Card.Footer>
-                </Card>
->>>>>>> develop
                 </Col>
             </Row>
         </React.Fragment>

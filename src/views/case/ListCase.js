@@ -57,6 +57,8 @@ const ListCase = () => {
 
     const [refresh, setRefresh] = useState(true)
 
+    const { t } = useTranslation();
+
     function updatePage(chosenPage) {
         setCurrentPage(chosenPage);
     }
@@ -143,7 +145,6 @@ const ListCase = () => {
     }, [currentPage, ifModify, order, wordToSearch, priorityFilter, tlpFilter, stateFilter, refresh])
 
 
-    //-----------------MERGE------------------------
     const mergeConfirm = () => {
         setShowModal(true);
     }
@@ -164,9 +165,6 @@ const ListCase = () => {
     const reloadPage = () => {
         setRefresh(!refresh)
     }
-
-    const { t } = useTranslation();
-
 
     return (
         <React.Fragment>
@@ -216,33 +214,9 @@ const ListCase = () => {
                                     </Button>
                                 </Col>
                             </Row>
-                            <br />
-                        </div>
-                    </Collapse>
-                </Card.Header>
-                <Card.Body>
-                    <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order} setOrder={setOrder}
-                        setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames} stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}
-                        editColum={true} deleteColum={true} navigationRow={true} buttonReturn={false} disableNubersOfEvents={true} />
-                </Card.Body>
-                <Card.Footer >
-                    <Row className="justify-content-md-center">
-                        <Col md="auto">
-                            <AdvancedPagination countItems={countItems} updatePage={updatePage} updatePagination={updatePagination}
-                                setUpdatePagination={setUpdatePagination} setLoading={setLoading}
-                                setDisabledPagination={setDisabledPagination} disabledPagination={disabledPagination} />
-                        </Col>
-                    </Row>
-                </Card.Footer>
-            </Card>
-        </Col>
-        </Row >
-    <ModalConfirm type='merge' component='casos' name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
+                            <Row>
 
-
-
-
-                            </Row >
+                            </Row>
                             <br />
                             <Collapse in={open}>
                                 <div id="example-collapse-text">
@@ -255,16 +229,17 @@ const ListCase = () => {
                                             <FilterSelectUrl options={tlps} itemName="tlp" partOfTheUrl="tlp" itemFilter={tlpFilter} itemFilterSetter={setTlpFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                         <Col sm={4} lg={4}>
-                                            <FilterSelectUrl options={states} itemName={t('ngen.state_other')} partOfTheUrl="state" itemFilter={stateFilter} itemFilterSetter={setStateFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                                            <FilterSelectUrl options={states} itemName="estados" partOfTheUrl="state" itemFilter={stateFilter} itemFilterSetter={setStateFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                     </Row>
                                     <br />
                                 </div>
                             </Collapse>
-                        </Card.Header >
+                        </Card.Header>
                         <Card.Body>
                             <TableCase cases={cases} loading={loading} selectedCases={selectedCases} setSelectedCases={setSelectedCases} order={order} setOrder={setOrder}
-                                setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames} stateNames={stateNames} tlpNames={tlpNames} userNames={userNames} />
+                                setIfModify={setIfModify} setLoading={setLoading} priorityNames={priorityNames} stateNames={stateNames} tlpNames={tlpNames} userNames={userNames}
+                                editColum={true} deleteColum={true} navigationRow={true} buttonReturn={false} disableNubersOfEvents={true} />
                         </Card.Body>
                         <Card.Footer >
                             <Row className="justify-content-md-center">
@@ -275,13 +250,14 @@ const ListCase = () => {
                                 </Col>
                             </Row>
                         </Card.Footer>
-                    </Card >
-                </Col >
-            </Row >
-    <ModalConfirm type='merge' component={t('ngen.case_other')} name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
+                    </Card>
+                </Col>
+            </Row>
+            <ModalConfirm type='merge' component={t('ngen.case_other')} name={selectedCases} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
 
-        </React.Fragment >
+        </React.Fragment>
     )
 }
+
 
 export default ListCase; 
