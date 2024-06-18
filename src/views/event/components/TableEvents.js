@@ -8,8 +8,7 @@ import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
 
-
-const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents }) => {
+const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents, disableCheckboxAll, modalEventDetail, formCaseCheckbok, detailModal, deleteColumForm, deleteEventFromForm, disableColumOption}) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
@@ -56,6 +55,15 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
             setSelectedEvent([]);
         }
     };
+    const handleClickFormCase = (e, date, address_value, domain, cidr, tlp, taxonomy, feed) => {
+        const { id, checked } = e.target;
+        console.log("handleClickFormCase")
+        setSelectedEvent([...selectedEvent, { url: id, date: date, address_value: address_value, domain: domain, cidr: cidr, tlp: tlp, taxonomy: taxonomy, feed: feed }]);
+        if (!checked) {
+            selectedEvent.filter(item => item.url !== id)
+            setSelectedEvent(selectedEvent.filter(item => item.url !== id));
+        }
+    };
 
     const handleClick = e => {
         const { id, checked } = e.target;
@@ -64,6 +72,11 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
             setSelectedEvent(selectedEvent.filter(item => item !== id));
         }
     };
+
+    const storageEventUrl = (url) => {
+        localStorage.setItem('event', url);
+    };
+
 
     const letterSize = { fontSize: '1.1em' }
 
@@ -74,12 +87,14 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            {disableCheckbox ?
-                                ""
+                            {disableCheckboxAll ?
+                                disableCheckbox ? ""
+                                    :
+                                    <th></th>
                                 : <th>
                                     <Form.Group>
                                         <Form.Check type="checkbox" id={"selectAll"}
-                                            onChange={handleSelectAll} checked={selectedEvent.length !== 0 ? isCheckAll : false} /> {/*|| selectedCases == list.filter(item => item.solve_date == null).length */}
+                                            onChange={handleSelectAll} checked={selectedEvent.length !== 0 ? isCheckAll : false} />
                                     </Form.Group>
                                 </th>}
 
@@ -103,7 +118,11 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                             }
                             <th style={letterSize}>{t('ngen.taxonomy_one')}</th>
                             <th style={letterSize}>{t('ngen.infoSource')}</th>
+                            {disableColumOption ?
+                            ""
+                            :
                             <th style={letterSize}>{t('ngen.options')}</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -112,12 +131,23 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                 <tr key={index}>
                                     {disableCheckbox ? ""
                                         :
-                                        <th ><Form.Group>
-                                            <Form.Check disabled={event.solve_date != null ? true : false}
-                                                type="checkbox" id={event.url}
-                                                onChange={handleClick} checked={selectedEvent.includes(event.url)} />
-                                        </Form.Group>
-                                        </th>
+                                        formCaseCheckbok ?
+                                            <th ><Form.Group>
+                                                <Form.Check disabled={event.solve_date != null ? true : false}
+                                                    type="checkbox" id={event.url}
+                                                    onChange={(e) => handleClickFormCase(e, event.date, event.address_value, event.domain,
+                                                        event.cidr, event.tlp, event.taxonomy, event.feed)}
+                                                    checked={selectedEvent.some(eventList => eventList.url === event.url)} />
+                                            </Form.Group>
+                                            </th>
+                                            :
+                                            <th ><Form.Group>
+                                                <Form.Check disabled={event.solve_date != null ? true : false}
+                                                    type="checkbox" id={event.url}
+                                                    onChange={handleClick} checked={selectedEvent.includes(event.url)} />
+                                            </Form.Group>
+                                            </th>
+
                                     }
 
                                     <td>{event.date ? event.date.slice(0, 10) + " " + event.date.slice(11, 19) : ""}</td>
@@ -141,21 +171,36 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                     <td>{feedNames[event.feed]}</td>
 
                                     <td>
-                                        <Link to={{ pathname: "/events/view", state: event }} >
-                                            <CrudButton type='read' />
-                                        </Link>
-                                        {disableColumnEdit ? ""
+                                        {disableColumOption?
+                                        ""
+                                        :
+                                        detailModal ?
+                                            <CrudButton type="read" onClick={() => modalEventDetail(event.url, event.date, event.address_value, event.domain,
+                                                event.cidr, event.tlp, event.taxonomy, event.feed)} />
+                                            :
+                                            <Link to={{ pathname: "/events/view", state: event }} >
+                                                <CrudButton type='read' onClick={() => storageEventUrl(event.url)} />
+                                            </Link>
+                                        }
+                                        {disableColumOption?
+                                        ""
+                                        :
+                                        disableColumnEdit ? ""
                                             :
                                             <Link to={{ pathname: "/events/edit", state: event }} >
                                                 <CrudButton type='edit' />
                                             </Link>
                                         }
-                                        {disableColumnDelete ? ""
+                                        {disableColumOption?
+                                        ""
+                                        :
+                                        disableColumnDelete ? ""
                                             :
-                                            <CrudButton type='delete' onClick={() => modalDelete(event.name, event.url)} />
+                                            deleteColumForm ?
+                                                <CrudButton type='delete' onClick={() => deleteEventFromForm(event.url)} />
+                                                :
+                                                <CrudButton type='delete' onClick={() => modalDelete(event.name, event.url)} />
                                         }
-
-
                                         {disableTemplate ? ""
                                             :
                                             event.case ? <Button className="btn-icon btn-rounded" disabled variant="outline-primary"

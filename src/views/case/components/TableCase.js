@@ -8,9 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
-
-const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder, order, priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority, disableTlp, disableNubersOfEvents }) => {
-
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption}) => {
     const [url, setUrl] = useState(null)
     const [modalDelete, setModalDelete] = useState(false)
     const [id, setId] = useState(null)
@@ -134,7 +132,11 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                             <th style={letterSize}> {t('ngen.event.quantity')} </th>
                         }
                         <th style={letterSize}> {t('status.assigned')} </th>
+                        {disableColumOption?
+                        ""
+                        :
                         <th style={letterSize}> {t('ngen.action_one')} </th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -196,14 +198,20 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                                 }
                                 <td>{userNames[caseItem.assigned] || "-"}</td>
                                 <td>
-                                    {detailModal ? (
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                    detailModal ? (
                                         <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
                                     ) : (
                                         <Link to={{ pathname: '/cases/view' }}>
                                             <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
                                         </Link>
                                     )}
-                                    {editColum && (
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                    editColum && (
                                         caseItem.solve_date == null ? (
                                             <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
                                                 <CrudButton type="edit" />
@@ -225,7 +233,18 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                                             </Button>
                                         )
                                     )}
-                                    {deleteColum && <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />}
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                        deleteColum ?
+                                        deleteColumForm ?
+
+                                            <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)}/>
+                                            :
+                                            <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
+                                        :
+                                        ""
+                                    }
                                 </td>
                             </tr>
                         );

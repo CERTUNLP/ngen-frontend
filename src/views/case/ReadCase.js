@@ -250,8 +250,8 @@ const ReadCase = () => {
                         </Card>
                         : <></>}
 
-
-                    <SmallEventTable list={list} />
+                    <SmallEventTable list={list} disableLink={true} detailModal={false} deleteColumForm={false}
+                    disableColumOption={true}/>
 
 
                     <Card>

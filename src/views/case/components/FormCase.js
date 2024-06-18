@@ -10,7 +10,13 @@ import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
 import SelectLabel from '../../../components/Select/SelectLabel';
+import SmallEventTable from '../../event/components/SmallEventTable'
 import { useTranslation, Trans } from 'react-i18next';
+import ModalListEvent from '../../event/ModalListEvent';
+import { getMinifiedFeed } from '../../../api/services/feeds';
+import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
+import ModalReadEvent from '../../event/ModalReadEvent';
+import { getEvent } from '../../../api/services/events';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
@@ -25,6 +31,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [tlp, setTlp] = useState(props.caseItem.tlp)
     const [assigned, setAssigned] = useState(props.caseItem.assigned)
     const [state, setState] = useState(props.caseItem.state)
+    const [events, setEvents] = useState(props.caseItem.events !== [] ? props.caseItem.events : []) 
     const [comments, setComments] = useState([])
     const [evidences, setEvidences] = useState(props.caseItem.evidence)
     const [attend_date, setAttend_date] = useState(props.caseItem.attend_date !== null ? props.caseItem.attend_date.substr(0, 16) : '')
@@ -54,7 +61,62 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [priorityNames, setPriorityNames] = useState({});
     const [userNames, setUserNames] = useState({});
 
+    const [taxonomyNames, setTaxonomyNames] = useState({});
+    const [feedNames, setFeedNames] = useState({});
+
+    const [showModalListEvent, setShowModalListEvent] = useState(false);
+    const [updatePagination, setUpdatePagination] = useState(false)
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedEvent, setSelectedEvent] = useState([]);
+    const [eventList, setEventList] = useState([]) 
+    const [taxonomyFilter, setTaxonomyFilter] = useState("");
+    const [tlpFilter, setTlpFilter] = useState("");
+    const [feedFilter, setFeedFilter] = useState("");
+    const [taxonomies, setTaxonomies] = useState([]);  
+    const [feeds, setFeeds] = useState([])
+    const [wordToSearch, setWordToSearch] = useState("");
+    const [modalShowEvent, setModalShowEvent] = useState(false);
+    const [selectedEventDetail, setSelectedEventDetail] = useState({});
+    const [updateList, setUpdateList] = useState(false)
+    const [selectFeedFilter, setSelectFeedFilter] = useState("");
+    const [selectTlpFilter, setSelectTlpFilter] = useState("")
+    const [selectTaxonomyFilter, setSelectTaxonomyFilter] = useState("");
+    const [tableDetail, setTableDetail] = useState(false);
+
     const { t } = useTranslation();
+
+    useEffect(()=> {
+        /*setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed})*/
+        if(Object.keys(taxonomyNames).length !== 0 && Object.keys(feedNames).length !== 0 && Object.keys(tlpNames).length !== 0 
+        && events !== []){
+            async function fetchAndSetEvents(events) {
+                try {
+                    const responses = await Promise.all(events.map(event => getEvent(event).then((response) => {return response.data})))
+                    console.log(responses)
+                    const newEventList = responses.map(response => ({
+                        url: response.url,
+                        date: response.date,
+                        address_value: response.address_value,
+                        domain: response.domain,
+                        cidr: response.cidr,
+                        tlp: response.tlp,
+                        taxonomy: response.taxonomy,
+                        feed: response.feed
+                    }));
+            
+                    setEventList(newEventList);
+                } catch (error) {
+                    console.error("Error fetching events:", error);
+                }
+            }
+            
+            // Llamada a la función
+            fetchAndSetEvents(events);
+        }
+
+    },[taxonomyNames, feedNames, tlpNames, events])
 
     useEffect(() => {
 
@@ -96,54 +158,84 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     }, [allPriorities, allTlp, allUsers, props.allStates])
 
-    useEffect(() => {
-
+    useEffect(()=> {
+        getMinifiedTaxonomy().then((response) => { 
+            let dicTaxonomy = {}
+            let listTaxonomies = [];
+            response.map((taxonomy) => {
+                dicTaxonomy[taxonomy.url] = taxonomy.name
+                listTaxonomies.push({ value: taxonomy.url, label: taxonomy.name });
+            })
+            setTaxonomyNames(dicTaxonomy)
+            setTaxonomies(listTaxonomies);
+          })
+          .catch((error) => {
+            console.log(error)
+              
+          })
+  
+          getMinifiedFeed().then((response) => { //se hardcodea las paginas
+            let dicFeed={}
+            let listFeeds = [];
+            response.map((feed) => {
+                dicFeed[feed.url]= feed.name
+                listFeeds.push({ value: feed.url, label: feed.name });
+            })
+            setFeedNames(dicFeed)
+            setFeeds(listFeeds);
+          })
+          .catch((error) => {
+            console.log(error)
+              
+          })
+      
         getMinifiedPriority()
-            .then((response) => {
-                let listPriority = []
-                let dicPriority = {}
-                response.map((priority) => {
-                    listPriority.push({ value: priority.url, label: priority.name })
-                    dicPriority[priority.url] = priority.name
-                })
-                setPriorityNames(dicPriority)
-                setAllPriorities(listPriority)
+        .then((response) => {
+            let listPriority = []
+            let dicPriority={}
+            response.map((priority) => {
+              listPriority.push({value:priority.url, label:priority.name})
+              dicPriority[priority.url]= priority.name
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            setPriorityNames(dicPriority)
+            setAllPriorities(listPriority)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
 
         getMinifiedTlp()
-            .then((response) => {
-                let listTlp = []
-                let dicTlp = {}
-                response.map((tlp) => {
-                    listTlp.push({ value: tlp.url, label: tlp.name })
-                    dicTlp[tlp.url] = { name: tlp.name, color: tlp.color }
-                })
-                setAllTlp(listTlp)
-                setTlpNames(dicTlp)
+        .then((response) => {
+            let listTlp = []
+            let dicTlp = {}
+            response.map((tlp) => {
+              listTlp.push({value:tlp.url, label:tlp.name})
+              dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            setAllTlp(listTlp)
+            setTlpNames(dicTlp)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
 
         getMinifiedUser()
-            .then((response) => {
-                let listUser = []
-                let dicUser = {}
-                response.map((user) => {
-                    listUser.push({ value: user.url, label: user.username })
-                    dicUser[user.url] = user.username
-                })
-                setAllUsers(listUser)
-                setUserNames(dicUser)
+        .then((response) => {
+            let listUser = []
+            let dicUser={}
+            response.map((user) => {
+                listUser.push({value:user.url, label:user.username})
+                dicUser[user.url]= user.username
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            setAllUsers(listUser)
+            setUserNames(dicUser)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
 
-    }, [props.allStates])
+
+    },[props.allStates])
 
 
     const allLifecycles = [
@@ -252,6 +344,12 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (assigned !== null) {
             form.append("assigned", assigned)
         }
+        if (events !== []){
+
+            events.forEach(event => {
+                form.append("events", event);
+            });
+        }
         form.append("state", state)
         form.append("attend_date", attend_date)
         form.append("solve_date", solve_date)
@@ -333,6 +431,79 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
+    const modalListEvent = () => {
+        setUpdatePagination(true)
+        setShowModalListEvent(true);
+    }
+
+    function closeModal(){
+        setShowModalListEvent(false)
+        setCurrentPage(1);
+    }
+
+    function linkEventsToCase(){
+        setEvents(selectedEvent.map(event => event.url))
+        setEventList(selectedEvent)
+        setShowModalListEvent(false)
+        setCurrentPage(1);
+
+    }
+
+    const returnToListOfEvent=()=>{ 
+        setShowModalListEvent(true)
+        setModalShowEvent(false)
+        setUpdatePagination(true)
+    };
+
+    const linkCaseToEvent=()=>{
+
+        if (!selectedEvent.some(event => event.url === selectedEventDetail.url)){
+            setSelectedEvent([...selectedEvent, selectedEventDetail]);
+        }
+        
+        setShowModalListEvent(true)
+        setModalShowEvent(false)
+        setUpdatePagination(true)
+        setUpdateList(!updateList)
+        /*setShowModalListCase(false)
+        setModalShowCase(false)
+        setCurrentPage(1);
+        setTlpFilter("")
+        setWordToSearch("")
+        setUpdatePagination(true)*/
+    };
+
+    const modalEventDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
+        console.log(url)    
+        localStorage.setItem('event', url);
+        setModalShowEvent(true)
+        setShowModalListEvent(false)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed});
+    }
+    
+    const tableCaseDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
+        localStorage.setItem('event', url);
+        setModalShowEvent(true)
+        setTableDetail(true)
+        localStorage.setItem('navigation', false);  
+        localStorage.setItem('button return', false);     
+        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
+            taxonomy:taxonomy, feed:feed});
+    }
+
+    const closeModalDetail=()=>{ 
+        setModalShowEvent(false)
+        setTableDetail(false)
+    };
+    
+    const deleteEventFromForm=(url)=>{ 
+        setEventList(eventList.filter(event => event.url !== url))
+        setSelectedEvent(selectedEvent.filter(event => event.url !== url))
+    };
+
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case" />
@@ -408,6 +579,28 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     </Row>
                 </Card.Body >
             </Card >
+
+            <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail} 
+                modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} 
+                disableColumOption={false}/>
+            
+            <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail} 
+                selectFeedFilter={selectFeedFilter} setSelectFeedFilter={setSelectFeedFilter}
+                selectTlpFilter={selectTlpFilter} setSelectTlpFilter={setSelectTlpFilter}
+                selectTaxonomyFilter={selectTaxonomyFilter} setSelectTaxonomyFilter={setSelectTaxonomyFilter}
+                currentPage={currentPage}  setCurrentPage={setCurrentPage}
+                setUpdatePagination={setUpdatePagination} updatePagination={updatePagination} 
+                selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} 
+                taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
+                closeModal={closeModal} linkEventsToCase={linkEventsToCase}
+                wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
+                taxonomyFilter={taxonomyFilter} setTaxonomyFilter={setTaxonomyFilter}
+                tlpFilter={tlpFilter} setTlpFilter={setTlpFilter} feedFilter={feedFilter} setFeedFilter={setFeedFilter}
+                taxonomies={taxonomies} feeds={feeds}  tlpList={allTlp} updateList={updateList}/>
+
+            <ModalReadEvent modalShowCase={modalShowEvent} tableDetail={tableDetail} returnToListOfCases={returnToListOfEvent} 
+                linkCaseToEvent={linkCaseToEvent} closeModalDetail={closeModalDetail}/>
+
             {props.evidenceColum ?
 
                 props.edit ?

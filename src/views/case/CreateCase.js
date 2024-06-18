@@ -57,7 +57,8 @@ const CreateCase = () => {
             <Row>
                 <Navigation actualPosition={t('button.case_create')} path="/cases" index={t('ngen.case_other')} />
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save={t('button.case_create')} evidenceColum={true} stateName={stateName} setStatesName={setStatesName} />
+            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save={t('button.case_create')} evidenceColum={true} stateName={stateName} setStatesName={setStatesName}
+            buttonsModalColum={true} />
         </React.Fragment>
     );
 };

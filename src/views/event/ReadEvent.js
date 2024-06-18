@@ -20,15 +20,23 @@ import { useTranslation, Trans } from 'react-i18next';
 const ReadEvent = () => {
     const location = useLocation();
     const [body, setBody] = useState({})
+    const [eventItem, setEventItem] = useState(location?.state?.item || null);
+    const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
+    const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
     const { t } = useTranslation();
 
 
     useEffect(() => {
-        let event = location.state;
-        getEvent(event.url).then((responsive) => {
-            setBody(responsive.data)
-        })
-    }, []);
+        console.log(body)
+        if (!eventItem) {
+            const event = localStorage.getItem('event');
+            getEvent(event).then((responsive) => {
+                setBody(responsive.data)
+                setEventItem(responsive.data)
+                console.log(responsive.data)
+            }).catch(error => console.log(error));
+        }
+    }, [eventItem]);
 
     const callbackTaxonomy = (url, setPriority) => {
         getTaxonomy(url)
@@ -84,9 +92,12 @@ const ReadEvent = () => {
 
     return (
         <div>
-            <Row>
-                <Navigation actualPosition={t('ngen.event.detail')} path="/events" index="Evento" />
-            </Row>
+            {navigationRow !== "false" ?
+                <Row>
+                    <Navigation actualPosition={t('ngen.event.detail')} path="/events" index="Evento" />
+                </Row>
+                : ""
+            }
             <Card>
                 <Card.Header>
                     <Card.Title as="h5">{t('menu.principal')}</Card.Title>
@@ -168,7 +179,7 @@ const ReadEvent = () => {
                 </Card.Body>
             </Card>
 
-            <SmallCaseTable readCase={body.case} />
+            <SmallCaseTable readCase={body.case} disableColumOption={true} />
 
             <Card>
                 <Card.Header>
@@ -314,7 +325,10 @@ const ReadEvent = () => {
 
                     </Card.Body>
                 </Card>
-                <Button variant="primary" onClick={() => returnBack()}>{t('w.return')}</Button>
+                {buttonReturn !== "false" ?
+                    <Button variant="primary" onClick={() => returnBack()}>{t('w.return')}</Button>
+                    : ""
+                }
 
             </Table>
         </div>
