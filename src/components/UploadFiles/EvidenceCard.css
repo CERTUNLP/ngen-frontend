@@ -1,0 +1,20 @@
+.dropzone {
+    border: 2px dashed #ddd;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.evidence-container {
+    max-height: 400px; /* Ajusta la altura según sea necesario */
+    overflow-y: auto;
+    overflow-x: hidden; /* Desactiva el desplazamiento horizontal */
+}
+
+.flex-fill {
+    flex: 1;
+}
+
+.mr-auto {
+    margin-right: auto;
+}

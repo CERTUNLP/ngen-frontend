@@ -1,84 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { getEvidence, deleteEvidence } from '../../api/services/evidences';
-import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Card, } from 'react-bootstrap';
+import { deleteEvidence } from '../../api/services/evidences';
+import ModalConfirm from '../Modal/ModalConfirm';
 
 const ViewFiles = (props) => {
-    const [data, setData] = useState({})
-
-    useEffect( ()=> { 
-        getEvidence(props.url)
-        .then((response) => {
-            setData(response.data)
-        })
-        .catch();
-
-    },[])
+    const [modalDelete, setModalDelete] = useState(false);
+    const [name, setName] = useState("");
 
     const openFile = () => {
-        window.open(data.file, props.index);;
-    }
+        window.open(props.file.file, props.index);
+    };
 
-    const deleteFile = () => {
-        deleteEvidence(props.url)
-            .then((response) => {
-                console.log(response.data)
-                //no mostrar button
-            })
-            
-    }
+    const deleteFile = (name) => {
+        setModalDelete(true);
+        setName(name);
+    };
+
+    const removeCase = (file) => {
+        if (file.url) {
+            deleteEvidence(file.url)
+                .then((response) => {
+                    props.setUpdateCase(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    setModalDelete(false);
+                });
+        } else {
+            props.removeFile(props.index);
+            setModalDelete(false);
+        }
+    };
 
     return (
         <>
-            <Button 
-                className='text-capitalize' 
-                variant='light'
-                title={'Evidencia '+ props.index} 
-                onClick={openFile} 
-                size="sm">
-                <i className="fas fa-external-link-alt"/>
-                <p>Nombre: {data.original_filename}</p>
-                <p>Mime:   {data.mime}</p>
-                <p>Tamaño: {data.size}</p>
-                <p>Fecha de creacion: {data.created ? data.created.slice(0,10)+" "+data.created.slice(11,19): ""}</p>
-            </Button>
-            <Button 
-                size='sm'
-                className='btn-icon btn-rounded' 
-                variant='outline-danger'
-                title={'Eliminar evidencia '+ props.index}
-                onClick={deleteFile}>
-                    <i className='fas fa-trash-alt' />
-            </Button> 
+            <ModalConfirm type='delete' component='Evidencia' name={`La evidencia ${name} `} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(props.file)} />
+            <Card className="flex-fill">
+                <Card.Body className="d-flex align-items-center">
+                    <div className="mr-auto">
+                        <Button
+                            className='text-capitalize'
+                            variant='light'
+                            title={'Evidencia ' + props.index}
+                            onClick={openFile}
+                            disabled={props.file.url == null ? true : false}
+                            size="sm">
+                            <i className="fas fa-external-link-alt" />
+                            <p>Nombre: {props.file.original_filename || props.file.name}</p>
+                            <p>Mime: {props.file.mime || props.file.type}</p>
+                            <p>Tamaño: {props.file.size}</p>
+                            <p>Fecha de creación: {props.file.created ? props.file.created.slice(0, 10) + " " + props.file.created.slice(11, 19) : "" || "No creado en el sistema"}</p>
+                        </Button>
+                    </div>
+                    {props.disableDelete?
+                    ""
+                    :
+                    <Button
+                        size='sm'
+                        className='btn-icon btn-rounded ml-3'
+                        variant='outline-danger'
+                        title={'Eliminar evidencia ' + props.index}
+                        onClick={() => deleteFile(props.file.original_filename || props.file.name)}>
+                        <i className='fas fa-trash-alt' />
+                    </Button>
+                    }
+                </Card.Body>
+            </Card>
         </>
-        
-    )
-    }
+    );
+};
 
 export default ViewFiles;
-/*
-            <Badge 
-                    variant='danger'
-                    title={'Eliminar evidencia '+ props.index}
-                    onClick={deleteFile}>
-                        <i className='fas fa-trash-alt' />
-                </Badge> 
-*/
-/* EL DEL MERGE
-<Col> 
-                                <Button 
-                                    disabled={selectedCases.length > 1 ? false : true}
-                                    size="sm"
-                                    className='text-capitalize'
-                                    variant='light'
-                                    title='Mergear'
-                                    onClick={() => mergeConfirm()}>
-                                    <i variant='danger' className="fa fa-code-branch"/>
-                                        Merge&nbsp;
-                                    <Badge  
-                                        className="badge mr-1" >
-                                        {selectedCases.length} 
-                                    </Badge>
-                                </Button>                                
-                            </Col> 
-
-*/

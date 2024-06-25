@@ -26,6 +26,7 @@ const CreateCase = () => {
         solve_date: null,
         comments: [], //?
         evidence: [],
+        events: []
     }
 
     useEffect(()=> {
@@ -54,7 +55,8 @@ const CreateCase = () => {
             <Row>
                 <Navigation actualPosition="Crear Caso" path="/cases" index ="Casos"/>
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save='Crear' evidenceColum={true} stateName={stateName} setStatesName={setStatesName}/>
+            <FormCase caseItem={caseItem} allStates={allStates} edit={false} save='Crear' evidenceColum={true} stateName={stateName} setStatesName={setStatesName}
+            buttonsModalColum={true}/>
         </React.Fragment>
     );
 };

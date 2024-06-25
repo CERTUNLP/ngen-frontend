@@ -6,6 +6,7 @@ const FileList = ({ files, removeFile }) => {
     const deleteFileHandler = (_name) => {
         removeFile(_name)
     }
+    console.log(files)
     return (
         <ul className="file-list">
             {

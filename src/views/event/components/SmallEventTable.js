@@ -1,20 +1,20 @@
 
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { getMinifiedTaxonomy} from '../../../api/services/taxonomies';
-import { getMinifiedTlp} from '../../../api/services/tlp';
+import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
+import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedFeed } from '../../../api/services/feeds';
 import TableEvents from './TableEvents';
 
 
-const SmallEventTable = ({ list ,  disableLink, modalListEvent, modalEventDetail, deleteEventFromForm}) => {
+const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm }) => {
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
     const [tlpNames, setTlpNames] = useState({});
 
 
-    useEffect( ()=> {
+    useEffect(() => {
         getMinifiedTaxonomy().then((response) => {
             let dicTaxonomy = {};
             response.map((taxonomy) => {
@@ -44,38 +44,27 @@ const SmallEventTable = ({ list ,  disableLink, modalListEvent, modalEventDetail
             <Card>
                 <Card.Header>
                     <Row>
-                    <Col sm={12} lg={10}>
-                        <Card.Title as="h5">Eventos</Card.Title>
-                    </Col>
-                    {/*disableLink  ? "":
-                    <Col sm={12} lg={2}>
-                        <Button 
-                                size="lm"
-                                variant="outline-dark"
-                                onClick={() => modalEvent()}
+                        <Col sm={12} lg={10}>
+                            <Card.Title as="h5">Eventos</Card.Title>
+                        </Col>
+                        {disableLink ? "" :
+                            <Col sm={12} lg={2}>
+                                <Button
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => modalListEvent()}
                                 >
-                                Crear evento
-                        </Button>
-                    </Col> 
-                    */}
-                    {disableLink ? "":
-                    <Col sm={12} lg={2}>
-                        <Button 
-                                size="lm"
-                                variant="outline-dark"
-                                onClick={() => modalListEvent()}
-                                >
-                                Vincular a Eventos
-                        </Button>
-                    </Col>
-                    }
+                                    Vincular Eventos
+                                </Button>
+                            </Col>
+                        }
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <TableEvents events={list}  taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
-                    disableDateOrdering={true} disableCheckbox={true}  disableTemplate={true} deleteColumForm={true}
-                    disableColumnEdit={true} disableCheckboxAll={true} detailModal={true} modalEventDetail={modalEventDetail}
-                    deleteEventFromForm={deleteEventFromForm}/>
+                    <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
+                        disableDateOrdering={true} disableCheckbox={true} disableTemplate={true} deleteColumForm={true}
+                        disableColumnEdit={true} disableCheckboxAll={true} detailModal={true} modalEventDetail={modalEventDetail}
+                        deleteEventFromForm={deleteEventFromForm} />
                 </Card.Body>
             </Card>
         </React.Fragment>

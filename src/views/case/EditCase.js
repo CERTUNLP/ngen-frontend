@@ -16,17 +16,17 @@ const EditCase = () => {
  
     //multiselect
     const [allStates, setSupportedStates] = useState([]) 
+    const [updateCase, setUpdateCase] = useState([]) 
 
     useEffect(()=> {
         getCase(url)
             .then(response => {
-                console.log(response.data)
                 setCaseItem(response.data)
             })
             .catch(error => {
             })
     
-    },[])
+    },[updateCase])
 
     useEffect(()=>{
         let listStates =[]
@@ -65,7 +65,8 @@ const EditCase = () => {
             <Row>
                 <Navigation actualPosition="Editar Caso" path="/cases" index ="Casos"/>
             </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios' evidenceColum={true}/>
+            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save='Guardar Cambios' evidenceColum={true} 
+                setUpdateCase={setUpdateCase} updateCase={updateCase} buttonsModalColum={true}/>
         </React.Fragment>
     );
 };

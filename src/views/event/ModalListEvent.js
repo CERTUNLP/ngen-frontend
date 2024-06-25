@@ -15,9 +15,11 @@ const ModalListEvent = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const [events, setEvents] = useState([]);
     const [disabledPagination, setDisabledPagination] = useState(true);
+    const [caseIsNull, setCaseIsNull]= useState('&case__isnull=true')
+    //&case__isnull=true
     
     useEffect(() => {
-        getEvents(props.currentPage, props.taxonomyFilter+props.tlpFilter+props.feedFilter,)
+        getEvents(props.currentPage, props.taxonomyFilter+props.tlpFilter+props.feedFilter+caseIsNull,)
             .then((response) => {
                 setEvents(response.data.results);
                 setCountItems(response.data.count);

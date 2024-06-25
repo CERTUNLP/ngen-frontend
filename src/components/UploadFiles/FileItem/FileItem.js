@@ -3,7 +3,7 @@ import './FileItem.css'
 import {Button} from 'react-bootstrap';
 
 const FileItem = ({ index, file, deleteFile }) => {
-    console.log(file)
+    
     return (
         <>
             <li

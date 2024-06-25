@@ -23,7 +23,7 @@ const ModalCreateCase = ({ showModalCase, setShowModalCase, caseItem, states, se
             setSelectCase={setSelectCase}
             completeField1={completeField1}
             stateNames={stateNames}
-
+            disableTableEvent={true}
             selectedEvent={selectedEvent}
             setSelectedEvent={setSelectedEvent} 
             refresh={refresh} 

@@ -7,7 +7,8 @@ import SmallEventTable from '../event/components/SmallEventTable';
 import { getCase } from '../../api/services/cases';
 import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
-
+import { getEvidence } from '../../api/services/evidences';
+import EvidenceCard from '../../components/UploadFiles/EvidenceCard';
 
 
 const ReadCase = () => {
@@ -31,6 +32,8 @@ const ReadCase = () => {
     const [modalShowEvent, setModalShowEvent] = useState(false);
 
     const [list, setList] = useState([]);
+    
+    const [evidences, setEvidences] = useState([]);
 
     useEffect(() => {
 
@@ -120,7 +123,27 @@ const ReadCase = () => {
             }
         }
     }, [caseItem]);
-   
+
+    useEffect(() => {
+
+        const fetchAllEvidences = async () => {
+            try {
+                // Esperar a que todas las promesas de getEvidence se resuelvan
+                const responses = await Promise.all(caseItem.evidence.map((url) => getEvidence(url)));
+                // Extraer los datos de las respuestas
+                const data = responses.map(response => response.data);
+                // Actualizar el estado con los datos de todas las evidencias
+                setEvidences(data);
+                
+            } catch (error) {
+                console.error("Error fetching evidence data:", error);
+            }
+        };
+
+        // Llamar a la función para obtener los datos de las evidencias
+        fetchAllEvidences();
+    }, [caseItem]);
+
     return (
         caseItem &&
         <React.Fragment>
@@ -230,23 +253,8 @@ const ReadCase = () => {
                         </Card.Body>
                     </Card>
 
-                    {caseItem.evidence.length > 0
-
-                        ?
-                        <Card>
-                            <Card.Header>
-                                <Card.Title as="h5">Evidencias</Card.Title>
-                            </Card.Header>
-                            <Card.Body>
-                                {caseItem.evidence.map((url, index) => {
-                                    console.log(url)
-                                    return (<ViewFiles url={url} index={index + 1} />)
-                                })}
-                            </Card.Body>
-                        </Card>
-                        : <></>}
-
-
+                    <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true}/>
+                    
                     <SmallEventTable list={list} disableLink={true}/>
 
 
