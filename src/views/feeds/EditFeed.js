@@ -6,7 +6,7 @@ import { putFeed } from '../../api/services/feeds';
 import Navigation from '../../components/Navigation/Navigation';
 import FormFeed from './components/FormFeed'
 import { getFeed } from '../../api/services/feeds';
-
+import { useTranslation, Trans } from 'react-i18next';
 
 const EditFeed = () => {
     const location = useLocation();
@@ -16,8 +16,9 @@ const EditFeed = () => {
     const [active, setActive] = useState(true);
     const [description, setDescription] = useState("");
     const [showAlert, setShowAlert] = useState(false)
+    const { t } = useTranslation();
 
-    useEffect(() => {                
+    useEffect(() => {
         getFeed(fromState.url).then((response) => {
             setUrl(response.data.url)
             setName(response.data.name)
@@ -25,46 +26,46 @@ const EditFeed = () => {
             setDescription(response.data.description)
             console.log(response.data)
         })
-        .catch((error)=>{
-            console.log(error)
-        })
-        .finally(() => {
+            .catch((error) => {
+                console.log(error)
+            })
+            .finally(() => {
 
-        })
+            })
     }, []);
 
-    const editFeed = ()=> {
+    const editFeed = () => {
         putFeed(url, name, description, active)
-        .then(() => {
-            window.location.href = '/feeds';
-        })
-        .catch((error) => {
-            setShowAlert(true) 
-            console.log(error)         
-        })         
-    };  
-    
+            .then(() => {
+                window.location.href = '/feeds';
+            })
+            .catch((error) => {
+                setShowAlert(true)
+                console.log(error)
+            })
+    };
+
     const resetShowAlert = () => {
         setShowAlert(false);
-    } 
-   
+    }
+
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed"/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed" />
             <Row>
-                <Navigation actualPosition="Editar fuente de información" path="/feeds" index ="Fuentes de Información"/> 
+                <Navigation actualPosition={t('ngen.infoSource.edit')} path="/feeds" index={t('ngen.infoSource')} />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Fuente de Informacion</Card.Title>
+                            <Card.Title as="h5">{t('ngen.infoSource')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
-                        <FormFeed  name={name} setName={setName} active={active} setActive={setActive} description={description} setDescription={setDescription} createFeed={editFeed}/>
+                            <FormFeed name={name} setName={setName} active={active} setActive={setActive} description={description} setDescription={setDescription} createFeed={editFeed} />
                         </Card.Body>
                     </Card>
-                </Col>                    
+                </Col>
             </Row>
         </React.Fragment>
     );

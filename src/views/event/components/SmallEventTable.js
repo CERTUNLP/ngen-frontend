@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
@@ -7,7 +6,7 @@ import { getMinifiedFeed } from '../../../api/services/feeds';
 import TableEvents from './TableEvents';
 
 
-const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm }) => {
+const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption }) => {
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
@@ -64,7 +63,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                     <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
                         disableDateOrdering={true} disableCheckbox={true} disableTemplate={true} deleteColumForm={true}
                         disableColumnEdit={true} disableCheckboxAll={true} detailModal={true} modalEventDetail={modalEventDetail}
-                        deleteEventFromForm={deleteEventFromForm} />
+                        deleteEventFromForm={deleteEventFromForm} disableColumOption={disableColumOption} />
                 </Card.Body>
             </Card>
         </React.Fragment>

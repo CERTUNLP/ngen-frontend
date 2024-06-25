@@ -7,7 +7,8 @@ import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
 import SelectLabel from '../../../components/Select/SelectLabel';
-import SmallEventTable from '../../event/components/SmallEventTable';
+import SmallEventTable from '../../event/components/SmallEventTable'
+import { useTranslation, Trans } from 'react-i18next';
 import ModalListEvent from '../../event/ModalListEvent';
 import { getMinifiedFeed } from '../../../api/services/feeds';
 import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
@@ -79,7 +80,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectTlpFilter, setSelectTlpFilter] = useState("")
     const [selectTaxonomyFilter, setSelectTaxonomyFilter] = useState("");
     const [tableDetail, setTableDetail] = useState(false);
-
+    const { t } = useTranslation();
     useEffect(() => {
         var list = []
         props.caseItem.evidence.forEach((url) => {
@@ -107,13 +108,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         taxonomy: response.taxonomy,
                         feed: response.feed
                     }));
-
                     setEventList(newEventList);
                 } catch (error) {
                     console.error("Error fetching events:", error);
                 }
             }
-
             // Llamada a la función
             fetchAndSetEvents(events);
         }
@@ -319,6 +318,12 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (assigned !== null) {
             form.append("assigned", assigned)
         }
+        if (events !== []){
+
+            events.forEach(event => {
+                form.append("events", event);
+            });
+        }
         form.append("state", state)
         form.append("attend_date", attend_date)
         form.append("solve_date", solve_date)
@@ -478,17 +483,17 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case" />
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Principal</Card.Title>
+                    <Card.Title as="h5">{t('menu.main')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
                         <Col lg={6} sm={12}>
                             <Form.Group controlId="Form.Case.Comments">
-                                <Form.Label>Nombre del caso </Form.Label>
+                                <Form.Label>{t('ngen.case_name')} </Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="name"
-                                    placeholder="Nombre del caso"
+                                    placeholder={t('ngen.case_name')}
                                     maxlength="100"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -497,7 +502,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         </Col>
                         <Col lg={3} sm={12}>
                             <Form.Group controlId="Form.Case.Date">
-                                <Form.Label>Fecha de inicio de gestión </Form.Label>
+                                <Form.Label>{t('date.incidence')}</Form.Label>
                                 <Form.Control type="datetime-local" //2023-03-24T01:40:14.181622Z 
 
                                     value={date} //yyyy-mm-ddThh:mm
@@ -508,30 +513,30 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
                                 value={selectPriority} placeholder="Prioridad" required={true} />
-                        </Col>
+                        </Col >
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setLifecycle} setSelect={setSelectLifecycle} options={allLifecycles}
-                                value={selectLifecycle} placeholder="Ciclo de vida" required={true} />
+                                value={selectLifecycle} placeholder={t('ngen.lifecycle_one')} required={true} />
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setTlp} setSelect={setSelectTlp} options={allTlp}
-                                value={selectTlp} placeholder="TLP" required={true} />
+                                value={selectTlp} placeholder={t('ngen.TLP')} required={true} />
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setState} setSelect={setSelectState} options={props.allStates}
-                                value={selectState} placeholder="Estado" required={true} />
+                                value={selectState} placeholder={t('status.assigned')} required={true} />
                         </Col>
 
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
-                                value={selectAssigned} placeholder="Asignado" />
+                                value={selectAssigned} placeholder={t('status.assigned')} />
                         </Col>
 
-                    </Row>
+                    </Row >
                     <Row>
                         <Col >
                             <Form.Group controlId="Form.Case.Comments">
-                                <Form.Label>Comentarios</Form.Label>
+                                <Form.Label>{t('ngen.comments')}</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     name="comment"

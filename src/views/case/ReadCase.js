@@ -9,6 +9,7 @@ import apiInstance from "../../api/api.js";
 import { getEvent } from "../../api/services/events";
 import { getEvidence } from '../../api/services/evidences';
 import EvidenceCard from '../../components/UploadFiles/EvidenceCard';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const ReadCase = () => {
@@ -35,6 +36,8 @@ const ReadCase = () => {
     
     const [evidences, setEvidences] = useState([]);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
 
         if (caseItem !== null) {
@@ -48,7 +51,8 @@ const ReadCase = () => {
                 })
                 .catch(error => {
                     // Maneja cualquier error que ocurra durante las llamadas
-                    console.error("Error al obtener eventos:", error);
+                    const errorMessage = t('error.event');
+                    console.error(errorMessage, error);
                 });
         }
         if (!caseItem) {
@@ -147,46 +151,46 @@ const ReadCase = () => {
     return (
         caseItem &&
         <React.Fragment>
-            {navigationRow !=="false" ? 
-            <Row>
-                <Navigation actualPosition="Detalle" path="/cases" index="Casos" />
-            </Row>
-            :" "
+            {navigationRow !== "false" ?
+                <Row>
+                    <Navigation actualPosition="Detalle" path="/cases" index={t('ngen.case_other')} />
+                </Row>
+                : " "
             }
             <Row>
                 <Col sm={12}>
 
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Principal</Card.Title>
+                            <Card.Title as="h5">{t('w.main')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>Id del sistema</td>
+                                        <td>{t('ngen.system.id')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={id} />
                                         </td>
-                                        <td>Prioridad</td>
+                                        <td>{t('ngen.priority_one')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={priority} />
                                         </td>
-                                        <td>TLP</td>
+                                        <td>{t('ngen.tlp')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={tlp} />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Ciclo de vida</td>
-                                        <td>
+                                        <td>{t('ngen.lifecycle_one')}</td>
+                                        < td >
                                             <Form.Control plaintext readOnly defaultValue={caseItem.lifecycle} />
                                         </td>
-                                        <td>Estado</td>
+                                        <td>{t('ngen.state_one')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={state} />
                                         </td>
-                                        <td>Asignado</td>
+                                        <td>{t('status.assigned')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={assigned} />
                                         </td>
@@ -204,44 +208,44 @@ const ReadCase = () => {
 
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Fechas</Card.Title>
+                            <Card.Title as="h5">{t('date.other')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <Table responsive >
                                 <tbody>
                                     <tr>
-                                        <td>Fecha de inicio de gestión</td>
+                                        <td>{t('date.management.start')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={date} />
                                         </td>
-                                        <td>Atencion</td>
+                                        <td>{t('w.attended')}</td>
                                         {caseItem.attend_date ?
                                             <td>
                                                 <Form.Control plaintext readOnly defaultValue={attend_date} />
                                             </td>
                                             :
                                             <td>
-                                                <Form.Control plaintext readOnly defaultValue='No atendido' />
+                                                <Form.Control plaintext readOnly defaultValue={t('w.attended.no')} />
                                             </td>
                                         }
 
-                                        <td>Resolucion</td>
+                                        <td>{t('w.solved')}</td>
                                         {caseItem.solve_date ?
                                             <td>
                                                 <Form.Control plaintext readOnly defaultValue={solve_date} />
                                             </td>
                                             :
                                             <td>
-                                                <Form.Control plaintext readOnly defaultValue='No resuelto' />
+                                                <Form.Control plaintext readOnly defaultValue={t('w.solved.no')} />
                                             </td>
                                         }
                                     </tr>
                                     <tr>
-                                        <td>Creacion</td>
+                                        <td>{t('w.creation')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={created} />
                                         </td>
-                                        <td>Modificacion</td>
+                                        <td>{t('w.update')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={modified} />
                                         </td>
@@ -255,17 +259,17 @@ const ReadCase = () => {
 
                     <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true}/>
                     
-                    <SmallEventTable list={list} disableLink={true}/>
+                    <SmallEventTable list={list} disableLink={true} disableColumOption={true}/>
 
 
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">Informacion Adicional</Card.Title>
+                            <Card.Title as="h5">{t('w.info')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <Row>
                                 <Col sm={6} lg={3}>
-                                    Comentarios
+                                    {t('ngen.comments')}
                                 </Col>
                                 <Col>
                                     <Form.Control plaintext readOnly defaultValue={caseItem.comments} />
@@ -276,11 +280,11 @@ const ReadCase = () => {
                     {caseItem.children.length > 0 ?
                         <Card>
                             <Card.Header>
-                                <Card.Title as="h5">Children</Card.Title>
+                                <Card.Title as="h5">{t('ngen.children')}</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <Row>
-                                    <Col sm={6} lg={3}>Children</Col>
+                                    <Col sm={6} lg={3}>{t('ngen.children')}</Col>
                                     <Col>
                                         <Form.Control plaintext readOnly defaultValue={caseItem.children} />
                                     </Col>
@@ -290,14 +294,14 @@ const ReadCase = () => {
                         : <></>}
 
 
-                    {buttonReturn  !=="false" ?
-                        <Button variant="primary" href="/cases">Volver</Button>
-                    : 
-                    ""
+                    {buttonReturn !== "false" ?
+                        <Button variant="primary" href="/cases">{t('w.return')}</Button>
+                        :
+                        ""
                     }
-                    
-                </Col>
-            </Row>
+
+                </Col >
+            </Row >
 
             <Modal size='lg' show={modalShowEvent} onHide={() => setModalShowEvent(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>
@@ -307,21 +311,21 @@ const ReadCase = () => {
                                 <Card.Header>
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">Evento</Card.Title>
-                                            <span className="d-block m-t-5">Detalle de Evento</span>
+                                            <Card.Title as="h5">{t('ngen.event_one')}</Card.Title>
+                                            <span className="d-block m-t-5">{t('ngen.event.detail')}</span>
                                         </Col>
                                         <Col sm={12} lg={4}>
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalShowEvent(false)} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => setModalShowEvent(false)} />
                                         </Col>
                                     </Row>
                                 </Card.Header>
-                                <Card.Body>Informacion del evento</Card.Body>
+                                <Card.Body>{t('ngen.event.information')}</Card.Body>
                             </Card>
                         </Col>
                     </Row>
                 </Modal.Body>
             </Modal>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

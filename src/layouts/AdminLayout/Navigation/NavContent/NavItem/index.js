@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import i18next from 'i18next';
 
 import NavIcon from '../NavIcon';
 import NavBadge from '../NavBadge';
@@ -14,9 +15,9 @@ const NavItem = ({ layout, item }) => {
     const configContext = useContext(ConfigContext);
     const { dispatch } = configContext;
 
-    let itemTitle = item.title;
+    let itemTitle = i18next.t(item.title);
     if (item.icon) {
-        itemTitle = <span className="pcoded-mtext">{item.title}</span>;
+        itemTitle = <span className="pcoded-mtext">{itemTitle}</span>;
     }
 
     let itemTarget = '';

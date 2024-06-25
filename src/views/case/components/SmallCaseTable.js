@@ -7,7 +7,7 @@ import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedUser } from '../../../api/services/users';
 import TableCase from './TableCase'
 
-const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, modalCaseDetail, deleteCaseFromForm}) => {
+const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, modalCaseDetail, deleteCaseFromForm, disableColumOption}) => {
 
     const [userNames, setUserNames] = useState({});
     const [stateNames, setStateNames] = useState({});
@@ -120,7 +120,7 @@ const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, moda
                priorityNames={priorityNames} stateNames={stateNames} userNames={userNames} tlpNames={tlpNames}
                         editColum={false} deleteColum={true} deleteColumForm={true} detailModal={true} 
                         navigationRow={false} selectCase={true}  disableNubersOfEvents={true} modalCaseDetail={modalCaseDetail}
-                        deleteCaseFromForm={deleteCaseFromForm}/>
+                        deleteCaseFromForm={deleteCaseFromForm} disableColumOption={disableColumOption}/>
         </Card.Body>
     </Card>
 </React.Fragment>

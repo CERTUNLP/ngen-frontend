@@ -10,6 +10,7 @@ import { getMinifiedPriority } from "../../api/services/priorities";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const CreateEvent = () => {
   const formEmpty = {
@@ -44,6 +45,8 @@ const CreateEvent = () => {
   const [priorityNames, setPriorityNames] = useState({});
   const [userNames, setUserNames] = useState({});
   const [showAlert, setShowAlert] = useState(false)
+
+  const { t } = useTranslation();
 
   const resetShowAlert = () => {
     setShowAlert(false);
@@ -136,6 +139,7 @@ const CreateEvent = () => {
 
     const formDataEvent = new FormData();
 
+
     formDataEvent.append("date", body.date)// tengo que hacer esto porque solo me acepta este formato, ver a futuro
     formDataEvent.append("priority", body.priority)
     formDataEvent.append("tlp", body.tlp)
@@ -176,7 +180,7 @@ const CreateEvent = () => {
     <div>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event" />
       <Row>
-        <Navigation actualPosition="Agregar evento" path="/events" index="Evento" />
+        <Navigation actualPosition={t('ngen.event.add')} path="/events" index={t('ngen.event_one')} />
       </Row>
       <FormEvent createEvent={createEvent} setBody={setBody} body={body}
         feeds={feeds} taxonomy={taxonomy} tlp={TLP} priorities={priorities}
@@ -188,4 +192,5 @@ const CreateEvent = () => {
     </div>
   )
 }
+
 export default CreateEvent

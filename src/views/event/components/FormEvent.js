@@ -16,6 +16,7 @@ import { getCase } from '../../../api/services/cases';
 import SmallCaseTable from '../../case/components/SmallCaseTable';
 import EvidenceCard from '../../../components/UploadFiles/EvidenceCard';
 import { getEvidence } from '../../../api/services/evidences';
+import { useTranslation, Trans } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
 const FormEvent = (props) => {
@@ -66,6 +67,8 @@ const FormEvent = (props) => {
     const [caseSelectedFromTheList, setCaseSelectedFromTheList] = useState({});
     const [tableDetail, setTableDetail] = useState(false);
 
+    const { t } = useTranslation();
+
     useEffect(() => {
         // Función para obtener los datos de todas las evidencias
         const fetchAllEvidences = async () => {
@@ -92,6 +95,8 @@ const FormEvent = (props) => {
         // Llamar a la función para obtener los datos de las evidencias
         fetchAllEvidences();
     }, [props.body.evidence]);
+
+    
 
     useEffect(() => {
         getMinifiedState()
@@ -348,7 +353,7 @@ const FormEvent = (props) => {
         <div>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Principal</Card.Title>
+                    <Card.Title as="h5">{t('menu.principal')}</Card.Title>
                 </Card.Header>
                 <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
                 <Card.Body>
@@ -356,7 +361,7 @@ const FormEvent = (props) => {
                         <Row>
                             <Col sm={12} lg={4}>
                                 <Form.Group controlId="formGridAddress1">
-                                    <Form.Label>Fecha <b style={{ color: "red" }}>*</b></Form.Label>
+                                    <Form.Label>{t('date.one')}<b style={{ color: "red" }}>*</b></Form.Label>
                                     <Form.Control
                                         type="datetime-local"
                                         maxLength="150"
@@ -365,36 +370,35 @@ const FormEvent = (props) => {
                                         isInvalid={new Date(props.body.date) > new Date()}
                                         onChange={(e) => completeField(e)}
                                         name="date" />
-                                    {new Date(props.body.date) > new Date() ? <div className="invalid-feedback"> Se debe ingresar una fecha menor a la de hoy</div> : ""}
+                                    {new Date(props.body.date) > new Date() ? <div className="invalid-feedback">{t('date.invalid')}</div> : ""}
                                 </Form.Group>
                             </Col>
                             <Col sm={12} lg={4}>
-                                <SelectComponent controlId="exampleForm.ControlSelect1" label="TLP" options={props.tlp} value={selectTlp} nameField="tlp"
-                                    onChange={completeField1} placeholder="Seleccione un tlp" setOption={setSelectTlp} required={true}
+                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.tlp')} options={props.tlp} value={selectTlp} nameField="tlp"
+                                    onChange={completeField1} placeholder={t('ngen.tlp.select')} setOption={setSelectTlp} required={true}
                                 />
                             </Col>
                             <Col sm={12} lg={4}>
-                                <SelectComponent controlId="exampleForm.ControlSelect1" label="Taxonomia" options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy"
-                                    onChange={completeField1} placeholder="Seleccione una taxonomia" setOption={setSelectTaxonomy} required={true}
+                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.taxonomy_one')} options={props.taxonomy} value={selectTaxonomy} nameField="taxonomy"
+                                    onChange={completeField1} placeholder={t('ngen.taxonomy.one.select')} setOption={setSelectTaxonomy} required={true}
                                     disabled={(props.body.children !== [] && props.body.children.length > 0) ? true : false} />
                             </Col>
                         </Row>
                         <Row>
                             <Col sm={12} lg={4}>
-                                <SelectComponent controlId="exampleForm.ControlSelect1" label="Fuente de Informacion" options={props.feeds} value={selectFeed} nameField="feed"
-                                    onChange={completeField1} placeholder="Seleccione una Fuente de Informacion" setOption={setSelectFeed} required={true}
+                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('Fuente de Informacion')} options={props.feeds} value={selectFeed} nameField="feed"
+                                    onChange={completeField1} placeholder={t('ngen.infoSource.select')} setOption={setSelectFeed} required={true}
                                     disabled={(props.body.children !== [] && props.body.children.length > 0) ? true : false} />
                             </Col>
                             <Col sm={12} lg={4}>
-                                <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={props.priorities} value={selectPriority} nameField="priority"
-                                    onChange={completeField1} placeholder="Seleccione una Prioridad" setOption={setSelectPriority} required={true} />
+                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.priority_other')} options={props.priorities} value={selectPriority} nameField="priority"
+                                    onChange={completeField1} placeholder={t('ngen.priority_select')} setOption={setSelectPriority} required={true} />
                             </Col>
                         </Row>
-
                         <Form.Group controlId="formGridAddress1">
-                            <Form.Label>Notas</Form.Label>
+                            <Form.Label>{t('notes')}</Form.Label>
                             <Form.Control
-                                placeholder="Ingrese "
+                                placeholder={t('ngen.notes.placeholder')}
                                 maxLength="150"
                                 value={props.body.notes}
                                 onChange={(e) => completeField(e)}
@@ -431,16 +435,16 @@ const FormEvent = (props) => {
 
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Artefactos</Card.Title>
+                    <Card.Title as="h5">{t('ngen.affectedResources')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Form>
                         <Form.Group controlId="formGridAddress1">
-                            <Form.Label>Artefactos</Form.Label>
+                            <Form.Label>{t('ngen.artifact_other')}</Form.Label>
                             <Row>
                                 <Col sm={12} lg={9}>
                                     <Select
-                                        placeholder='Seleccione artefactos'
+                                        placeholder={t('ngen.artifact_other_select')}
                                         closeMenuOnSelect={false}
                                         components={animatedComponents}
                                         isMulti
@@ -458,22 +462,22 @@ const FormEvent = (props) => {
             </Card>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Recursos afectados</Card.Title>
+                    <Card.Title as="h5">{t('ngen.affectedResources')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                    <Form.Label>CIDR, Domino o Email<b style={{ color: "red" }}>*</b></Form.Label>
+                    <Form.Label>{t('cidr.domain.email')}<b style={{ color: "red" }}>*</b></Form.Label>
                     <Row>
                         <Col sm={12} lg={6}>
                             <Form.Group controlId="formGridAddress1">
                                 <Form.Control
-                                    placeholder="Ingrese IPv4,IPv6, Nombre de domino o Email"
+                                    placeholder={t('ngen.enter.ipv5.ipv6.domain.email')}
                                     maxLength="150"
                                     value={props.body.address_value}
                                     disabled={(props.body.children !== [] && props.body.children.length > 0) ? true : false}
                                     onChange={(e) => completeFieldStringIdentifier(e)}
                                     isInvalid={showErrorMessage}
                                     name="address_value" />
-                                {showErrorMessage ? <div className="invalid-feedback"> Debe ingresar IPv4,IPv6, Nombre de domino o Email</div> : ""}
+                                {showErrorMessage ? <div className="invalid-feedback"> {t('error.ipv4.ipv6.domain')}</div> : ""}
                             </Form.Group>
                         </Col>
                     </Row>

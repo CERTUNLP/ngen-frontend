@@ -17,6 +17,7 @@ import ViewFiles from '../../components/Button/ViewFiles';
 import SmallCaseTable from '../case/components/SmallCaseTable';
 import { getEvidence } from '../../api/services/evidences';
 import EvidenceCard from '../../components/UploadFiles/EvidenceCard';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ReadEvent = () => {
     const location = useLocation();
@@ -25,6 +26,7 @@ const ReadEvent = () => {
     const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
     const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
     const [evidences, setEvidences] = useState([]);
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -115,18 +117,18 @@ const ReadEvent = () => {
         <div>
             {navigationRow !== "false" ?
                 <Row>
-                    <Navigation actualPosition="Detalle" path="/events" index="Evento" />
+                    <Navigation actualPosition={t('ngen.event.detail')} path="/events" index="Evento" />
                 </Row>
                 : ""
             }
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Principal</Card.Title>
+                    <Card.Title as="h5">{t('menu.principal')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
                         <Col sm={12} lg={2}>
-                            Fecha
+                            {t('date.one')}
                         </Col>
                         <Col sm={12} lg={4}>
                             <div> {body.date ? body.date.slice(0, 10) + " " + body.date.slice(11, 19) : "--"}</div>
@@ -135,7 +137,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Tlp
+                            {t('ngen.TLP')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.tlp !== undefined ?
@@ -146,7 +148,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Taxonomia
+                            {t('ngen.taxonomy_one')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.taxonomy !== undefined ?
@@ -157,7 +159,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Fuentes de informacion
+                            {t('ngen.infoSource')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.feed !== undefined ?
@@ -168,7 +170,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Prioridad
+                            {t('ngen.priority_one')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.priority !== undefined ?
@@ -179,7 +181,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Usuario que reporta
+                            {t('reporter')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.reporter !== undefined ?
@@ -189,7 +191,7 @@ const ReadEvent = () => {
                     <br />
                     <Row>
                         <Col sm={12} lg={2}>
-                            Notas
+                            {t('notes')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.notes}
@@ -200,11 +202,11 @@ const ReadEvent = () => {
                 </Card.Body>
             </Card>
 
-            <SmallCaseTable readCase={body.case} />
+            <SmallCaseTable readCase={body.case} disableColumOption={true} />
 
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Artefactos</Card.Title>
+                    <Card.Title as="h5">{t('ngen.artifact_other')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
@@ -218,13 +220,13 @@ const ReadEvent = () => {
             </Card>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Recursos afectados</Card.Title>
+                    <Card.Title as="h5">{t('ngen.affectedResources')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Row>
                         <p></p>
 
-                        <Col sm={12} lg={2}>Dominio</Col>
+                        <Col sm={12} lg={2}>{t('ngen.domain')}</Col>
                         <p></p>
 
                         <Col sm={12} lg={4}> <Form.Control plaintext readOnly defaultValue={body.domain} /></Col>
@@ -234,7 +236,7 @@ const ReadEvent = () => {
                     </Row>
                     <Row>
 
-                        <Col sm={12} lg={2}>Cidr</Col>
+                        <Col sm={12} lg={2}>{t('ngen.cidr')}</Col>
 
                         <Col sm={12} lg={4}>  <Form.Control plaintext readOnly defaultValue={body.cidr} /></Col>
 
@@ -250,24 +252,24 @@ const ReadEvent = () => {
             <Table responsive >
                 <Card>
                     <Card.Header>
-                        <Card.Title as="h5">Datos adicionales</Card.Title>
+                        <Card.Title as="h5">{t('ngen.evidences')}Datos adicionales</Card.Title>
                     </Card.Header>
                     <Card.Body>
                         <tr>
-                            <td>Comentarios</td>
+                            <td>{t('ngen.comments')}</td>
                             <td>
                                 <Form.Control plaintext readOnly defaultValue="" />
                             </td>
                         </tr>
 
                         <tr>
-                            <td>Creación</td>
+                            <td>{t('w.creation')}</td>
                             <td>
                                 <Form.Control plaintext readOnly defaultValue={body.created !== undefined ? body.created.slice(0, 10) + " " + body.date.slice(11, 19) : ""} />
                             </td>
                         </tr>
                         <tr>
-                            <td>Actualización</td>
+                            <td>{t('w.update')}</td>
                             <td>
                                 <Form.Control plaintext readOnly defaultValue={body.modified !== undefined ? body.modified.slice(0, 10) + " " + body.date.slice(11, 19) : ""} />
                             </td>
@@ -277,7 +279,7 @@ const ReadEvent = () => {
                     </Card.Body>
                 </Card>
                 {buttonReturn !== "false" ?
-                    <Button variant="primary" onClick={() => returnBack()}>Volver</Button>
+                    <Button variant="primary" onClick={() => returnBack()}>{t('w.return')}</Button>
                     : ""
                 }
 

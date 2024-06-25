@@ -7,29 +7,30 @@ import { Link } from 'react-router-dom';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
-
-const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm}) => {
-    
-    const [url, setUrl] = useState(null) 
+import { useTranslation, Trans } from 'react-i18next';
+const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption}) => {
+    const [url, setUrl] = useState(null)
     const [modalDelete, setModalDelete] = useState(false)
-    const [id, setId] = useState(null) 
-        
+    const [id, setId] = useState(null)
+
     //checkbox
     const [isCheckAll, setIsCheckAll] = useState(false);
 
     const [list, setList] = useState([]);
-  
+
+    const { t } = useTranslation();
+
     //ORDER
-    useEffect(() => { 
+    useEffect(() => {
         setList(cases)
-        
-      }, [cases]);
+
+    }, [cases]);
 
     const storageCaseUrl = (url) => {
         localStorage.setItem('case', url);
-        localStorage.setItem('navigation', navigationRow);   
-        localStorage.setItem('button return', navigationRow);  
-        
+        localStorage.setItem('navigation', navigationRow);
+        localStorage.setItem('button return', navigationRow);
+
     }
 
     if (loading) {
@@ -37,7 +38,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             <Row className='justify-content-md-center'>
                 <Spinner animation='border' variant='primary' size='sm' />
             </Row>
-        );    
+        );
     }
 
     //Remove Case
@@ -46,8 +47,8 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         setUrl(url)
         setModalDelete(true)
     }
-    
-    const removeCase = (url)=> {
+
+    const removeCase = (url) => {
         deleteCase(url)
             .then((response) => {
                 setIfModify(response)
@@ -58,7 +59,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             .finally(() => {
                 setModalDelete(false)
             })
-        };
+    };
 
     //Checkbox 
     const handleSelectAll = e => {
@@ -68,7 +69,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
             setSelectedCases([]);
         }
     };
-    const handleClick = e => { 
+    const handleClick = e => {
         const { id, checked } = e.target;
         setSelectedCases([...selectedCases, id]);
         if (!checked) {
@@ -76,162 +77,179 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         }
     };
 
-    
-    
-    const letterSize= { fontSize: '1.0em' }
+
+
+    const letterSize = { fontSize: '1.0em' }
     return (
-            <React.Fragment>
-               <Table responsive hover className="text-center">
-            <thead>
-                <tr>
-                
-                    {
-                    disableCheckbox? ""
-                    :
-                    selectCase ? (
-                        <th></th>
-                    ) : list.length > 0 ? (
-                        <th>
-                            <Form.Group>
-                                <Form.Check
-                                    type="checkbox"
-                                    id={"selectAll"}
-                                    onChange={handleSelectAll}
-                                    checked={selectedCases.length !== 0 ? selectedCases.length === list.length : false}
-                                />
-                            </Form.Group>
-                        </th>
-                    ) : (
-                        <th>
-                            <Form.Group>
-                                <Form.Check custom type="checkbox" disabled />
-                            </Form.Group>
-                        </th>
-                    )}
-                    {disableDateOrdering ?
-                    ""
-                    :
-                    <Ordering field="date" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                    }
-                    {disableName?"":
-                    <th style={letterSize}>Nombre</th>
-                    }
-                    {disablePriority?"":
-                    <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                    }
-                    {disableTlp ?"":
-                    <th style={letterSize}>TLP</th>
-                    }
-                    <th style={letterSize}>Estado</th>
-                    {disableNubersOfEvents?"":
-                    <th style={letterSize}>Cantidad de eventos</th>
-                    }
-                    <th style={letterSize}>Asignado</th>
-                    <th style={letterSize}>Accion</th>
-                </tr>
-            </thead>
-            <tbody>
-                {list.map((caseItem, index) => {
-                    return (
-                        <tr key={index}>
-                            
-                            {
-                            disableCheckbox?""
-                            :
-                            selectCase ? (
-                                <td>
-                                    <Form.Group>
-                                        <Form.Check
-                                            type="checkbox"
-                                            id={caseItem.url}//Fecha de inicio de gestiónunfold_more	Nombre	Prioridadunfold_more	TLP	Estado	Asignado
-                                            onChange={(event) =>handleClickRadio(event, caseItem.url, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])}
-                                            checked={selectedCases.includes(caseItem.url)}
-                                        />
-                                    </Form.Group>
-                                </td>
-                            ) : (
-                                <td>
-                                    <Form.Group>
-                                        <Form.Check
-                                            disabled={caseItem.solve_date !== null}
-                                            type="checkbox"
-                                            id={caseItem.url}
-                                            onChange={handleClick}
-                                            checked={selectedCases.includes(caseItem.url)}
-                                        />
-                                    </Form.Group>
-                                </td>
-                            )}
-                            {disableDateOrdering ?
+        <React.Fragment>
+            <Table responsive hover className="text-center">
+                <thead>
+                    <tr>
+
+                        {
+                            disableCheckbox ? ""
+                                :
+                                selectCase ? (
+                                    <th></th>
+                                ) : list.length > 0 ? (
+                                    <th>
+                                        <Form.Group>
+                                            <Form.Check
+                                                type="checkbox"
+                                                id={"selectAll"}
+                                                onChange={handleSelectAll}
+                                                checked={selectedCases.length !== 0 ? selectedCases.length === list.length : false}
+                                            />
+                                        </Form.Group>
+                                    </th>
+                                ) : (
+                                    <th>
+                                        <Form.Group>
+                                            <Form.Check custom type="checkbox" disabled />
+                                        </Form.Group>
+                                    </th>
+                                )}
+                        {disableDateOrdering ?
                             ""
                             :
-                            <td>{ caseItem? caseItem.date.slice(0,10)+" "+caseItem.date.slice(11,19): ""}</td>
-                            }
+                            <Ordering field="date" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                        }
+                        {disableName ? "" :
+                            <th style={letterSize}> {t('ngen.name_one')} </th>
+                        }
+                        {disablePriority ? "" :
+                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                        }
+                        {disableTlp ? "" :
+                            <th style={letterSize}> {t('ngen.TLP')} </th>
+                        }
+                        <th style={letterSize}> {t('ngen.state_one')} </th>
+                        {disableNubersOfEvents ? "" :
+                            <th style={letterSize}> {t('ngen.event.quantity')} </th>
+                        }
+                        <th style={letterSize}> {t('status.assigned')} </th>
+                        {disableColumOption?
+                        ""
+                        :
+                        <th style={letterSize}> {t('ngen.action_one')} </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((caseItem, index) => {
+                        /*let datetime = caseItem.date.split('T');
+                        datetime = datetime[0] + ' ' + datetime[1].slice(0, 8);
+                        let idItem = caseItem.url.split('/').slice(-2)[0];*/
 
-                            {disableName?"":
-                            <td>{caseItem.name || "-"}</td>
-                            }
+                        return (
+                            <tr key={index}>
 
-                            {disablePriority?"":
-                            <td>{priorityNames[caseItem.priority]}</td>
-                            }
-                            {disableTlp ?"":
-                            <td>
-                                <LetterFormat useBadge={true} stringToDisplay={tlpNames[caseItem.tlp].name} color={tlpNames[caseItem.tlp].color} />
-                            </td>}
-                            <td>{stateNames[caseItem.state] || "-"}</td>
-                            {disableNubersOfEvents?"":
-                            <td>{caseItem.events_count}</td>
-                            }
-                            <td>{userNames[caseItem.assigned] || "-"}</td>
-                            <td>
-                                {detailModal ? (
-                                    <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
-                                ) : (
-                                    <Link to={{ pathname: '/cases/view' }}>
-                                        <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
-                                    </Link>
-                                )}
-                                {editColum && (
-                                    caseItem.solve_date == null ? (
-                                        <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
-                                            <CrudButton type="edit" />
-                                        </Link>
-                                    ) : (
-                                        <Button
-                                            id="button_hover"
-                                            className="btn-icon btn-rounded"
-                                            variant="outline-warning"
-                                            title="Caso resuelto"
-                                            disabled
-                                            style={{
-                                                border: "1px solid #555",
-                                                borderRadius: "50px",
-                                                color: "#555",
-                                            }}
-                                        >
-                                            <i className="fa fa-edit" style={{ color: "#555" }}></i>
-                                        </Button>
-                                    )
-                                )}
-                                {deleteColum ?
-                                    deleteColumForm ?
-                                        
-                                        <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)}/>
+                                {
+                                    disableCheckbox ? ""
                                         :
-                                        <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
-                                    :
+                                        selectCase ? (
+                                            <td>
+                                                <Form.Group>
+                                                    <Form.Check
+                                                        type="checkbox"
+                                                        id={caseItem.url}//Fecha de inicio de gestiónunfold_more	Nombre	Prioridadunfold_more	TLP	Estado	Asignado
+                                                        onChange={(event) => handleClickRadio(event, caseItem.url, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])}
+                                                        checked={selectedCases.includes(caseItem.url)}
+                                                    />
+                                                </Form.Group>
+                                            </td>
+                                        ) : (
+                                            <td>
+                                                <Form.Group>
+                                                    <Form.Check
+                                                        disabled={caseItem.solve_date !== null}
+                                                        type="checkbox"
+                                                        id={caseItem.url}
+                                                        onChange={handleClick}
+                                                        checked={selectedCases.includes(caseItem.url)}
+                                                    />
+                                                </Form.Group>
+                                            </td>
+                                        )}
+                                {disableDateOrdering ?
                                     ""
+                                    :
+                                    <td>{caseItem ? caseItem.date.slice(0, 10) + " " + caseItem.date.slice(11, 19) : ""}</td>
                                 }
-                            </td>
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </Table>
-            <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)}/>
-        </React.Fragment> 
-  );
+
+                                {disableName ? "" :
+                                    <td>{caseItem.name || "-"}</td>
+                                }
+
+                                {disablePriority ? "" :
+                                    <td>{priorityNames[caseItem.priority]}</td>
+                                }
+                                {disableTlp ? "" :
+                                    <td>
+                                        <LetterFormat useBadge={true} stringToDisplay={tlpNames[caseItem.tlp].name} color={tlpNames[caseItem.tlp].color} />
+                                    </td>}
+                                <td>{stateNames[caseItem.state] || "-"}</td>
+                                {disableNubersOfEvents ? "" :
+                                    <td>{caseItem.events_count}</td>
+                                }
+                                <td>{userNames[caseItem.assigned] || "-"}</td>
+                                <td>
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                    detailModal ? (
+                                        <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
+                                    ) : (
+                                        <Link to={{ pathname: '/cases/view' }}>
+                                            <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
+                                        </Link>
+                                    )}
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                    editColum && (
+                                        caseItem.solve_date == null ? (
+                                            <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
+                                                <CrudButton type="edit" />
+                                            </Link>
+                                        ) : (
+                                            <Button
+                                                id="button_hover"
+                                                className="btn-icon btn-rounded"
+                                                variant="outline-warning"
+                                                title="Caso resuelto"
+                                                disabled
+                                                style={{
+                                                    border: "1px solid #555",
+                                                    borderRadius: "50px",
+                                                    color: "#555",
+                                                }}
+                                            >
+                                                <i className="fa fa-edit" style={{ color: "#555" }}></i>
+                                            </Button>
+                                        )
+                                    )}
+                                    {disableColumOption?
+                                        ""
+                                        :
+                                        deleteColum ?
+                                        deleteColumForm ?
+
+                                            <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)}/>
+                                            :
+                                            <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
+                                        :
+                                        ""
+                                    }
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </Table>
+            <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
+        </React.Fragment>
+    );
 };
 
 export default TableCase;

@@ -9,6 +9,7 @@ import { deleteTaxonomy, getTaxonomy } from '../../../api/services/taxonomies';
 import Ordering from '../../../components/Ordering/Ordering';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import CallBackendByName from '../../../components/CallBackendByName';
+import { useTranslation, Trans } from 'react-i18next';
 
 const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading }) => {
   const [modalDelete, setModalDelete] = useState(false);
@@ -18,6 +19,7 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
   const [modalShow, setModalShow] = useState(false);
   const [created, setCreated] = useState(null);
   const [modified, setModified] = useState(null);
+  const { t } = useTranslation();
 
   if (loading) {
     return (
@@ -80,9 +82,9 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
         <thead>
           <tr>
             <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-            <th style={letterSize}>Activo</th>
-            <th style={letterSize}>Reportes</th>
-            <th style={letterSize}>Opciones</th>
+            <th style={letterSize}>{t('w.active')}</th>
+            <th style={letterSize}>{t('ngen.event_one')}</th>
+            <th style={letterSize}>{t('ngen.options')}</th>
           </tr>
         </thead>
         <tbody>

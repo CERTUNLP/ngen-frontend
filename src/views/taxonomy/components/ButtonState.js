@@ -2,29 +2,30 @@ import React, { useState } from 'react';
 import ActiveButton from '../../../components/Button/ActiveButton';
 import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { putActivationStatus } from '../../../api/services/taxonomies';
+import { useTranslation, Trans } from 'react-i18next';
 
-function ButtonState({taxonomy}) {    
+function ButtonState({ taxonomy }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const changeState = (taxonomy)=> {        
+    const changeState = (taxonomy) => {
         putActivationStatus(taxonomy.url, !taxonomy.active, taxonomy.name).
-        then(() => {           
-            window.location.href = '/taxonomies';
-        })
-        .catch((error) => {
-            console.log(error)     
-          })
-        .finally(()=>{
-            handleClose();
-        })
+            then(() => {
+                window.location.href = '/taxonomies';
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            .finally(() => {
+                handleClose();
+            })
     };
-    
-    return(
-        <>           
+
+    return (
+        <>
             <ActiveButton active={+taxonomy.active} onClick={handleShow} />
-            <ModalConfirm type='editState' component='Taxonomia' name={taxonomy.name} state={+taxonomy.active} showModal={show} onHide={() => handleClose()} ifConfirm={() => changeState(taxonomy)}/>
+            <ModalConfirm type='editState' component='Taxonomia' name={taxonomy.name} state={+taxonomy.active} showModal={show} onHide={() => handleClose()} ifConfirm={() => changeState(taxonomy)} />
         </>
     );
 }

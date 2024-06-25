@@ -10,7 +10,7 @@ const FilterSelectUrl = ({ options, itemName, partOfTheUrl, itemFilter,  itemFil
       itemNumber = parts[parts.length - 2];
       setCurrentPage(1)
       itemFilterSetter(`${partOfTheUrl}=${itemNumber}&`);
-      
+
     } else {
       setCurrentPage(1)
       itemFilterSetter(`${partOfTheUrl}=${itemNumber}&`);
