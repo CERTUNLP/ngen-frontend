@@ -82,14 +82,32 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [tableDetail, setTableDetail] = useState(false);
     const { t } = useTranslation();
     useEffect(() => {
-        var list = []
-        props.caseItem.evidence.forEach((url) => {
-            getEvidence(url).then((response) => {
-                list.push(response.data)
-            })
-        });
-        setEvidences(list)
+
+        const fetchAllEvidences = async () => {
+            try {
+                // Esperar a que todas las promesas de getEvidence se resuelvan
+                const responses = await Promise.all(props.caseItem.evidence.map((url) => getEvidence(url)));
+                // Extraer los datos de las respuestas
+                const data = responses.map(response => response.data);
+                // Actualizar el estado con los datos de todas las evidencias
+                evidences.forEach((evidence) => {
+                    console.log(evidence.url)
+                    if(evidence.url === undefined){
+                        data.push(evidence)
+                    }
+                });
+
+                setEvidences(data);
+                
+            } catch (error) {
+                console.error("Error fetching evidence data:", error);
+            }
+        };
+
+        // Llamar a la función para obtener los datos de las evidencias
+        fetchAllEvidences();
     }, [props.caseItem.evidence])
+
 
     useEffect(() => {
 
