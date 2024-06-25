@@ -22,7 +22,6 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
     useEffect(() => {
         setList(events)
 
-
     }, [events]);
 
     if (loading) {
@@ -77,9 +76,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
         localStorage.setItem('event', url);
     };
 
-
     const letterSize = { fontSize: '1.1em' }
-
     return (
         <div>
 

@@ -3,9 +3,6 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { getMinifiedPriority } from '../../../api/services/priorities';
 import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedUser } from '../../../api/services/users';
-import ViewFiles from '../../../components/Button/ViewFiles';
-import FileUpload from '../../../components/UploadFiles/FileUpload/FileUpload'
-import FileList from '../../../components/UploadFiles/FileList/FileList'
 import Alert from '../../../components/Alert/Alert';
 import { putCase, postCase } from '../../../api/services/cases';
 import { useLocation } from "react-router-dom";
@@ -17,11 +14,12 @@ import { getMinifiedFeed } from '../../../api/services/feeds';
 import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
 import ModalReadEvent from '../../event/ModalReadEvent';
 import { getEvent } from '../../../api/services/events';
+import EvidenceCard from '../../../components/UploadFiles/EvidenceCard';
+import { getEvidence } from '../../../api/services/evidences';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
     const location = useLocation();
-    const fromState = location.state;
     const [url, setUrl] = useState(props.edit ? props.caseItem.url : null)
     const [date, setDate] = useState(props.caseItem.date !== null ? props.caseItem.date.substr(0, 16) : getCurrentDateTime())
     const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle)
@@ -31,9 +29,9 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [tlp, setTlp] = useState(props.caseItem.tlp)
     const [assigned, setAssigned] = useState(props.caseItem.assigned)
     const [state, setState] = useState(props.caseItem.state)
-    const [events, setEvents] = useState(props.caseItem.events !== [] ? props.caseItem.events : []) 
+    const [events, setEvents] = useState(props.caseItem.events !== [] ? props.caseItem.events : [])
     const [comments, setComments] = useState([])
-    const [evidences, setEvidences] = useState(props.caseItem.evidence)
+    const [evidences, setEvidences] = useState([])
     const [attend_date, setAttend_date] = useState(props.caseItem.attend_date !== null ? props.caseItem.attend_date.substr(0, 16) : '')
     const [solve_date, setSolve_date] = useState(props.caseItem.solve_date !== null ? props.caseItem.solve_date.substr(0, 16) : '')
 
@@ -57,23 +55,22 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectState, setSelectState] = useState("")
     const [selectAssigned, setSelectAssigned] = useState("")
 
+    const [taxonomyNames, setTaxonomyNames] = useState({});
     const [tlpNames, setTlpNames] = useState({});
+    const [feedNames, setFeedNames] = useState({});
     const [priorityNames, setPriorityNames] = useState({});
     const [userNames, setUserNames] = useState({});
-
-    const [taxonomyNames, setTaxonomyNames] = useState({});
-    const [feedNames, setFeedNames] = useState({});
 
     const [showModalListEvent, setShowModalListEvent] = useState(false);
     const [updatePagination, setUpdatePagination] = useState(false)
 
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEvent, setSelectedEvent] = useState([]);
-    const [eventList, setEventList] = useState([]) 
+    const [eventList, setEventList] = useState([])
     const [taxonomyFilter, setTaxonomyFilter] = useState("");
     const [tlpFilter, setTlpFilter] = useState("");
     const [feedFilter, setFeedFilter] = useState("");
-    const [taxonomies, setTaxonomies] = useState([]);  
+    const [taxonomies, setTaxonomies] = useState([]);
     const [feeds, setFeeds] = useState([])
     const [wordToSearch, setWordToSearch] = useState("");
     const [modalShowEvent, setModalShowEvent] = useState(false);
@@ -83,18 +80,42 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectTlpFilter, setSelectTlpFilter] = useState("")
     const [selectTaxonomyFilter, setSelectTaxonomyFilter] = useState("");
     const [tableDetail, setTableDetail] = useState(false);
-
     const { t } = useTranslation();
+    useEffect(() => {
 
-    useEffect(()=> {
-        /*setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
-            taxonomy:taxonomy, feed:feed})*/
-        if(Object.keys(taxonomyNames).length !== 0 && Object.keys(feedNames).length !== 0 && Object.keys(tlpNames).length !== 0 
-        && events !== []){
+        const fetchAllEvidences = async () => {
+            try {
+                // Esperar a que todas las promesas de getEvidence se resuelvan
+                const responses = await Promise.all(props.caseItem.evidence.map((url) => getEvidence(url)));
+                // Extraer los datos de las respuestas
+                const data = responses.map(response => response.data);
+                // Actualizar el estado con los datos de todas las evidencias
+                evidences.forEach((evidence) => {
+                    console.log(evidence.url)
+                    if(evidence.url === undefined){
+                        data.push(evidence)
+                    }
+                });
+
+                setEvidences(data);
+                
+            } catch (error) {
+                console.error("Error fetching evidence data:", error);
+            }
+        };
+
+        // Llamar a la función para obtener los datos de las evidencias
+        fetchAllEvidences();
+    }, [props.caseItem.evidence])
+
+
+    useEffect(() => {
+
+        if (Object.keys(taxonomyNames).length !== 0 && Object.keys(feedNames).length !== 0 && Object.keys(tlpNames).length !== 0
+            && events !== []) {
             async function fetchAndSetEvents(events) {
                 try {
-                    const responses = await Promise.all(events.map(event => getEvent(event).then((response) => {return response.data})))
-                    console.log(responses)
+                    const responses = await Promise.all(events.map(event => getEvent(event).then((response) => { return response.data })))
                     const newEventList = responses.map(response => ({
                         url: response.url,
                         date: response.date,
@@ -105,21 +126,18 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         taxonomy: response.taxonomy,
                         feed: response.feed
                     }));
-            
                     setEventList(newEventList);
                 } catch (error) {
                     console.error("Error fetching events:", error);
                 }
             }
-            
             // Llamada a la función
             fetchAndSetEvents(events);
         }
 
-    },[taxonomyNames, feedNames, tlpNames, events])
+    }, [taxonomyNames, feedNames, tlpNames, events])
 
     useEffect(() => {
-
         if (allPriorities !== []) {
             allPriorities.forEach(item => {
                 if (item.value === priority) {
@@ -158,8 +176,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     }, [allPriorities, allTlp, allUsers, props.allStates])
 
-    useEffect(()=> {
-        getMinifiedTaxonomy().then((response) => { 
+    useEffect(() => {
+        getMinifiedTaxonomy().then((response) => {
             let dicTaxonomy = {}
             let listTaxonomies = [];
             response.map((taxonomy) => {
@@ -168,75 +186,74 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             })
             setTaxonomyNames(dicTaxonomy)
             setTaxonomies(listTaxonomies);
-          })
-          .catch((error) => {
-            console.log(error)
-              
-          })
-  
-          getMinifiedFeed().then((response) => { //se hardcodea las paginas
-            let dicFeed={}
+        })
+            .catch((error) => {
+                console.log(error)
+
+            })
+
+        getMinifiedFeed().then((response) => { //se hardcodea las paginas
+            let dicFeed = {}
             let listFeeds = [];
             response.map((feed) => {
-                dicFeed[feed.url]= feed.name
+                dicFeed[feed.url] = feed.name
                 listFeeds.push({ value: feed.url, label: feed.name });
             })
             setFeedNames(dicFeed)
             setFeeds(listFeeds);
-          })
-          .catch((error) => {
-            console.log(error)
-              
-          })
-      
-        getMinifiedPriority()
-        .then((response) => {
-            let listPriority = []
-            let dicPriority={}
-            response.map((priority) => {
-              listPriority.push({value:priority.url, label:priority.name})
-              dicPriority[priority.url]= priority.name
+        })
+            .catch((error) => {
+                console.log(error)
+
             })
-            setPriorityNames(dicPriority)
-            setAllPriorities(listPriority)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+
+        getMinifiedPriority()
+            .then((response) => {
+                let listPriority = []
+                let dicPriority = {}
+                response.map((priority) => {
+                    listPriority.push({ value: priority.url, label: priority.name })
+                    dicPriority[priority.url] = priority.name
+                })
+                setPriorityNames(dicPriority)
+                setAllPriorities(listPriority)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
 
         getMinifiedTlp()
-        .then((response) => {
-            let listTlp = []
-            let dicTlp = {}
-            response.map((tlp) => {
-              listTlp.push({value:tlp.url, label:tlp.name})
-              dicTlp[tlp.url]={name:tlp.name, color:tlp.color}
+            .then((response) => {
+                let listTlp = []
+                let dicTlp = {}
+                response.map((tlp) => {
+                    listTlp.push({ value: tlp.url, label: tlp.name })
+                    dicTlp[tlp.url] = { name: tlp.name, color: tlp.color }
+                })
+                setAllTlp(listTlp)
+                setTlpNames(dicTlp)
             })
-            setAllTlp(listTlp)
-            setTlpNames(dicTlp)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
 
         getMinifiedUser()
-        .then((response) => {
-            let listUser = []
-            let dicUser={}
-            response.map((user) => {
-                listUser.push({value:user.url, label:user.username})
-                dicUser[user.url]= user.username
+            .then((response) => {
+                let listUser = []
+                let dicUser = {}
+                response.map((user) => {
+                    listUser.push({ value: user.url, label: user.username })
+                    dicUser[user.url] = user.username
+                })
+                setAllUsers(listUser)
+                setUserNames(dicUser)
             })
-            setAllUsers(listUser)
-            setUserNames(dicUser)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
 
 
-    },[props.allStates])
-
+    }, [props.allStates])
 
     const allLifecycles = [
         {
@@ -257,29 +274,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         }
     ]
 
-    /***************************************/
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        console.log('1-------------------------')
-    }
-    const handleDrop = (event) => {
-        console.log('2-------------------------')
-        event.preventDefault();
-        const filesToUpload = event.dataTransfer.files
-        setEvidences([...evidences, ...filesToUpload]);
-        console.log('3-------------------------')
-    };
-    const removeFile = (position) => {
-        if (evidences.length > 0) {
-            setEvidences(evidences.filter((file, index) => index !== position));
-        }
-    }
-    /********************************************** */
-
     //Edit
     const editCase = () => {
-        console.log(comments)
-        console.log(evidences)
         setIfClick(true);
         const form = new FormData();
         form.append("date", date)
@@ -299,26 +295,23 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (evidences !== null) {
             for (let index = 0; index < evidences.length; index++) {
                 form.append("evidence", evidences[index])
-                console.log(evidences[index])
             }
-        }/*else{
-            form.append("evidence", evidences)
         }
-        */
+        if (events !== []) {
+
+            events.forEach(selectedEvent => {
+                form.append("events", selectedEvent);
+            });
+        }
         if (comm !== null) {
             let array = comments;
             array.push(comm)
             setComments((e) => [...e, comm])
-            console.log(comm);
-            console.log(array);
-            console.log(comments);
             form.append("comments", comm)
         }
-        console.log(form)
 
         putCase(url, form)
             .then((response) => {
-                console.log(response)
                 window.location.href = "/cases"
 
             })
@@ -327,7 +320,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 setIfClick(false)
             });
     };
-    console.log(props.selectedEvent)
 
     //Create
     const addCase = () => {
@@ -359,33 +351,30 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 form.append("events", selectedEvent);
             });
         }
+        if (events !== []) {
+
+            events.forEach(selectedEvent => {
+                form.append("events", selectedEvent);
+            });
+        }
         //form.append("evidence", evidences)
         if (evidences !== null) {
             for (let index = 0; index < evidences.length; index++) {
                 form.append("evidence", evidences[index])
-                console.log(evidences[index])
             }
-        }/*else{
-            form.append("evidence", evidences)
         }
-        */
         if (comm !== null) {
             let array = comments;
             array.push(comm)
             setComments((e) => [...e, comm])
-            console.log(comm);
-            console.log(array);
-            console.log(comments);
             form.append("comments", array)
         }
 
         postCase(form)
             .then((response) => {
-                console.log("entro aca23")
                 if (props.createCaseModal) {
 
                     if (props.setCaseToLink !== undefined) {
-                        console.log("entro aca3")
                         props.setCaseToLink({
                             name: response.data.name, date: response.data.date,
                             priority: priorityNames[response.data.priority], tlp: tlpNames[response.data.tlp].name,
@@ -399,13 +388,10 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         }, props.setSelectCase)
 
                     }
-                    console.log("entro aca2")
                     if (props.selectedEvent !== undefined) {
 
                         props.setSelectedEvent([])
-                        console.log("entro aca1")
                         props.setSelectCase("")
-                        console.log("entro aca")
                         props.setRefresh(!props.refresh)
                     }
                     props.setShowModalCase(false)
@@ -416,7 +402,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
             })
             .catch((error) => {
-                console.log(error.data)
+                console.log(error)
                 setShowAlert(true)
                 setIfClick(false)
             });
@@ -436,12 +422,13 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         setShowModalListEvent(true);
     }
 
-    function closeModal(){
+    function closeModal() {
         setShowModalListEvent(false)
+        setSelectedEvent(eventList)
         setCurrentPage(1);
     }
 
-    function linkEventsToCase(){
+    function linkEventsToCase() {
         setEvents(selectedEvent.map(event => event.url))
         setEventList(selectedEvent)
         setShowModalListEvent(false)
@@ -449,67 +436,69 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     }
 
-    const returnToListOfEvent=()=>{ 
+    const returnToListOfEvent = () => {
         setShowModalListEvent(true)
         setModalShowEvent(false)
         setUpdatePagination(true)
     };
 
-    const linkCaseToEvent=()=>{
+    const linkCaseToEvent = () => {
 
         if (!selectedEvent.some(event => event.url === selectedEventDetail.url)){
             setSelectedEvent([...selectedEvent, selectedEventDetail]);
         }
-        
         setShowModalListEvent(true)
         setModalShowEvent(false)
         setUpdatePagination(true)
         setUpdateList(!updateList)
-        /*setShowModalListCase(false)
-        setModalShowCase(false)
-        setCurrentPage(1);
-        setTlpFilter("")
-        setWordToSearch("")
-        setUpdatePagination(true)*/
     };
 
-    const modalEventDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
-        console.log(url)    
+    const modalEventDetail = (url, date, address_value, domain, cidr, tlp, taxonomy, feed) => {
         localStorage.setItem('event', url);
         setModalShowEvent(true)
         setShowModalListEvent(false)
-        localStorage.setItem('navigation', false);  
-        localStorage.setItem('button return', false);     
-        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
-            taxonomy:taxonomy, feed:feed});
+        localStorage.setItem('navigation', false);
+        localStorage.setItem('button return', false);
+        setSelectedEventDetail({
+            url: url, date: date, address_value: address_value, domain: domain, cidr: cidr, tlp: tlp,
+            taxonomy: taxonomy, feed: feed
+        });
     }
-    
-    const tableCaseDetail = (url, date , address_value, domain, cidr, tlp, taxonomy, feed) => {
+
+    const tableCaseDetail = (url, date, address_value, domain, cidr, tlp, taxonomy, feed) => {
         localStorage.setItem('event', url);
         setModalShowEvent(true)
         setTableDetail(true)
-        localStorage.setItem('navigation', false);  
-        localStorage.setItem('button return', false);     
-        setSelectedEventDetail({url:url, date:date, address_value:address_value, domain:domain, cidr:cidr, tlp:tlp, 
-            taxonomy:taxonomy, feed:feed});
+        localStorage.setItem('navigation', false);
+        localStorage.setItem('button return', false);
+        setSelectedEventDetail({
+            url: url, date: date, address_value: address_value, domain: domain, cidr: cidr, tlp: tlp,
+            taxonomy: taxonomy, feed: feed
+        });
     }
 
-    const closeModalDetail=()=>{ 
+    const closeModalDetail = () => {
         setModalShowEvent(false)
         setTableDetail(false)
     };
-    
-    const deleteEventFromForm=(url)=>{ 
+
+    const deleteEventFromForm = (url) => {
         setEventList(eventList.filter(event => event.url !== url))
         setSelectedEvent(selectedEvent.filter(event => event.url !== url))
+        let list=[]
+        eventList.forEach(
+            event => {
+            if(event.url !== url){
+                list.push(event.url)
+            }
+        }
+            )
+        setEvents(list)
     };
 
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case" />
-
-
-
             <Card>
                 <Card.Header>
                     <Card.Title as="h5">{t('menu.main')}</Card.Title>
@@ -577,86 +566,34 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                             </Form.Group>
                         </Col>
                     </Row>
-                </Card.Body >
-            </Card >
+                </Card.Body>
+            </Card>
+            {props.disableTableEvent ?
+                ""
+                :
+                <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail}
+                    modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} />
+            }
 
-            <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail} 
-                modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} 
-                disableColumOption={false}/>
-            
-            <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail} 
+            <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail}
                 selectFeedFilter={selectFeedFilter} setSelectFeedFilter={setSelectFeedFilter}
                 selectTlpFilter={selectTlpFilter} setSelectTlpFilter={setSelectTlpFilter}
                 selectTaxonomyFilter={selectTaxonomyFilter} setSelectTaxonomyFilter={setSelectTaxonomyFilter}
-                currentPage={currentPage}  setCurrentPage={setCurrentPage}
-                setUpdatePagination={setUpdatePagination} updatePagination={updatePagination} 
-                selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} 
+                currentPage={currentPage} setCurrentPage={setCurrentPage}
+                setUpdatePagination={setUpdatePagination} updatePagination={updatePagination}
+                selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent}
                 taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
                 closeModal={closeModal} linkEventsToCase={linkEventsToCase}
                 wordToSearch={wordToSearch} setWordToSearch={setWordToSearch}
                 taxonomyFilter={taxonomyFilter} setTaxonomyFilter={setTaxonomyFilter}
                 tlpFilter={tlpFilter} setTlpFilter={setTlpFilter} feedFilter={feedFilter} setFeedFilter={setFeedFilter}
-                taxonomies={taxonomies} feeds={feeds}  tlpList={allTlp} updateList={updateList}/>
+                taxonomies={taxonomies} feeds={feeds} tlpList={allTlp} updateList={updateList} />
 
-            <ModalReadEvent modalShowCase={modalShowEvent} tableDetail={tableDetail} returnToListOfCases={returnToListOfEvent} 
-                linkCaseToEvent={linkCaseToEvent} closeModalDetail={closeModalDetail}/>
+            <ModalReadEvent modalShowCase={modalShowEvent} tableDetail={tableDetail} returnToListOfCases={returnToListOfEvent}
+                linkCaseToEvent={linkCaseToEvent} closeModalDetail={closeModalDetail} />
 
-            {props.evidenceColum ?
-
-                props.edit ?
-                    <Card>
-                        <Card.Header>
-                            <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
-                        </Card.Header>
-                        <Card.Body>
-                            <Row>
-                                {evidences.map((url, index) => {
-                                    console.log(url)
-                                    return (
-                                        <Col>
-                                            <ViewFiles url={url} index={index + 1} /> {/*setIfDelete={setIfDelete} */}
-                                        </Col>)
-                                })}
-                            </Row>
-                        </Card.Body>
-                        <Card.Body>
-                            <Form>
-                                <Form.Group controlId="Form.Case.Evidences.Drag&Drop">
-                                    <div
-                                        className="dropzone"
-                                        onDragOver={handleDragOver}
-                                        onDrop={handleDrop}>
-                                        <FileUpload files={evidences} setFiles={setEvidences} removeFile={removeFile} />
-                                        <FileList files={evidences} removeFile={removeFile} />
-                                    </div>
-                                </Form.Group>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-
-                    :
-                    <Card>
-                        <Card.Header>
-                            <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
-                        </Card.Header>
-                        <Card.Body>
-                            <Form>
-                                <Form.Group controlId="Form.Case.Evidences.Drag&Drop">
-                                    <div
-                                        className="dropzone"
-                                        onDragOver={handleDragOver}
-                                        onDrop={handleDrop}>
-                                        <FileUpload files={evidences} setFiles={setEvidences} removeFile={removeFile} />
-                                        <FileList files={evidences} removeFile={removeFile} />
-                                    </div>
-                                </Form.Group>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                :
-                ""
-
-            }
+            <EvidenceCard evidences={evidences} setEvidences={setEvidences} setUpdateCase={props.setUpdateCase}
+                updateCase={props.updateCase} />
 
             {
                 priority !== '' && lifecycle !== '' && tlp !== '' && state !== '' ?
@@ -669,7 +606,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 <Button variant="primary" onClick={() => props.setShowModalCase(false)}>Cancelar</Button>
             }
 
-        </React.Fragment >
+        </React.Fragment>
     );
 };
 

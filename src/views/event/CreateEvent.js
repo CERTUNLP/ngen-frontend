@@ -28,7 +28,8 @@ const CreateEvent = () => {
     feed: "",       //requerido
     reporter: [],
     case: "",
-    tasks: []
+    tasks: [],
+    evidence: []
   }
   const [body, setBody] = useState(formEmpty)
   const [evidence, setEvidence] = useState([])
@@ -175,7 +176,7 @@ const CreateEvent = () => {
       })
   }
 
-  return (
+  return (body &&
     <div>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event" />
       <Row>
@@ -188,7 +189,7 @@ const CreateEvent = () => {
         tlpNames={tlpNames}
         priorityNames={priorityNames} setPriorityNames={setPriorityNames}
         userNames={userNames} />
-    </div >
+    </div>
   )
 }
 

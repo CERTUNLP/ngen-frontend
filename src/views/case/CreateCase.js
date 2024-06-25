@@ -27,13 +27,13 @@ const CreateCase = () => {
         solve_date: null,
         comments: [], //?
         evidence: [],
+        events: []
     }
 
     useEffect(() => {
 
         getAllStates()
             .then((response) => {
-                console.log(response);
                 let listStates = []
                 let dicState = {}
                 response.map((stateItem) => {

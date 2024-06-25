@@ -18,17 +18,18 @@ const EditCase = () => {
 
     //multiselect
     const [allStates, setSupportedStates] = useState([])
+    const [updateCase, setUpdateCase] = useState([])
 
     useEffect(() => {
         getCase(url)
             .then(response => {
-                console.log(response.data)
                 setCaseItem(response.data)
             })
             .catch(error => {
             })
 
-    }, [])
+    }, [updateCase])
+
 
     useEffect(() => {
         let listStates = []
@@ -60,18 +61,18 @@ const EditCase = () => {
 
     }, [caseItem])
 
-    const { t } = useTranslation();
+const { t } = useTranslation();
 
 
-    return (caseItem &&
-        <React.Fragment>
-            <Row>
-                <Navigation actualPosition={t('ngen.case_edit')} path="/cases" index={t('ngen.case_other')} />
-            </Row>
-            <FormCase caseItem={caseItem} allStates={allStates} edit={true} save={t('button.savechanges')} evidenceColum={true} 
-            buttonsModalColum={true}/>
-        </React.Fragment>
-    );
+return (caseItem &&
+    <React.Fragment>
+        <Row>
+            <Navigation actualPosition={t('ngen.case_edit')} path="/cases" index={t('ngen.case_other')} />
+        </Row>
+        <FormCase caseItem={caseItem} allStates={allStates} edit={true} save={t('button.savechanges')} evidenceColum={true}
+            buttonsModalColum={true} setUpdateCase={setUpdateCase} updateCase={updateCase}  />
+    </React.Fragment>
+);
 };
 
 export default EditCase;

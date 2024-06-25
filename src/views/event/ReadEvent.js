@@ -15,6 +15,8 @@ import Navigation from '../../components/Navigation/Navigation'
 import { getArtefact } from '../../api/services/artifact';
 import ViewFiles from '../../components/Button/ViewFiles';
 import SmallCaseTable from '../case/components/SmallCaseTable';
+import { getEvidence } from '../../api/services/evidences';
+import EvidenceCard from '../../components/UploadFiles/EvidenceCard';
 import { useTranslation, Trans } from 'react-i18next';
 
 const ReadEvent = () => {
@@ -23,6 +25,7 @@ const ReadEvent = () => {
     const [eventItem, setEventItem] = useState(location?.state?.item || null);
     const [navigationRow, setNavigationRow] = useState(localStorage.getItem('navigation'));
     const [buttonReturn, setButtonReturn] = useState(localStorage.getItem('button return'));
+    const [evidences, setEvidences] = useState([]);
     const { t } = useTranslation();
 
 
@@ -36,6 +39,26 @@ const ReadEvent = () => {
                 console.log(responsive.data)
             }).catch(error => console.log(error));
         }
+    }, [eventItem]);
+
+    useEffect(() => {
+
+        const fetchAllEvidences = async () => {
+            try {
+                // Esperar a que todas las promesas de getEvidence se resuelvan
+                const responses = await Promise.all(eventItem.evidence.map((url) => getEvidence(url)));
+                // Extraer los datos de las respuestas
+                const data = responses.map(response => response.data);
+                // Actualizar el estado con los datos de todas las evidencias
+                setEvidences(data);
+
+            } catch (error) {
+                console.error("Error fetching evidence data:", error);
+            }
+        };
+
+        // Llamar a la función para obtener los datos de las evidencias
+        fetchAllEvidences();
     }, [eventItem]);
 
     const callbackTaxonomy = (url, setPriority) => {
@@ -223,78 +246,8 @@ const ReadEvent = () => {
                 </Card.Body>
             </Card>
 
-
-
-            <Card>
-                <Card.Header>
-
-                    <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
-
-
-                </Card.Header>
-
-                <Card.Body>
-                    <Row>
-
-                        {body.evidence !== undefined ?
-                            body.evidence.map((url, index) => {
-                                return (<ViewFiles url={url} index={index + 1} />)
-                            }) : ""
-                        }
-                    </Row>
-                </Card.Body>
-            </Card>
-            <Card>
-                <Card.Header>
-                    <Card.Title as="h5">{t('ngen.affectedResources')}</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                    <Row>
-                        <p></p>
-
-                        <Col sm={12} lg={2}>{t('ngen.domain')}</Col>
-                        <p></p>
-
-                        <Col sm={12} lg={4}> <Form.Control plaintext readOnly defaultValue={body.domain} /></Col>
-
-
-
-                    </Row>
-                    <Row>
-
-                        <Col sm={12} lg={2}>{t('ngen.cidr')}</Col>
-
-                        <Col sm={12} lg={4}>  <Form.Control plaintext readOnly defaultValue={body.cidr} /></Col>
-
-
-
-                    </Row>
-                </Card.Body>
-            </Card>
-
-
-
-            <Card>
-                <Card.Header>
-
-                    <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
-
-
-                </Card.Header>
-
-                <Card.Body>
-                    <Row>
-
-                        {body.evidence !== undefined ?
-                            body.evidence.map((url, index) => {
-                                return (<ViewFiles url={url} index={index + 1} />)
-                            }) : ""
-                        }
-
-                    </Row>
-
-                </Card.Body>
-            </Card>
+            <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true}
+                 />
 
             <Table responsive >
                 <Card>

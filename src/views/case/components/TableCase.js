@@ -75,10 +75,6 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
         if (!checked) {
             setSelectedCases(selectedCases.filter(item => item !== id));
         }
-        console.log(e.target)
-        console.log(selectedCases)
-        console.log(e.target.value)
-        console.log(selectedCases.includes(id))
     };
 
 

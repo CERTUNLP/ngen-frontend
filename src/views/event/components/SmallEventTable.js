@@ -46,17 +46,6 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                         <Col sm={12} lg={10}>
                             <Card.Title as="h5">Eventos</Card.Title>
                         </Col>
-                        {/*disableLink  ? "":
-                    <Col sm={12} lg={2}>
-                        <Button 
-                                size="lm"
-                                variant="outline-dark"
-                                onClick={() => modalEvent()}
-                                >
-                                Crear evento
-                        </Button>
-                    </Col> 
-                    */}
                         {disableLink ? "" :
                             <Col sm={12} lg={2}>
                                 <Button
@@ -64,7 +53,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                                     variant="outline-dark"
                                     onClick={() => modalListEvent()}
                                 >
-                                    Vincular a Eventos
+                                    Vincular Eventos
                                 </Button>
                             </Col>
                         }

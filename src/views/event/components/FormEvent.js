@@ -4,8 +4,6 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import CrudButton from '../../../components/Button/CrudButton';
 import SelectComponent from '../../../components/Select/SelectComponent';
-import FileUpload from '../../../components/UploadFiles/FileUpload/FileUpload'
-import FileList from '../../../components/UploadFiles/FileList/FileList'
 import { postArtifact } from "../../../api/services/artifact";
 import { postStringIdentifier } from "../../../api/services/stringIdentifier";
 import Alert from '../../../components/Alert/Alert';
@@ -16,6 +14,8 @@ import ModalListCase from '../../case/ModalListCase';
 import CreateArtifactModal from '../../artifact/CreateArtifactModal';
 import { getCase } from '../../../api/services/cases';
 import SmallCaseTable from '../../case/components/SmallCaseTable';
+import EvidenceCard from '../../../components/UploadFiles/EvidenceCard';
+import { getEvidence } from '../../../api/services/evidences';
 import { useTranslation, Trans } from 'react-i18next';
 
 const animatedComponents = makeAnimated();
@@ -70,6 +70,35 @@ const FormEvent = (props) => {
     const { t } = useTranslation();
 
     useEffect(() => {
+        // Función para obtener los datos de todas las evidencias
+        const fetchAllEvidences = async () => {
+            try {
+                // Esperar a que todas las promesas de getEvidence se resuelvan
+                const responses = await Promise.all(props.body.evidence.map((url) => getEvidence(url)));
+                // Extraer los datos de las respuestas
+                const data = responses.map(response => response.data);
+                // Actualizar el estado con los datos de todas las evidencias
+                props.evidence.forEach((evidence) => {
+                    console.log(evidence.url)
+                    if(evidence.url === undefined){
+                        data.push(evidence)
+                    }
+                });
+
+                props.setEvidence(data);
+                
+            } catch (error) {
+                console.error("Error fetching evidence data:", error);
+            }
+        };
+
+        // Llamar a la función para obtener los datos de las evidencias
+        fetchAllEvidences();
+    }, [props.body.evidence]);
+
+    
+
+    useEffect(() => {
         getMinifiedState()
             .then((response) => {
                 let list = []
@@ -89,7 +118,7 @@ const FormEvent = (props) => {
 
     useEffect(() => {
         if (Object.keys(props.priorityNames).length !== 0 && Object.keys(props.tlpNames).length !== 0 && Object.keys(allStates).length !== 0
-            && Object.keys(props.userNames).length !== 0 && props.body.case !== "") {
+            && Object.keys(props.userNames).length !== 0 && props.body.case !== null) {
             getCase(props.body.case).then((response) => {
                 setCaseToLink({
                     value: response.data.url, name: response.data.name, date: response.data.date,
@@ -181,21 +210,6 @@ const FormEvent = (props) => {
         console.log(props.body.artifacts)
     };
 
-    const handleDragOver = (event) => {
-        event.preventDefault();
-    };
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        const filesToUpload = event.dataTransfer.files
-        props.setEvidence([...props.evidence, ...filesToUpload]);
-    };
-
-    const removeFile = (position) => {
-        if (props.evidence.length > 0) {
-            props.setEvidence(props.evidence.filter((file, index) => index !== position));
-        }
-    };
 
     const modalCaseDetail = (url, name, date, priority, tlp, state, user) => {
         localStorage.setItem('case', url);
@@ -274,6 +288,9 @@ const FormEvent = (props) => {
         }
         setOption(event)
 
+        console.log(caseToLink)
+        console.log(props.body)
+
     };
 
     const returnToListOfCases = () => {
@@ -283,7 +300,7 @@ const FormEvent = (props) => {
     };
 
     const linkCaseToEvent = () => {
-        completeField1("case", caseToLink, setSelectCase)
+        completeField1("case", caseSelectedFromTheList, setSelectCase)
         setCaseToLink(caseSelectedFromTheList)
         setShowModalListCase(false)
         setModalShowCase(false)
@@ -466,31 +483,11 @@ const FormEvent = (props) => {
                     </Row>
                 </Card.Body>
             </Card>
-            <Card>
+            <EvidenceCard evidences={props.evidence} setEvidences={props.setEvidence} setUpdateCase={props.setUpdateEvidence}
+                updateCase={props.updateEvidence} />
 
-                <Card.Header>
-                    <Card.Title as="h5">Evidencias</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                    <Form>
-                        <Form.Group controlId="formGridAddress1">
-                            <div
-                                className="dropzone"
-                                onDragOver={handleDragOver}
-                                onDrop={handleDrop}>
-                                <FileUpload files={props.evidence} setFiles={props.setEvidence} removeFile={removeFile} />
-                                <FileList files={props.evidence} removeFile={removeFile} />
-                            </div>
-                        </Form.Group>
-                    </Form>
-
-                    <CreateArtifactModal show={modalCreate} onHide={() => setModalCreate(false)} value={value} setValue={setValue}
-                        typeArtifact={typeArtifact} setTypeArtifact={setTypeArtifact} createArtifact={createArtifact} />
-
-                   
-
-                </Card.Body>
-            </Card>
+            <CreateArtifactModal show={modalCreate} onHide={() => setModalCreate(false)} value={value} setValue={setValue}
+                typeArtifact={typeArtifact} setTypeArtifact={setTypeArtifact} createArtifact={createArtifact} />
 
             {!(new Date(props.body.date) > new Date()) && props.body.tlp !== "" && props.body.taxonomy !== "" && props.body.feed !== ""
                 && props.body.priority !== "" && props.body.address_value !== "" && !showErrorMessage ?

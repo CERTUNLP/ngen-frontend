@@ -8,7 +8,7 @@ import { getCases } from '../../api/services/cases';
 
 const ModalListCase = (props) => {
     
-    
+
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState("-date");
     
@@ -22,10 +22,6 @@ const ModalListCase = (props) => {
         getCases(props.currentPage, props.stateFilter+props.tlpFilter+props.priorityFilter+props.wordToSearch, order) 
                 .then((response) => {
                     setCases(response.data.results)
-                    var list= []
-                    response.data.results.map((caseItem)=>{
-                      list.push({value:caseItem.url, label:caseItem.name+caseItem.uuid})
-                    })
                     setCountItems(response.data.count);
                     if (props.currentPage === 1) {
                         props.setUpdatePagination(true);  
