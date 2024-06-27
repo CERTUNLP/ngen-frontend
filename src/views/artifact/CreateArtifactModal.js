@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Row, Col, Card, CloseButton } from 'react-bootstrap';
 import FormArtifact from './components/FormArtifact';
+import { useTranslation, Trans } from 'react-i18next';
+
 
 const CreateArtifactModal = ({ show, onHide, value, setValue, typeArtifact, setTypeArtifact, createArtifact }) => {
+    const { t } = useTranslation();
     return (
         <Modal size='lg' show={show} onHide={onHide} aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Body>

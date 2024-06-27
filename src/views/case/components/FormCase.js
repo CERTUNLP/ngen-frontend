@@ -92,13 +92,13 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 // Actualizar el estado con los datos de todas las evidencias
                 evidences.forEach((evidence) => {
                     console.log(evidence.url)
-                    if(evidence.url === undefined){
+                    if (evidence.url === undefined) {
                         data.push(evidence)
                     }
                 });
 
                 setEvidences(data);
-                
+
             } catch (error) {
                 console.error("Error fetching evidence data:", error);
             }
@@ -336,7 +336,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (assigned !== null) {
             form.append("assigned", assigned)
         }
-        if (events !== []){
+        if (events !== []) {
 
             events.forEach(event => {
                 form.append("events", event);
@@ -444,7 +444,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     const linkCaseToEvent = () => {
 
-        if (!selectedEvent.some(event => event.url === selectedEventDetail.url)){
+        if (!selectedEvent.some(event => event.url === selectedEventDetail.url)) {
             setSelectedEvent([...selectedEvent, selectedEventDetail]);
         }
         setShowModalListEvent(true)
@@ -485,14 +485,14 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const deleteEventFromForm = (url) => {
         setEventList(eventList.filter(event => event.url !== url))
         setSelectedEvent(selectedEvent.filter(event => event.url !== url))
-        let list=[]
+        let list = []
         eventList.forEach(
             event => {
-            if(event.url !== url){
-                list.push(event.url)
+                if (event.url !== url) {
+                    list.push(event.url)
+                }
             }
-        }
-            )
+        )
         setEvents(list)
     };
 
@@ -530,7 +530,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setPriority} setSelect={setSelectPriority} options={allPriorities}
-                                value={selectPriority} placeholder="Prioridad" required={true} />
+                                value={selectPriority} placeholder={t('ngen.priority_one')} required={true} />
                         </Col >
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setLifecycle} setSelect={setSelectLifecycle} options={allLifecycles}
@@ -558,7 +558,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                                 <Form.Control
                                     as="textarea"
                                     name="comment"
-                                    placeholder="Comentarios"
+                                    placeholder={t('ngen.comments')}
                                     maxlength="500"
                                     value={comm}
                                     onChange={(e) => setComm(e.target.value)}
@@ -601,9 +601,9 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     <><Button variant="primary" disabled>{props.save}</Button></>
             }
             {props.buttonsModalColum ?
-                <Button variant="primary" href="/cases">Cancelar</Button>
+                <Button variant="primary" href="/cases">{t('button.cancel')}</Button>
                 :
-                <Button variant="primary" onClick={() => props.setShowModalCase(false)}>Cancelar</Button>
+                <Button variant="primary" onClick={() => props.setShowModalCase(false)}>{t('button.cancel')}</Button>
             }
 
         </React.Fragment>

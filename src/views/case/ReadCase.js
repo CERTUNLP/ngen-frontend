@@ -33,7 +33,7 @@ const ReadCase = () => {
     const [modalShowEvent, setModalShowEvent] = useState(false);
 
     const [list, setList] = useState([]);
-    
+
     const [evidences, setEvidences] = useState([]);
 
     const { t } = useTranslation();
@@ -138,7 +138,7 @@ const ReadCase = () => {
                 const data = responses.map(response => response.data);
                 // Actualizar el estado con los datos de todas las evidencias
                 setEvidences(data);
-                
+
             } catch (error) {
                 console.error("Error fetching evidence data:", error);
             }
@@ -196,7 +196,7 @@ const ReadCase = () => {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Nombre</td>
+                                        <td> {t('ngen.name_one')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={caseItem.name ? caseItem.name : "-"} />
                                         </td>
@@ -257,9 +257,9 @@ const ReadCase = () => {
                         </Card.Body>
                     </Card>
 
-                    <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true}/>
-                    
-                    <SmallEventTable list={list} disableLink={true} disableColumOption={true}/>
+                    <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true} />
+
+                    <SmallEventTable list={list} disableLink={true} disableColumOption={true} />
 
 
                     <Card>
@@ -295,7 +295,7 @@ const ReadCase = () => {
 
 
                     {buttonReturn !== "false" ?
-                        <Button variant="primary" href="/cases">{t('w.return')}</Button>
+                        <Button variant="primary" href="/cases">{t('button.return')}</Button>
                         :
                         ""
                     }

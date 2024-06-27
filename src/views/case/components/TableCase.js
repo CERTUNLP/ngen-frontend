@@ -8,7 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
-const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder , order,  priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority,disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption}) => {
+const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder, order, priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority, disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption }) => {
     const [url, setUrl] = useState(null)
     const [modalDelete, setModalDelete] = useState(false)
     const [id, setId] = useState(null)
@@ -112,13 +112,13 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                         {disableDateOrdering ?
                             ""
                             :
-                            <Ordering field="date" label="Fecha de inicio de gestión" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="date" label={t('date.management.start')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         }
                         {disableName ? "" :
                             <th style={letterSize}> {t('ngen.name_one')} </th>
                         }
                         {disablePriority ? "" :
-                            <Ordering field="priority" label="Prioridad" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="priority" label={t('ngen.priority_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         }
                         {disableTlp ? "" :
                             <th style={letterSize}> {t('ngen.TLP')} </th>
@@ -128,10 +128,10 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                             <th style={letterSize}> {t('ngen.event.quantity')} </th>
                         }
                         <th style={letterSize}> {t('status.assigned')} </th>
-                        {disableColumOption?
-                        ""
-                        :
-                        <th style={letterSize}> {t('ngen.action_one')} </th>
+                        {disableColumOption ?
+                            ""
+                            :
+                            <th style={letterSize}> {t('ngen.action_one')} </th>
                         }
                     </tr>
                 </thead>
@@ -194,52 +194,52 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                                 }
                                 <td>{userNames[caseItem.assigned] || "-"}</td>
                                 <td>
-                                    {disableColumOption?
+                                    {disableColumOption ?
                                         ""
                                         :
-                                    detailModal ? (
-                                        <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
-                                    ) : (
-                                        <Link to={{ pathname: '/cases/view' }}>
-                                            <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
-                                        </Link>
-                                    )}
-                                    {disableColumOption?
-                                        ""
-                                        :
-                                    editColum && (
-                                        caseItem.solve_date == null ? (
-                                            <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
-                                                <CrudButton type="edit" />
-                                            </Link>
+                                        detailModal ? (
+                                            <CrudButton type="read" onClick={() => modalCaseDetail(caseItem.url, caseItem.name, caseItem.name, caseItem.date, priorityNames[caseItem.priority], tlpNames[caseItem.tlp].name, stateNames[caseItem.state], userNames[caseItem.user_creator])} />
                                         ) : (
-                                            <Button
-                                                id="button_hover"
-                                                className="btn-icon btn-rounded"
-                                                variant="outline-warning"
-                                                title="Caso resuelto"
-                                                disabled
-                                                style={{
-                                                    border: "1px solid #555",
-                                                    borderRadius: "50px",
-                                                    color: "#555",
-                                                }}
-                                            >
-                                                <i className="fa fa-edit" style={{ color: "#555" }}></i>
-                                            </Button>
-                                        )
-                                    )}
-                                    {disableColumOption?
+                                            <Link to={{ pathname: '/cases/view' }}>
+                                                <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
+                                            </Link>
+                                        )}
+                                    {disableColumOption ?
+                                        ""
+                                        :
+                                        editColum && (
+                                            caseItem.solve_date == null ? (
+                                                <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
+                                                    <CrudButton type="edit" />
+                                                </Link>
+                                            ) : (
+                                                <Button
+                                                    id="button_hover"
+                                                    className="btn-icon btn-rounded"
+                                                    variant="outline-warning"
+                                                    title={t('ngen.case_one') + t('w.solved')}
+                                                    disabled
+                                                    style={{
+                                                        border: "1px solid #555",
+                                                        borderRadius: "50px",
+                                                        color: "#555",
+                                                    }}
+                                                >
+                                                    <i className="fa fa-edit" style={{ color: "#555" }}></i>
+                                                </Button>
+                                            )
+                                        )}
+                                    {disableColumOption ?
                                         ""
                                         :
                                         deleteColum ?
-                                        deleteColumForm ?
+                                            deleteColumForm ?
 
-                                            <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)}/>
+                                                <CrudButton type="delete" onClick={() => deleteCaseFromForm(caseItem.url)} />
+                                                :
+                                                <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
                                             :
-                                            <CrudButton type="delete" onClick={() => Delete(caseItem.url)} />
-                                        :
-                                        ""
+                                            ""
                                     }
                                 </td>
                             </tr>
@@ -247,7 +247,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                     })}
                 </tbody>
             </Table>
-            <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
+            <ModalConfirm type='delete' component='Caso' name={`${t('ngen.case_one')}${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
         </React.Fragment>
     );
 };

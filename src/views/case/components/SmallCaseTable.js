@@ -6,31 +6,33 @@ import { getMinifiedState } from '../../../api/services/states';
 import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedUser } from '../../../api/services/users';
 import TableCase from './TableCase'
+import { useTranslation, Trans } from 'react-i18next';
 
-const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, modalCaseDetail, deleteCaseFromForm, disableColumOption}) => {
+const SmallCaseTable = ({ readCase, disableLink, modalCase, modalListCase, modalCaseDetail, deleteCaseFromForm, disableColumOption }) => {
 
     const [userNames, setUserNames] = useState({});
     const [stateNames, setStateNames] = useState({});
     const [priorityNames, setPriorityNames] = useState({});
     const [caseItem, setCaseItem] = useState([]);
     const [tlpNames, setTlpNames] = useState({});
+    const { t } = useTranslation();
 
     console.log(readCase)
 
     useEffect(() => {
 
-        if(readCase){
+        if (readCase) {
             getCase(readCase).then((response) => {
                 setCaseItem([response.data])
-                
+
             })
-            .catch((error)=>{
-                console.log(error)
-            })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
-        if(readCase === undefined){
+        if (readCase === undefined) {
             setCaseItem([])
-              
+
         }
 
         getMinifiedTlp().then((response) => {
@@ -43,88 +45,88 @@ const SmallCaseTable = ({readCase,  disableLink, modalCase,  modalListCase, moda
 
 
         getMinifiedPriority()
-        .then((response) => {
-            let dicPriority={}
-            response.map((priority) => {
-                dicPriority[priority.url]= priority.name
+            .then((response) => {
+                let dicPriority = {}
+                response.map((priority) => {
+                    dicPriority[priority.url] = priority.name
+                })
+                setPriorityNames(dicPriority)
+
             })
-            setPriorityNames(dicPriority)
-            
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
 
         getMinifiedUser()
-        .then((response) => {
-            let dicUser={}
-            response.map((user) => {
-                dicUser[user.url]= user.username
+            .then((response) => {
+                let dicUser = {}
+                response.map((user) => {
+                    dicUser[user.url] = user.username
+                })
+                setUserNames(dicUser)
             })
-            setUserNames(dicUser)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
 
         getMinifiedState()
-        .then((response) => {
-            let dicState={}
-            response.map((state) => {
-                dicState[state.url]= state.name
+            .then((response) => {
+                let dicState = {}
+                response.map((state) => {
+                    dicState[state.url] = state.name
+                })
+                setStateNames(dicState)
             })
-            setStateNames(dicState)
-        })
-        
-    },[readCase]);
 
-  return (
-    <React.Fragment>
-    <Card>
-        <Card.Header>
-            <Row>
-            
-                <Col sm={12} lg={8}>
-                    <Card.Title as="h5">Caso</Card.Title>
-                </Col>
-                {disableLink  ?
-                <Col sm={12} lg={2}>
-                    <Button 
-                            size="lm"
-                            variant="outline-dark"
-                            onClick={() => modalCase()}
-                            >
-                            Crear nuevo caso
-                    </Button>
-                </Col>
-                :  ""
-                }
-                {disableLink ?
-                <Col sm={12} lg={2}>
-                    <Button 
-                            size="lm"
-                            variant="outline-dark"
-                            onClick={() => modalListCase()}
-                            >
-                            Vincular a caso 
-                    </Button>
-                </Col>
-                :""
-                }
-                
-                 
-            </Row>
-        </Card.Header>
-        <Card.Body>
-            <TableCase cases={caseItem} disableCheckbox={true} disableDateOrdering={true} 
-               priorityNames={priorityNames} stateNames={stateNames} userNames={userNames} tlpNames={tlpNames}
-                        editColum={false} deleteColum={true} deleteColumForm={true} detailModal={true} 
-                        navigationRow={false} selectCase={true}  disableNubersOfEvents={true} modalCaseDetail={modalCaseDetail}
-                        deleteCaseFromForm={deleteCaseFromForm} disableColumOption={disableColumOption}/>
-        </Card.Body>
-    </Card>
-</React.Fragment>
-  )
+    }, [readCase]);
+
+    return (
+        <React.Fragment>
+            <Card>
+                <Card.Header>
+                    <Row>
+
+                        <Col sm={12} lg={8}>
+                            <Card.Title as="h5">{t('ngen.case_one')}</Card.Title>
+                        </Col>
+                        {disableLink ?
+                            <Col sm={12} lg={2}>
+                                <Button
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => modalCase()}
+                                >
+                                    {t('ngen.case.create')}
+                                </Button>
+                            </Col>
+                            : ""
+                        }
+                        {disableLink ?
+                            <Col sm={12} lg={2}>
+                                <Button
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => modalListCase()}
+                                >
+                                    {t('ngen.case_link')}
+                                </Button>
+                            </Col>
+                            : ""
+                        }
+
+
+                    </Row>
+                </Card.Header>
+                <Card.Body>
+                    <TableCase cases={caseItem} disableCheckbox={true} disableDateOrdering={true}
+                        priorityNames={priorityNames} stateNames={stateNames} userNames={userNames} tlpNames={tlpNames}
+                        editColum={false} deleteColum={true} deleteColumForm={true} detailModal={true}
+                        navigationRow={false} selectCase={true} disableNubersOfEvents={true} modalCaseDetail={modalCaseDetail}
+                        deleteCaseFromForm={deleteCaseFromForm} disableColumOption={disableColumOption} />
+                </Card.Body>
+            </Card>
+        </React.Fragment>
+    )
 }
 
 export default SmallCaseTable

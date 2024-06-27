@@ -1,8 +1,11 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import ReadCase from './ReadCase';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ModalReadCase = ({ modalShowCase, tableDetail, returnToListOfCases, linkCaseToEvent, closeModalDetail }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal show={modalShowCase} size="lg" onHide={tableDetail ? closeModalDetail : returnToListOfCases} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton />
@@ -12,11 +15,11 @@ const ModalReadCase = ({ modalShowCase, tableDetail, returnToListOfCases, linkCa
         </div>
       </Modal.Body>
       {tableDetail ?
-      ""
-      :
+        ""
+        :
         <Modal.Footer>
-          <Button variant="outline-primary" onClick={linkCaseToEvent}>Vincular</Button>
-          <Button variant="outline-secondary" onClick={returnToListOfCases}>Volver al listado</Button>
+          <Button variant="outline-primary" onClick={linkCaseToEvent}> {t('button.link')}</Button>
+          <Button variant="outline-secondary" onClick={returnToListOfCases}> {t('button.return')}</Button>
         </Modal.Footer>
       }
     </Modal>

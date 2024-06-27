@@ -247,7 +247,7 @@ const ReadEvent = () => {
             </Card>
 
             <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true}
-                 />
+            />
 
             <Table responsive >
                 <Card>
@@ -279,7 +279,7 @@ const ReadEvent = () => {
                     </Card.Body>
                 </Card>
                 {buttonReturn !== "false" ?
-                    <Button variant="primary" onClick={() => returnBack()}>{t('w.return')}</Button>
+                    <Button variant="primary" onClick={() => returnBack()}>{t('button.return')}</Button>
                     : ""
                 }
 

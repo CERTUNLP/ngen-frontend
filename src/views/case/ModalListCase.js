@@ -1,44 +1,46 @@
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Row, Col, Button } from 'react-bootstrap';
 import Search from '../../components/Search/Search';
 import FilterSelectUrl from '../../components/Filter/FilterSelectUrl';
 import TableCase from './components/TableCase';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import { getCases } from '../../api/services/cases';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ModalListCase = (props) => {
-    
+
 
     const [loading, setLoading] = useState(true)
     const [order, setOrder] = useState("-date");
-    
+
     const [cases, setCases] = useState([])
     const [countItems, setCountItems] = useState(0);
     const [showAlert, setShowAlert] = useState(false)
-    
+
     const [disabledPagination, setDisabledPagination] = useState(true)
+    const { t } = useTranslation();
 
-    useEffect( ()=> {
-        getCases(props.currentPage, props.stateFilter+props.tlpFilter+props.priorityFilter+props.wordToSearch, order) 
-                .then((response) => {
-                    setCases(response.data.results)
-                    setCountItems(response.data.count);
-                    if (props.currentPage === 1) {
-                        props.setUpdatePagination(true);  
-                    } 
-                    setDisabledPagination(false);
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-                .finally(() => {
-                    setShowAlert(true)//este tiene que ser enviado por props
-                    setLoading(false)
-                })
-        
-    },[props.wordToSearch , props.priorityFilter, props.currentPage, props.tlpFilter, props.stateFilter, order]);
+    useEffect(() => {
+        getCases(props.currentPage, props.stateFilter + props.tlpFilter + props.priorityFilter + props.wordToSearch, order)
+            .then((response) => {
+                setCases(response.data.results)
+                setCountItems(response.data.count);
+                if (props.currentPage === 1) {
+                    props.setUpdatePagination(true);
+                }
+                setDisabledPagination(false);
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            .finally(() => {
+                setShowAlert(true)//este tiene que ser enviado por props
+                setLoading(false)
+            })
 
-    function updatePage(chosenPage){
+    }, [props.wordToSearch, props.priorityFilter, props.currentPage, props.tlpFilter, props.stateFilter, order]);
+
+    function updatePage(chosenPage) {
         props.setCurrentPage(chosenPage);
     }
 
@@ -48,19 +50,19 @@ const ModalListCase = (props) => {
             <Modal.Body>
                 <Row>
                     <Col sm={12} lg={12}>
-                        <Search type="caso" setWordToSearch={props.setWordToSearch} wordToSearch={props.wordToSearch} setLoading={setLoading} />
+                        <Search type={t('ngen.case_one')} setWordToSearch={props.setWordToSearch} wordToSearch={props.wordToSearch} setLoading={setLoading} />
                     </Col>
                 </Row>
                 <br />
                 <Row>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.priorities} itemName="prioridad" partOfTheUrl="priority" itemFilter={props.priorityFilter} itemFilterSetter={props.setPriorityFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                        <FilterSelectUrl options={props.priorities} itemName={t('ngen.priority_one')} partOfTheUrl="priority" itemFilter={props.priorityFilter} itemFilterSetter={props.setPriorityFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
                     </Col>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.tlp} itemName="tlp" partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                        <FilterSelectUrl options={props.tlp} itemName={t('ngen.TLP')} partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
                     </Col>
                     <Col sm={4} lg={4}>
-                    <FilterSelectUrl options={props.allStates} itemName="estados" partOfTheUrl="state" itemFilter={props.stateFilter} itemFilterSetter={props.setStateFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                        <FilterSelectUrl options={props.allStates} itemName={t('ngen.state_one')} partOfTheUrl="state" itemFilter={props.stateFilter} itemFilterSetter={props.setStateFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
                     </Col>
                 </Row>
                 <div id="example-collapse-text">
@@ -69,8 +71,8 @@ const ModalListCase = (props) => {
                         setLoading={setLoading} priorityNames={props.priorityNames}
                         stateNames={props.stateNames} tlpNames={props.tlpNames} userNames={props.userNames}
                         editColum={false} deleteColum={false} detailModal={true} modalCaseDetail={props.modalCaseDetail}
-                        navigationRow={false} selectCase={true} handleClickRadio={props.handleClickRadio} setSelectCase={props.setSelectCase} 
-                        disableNubersOfEvents={true}/>
+                        navigationRow={false} selectCase={true} handleClickRadio={props.handleClickRadio} setSelectCase={props.setSelectCase}
+                        disableNubersOfEvents={true} />
                 </div>
             </Modal.Body>
             <Modal.Footer>
@@ -85,9 +87,9 @@ const ModalListCase = (props) => {
             </Modal.Footer>
             <Modal.Footer>
                 <Button variant="outline-primary" onClick={props.linkCaseToEvent}>
-                    Vincular
+                    {t('button.link')}
                 </Button>
-                <Button variant="outline-secondary" onClick={props.closeModal}>Cancelar</Button>
+                <Button variant="outline-secondary" onClick={props.closeModal}>{t('button.cancel')}</Button>
             </Modal.Footer>
         </Modal>
     );

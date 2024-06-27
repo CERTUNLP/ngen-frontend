@@ -83,7 +83,7 @@ const EditPlaybook = () => {
 
                     <ListTask urlPlaybook={url} sectionAddTask={true} setShowAlert={setShowAlert} />
 
-                    <Button variant="primary" href="/playbooks">{t('w.return')}</Button>
+                    <Button variant="primary" href="/playbooks">{t('button.return')}</Button>
                 </Col>
             </Row>
         </React.Fragment>
