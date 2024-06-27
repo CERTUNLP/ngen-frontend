@@ -65,7 +65,7 @@ const RestLogin = ({ className, ...rest }) => {
                                     className="form-control"
                                     error={touched.username && errors.username}
                                     label="Username"
-                                    placeholder="Nombre de usuario"
+                                    placeholder={t('ngen.user.name')}
                                     name="username"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
@@ -79,7 +79,7 @@ const RestLogin = ({ className, ...rest }) => {
                                     className="form-control"
                                     error={touched.password && errors.password}
                                     label="Password"
-                                    placeholder="Contraseña"
+                                    placeholder={t('ngen.password')}
                                     name="password"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
