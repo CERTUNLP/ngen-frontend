@@ -20,69 +20,69 @@ const FormArtifactsSelect = (props) => {
     const typeValue = [
         {
             name: 'mail',
-            placeholder: '{t("Ingrese email")}',
+            placeholder: t('ngen.email_add'),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateEmail(props.value)),
             condition: JSON.parse(validateEmail(props.value)),
-            messageDanger: '{t("Ingrese un email valido")}'
+            messageDanger: t("ngen.email_valid")
 
         },
         {
             name: 'domain',
-            placeholder: '{t("Ingrese dominio")}',
+            placeholder: t("ngen.domain_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateDomain(props.value)),
             condition: "",
-            messageDanger: '{t("Ingrese un dominio valido")}'
+            messageDanger: t("ngen.domain_valid")
         },
         {
             name: 'url',
-            placeholder: '{t("Ingrese URI")}',
+            placeholder: t("ngen.url_add"),
             isInvalid: JSON.parse(!validateSpace(props.value)),
             condition: "",
-            messageDanger: '{t("Ingrese un URL valido")}'
+            messageDanger: t("ngen.url_valid")
         },
         {
             name: 'ip',
-            placeholder: '{t("Ingrese IP")}',
+            placeholder: t("ngen.ip_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateIP(props.value)),
             condition: JSON.parse(validateIP(props.value)),
-            messageDanger: '{t("Ingrese una ip valida")}'
+            messageDanger: t("ngen.ip_valid")
         },
         {
             name: 'autonomous-system',
-            placeholder: '{t("Ingrese Número de Sistema Autónomo")}',
+            placeholder: t("ngen.auSys_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateAutonomousSystem(props.value)),
             condition: JSON.parse(validateAutonomousSystem(props.value)),
-            messageDanger: '{t("Ingrese un número de Sistema Autónomo valido")}'
+            messageDanger: t("ngen.auSys_valid"),
         },
         {
             name: 'user-agent',
-            placeholder: '{t("Ingrese user-agent")}',
+            placeholder: t("ngen.userAgent_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateUserAgent(props.value)),
             condition: JSON.parse(validateUserAgent(props.value)),
-            messageDanger: '{t("Ingrese un user-agent valido")}'
+            messageDanger: t("ngen.userAgent_valid"),
         },
         {
             name: 'fqdn',
-            placeholder: '{t("Ingrese fqdn")}',
+            placeholder: t("ngen.fqdn_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || !validateDomain(props.value)),
             condition: JSON.parse(validateDomain(props.value)),
-            messageDanger: '{t("Ingrese un fqdn valido")}'
+            messageDanger: t("ngen.fqdn_valid"),
         },
         {
             name: 'other',
-            placeholder: '{t("Ingrese Otro tipo de dato")}',
+            placeholder: t("ngen.other_add"),
             isInvalid: JSON.parse(!validateSpace(props.value)),
             condition: "",
-            messageDanger: '{t("Ingrese un URI valido")}'
+            messageDanger: t("ngen.URI_valid"),
         },
         {
             name: 'hash',
-            placeholder: '{t("Ingrese un valor hexadecimal de 32 caracteres")}',
+            placeholder: t("ngen.hex32_add"),
             isInvalid: JSON.parse(!validateSpace(props.value) || (!validateHexadecimal32(props.value) && !validateHexadecimal40(props.value)
                 && !validateHexadecimal64(props.value) && !validateHexadecimal128(props.value))),
             condition: JSON.parse(validateHexadecimal32(props.value) || validateHexadecimal40(props.value)
                 || validateHexadecimal64(props.value) || validateHexadecimal128(props.value)),
-            messageDanger: '{t("Ingrese un hash de 32 valido")}'
+            messageDanger: t("ngen.hex32_valid"),
         }
     ];
 
@@ -94,7 +94,7 @@ const FormArtifactsSelect = (props) => {
             <React.Fragment>
 
                 <Form.Group controlId="formGridAddress1">
-                    <Form.Label>{t('Valor')}</Form.Label>
+                    <Form.Label>{t('ngen.value')}</Form.Label>
                     <Form.Control
 
                         placeholder={username.placeholder}
@@ -116,9 +116,9 @@ const FormArtifactsSelect = (props) => {
         return (
             <React.Fragment>
                 <Form.Group controlId="Form.Contact.Username.readOnly">
-                    <Form.Label>{t('Valor')}</Form.Label>
+                    <Form.Label>{t('ngen.value')}</Form.Label>
                     <Form.Control readOnly
-                        placeholder='{t("Aun no ha seleccionado el tipo de contacto")}'
+                        placeholder={t('ngen.contact.placeholder')}
                         name="username" />
                 </Form.Group>
             </React.Fragment>
