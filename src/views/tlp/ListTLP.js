@@ -57,7 +57,7 @@ const ListTLP = () => {
                                 <Col>
 
                                     <div className="input-group">
-                                        <Search type={t('por codigo')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                        <Search type={t('search.bycode')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                                     </div>
                                 </Col>
                             </Row>
