@@ -107,7 +107,7 @@ const EditSetting = () => {
                           name="value"
                           value={setting.value}
                           maxLength="150"
-                          placeholder="Ingrese el problema"
+                          placeholder={t('w.issue.placeholder')}
                           onChange={e => completeField(e, setting.url)}
                         />
                       </Form.Group>

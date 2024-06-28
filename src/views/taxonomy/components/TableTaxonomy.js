@@ -114,14 +114,14 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
                 <Card.Header>
                   <Row>
                     <Col>
-                      <Card.Title as="h5">Taxonomia</Card.Title>
-                      <span className="d-block m-t-5">Detalle de taxonomia</span>
+                      <Card.Title as="h5">{t('ngen.taxonomy_one')}</Card.Title>
+                      <span className="d-block m-t-5">{t('ngen.taxonomy.detail')}</span>
                     </Col>
                     <Col sm={12} lg={2}>
                       <Link to={{ pathname: "./taxonomy/edit", state: taxonomy }}>
                         <CrudButton type="edit" />
                       </Link>
-                      <CloseButton aria-label='Cerrar' onClick={handleClose} />
+                      <CloseButton aria-label={t('w.close')} onClick={handleClose} />
                     </Col>
                   </Row>
                 </Card.Header>
@@ -129,33 +129,33 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
                   <Table responsive>
                     <tbody>
                       <tr>
-                        <td>Id del sistema</td>
+                        <td>{t('ngen.system.id')}</td>
                         <td>
                           <Form.Control plaintext readOnly defaultValue={taxonomy ? taxonomy.slug : ""} />
                         </td>
                         <td></td>
                       </tr>
                       <tr>
-                        <td>Nombre</td>
+                        <td>{t('ngen.name_one')}</td>
                         <td>
                           <Form.Control plaintext readOnly defaultValue={taxonomy ? taxonomy.name : ""} />
                         </td>
                       </tr>
                       <tr>
-                        <td>Activo</td>
+                        <td>{t('w.active')}</td>
                         <td>
                           <ActiveButton active={taxonomy ? taxonomy.active : ""} />
                         </td>
                       </tr>
                       <tr>
-                        <td>Tipo</td>
+                        <td>{t('ngen.type')}</td>
                         <td>
                           <Form.Control plaintext readOnly defaultValue={taxonomy ? taxonomy.type : ""} />
                         </td>
                       </tr>
                       {taxonomy && taxonomy.description && (
                         <tr>
-                          <td>Descripcion</td>
+                          <td>{t('ngen.description')}</td>
                           <td>
                             <Form.Control style={{ resize: "none" }} as="textarea" rows={3} plaintext readOnly defaultValue={taxonomy.description} />
                           </td>
@@ -170,22 +170,22 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
                         </tr>
                       )}
                       <tr>
-                        <td>Informacion Relacionada</td>
+                        <td>{t('ngen.info.related')}</td>
                         <td>
                           <Button size="sm" variant='light' className="text-capitalize">
-                            Reportes
+                            {t('ngen.reports')}
                             <Badge variant="light" className="ml-1">{taxonomy ? taxonomy.reports.length : ""}</Badge>
                           </Button>
                         </td>
                       </tr>
                       <tr>
-                        <td>Creación</td>
+                        <td>{t('w.creation')}</td>
                         <td>
                           <Form.Control plaintext readOnly defaultValue={taxonomy ? taxonomy.created.slice(0, 10) + " " + taxonomy.created.slice(11, 19) : ""} />
                         </td>
                       </tr>
                       <tr>
-                        <td>Actualización</td>
+                        <td>{t('w.update')}</td>
                         <td>
                           <Form.Control plaintext readOnly defaultValue={taxonomy ? taxonomy.modified.slice(0, 10) + " " + taxonomy.modified.slice(11, 19) : ""} />
                         </td>
@@ -199,7 +199,7 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
         </Modal.Body>
       </Modal>
 
-      <ModalConfirm type='delete' component='Taxonomia' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeTaxonomy(url, name)} />
+      <ModalConfirm type='delete' component={t('ngen.taxonomy_one')} name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeTaxonomy(url, name)} />
     </React.Fragment>
   );
 };

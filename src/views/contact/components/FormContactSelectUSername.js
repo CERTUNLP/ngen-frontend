@@ -10,39 +10,39 @@ const FormContactSelectUsername = (props) => {
             props.setValidContact(!props.contact || username.condition)
         }
     }, [props.contact, props.selectedType]);
-
+    const { t } = useTranslation();
     const typeValue = [
         {
             name: 'email',
-            placeholder: 'Ingrese email',
+            placeholder: t('ngen.email_add'),
             isInvalid: JSON.parse(!validateContactMail(props.contact)),
             condition: JSON.parse(validateContactMail(props.contact)),
-            messageDanger: 'Ingrese un email valido'
+            messageDanger: t('ngen.email_valid')
 
         },
         {
             name: 'telegram',
-            placeholder: 'Ingrese contacto de telegram',
+            placeholder: t('ngen.telegram_add'),
             isInvalid: JSON.parse(!validateContactTelegram(props.contact)),
             condition: JSON.parse(validateContactTelegram(props.contact)),
-            messageDanger: 'Ingrese un contacto de telegram valido'
+            messageDanger: t('ngen.telegram_valid')
         },
         {
             name: 'phone',
-            placeholder: 'Ingrese telefono',
+            placeholder: t('ngen.phone_add'),
             isInvalid: JSON.parse(!validateContactPhone(props.contact)),
             condition: JSON.parse(validateContactPhone(props.contact)),
-            messageDanger: 'Ingrese un telefono valido'
+            messageDanger: t('ngen.phone_valid')
         },
         {
             name: 'uri',
-            placeholder: 'Ingrese URI',
+            placeholder: t('ngen.URI_add'),
             isInvalid: JSON.parse(!validateContactURI(props.contact)),
             condition: JSON.parse(validateContactURI(props.contact)),
-            messageDanger: 'Ingrese un URI valido'
+            messageDanger: t('ngen.URI_valid')
         }
     ]
-    const { t } = useTranslation();
+
     const username = typeValue.find(contact => contact.name === props.selectedType)
 
 

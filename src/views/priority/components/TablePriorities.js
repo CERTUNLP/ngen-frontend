@@ -105,7 +105,7 @@ const TablePriorities = ({ Priorities, loading, order, setOrder, setLoading, cur
                                                         <Link to={{ pathname: "/priorities/edit", state: priority }} >
                                                             <CrudButton type='edit' />
                                                         </Link>
-                                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                                        <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                                     </Col>
                                                 </Row>
                                             </Card.Header>
@@ -160,7 +160,7 @@ const TablePriorities = ({ Priorities, loading, order, setOrder, setLoading, cur
                                 </Row>
                             </Modal.Body>
                         </Modal>
-                        <ModalConfirm type='delete' component='Prioridad' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                        <ModalConfirm type='delete' component={t('ngen.priority_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
                     </tbody>
                 </Table>
             </ul>

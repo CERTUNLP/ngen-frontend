@@ -64,7 +64,7 @@ const ListReport = () => {
     <div>
       <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report" />
       <Row>
-        <Navigation actualPosition="Reporte" />
+        <Navigation actualPosition={t('ngen.report')} />
       </Row>
       <Card>
         <Card.Header>
@@ -74,7 +74,7 @@ const ListReport = () => {
             </Col>
             <Col sm={12} lg={3}>
               <Link to={{ pathname: '/reports/create' }} >
-                <CrudButton type='create' name='reporte' />
+                <CrudButton type='create' name={t('ngen.report')} />
               </Link>
 
             </Col>

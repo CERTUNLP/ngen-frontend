@@ -83,13 +83,13 @@ const EditPriority = () => {
         <>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="priority" />
             <Row>
-                <Navigation actualPosition="Editar prioridad" path="/priorities" index={t('ngen.priority_other')} />
+                <Navigation actualPosition={t('ngen.priority.edit')} path="/priorities" index={t('ngen.priority_other')} />
             </Row>
             <Row>
                 <Col>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('w.edit')} {t('ngen.priority_one')}</Card.Title>
+                            <Card.Title as="h5">{t('ngen.priority.edit')}</Card.Title>
                         </Card.Header>
                         <FormPriority body={body} setBody={setBody} createPriority={editPriority} />
                     </Card>

@@ -141,14 +141,14 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
                                 <Card.Header>
                                     <Row>
                                         <Col>
-                                            <Card.Title as="h5">ngen.entity_other</Card.Title>
-                                            <span className="d-block m-t-5">Detalle de entidad</span>
+                                            <Card.Title as="h5">{t('ngen.entity_other')}</Card.Title>
+                                            <span className="d-block m-t-5">{t('ngen.entity_detail')}</span>
                                         </Col>
                                         <Col sm={12} lg={3}>
                                             <Link to={{ pathname: '/entities/edit', state: entity }} >
                                                 <CrudButton type='edit' />
                                             </Link>
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                         </Col>
                                     </Row>
                                 </Card.Header>
@@ -156,20 +156,20 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
                                     <Table responsive >
                                         <tbody>
                                             <tr>
-                                                <td>Id del sistema</td>
+                                                <td>{t('ngen.system.id')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={id} />
                                                 </td>
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td>Nombre</td>
+                                                <td>{t('ngen.name_one')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={entity.name} />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Activa</td>
+                                                <td>{t('w.active')}</td>
                                                 <td>
                                                     <ActiveButton active={entity.active} />
                                                 </td>
@@ -181,16 +181,16 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Actualización</td>
+                                                <td>{t('w.creation')}</td>
                                                 <td>
                                                     <Form.Control plaintext readOnly defaultValue={modified} />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Informacion Relacionada</td>
+                                                <td>{t('ngen.related.info')}</td>
                                                 <td>
                                                     <Button size="sm" variant='light' className="text-capitalize">
-                                                        Redes <Badge variant="light" className="ml-1">{entity ? entity.networks.length : 0}</Badge>
+                                                        {t('ngen.newtork_other')} <Badge variant="light" className="ml-1">{entity ? entity.networks.length : 0}</Badge>
                                                     </Button>
                                                 </td>
                                             </tr>
@@ -203,9 +203,9 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
                 </Modal.Body>
             </Modal>
 
-            <ModalConfirm type='delete' component='Entidad' name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeEntity(url, name)} />
+            <ModalConfirm type='delete' component={t('ngen.entity')} name={name} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeEntity(url, name)} />
 
-            <ModalConfirm type='editState' component='Entidad' name={name} state={active} showModal={modalState} onHide={() => setModalState(false)} ifConfirm={() => switchState(url, active, name)} />
+            <ModalConfirm type='editState' component={t('ngen.entity')} name={name} state={active} showModal={modalState} onHide={() => setModalState(false)} ifConfirm={() => switchState(url, active, name)} />
 
         </React.Fragment>
     );

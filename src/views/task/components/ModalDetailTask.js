@@ -54,7 +54,7 @@ const ModalDetailTask = (props) => {
                                             {/*<Link to={{pathname:'/task/edit', state: props.task}} >
                                             </Link>*/}
                                             <CrudButton type='edit' />
-                                            <CloseButton aria-label='Cerrar' onClick={props.onHide} />
+                                            <CloseButton aria-label={t('w.close')} onClick={props.onHide} />
                                         </Col>
                                     </Row>
                                 </Card.Header>

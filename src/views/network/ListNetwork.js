@@ -104,11 +104,11 @@ const ListNetwork = () => {
                                     <ButtonFilter open={open} setOpen={setOpen} />
                                 </Col>
                                 <Col sm={12} lg={8}>
-                                    <Search type={t('cidr o dominio')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                    <Search type={t('filter.cidr_domain')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                                 </Col>
                                 <Col sm={12} lg={3}>
                                     <Link to={{ pathname: '/networks/create' }} >
-                                        <CrudButton type='create' name={t('Red')} />
+                                        <CrudButton type='create' name={t('ngen.network_one')} />
                                     </Link>
                                 </Col>
                             </Row>
@@ -118,7 +118,7 @@ const ListNetwork = () => {
                                 <div id="example-collapse-text">
                                     <Row>
                                         <Col sm={4} lg={4}>
-                                            <FilterSelectUrl options={entities} itemName="ngen.entity_other" partOfTheUrl="network_entity" itemFilter={entitiesFilter} itemFilterSetter={setEntitiesFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                                            <FilterSelectUrl options={entities} itemName={t('ngen.entity_other')} partOfTheUrl="network_entity" itemFilter={entitiesFilter} itemFilterSetter={setEntitiesFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                         <Col sm={4} lg={4}>
                                             <FilterSelect options={types} partOfTheUrl="type" setFilter={setTypeFilter} currentFilter={typeFilter} setLoading={setLoading} placeholder="Filtrar por tipos" />

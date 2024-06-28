@@ -62,7 +62,7 @@ const CreateReport = () => {
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('w.report')}</Card.Title>
+                            <Card.Title as="h5">{t('ngen.report')}</Card.Title>
                             <span className="d-block m-t-5">{t('w.add')} {t('ngen.report')}</span>
                         </Card.Header>
                         <Card.Body>

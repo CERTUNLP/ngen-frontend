@@ -48,7 +48,7 @@ const ModalEditTask = (props) => { //show, task, onHide, ifEdit, setShowAlert
                                             <span className="d-block m-t-5">{t('w.edit')} {t('ngen.task')}</span>
                                         </Col>
                                         <Col sm={12} lg={2}>
-                                            <CloseButton aria-label='Cerrar' onClick={props.onHide} />
+                                            <CloseButton aria-label={t('w.close')} onClick={props.onHide} />
                                         </Col>
                                     </Row>
                                 </Card.Header>

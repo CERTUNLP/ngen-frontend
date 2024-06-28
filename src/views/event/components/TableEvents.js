@@ -8,7 +8,7 @@ import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
 
-const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents, disableCheckboxAll, modalEventDetail, formCaseCheckbok, detailModal, deleteColumForm, deleteEventFromForm, disableColumOption}) => {
+const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents, disableCheckboxAll, modalEventDetail, formCaseCheckbok, detailModal, deleteColumForm, deleteEventFromForm, disableColumOption }) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
@@ -96,9 +96,9 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                 </th>}
 
                             {disableDateOrdering ?
-                                <th style={letterSize}>{t('Fecha del Evento')} </th>
+                                <th style={letterSize}>{t('ngen.event_date')} </th>
                                 :
-                                <Ordering field="date" label={t('Fecha del Evento')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                                <Ordering field="date" label={t('ngen.event_date')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             }
                             <th style={letterSize}>{t('ngen.identifier')} </th>
                             {disableDomain ? ""
@@ -116,9 +116,9 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                             <th style={letterSize}>{t('ngen.taxonomy_one')}</th>
                             <th style={letterSize}>{t('ngen.infoSource')}</th>
                             {disableColumOption ?
-                            ""
-                            :
-                            <th style={letterSize}>{t('ngen.options')}</th>
+                                ""
+                                :
+                                <th style={letterSize}>{t('ngen.options')}</th>
                             }
                         </tr>
                     </thead>
@@ -168,35 +168,35 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                     <td>{feedNames[event.feed]}</td>
 
                                     <td>
-                                        {disableColumOption?
-                                        ""
-                                        :
-                                        detailModal ?
-                                            <CrudButton type="read" onClick={() => modalEventDetail(event.url, event.date, event.address_value, event.domain,
-                                                event.cidr, event.tlp, event.taxonomy, event.feed)} />
+                                        {disableColumOption ?
+                                            ""
                                             :
-                                            <Link to={{ pathname: "/events/view", state: event }} >
-                                                <CrudButton type='read' onClick={() => storageEventUrl(event.url)} />
-                                            </Link>
-                                        }
-                                        {disableColumOption?
-                                        ""
-                                        :
-                                        disableColumnEdit ? ""
-                                            :
-                                            <Link to={{ pathname: "/events/edit", state: event }} >
-                                                <CrudButton type='edit' />
-                                            </Link>
-                                        }
-                                        {disableColumOption?
-                                        ""
-                                        :
-                                        disableColumnDelete ? ""
-                                            :
-                                            deleteColumForm ?
-                                                <CrudButton type='delete' onClick={() => deleteEventFromForm(event.url)} />
+                                            detailModal ?
+                                                <CrudButton type="read" onClick={() => modalEventDetail(event.url, event.date, event.address_value, event.domain,
+                                                    event.cidr, event.tlp, event.taxonomy, event.feed)} />
                                                 :
-                                                <CrudButton type='delete' onClick={() => modalDelete(event.name, event.url)} />
+                                                <Link to={{ pathname: "/events/view", state: event }} >
+                                                    <CrudButton type='read' onClick={() => storageEventUrl(event.url)} />
+                                                </Link>
+                                        }
+                                        {disableColumOption ?
+                                            ""
+                                            :
+                                            disableColumnEdit ? ""
+                                                :
+                                                <Link to={{ pathname: "/events/edit", state: event }} >
+                                                    <CrudButton type='edit' />
+                                                </Link>
+                                        }
+                                        {disableColumOption ?
+                                            ""
+                                            :
+                                            disableColumnDelete ? ""
+                                                :
+                                                deleteColumForm ?
+                                                    <CrudButton type='delete' onClick={() => deleteEventFromForm(event.url)} />
+                                                    :
+                                                    <CrudButton type='delete' onClick={() => modalDelete(event.name, event.url)} />
                                         }
                                         {disableTemplate ? ""
                                             :
@@ -220,12 +220,12 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                 </tr>
                             )
                         })}
-                        <ModalConfirm type='delete' component='Estado' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                        <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
 
                     </tbody>
                 </Table>
             </ul>
-            <ModalConfirm type='delete' component='Estado' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+            <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
 
             <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                 <Modal.Body>

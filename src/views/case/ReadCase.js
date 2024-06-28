@@ -153,7 +153,7 @@ const ReadCase = () => {
         <React.Fragment>
             {navigationRow !== "false" ?
                 <Row>
-                    <Navigation actualPosition="Detalle" path="/cases" index={t('ngen.case_other')} />
+                    <Navigation actualPosition={t('w.detail')} path="/cases" index={t('ngen.case_other')} />
                 </Row>
                 : " "
             }

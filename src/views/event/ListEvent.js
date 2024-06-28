@@ -342,7 +342,7 @@ const ListEvent = () => {
               <ButtonFilter open={open} setOpen={setOpen} />
             </Col>
             <Col sm={8} lg={4} >
-              <Search type={t('por taxonomia, fuentes o recurso afectado')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+              <Search type={t('search.taxonomy_source_affectedresource')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col>
               <Link to={"/events/create"} >
@@ -367,7 +367,7 @@ const ListEvent = () => {
                 size="lm"
                 variant="outline-dark"
                 onClick={() => modalCase()}>
-                {t('Agregar a un caso')}
+                {t('ngen.case.addto')}
                 <Badge
                   className="badge mr-1" >
                   {selectedEvent.length}
@@ -417,15 +417,15 @@ const ListEvent = () => {
                   <FilterSelectUrl options={tlpList} itemName="tlp" partOfTheUrl="tlp" itemFilter={tlpFilter} itemFilterSetter={setTlpFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                 </Col>
                 <Col sm={4} lg={4}>
-                  <FilterSelectUrl options={taxonomies} itemName="taxonomia" partOfTheUrl="taxonomy" itemFilter={taxonomyFilter} itemFilterSetter={setTaxonomyFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                  <FilterSelectUrl options={taxonomies} itemName={t('ngen.taxonomy_one')} partOfTheUrl="taxonomy" itemFilter={taxonomyFilter} itemFilterSetter={setTaxonomyFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                 </Col>
                 <Col sm={4} lg={4}>
-                  <FilterSelectUrl options={feeds} itemName="fuentes" partOfTheUrl="feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                  <FilterSelectUrl options={feeds} itemName={t('ngen.source_other')} partOfTheUrl="feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                 </Col>
               </Row>
               <Row>
                 <Col sm={4} lg={4}>
-                  <FilterSelect options={types} partOfTheUrl="case__isnull" setFilter={setCaseIsNull} currentFilter={caseIsNull} setLoading={setLoading} placeholder="Filtrar por casos" />
+                  <FilterSelect options={types} partOfTheUrl="case__isnull" setFilter={setCaseIsNull} currentFilter={caseIsNull} setLoading={setLoading} placeholder={t('ngen.filter_case')} />
                 </Col>
               </Row>
               <br />
@@ -444,19 +444,18 @@ const ListEvent = () => {
           </Row>
         </Card.Footer>
 
-        <ModalConfirm type='merge' component='eventos' name={selectedEvent} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
+        <ModalConfirm type='merge' component={t('ngen.event_other')} name={selectedEvent} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
 
         <Modal show={showOptionsToAddCase} size="lg" onHide={() => clearModal()} aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
-            <Modal.Title>Agregar eventos a un caso</Modal.Title>
+            <Modal.Title>{t('ngen.add.eventcase')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Button variant="primary" className='text-capitalize' size="sm" onClick={() => closeOptionsList()} aria-expanded={openCases}>
-              caso exixstente
+              {t('button.case_existing')}
             </Button>
             <Button variant="primary" className='text-capitalize' size="sm" onClick={() => closeOptionsCreate()} aria-expanded={openCases}>
-              nuevo caso
-            </Button>
+              {t('button.case_new')}            </Button>
           </Modal.Body>
         </Modal>
         <ModalCreateCase showModalCase={showModalCase} setShowModalCase={setShowModalCase} caseItem={caseItem}

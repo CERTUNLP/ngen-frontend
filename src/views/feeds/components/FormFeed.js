@@ -15,7 +15,7 @@ const FormFeed = (props) => {
                         <Form.Label>{t('ngen.name_one')}<b style={{ color: "red" }}>*</b></Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nombre"
+                            placeholder={t('ngen.name_one')}
                             value={props.name}
                             onChange={(e) => props.setName(e.target.value)}
                             isInvalid={!validateName(props.name)}

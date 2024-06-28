@@ -63,9 +63,9 @@ const EditState = () => {
         <div>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="state" />
             <Row>
-                <Navigation actualPosition="Editar Estado" path="/states" index={t('ngen.state_other')} />
+                <Navigation actualPosition={t('ngen.state.edit')} path="/states" index={t('ngen.state_other')} />
             </Row>
-            <FormState body={body} setBody={setBody} edge={edge} createState={editState} childernes={states} type={"Editar"} />
+            <FormState body={body} setBody={setBody} edge={edge} createState={editState} childernes={states} type={t('w.edit')} />
             <ListEdge url={body.url} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
         </div>
     )

@@ -103,7 +103,7 @@ const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading
                         })}
                     </tbody>
                 </Table>
-                <ModalConfirm type='delete' component='Reporte' name={""} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                <ModalConfirm type='delete' component={t('ngen.report')} name={""} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
                 <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                     <Modal.Body>
                         <Row>
@@ -112,14 +112,14 @@ const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading
                                     <Card.Header>
                                         <Row>
                                             <Col>
-                                                <Card.Title as="h5">Reporte</Card.Title>
-                                                <span className="d-block m-t-5">Detalle del reporte</span>
+                                                <Card.Title as="h5">{t('ngen.report')}</Card.Title>
+                                                <span className="d-block m-t-5">{t('ngen.report.detail')}</span>
                                             </Col>
                                             <Col sm={12} lg={4}>
                                                 <Link to={{ pathname: '/reports/edit', state: report }} >
                                                     <CrudButton type='edit' />
                                                 </Link>
-                                                <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                                <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                             </Col>
                                         </Row>
                                     </Card.Header>

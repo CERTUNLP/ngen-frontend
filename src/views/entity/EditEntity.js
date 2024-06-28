@@ -51,7 +51,7 @@ const EditEntity = () => {
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="entity" />
             <Row>
-                <Navigation actualPosition="Editar Entidad" path="/entities" index="ngen.entity_other" />
+                <Navigation actualPosition={t('ngen.entity_edit')} path="/entities" index="ngen.entity_other" />
             </Row>
             <Row>
                 <Col sm={12}>

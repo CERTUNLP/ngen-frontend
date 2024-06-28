@@ -64,7 +64,7 @@ const ListTaxonomies = () => {
                         <Card.Header>
                             <Row>
                                 <Col sm={12} lg={9}>
-                                    <Search type="por nombre" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+                                    <Search type={t('search.by.name')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
                                 </Col>
 
                                 <Col sm={12} lg={3}>

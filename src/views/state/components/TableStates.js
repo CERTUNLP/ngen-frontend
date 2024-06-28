@@ -124,8 +124,8 @@ const TableStates = ({ states, callback, loading, currentPage }) => {
                             )
                         })}
 
-                        <ModalConfirm type='delete' component='Estado' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
-                        <ModalConfirm type='editState' component='Estado' name={dataState.name} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
+                        <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                        <ModalConfirm type='editState' component={t('ngen.state_one')} name={dataState.name} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
                         <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Body>
                                 <Row>
@@ -141,7 +141,7 @@ const TableStates = ({ states, callback, loading, currentPage }) => {
                                                         <Link to={{ pathname: "/states/edit", state: state }} >
                                                             <CrudButton type='edit' />
                                                         </Link>
-                                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                                        <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                                     </Col>
                                                 </Row>
                                             </Card.Header>

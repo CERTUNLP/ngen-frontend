@@ -261,7 +261,7 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
                             ref={textareaRefs.more_information}
                             onInput={() => updateMaxHeight('more_information')}
                         />
-                        <span style={{ color: "gray", fontSize: "0.8em" }}>El texto ingresado se parseará como código HTML.</span>
+                        <span style={{ color: "gray", fontSize: "0.8em" }}>{t('w.text.as.html')}</span>
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>

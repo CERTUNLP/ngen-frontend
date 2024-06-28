@@ -61,11 +61,11 @@ const ListState = () => {
         <Card.Header>
           <Row>
             <Col sm={12} lg={9}>
-              <Search type="Estado" setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+              <Search type={t('ngen.state_one')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
               <Link to={{ pathname: '/states/create', state: states }} >
-                <CrudButton type='create' name='estado' />
+                <CrudButton type='create' name={t('ngen.state_one')} />
               </Link>
 
             </Col>

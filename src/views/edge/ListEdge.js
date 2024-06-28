@@ -167,7 +167,7 @@ const ListEdge = (props) => {
                                 </Col>
                                 <Col sm={12} lg={3}>
                                     {props.sectionAddEdge ?
-                                        <CrudButton type='create' name='transición' onClick={() => setModalCreate(true)} />
+                                        <CrudButton type='create' name={t('transition')} onClick={() => setModalCreate(true)} />
                                         :
                                         <><Button variant="outline-primary" disabled>{t('transitionAdd')}</Button></>
                                     }
@@ -226,7 +226,7 @@ const ListEdge = (props) => {
                                             <span className="d-block m-t-5">{t('transitionAdd')}</span>
                                         </Col>
                                         <Col sm={12} lg={2}>
-                                            <CloseButton aria-label='Cerrar' onClick={() => closeModal()} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => closeModal()} />
                                         </Col>
                                     </Row>
                                 </Card.Header>

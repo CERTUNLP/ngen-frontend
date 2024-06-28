@@ -58,12 +58,12 @@ const EditReport = () => {
         <div>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="report" />
             <Row>
-                <Navigation actualPosition="Editar reporte" path="/reports" index="Reportes" />
+                <Navigation actualPosition={t('ngen.report.edit')} path="/reports" index={t('ngen.report')} />
             </Row>
 
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">{t('w.edit')} {t('ngen.report')}</Card.Title>
+                    <Card.Title as="h5">{t('ngen.report.edit')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Form>

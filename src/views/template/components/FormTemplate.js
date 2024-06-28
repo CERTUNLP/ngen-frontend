@@ -133,7 +133,7 @@ const FormTemplate = (props) => {
         <React.Fragment>
             <Card>
                 <Card.Header>
-                    <Card.Title as="h5">Ante un evento</Card.Title>
+                    <Card.Title as="h5">{t('ngen.event_given')}</Card.Title>
                 </Card.Header>
                 <Card.Body>
                     <Form>

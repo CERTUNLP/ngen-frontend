@@ -134,7 +134,7 @@ const ListTask = (props) => { //props setAlert
                                             <span className="d-block m-t-5">{t('w.add')} {t('ngen.tasks')}</span>
                                         </Col>
                                         <Col sm={12} lg={2}>
-                                            <CloseButton aria-label='Cerrar' onClick={() => setModalCreate(false)} />
+                                            <CloseButton aria-label={t('w.close')} onClick={() => setModalCreate(false)} />
                                         </Col>
                                     </Row>
                                 </Card.Header>

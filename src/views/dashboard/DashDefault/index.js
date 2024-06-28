@@ -222,7 +222,7 @@ const DashDefault = () => {
                             onChange={(e) => completeDateStar(e.target.value)}
                             name="date"
                         />
-                        {starDateNotification ? <div className="invalid-feedback">{t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""}
+                        {starDateNotification ? <div className="invalid-feedback">{t('date.invalid')}</div> : ""}
                     </Form.Group>
                 </Col>
                 <Col sm={12} lg={6}>
@@ -237,7 +237,7 @@ const DashDefault = () => {
                             onChange={(e) => completeDateEnd(e.target.value)}
                             name="date"
                         />
-                        {endDateNotification ? <div className="invalid-feedback"> {t('Se debe ingresar una fecha menor a la de hoy')}</div> : ""}
+                        {endDateNotification ? <div className="invalid-feedback"> {t('date.invalid')}</div> : ""}
                     </Form.Group>
                 </Col>
             </Row>

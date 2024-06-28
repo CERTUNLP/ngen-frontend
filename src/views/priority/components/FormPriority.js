@@ -100,7 +100,7 @@ const FormPriority = ({ body, setBody, createPriority }) => {
                                                 <Form.Group controlId="formGridAddress1">
                                                         <Form.Label>{t('ngen.color')} <b style={{ color: "red" }}>*</b> </Form.Label>
                                                         <Form.Control
-                                                                placeholder="Ingrese un color"
+                                                                placeholder={('ngen.color.placeholder')}
                                                                 maxlength="150"
                                                                 value={body.color}
                                                                 name="color"

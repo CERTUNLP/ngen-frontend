@@ -109,7 +109,7 @@ const FormCreateContact = (props) => {
                             <Form.Label>{t('ngen.name_one')} <b style={{ color: "red" }}>*</b></Form.Label>
                             <Form.Control
                                 type="nombre"
-                                placeholder="Nombre"
+                                placeholder={t('ngen.name_one')}
                                 maxlength="100"
                                 value={props.name}
                                 onChange={(e) => props.setName(e.target.value)}

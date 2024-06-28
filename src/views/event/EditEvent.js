@@ -12,9 +12,12 @@ import { getMinifiedPriority } from "../../api/services/priorities";
 import { getEvidence, deleteEvidence } from "../../api/services/evidences";
 import { getMinifiedUser } from "../../api/services/users";
 import { getMinifiedArtifact } from "../../api/services/artifact";
+import { useTranslation, Trans } from 'react-i18next';
+
 
 const EditEvent = () => {
   //const [date, setDate] = useState(caseItem.date  != null ? caseItem.date.substr(0,16) : '') //required
+  const { t } = useTranslation();
   const location = useLocation();
   const fromState = location.state;
   const [body, setBody] = useState(null)
@@ -37,7 +40,7 @@ const EditEvent = () => {
     getEvent(fromState.url)
       .then(response => {
         response.data.case = response.data.case ? response.data.case : ""
-        response.data.date = response.data.date.substr(0,16)
+        response.data.date = response.data.date.substr(0, 16)
         setBody(response.data)
       })
       .catch(error => {
@@ -165,9 +168,9 @@ const EditEvent = () => {
       });
       formDataEvent.append("feed", body.feed)
       formDataEvent.append("address_value", body.address_value)
-      
+
       formDataEvent.append("case", body.case)
-      
+
       formDataEvent.append("todos", body.todos)
       formDataEvent.append("comments", body.comments)
       //f.append("cidr", body.cidr)// 'null' does not appear to be an IPv4 or IPv6 network"
@@ -257,7 +260,7 @@ const EditEvent = () => {
     <div>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event" />
       <Row>
-        <Navigation actualPosition="Editar Evento " path="/events" index="Evento" />
+        <Navigation actualPosition={t('ngen.edit.event')} path="/events" index="Evento" />
       </Row>
       <FormEvent createEvent={editEvent} setBody={setBody} body={body} feeds={feeds}
         taxonomy={taxonomy} tlp={TLP} priorities={priorities} users={users}

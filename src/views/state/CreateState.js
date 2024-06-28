@@ -65,8 +65,8 @@ const AddState = () => {
     return (
         <div>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="state" />
-            <Navigation actualPosition="Agregar Estado" path="/states" index={t('ngen.state_other')} />
-            <FormState body={body} setBody={setBody} createState={!sectionAddEdge ? createState : editState} childernes={childernes} type={"Agregar"} />
+            <Navigation actualPosition={t('ngen.state.add')} path="/states" index={t('ngen.state_other')} />
+            <FormState body={body} setBody={setBody} createState={!sectionAddEdge ? createState : editState} childernes={childernes} type={t('w.add')} />
             <ListEdge url={url} sectionAddEdge={sectionAddEdge} setShowAlert={setShowAlert} />
 
         </div>

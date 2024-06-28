@@ -80,13 +80,13 @@ const FormEvent = (props) => {
                 // Actualizar el estado con los datos de todas las evidencias
                 props.evidence.forEach((evidence) => {
                     console.log(evidence.url)
-                    if(evidence.url === undefined){
+                    if (evidence.url === undefined) {
                         data.push(evidence)
                     }
                 });
 
                 props.setEvidence(data);
-                
+
             } catch (error) {
                 console.error("Error fetching evidence data:", error);
             }
@@ -96,7 +96,7 @@ const FormEvent = (props) => {
         fetchAllEvidences();
     }, [props.body.evidence]);
 
-    
+
 
     useEffect(() => {
         getMinifiedState()
@@ -491,11 +491,11 @@ const FormEvent = (props) => {
 
             {!(new Date(props.body.date) > new Date()) && props.body.tlp !== "" && props.body.taxonomy !== "" && props.body.feed !== ""
                 && props.body.priority !== "" && props.body.address_value !== "" && !showErrorMessage ?
-                <Button variant="primary" onClick={props.createEvent} >Guardar</Button>
+                <Button variant="primary" onClick={props.createEvent} >{t('button.save')}</Button>
                 :
-                <Button variant="primary" disabled>Guardar</Button>
+                <Button variant="primary" disabled>{t('button.save')}</Button>
             }
-            <Button variant="primary" href="/events">Cancelar</Button>
+            <Button variant="primary" href="/events">{t('button.cancel')}</Button>
         </div>
     )
 }

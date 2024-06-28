@@ -44,7 +44,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                 <Card.Header>
                     <Row>
                         <Col sm={12} lg={10}>
-                            <Card.Title as="h5">Eventos</Card.Title>
+                            <Card.Title as="h5">{t('ngen.event_one')}</Card.Title>
                         </Col>
                         {disableLink ? "" :
                             <Col sm={12} lg={2}>
@@ -53,7 +53,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                                     variant="outline-dark"
                                     onClick={() => modalListEvent()}
                                 >
-                                    Vincular Eventos
+                                    {t('button.link')} {t('ngen.event_one')}
                                 </Button>
                             </Col>
                         }

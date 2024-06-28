@@ -130,11 +130,11 @@ const EditTaxonomy = () => {
                                     </Col>
                                     <Col sm={12} lg={3}>
                                         <SelectLabel set={setType} setSelect={setSelectedType} options={typeOption}
-                                            value={selectedType} placeholder="Tipo" required={true} />
+                                            value={selectedType} placeholder={t('ngen.type')} required={true} />
                                     </Col>
                                     <Col sm={12} lg={4}>
                                         <SelectLabel set={setParent} setSelect={setSelectTaxonomy} options={taxonomies}
-                                            value={selectTaxonomy} placeholder="Padre" required={true} />
+                                            value={selectTaxonomy} placeholder={t('ngen.taxonomy.parent')} required={true} />
                                     </Col>
                                 </Row>
                                 <Row>

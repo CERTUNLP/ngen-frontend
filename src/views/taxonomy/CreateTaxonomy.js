@@ -95,7 +95,7 @@ const CreateTaxonomy = () => {
                                             <Form.Label>{t('ngen.name_one')} <b style={{ color: "red" }}>*</b></Form.Label>
                                             <Form.Control
                                                 type="text"
-                                                placeholder="Nombre"
+                                                placeholder={t('ngen.name_one')}
                                                 onChange={(e) => setName(e.target.value)}
                                                 isInvalid={!validateName(name)}
                                             />
@@ -104,11 +104,11 @@ const CreateTaxonomy = () => {
                                     </Col>
                                     <Col sm={12} lg={4}>
                                         <SelectLabel set={setType} setSelect={setSelectedType} options={typeOption}
-                                            value={selectedType} placeholder="Tipo" required={true} />
+                                            value={selectedType} placeholder={t('ngen.type')} required={true} />
                                     </Col>
                                     <Col sm={12} lg={4}>
                                         <SelectLabel set={setParent} setSelect={setSelectTaxonomy} options={taxonomies}
-                                            value={selectTaxonomy} placeholder="Padre" />
+                                            value={selectTaxonomy} placeholder={t('ngen.taxonomy.parent')} />
                                     </Col>
                                 </Row>
                                 <Row>
@@ -118,7 +118,7 @@ const CreateTaxonomy = () => {
                                             <Form.Control
                                                 as="textarea"
                                                 rows={3}
-                                                placeholder="Descripcion"
+                                                placeholder={t('ngen.description')}
                                                 onChange={(e) => setDescription(e.target.value)}
                                                 isInvalid={(validateUnrequiredInput(description)) ? !validateDescription(description) : false}
                                             />

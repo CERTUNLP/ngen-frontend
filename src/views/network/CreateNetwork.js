@@ -68,7 +68,7 @@ const CreateNetwork = () => {
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="network" />
             <Row>
-                <Navigation actualPosition={t('ngen.network.create')} path="/networks" index="Redes" />
+                <Navigation actualPosition={t('ngen.network.create')} path="/networks" index={t('ngen.network_other')} />
             </Row>
             <Row>
                 <Col sm={12}>

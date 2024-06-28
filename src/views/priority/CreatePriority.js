@@ -53,13 +53,13 @@ const AddPriority = () => {
         <>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="priority" />
             <Row>
-                <Navigation actualPosition="Agregar Prioridad" path="/priorities" index={t('ngen.priority_other')} />
+                <Navigation actualPosition={t('ngen.priority.add')} path="/priorities" index={t('ngen.priority_other')} />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('w.add')} {t('ngen.priority_one')}</Card.Title>
+                            <Card.Title as="h5">{t('ngen.priority.add')}</Card.Title>
                         </Card.Header>
                         <FormPriority body={body} setBody={setBody} createPriority={createPriority} />
                     </Card>

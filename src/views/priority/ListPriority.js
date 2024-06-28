@@ -64,11 +64,11 @@ const ListPriorities = () => {
 
           <Row>
             <Col sm={12} lg={9}>
-              <Search type="por nombre " setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+              <Search type={t('search.by.name')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col sm={12} lg={3}>
               <Link to={"/priorities/create"} >
-                <CrudButton type='create' name='Prioridad' />
+                <CrudButton type='create' name={t('ngen.priority_one')} />
               </Link>
             </Col>
           </Row>

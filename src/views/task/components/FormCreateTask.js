@@ -72,7 +72,7 @@ const FormCreateTask = (props) => {
                             <Form.Label>{t('ngen.description')}<b style={{ color: "red" }}>*</b></Form.Label>
                             <Form.Control
                                 as="textarea"
-                                placeholder="Descripcion"
+                                placeholder={t('ngen.description')}
                                 maxlength="250"
                                 rows={4}
                                 value={props.description}
