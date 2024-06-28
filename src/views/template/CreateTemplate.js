@@ -136,7 +136,7 @@ const CreateTemplate = () => {
     <React.Fragment>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="template" />
       <Row>
-        <Navigation actualPosition="Agregar Plantilla" path="/templates" index="Plantillas" />
+        <Navigation actualPosition={t('ngen.template.add')} path="/templates" index={t('ngen.template_other')} />
       </Row>
 
       <FormTemplate body={body} setBody={setBody} createTemplate={createTemplate} tlp={TLP} feeds={feeds} taxonomy={taxonomy} priorities={priorities} states={states} />

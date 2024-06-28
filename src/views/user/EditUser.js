@@ -67,7 +67,7 @@ const EditUser = () => {
     return (
         <>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
-            <Navigation actualPosition="Editar Usuario" path="/users" index="Usuarios" />
+            <Navigation actualPosition={t('w.edit') + t('ngen.user')} path="/users" index={t('ngen.user_other')} />
             <Card>
 
                 <Card.Header>

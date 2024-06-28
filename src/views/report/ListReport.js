@@ -9,6 +9,7 @@ import TableReport from './components/TableReport'
 import { getMinifiedTaxonomy } from '../../api/services/taxonomies';
 import AdvancedPagination from '../../components/Pagination/AdvancedPagination';
 import Alert from '../../components/Alert/Alert';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ListReport = () => {
   const [loading, setLoading] = useState(true)
@@ -23,6 +24,7 @@ const ListReport = () => {
 
   const [wordToSearch, setWordToSearch] = useState('')
   const [order, setOrder] = useState("taxonomy__name");
+  const { t } = useTranslation();
 
   function updatePage(chosenPage) {
     setCurrentPage(chosenPage);

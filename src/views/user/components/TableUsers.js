@@ -120,8 +120,8 @@ function TableUsers({ users, loading, order, setOrder, setLoading, currentPage }
                                 </tr>
                             )
                         })}
-                        <ModalConfirm type='delete' component='Usuario' name={deleteUsername} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
-                        <ModalConfirm type='editState' component='Usuario' name={dataState.username} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
+                        <ModalConfirm type='delete' component={t('ngen.user')} name={deleteUsername} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                        <ModalConfirm type='editState' component={t('ngen.user')} name={dataState.username} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
                         <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Body>
                                 <Row>
@@ -137,7 +137,7 @@ function TableUsers({ users, loading, order, setOrder, setLoading, currentPage }
                                                         <Link to={{ pathname: "/users/edit", state: user }} >
                                                             <CrudButton type='edit' />
                                                         </Link>
-                                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                                        <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                                     </Col>
                                                 </Row>
                                             </Card.Header>

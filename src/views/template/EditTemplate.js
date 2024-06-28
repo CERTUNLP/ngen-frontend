@@ -24,6 +24,7 @@ const EditTemplate = () => {
   const [states, setStates] = useState([])
   const [loading, setLoading] = useState(true)
   const [showAlert, setShowAlert] = useState(false)
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLoading(true)
@@ -118,7 +119,7 @@ const EditTemplate = () => {
     <React.Fragment>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="template" />
       <Row>
-        <Navigation actualPosition="Editar Plantilla" path="/templates" index="Plantilla" />
+        <Navigation actualPosition={t('ngen.template.edit')} path="/templates" index={t('ngen.template')} />
       </Row>
       <FormTemplate body={body} setBody={setBody} createTemplate={editState} tlp={TLP} feeds={feeds} taxonomy={taxonomy} priorities={priorities} states={states} />
     </React.Fragment>

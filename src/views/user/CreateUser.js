@@ -65,7 +65,7 @@ const AddUser = () => {
     return (
         <>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} />
-            <Navigation actualPosition="Agregar Usuario" path="/users" index="Usuarios" />
+            <Navigation actualPosition={t('w.add') + t('ngen.user')} path="/users" index={t('ngen.user_other')} />
             <Card>
                 <Card.Header>
 

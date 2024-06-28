@@ -9,6 +9,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import { deleteTemplate, isActive, createCases } from "../../../api/services/templates";
 import Alert from '../../../components/Alert/Alert';
 import Ordering from '../../../components/Ordering/Ordering';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage, taxonomyNames, feedNames }) => {
@@ -20,6 +21,7 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
     const [dataTemplate, setDataTemplate] = useState({})
     const [showTemplate, setShowTemplate] = useState()
     const [showAlert, setShowAlert] = useState(false)
+    const { t } = useTranslation();
 
     if (loading) {
         return (
@@ -92,12 +94,12 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="event_feed__name" label="Fuentes de información" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                            <Ordering field="event_taxonomy__name" label="Taxonomia" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
-                            <th>Taxonomia </th>
-                            <th>Recurso afectado</th>
-                            <th>Estado</th>
-                            <th>Opciones</th>
+                            <Ordering field="event_feed__name" label={t('ngen.infoSource')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="event_taxonomy__name" label={t('ngen.taxonomy_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <th>{t('ngen.taxonomy_one')}</th>
+                            <th>{t('ngen.affectedResources')}</th>
+                            <th>{t('ngen.state_one')}</th>
+                            <th>{t('ngen.options')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -152,8 +154,8 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                             )
                         })}
 
-                        <ModalConfirm type='delete' component='Estado' name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
-                        <ModalConfirm type='editState' component='Estado' name={dataTemplate.cidr} state={dataTemplate.state} showModal={showTemplate} onHide={() => setShowTemplate(false)} ifConfirm={() => changeState()} />
+                        <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                        <ModalConfirm type='editState' component={t('ngen.state_one')} name={dataTemplate.cidr} state={dataTemplate.state} showModal={showTemplate} onHide={() => setShowTemplate(false)} ifConfirm={() => changeState()} />
                         <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Body>
                                 <Row>
@@ -162,41 +164,41 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                                             <Card.Header>
                                                 <Row>
                                                     <Col>
-                                                        <Card.Title as="h5">Plantilla</Card.Title>
-                                                        <span className="d-block m-t-5">Detalle de la Plantilla</span>
+                                                        <Card.Title as="h5">{t('ngen.template')}</Card.Title>
+                                                        <span className="d-block m-t-5">{t('ngen.template.detail')}</span>
                                                     </Col>
                                                     <Col sm={12} lg={4}>
                                                         <Link to={{ pathname: "/templates/edit", state: template }} >
                                                             <CrudButton type='edit' />
                                                         </Link>
-                                                        <CloseButton aria-label='Cerrar' onClick={() => setModalShow(false)} />
+                                                        <CloseButton aria-label={t('w.close')} onClick={() => setModalShow(false)} />
                                                     </Col>
                                                 </Row>
                                             </Card.Header>
                                             <Card.Body>
                                                 <Table responsive >
                                                     <tr>
-                                                        <td>Cidr</td>
+                                                        <td>{t('ngen.cidr')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={template.cidr} />
                                                         </td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Dominio</td>
+                                                        <td>{t('ngen.domain')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={template.domain} />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Ciclo de vida</td>
+                                                        <td>{t('ngen.lifecycle_one')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={template.case_lifecycle} />
                                                         </td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td>activo</td>
+                                                        <td>{t('w.active')}</td>
                                                         <td>
                                                             <Button
                                                                 className="btn-icon btn-rounded"
@@ -207,13 +209,13 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Creación</td>
+                                                        <td>{t('w.creation')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={template.created ? template.created.slice(0, 10) + " " + template.created.slice(11, 19) : ""} />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Actualización</td>
+                                                        <td>{t('w.update')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={template.modified ? template.modified.slice(0, 10) + " " + template.modified.slice(11, 19) : ""} />
                                                         </td>

@@ -4,6 +4,7 @@ import { getMinifiedTaxonomy } from '../../../api/services/taxonomies';
 import { getMinifiedTlp } from '../../../api/services/tlp';
 import { getMinifiedFeed } from '../../../api/services/feeds';
 import TableEvents from './TableEvents';
+import { useTranslation, Trans } from 'react-i18next';
 
 
 const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption }) => {
@@ -11,6 +12,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
     const [tlpNames, setTlpNames] = useState({});
+    const { t } = useTranslation();
 
 
     useEffect(() => {

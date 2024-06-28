@@ -81,7 +81,7 @@ const TableTaxonomy = ({ setIsModify, list, loading, order, setOrder, setLoading
       <Table responsive hover className="text-center">
         <thead>
           <tr>
-            <Ordering field="name" label="Nombre" order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+            <Ordering field="name" label={t('ngen.name_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
             <th style={letterSize}>{t('w.active')}</th>
             <th style={letterSize}>{t('ngen.event_one')}</th>
             <th style={letterSize}>{t('ngen.options')}</th>
