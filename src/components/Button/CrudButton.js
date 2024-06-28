@@ -1,22 +1,25 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { useTranslation, Trans } from 'react-i18next';
+
 // type: {create, read, update, delete} 
 const CrudButton = ({ type, name, onClick }) => {
+    const { t } = useTranslation();
 
     const button = {
         create:
         {
             class: 'text-capitalize',
             variant: 'outline-primary',
-            title: `Agregar ${name}`,
+            title: t('crud.add') + ' ' + name,
             icon: 'fa fa-plus',
-            text: `Agregar ${name}`,
+            text: t('crud.add') + ' ' + name,
         },
         read:
         {
             class: 'btn-icon btn-rounded',
             variant: 'outline-primary',
-            title: 'Detalle',
+            title: t('crud.detail'),
             icon: 'fa fa-eye mx-auto',
             text: '',
         },
@@ -24,7 +27,7 @@ const CrudButton = ({ type, name, onClick }) => {
         {
             class: 'btn-icon btn-rounded',
             variant: 'outline-warning',
-            title: 'Editar',
+            title: t('crud.edit'),
             icon: 'fa fa-edit',
             text: '',
         },
@@ -32,7 +35,7 @@ const CrudButton = ({ type, name, onClick }) => {
         {
             class: 'btn-icon btn-rounded',
             variant: 'outline-danger',
-            title: 'Eliminar',
+            title: t('crud.delete'),
             icon: 'fas fa-trash-alt',
             text: '',
         },
@@ -40,9 +43,9 @@ const CrudButton = ({ type, name, onClick }) => {
         {
             class: 'text-capitalize',
             variant: 'outline-danger',
-            title: `Descargar ${name}`,
+            title: t('crud.download') + ' ' + name,
             icon: 'fa fa-download',
-            text: `Descargar ${name}`,
+            text: t('crud.download') + ' ' + name,
         }
     }
     return (
