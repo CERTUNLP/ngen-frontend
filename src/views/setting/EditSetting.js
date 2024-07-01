@@ -20,7 +20,16 @@ const EditSetting = () => {
   const [countItems, setCountItems] = useState(0);
   const [updatePagination, setUpdatePagination] = useState(false)
   const [disabledPagination, setDisabledPagination] = useState(true)
+
   const { t } = useTranslation();
+
+  const textareaStyle = {
+    resize: "none",
+    backgroundColor: "transparent",
+    border: "none",
+    boxShadow: "none"
+  }
+
   useEffect(() => {
     getSetting(currentPage)
       .then(response => {
@@ -92,6 +101,8 @@ const EditSetting = () => {
               <thead>
                 <tr>
                   <th>{t('ngen.name_one')}</th>
+                  <th>{t('ngen.description')}</th>
+                  <th>{t('ngen.default')}</th>
                   <th>{t('ngen.value')}</th>
                   <th>{t('w.modify')}</th>
                   <th></th>
@@ -101,6 +112,8 @@ const EditSetting = () => {
                 {list.map((setting, index) => (
                   <tr key={index}>
                     <td>{setting.key}</td>
+                    <td><Form.Control style={textareaStyle} as="textarea" rows={3} readOnly value={setting.help_text} /></td>
+                    <td>{setting.default}</td>
                     <td>
                       <Form.Group controlId={`formGridAddress${index}`}>
                         <Form.Control
@@ -114,7 +127,7 @@ const EditSetting = () => {
                     </td>
                     <td>
                       <Button variant="outline-warning" onClick={() => PatchSetting(setting.url)}>
-                        {t('w.register')}
+                        {t('button.save')}
                       </Button>
                     </td>
                   </tr>

@@ -344,5 +344,6 @@
     "signup.error.username.required": "The username is required",
     "signup.error.password.required": "The password is required",
     "signup.already_have_an_account": "Already have an account?",
-    "button.signin": "Sign in"
+    "button.signin": "Sign in",
+    "ngen.default": "Default"
 }
