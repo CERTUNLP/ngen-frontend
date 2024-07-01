@@ -121,13 +121,13 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                             <Ordering field="priority" label={t('ngen.priority_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                         }
                         {disableTlp ? "" :
-                            <th style={letterSize}> {t('ngen.TLP')} </th>
+                            <th style={letterSize}> {t('ngen.tlp')} </th>
                         }
                         <th style={letterSize}> {t('ngen.state_one')} </th>
                         {disableNubersOfEvents ? "" :
                             <th style={letterSize}> {t('ngen.event.quantity')} </th>
                         }
-                        <th style={letterSize}> {t('status.assigned')} </th>
+                        <th style={letterSize}> {t('ngen.status.assigned')} </th>
                         {disableColumOption ?
                             ""
                             :

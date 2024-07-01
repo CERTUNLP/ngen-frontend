@@ -66,7 +66,7 @@ const ListTLP = () => {
                             <Table responsive hover className="text-center">
                                 <thead>
                                     <tr>
-                                        <Ordering field="code" label={t('Codigo')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                                        <Ordering field="code" label={t('ngen.tlp.code')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                                         <th style={letterSize}>{t('ngen.description')}</th>
                                         <th style={letterSize}>{t('when.use')}</th>
                                         <th style={letterSize}>{t('when.share')}</th>

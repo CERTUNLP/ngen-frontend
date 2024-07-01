@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 const Search = ({ type, setWordToSearch, wordToSearch, setLoading }) => {
     const [search, setSearch] = useState("");
+    const { t } = useTranslation();
 
     const searcher = (e) => {
         setSearch(e.target.value);
@@ -15,7 +17,7 @@ const Search = ({ type, setWordToSearch, wordToSearch, setLoading }) => {
         }
     };
 
-    const text = `Buscar ${type} `;
+    const text = `${t('search')} ${type} `;
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Evita que se envíe el formulario (recarga la página)

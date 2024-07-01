@@ -4,18 +4,18 @@ import { validateName } from '../../../utils/validators/entity';
 import { useTranslation, Trans } from 'react-i18next';
 
 const FormEntity = (props) => { // props: name, setName, ifConfirm, {edit:false | true -> active, setActive}
+    const { t } = useTranslation();
+
     const stateOptions = [
         {
             value: true,
-            name: 'Activo'
+            name: t('w.active')
         },
         {
             value: false,
-            name: 'Inactivo'
+            name: t('w.inactive')
         },
     ]
-    const { t } = useTranslation();
-
 
     return (
         <React.Fragment>
@@ -23,7 +23,7 @@ const FormEntity = (props) => { // props: name, setName, ifConfirm, {edit:false 
                 <Row lg={12}>
                     <Col sm={12} lg={8}>
                         <Form.Group controlId="Form.Entity.Name">
-                            <Form.Label>Nombre <b style={{ color: "red" }}>*</b></Form.Label>
+                            <Form.Label>{t('ngen.name_one')}<b style={{ color: "red" }}>*</b></Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"

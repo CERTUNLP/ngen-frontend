@@ -59,7 +59,7 @@ const ModalListCase = (props) => {
                         <FilterSelectUrl options={props.priorities} itemName={t('ngen.priority_one')} partOfTheUrl="priority" itemFilter={props.priorityFilter} itemFilterSetter={props.setPriorityFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
                     </Col>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.tlp} itemName={t('ngen.TLP')} partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
+                        <FilterSelectUrl options={props.tlp} itemName={t('ngen.tlp')} partOfTheUrl="tlp" itemFilter={props.tlpFilter} itemFilterSetter={props.setTlpFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />
                     </Col>
                     <Col sm={4} lg={4}>
                         <FilterSelectUrl options={props.allStates} itemName={t('ngen.state_one')} partOfTheUrl="state" itemFilter={props.stateFilter} itemFilterSetter={props.setStateFilter} setLoading={setLoading} setCurrentPage={props.setCurrentPage} />

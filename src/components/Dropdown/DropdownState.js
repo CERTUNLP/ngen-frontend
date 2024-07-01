@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const options = {
-  true: "Activo",
-  false: "Inactivo"
+  true: "w.active",
+  false: "w.inactive"
 };
 const options2 = {
-  "Activo": true,
-  "Inactivo": false
+  "w.active": true,
+  "w.inactive": false
 };
 
 function DropdownState({ state, setActive }) {
-  
+  const { t } = useTranslation();
+
   const [selected, setSelected] = useState();
 
-  useEffect(() => {                
+  useEffect(() => {
     setSelected(options[state])
   }, [state]);
 
@@ -32,9 +34,9 @@ function DropdownState({ state, setActive }) {
       <Dropdown.Menu>
         {Object.entries(options).map(([key, value]) => (
           <Dropdown.Item eventKey={key} key={key} onSelect={() => setValue(value)} active={selected === value} >
-            {value}
+            {t(value)}
           </Dropdown.Item>)
-          )
+        )
         }
       </Dropdown.Menu>
     </Dropdown>
@@ -43,4 +45,3 @@ function DropdownState({ state, setActive }) {
 
 export default DropdownState;
 
-  

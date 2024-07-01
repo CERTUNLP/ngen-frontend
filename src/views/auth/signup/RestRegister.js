@@ -6,29 +6,32 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import useScriptRef from '../../../hooks/useScriptRef';
 import { register } from '../../../api/services/auth';
-import Alert from './../../../components/Alert/Alert'; 
+import Alert from './../../../components/Alert/Alert';
+
+import { useTranslation } from 'react-i18next';
 
 
 const RestRegister = ({ className, ...rest }) => {
     const [showAlert, setShowAlert] = useState(false);
     const [delayAlert, setDelayAlert] = useState(5000);
     const [registered, setRegistered] = useState(false);
+    const { t } = useTranslation();
     let history = useHistory();
 
     const resetShowAlert = () => {
-        
-        if ( registered === true ) {
+
+        if (registered === true) {
             history.push('/auth/signin', { from: '/auth/signup' });
         } else {
             setShowAlert(false);
             setDelayAlert(5000);
         }
-        
+
     }
 
     return (
         <React.Fragment>
-            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} delay={delayAlert}/>
+            <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} delay={delayAlert} />
             <Formik
                 initialValues={{
                     username: '',
@@ -37,9 +40,9 @@ const RestRegister = ({ className, ...rest }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('El email debe ser válido').max(255).required('El email es requerido'),
-                    username: Yup.string().required('El nombre de usuario es requerido'),
-                    password: Yup.string().max(255).required('La contraseña es requerida')
+                    email: Yup.string().email(t('signup.error.email.invalid')).max(255).required(t('signup.error.email.required')),
+                    username: Yup.string().required(t('signup.error.username.required')),
+                    password: Yup.string().max(255).required(t('signup.error.password.required'))
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
 
@@ -51,11 +54,11 @@ const RestRegister = ({ className, ...rest }) => {
                         })
                         .catch((error) => {
                             setShowAlert(true);
-                    });
+                        });
 
                 }
-            }
-                
+                }
+
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} className={className} {...rest}>
@@ -64,7 +67,7 @@ const RestRegister = ({ className, ...rest }) => {
                                 className="form-control"
                                 error={touched.username && errors.username}
                                 label="Username"
-                                placeholder="Nombre de usuario"
+                                placeholder={t('ngen.user.name')}
                                 name="username"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -78,7 +81,7 @@ const RestRegister = ({ className, ...rest }) => {
                                 className="form-control"
                                 error={touched.email && errors.email}
                                 label="Email Address"
-                                placeholder="Email"
+                                placeholder={t('w.email')}
                                 name="email"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -92,7 +95,7 @@ const RestRegister = ({ className, ...rest }) => {
                                 className="form-control"
                                 error={touched.password && errors.password}
                                 label="Password"
-                                placeholder="Contraseña"
+                                placeholder={t('ngen.password')}
                                 name="password"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
@@ -101,7 +104,7 @@ const RestRegister = ({ className, ...rest }) => {
                             />
                             {touched.password && errors.password && <small className="text-danger form-text">{errors.password}</small>}
                         </div>
-                       
+
                         <Row>
                             <Col mt={2}>
                                 <Button
@@ -112,7 +115,7 @@ const RestRegister = ({ className, ...rest }) => {
                                     type="submit"
                                     variant="primary"
                                 >
-                                    Registrarse
+                                    {t('button.signup')}
                                 </Button>
                             </Col>
                         </Row>

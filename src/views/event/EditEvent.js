@@ -260,7 +260,7 @@ const EditEvent = () => {
     <div>
       <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="event" />
       <Row>
-        <Navigation actualPosition={t('ngen.edit.event')} path="/events" index="Evento" />
+        <Navigation actualPosition={t('ngen.event.edit')} path="/events" index={t('ngen.event_one')} />
       </Row>
       <FormEvent createEvent={editEvent} setBody={setBody} body={body} feeds={feeds}
         taxonomy={taxonomy} tlp={TLP} priorities={priorities} users={users}

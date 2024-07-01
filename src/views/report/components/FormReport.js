@@ -99,11 +99,11 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
     let languageOptions = [
         {
             value: 'en',
-            label: "Ingles"
+            label: t('w.language.english')
         },
         {
             value: 'es',
-            label: "Español"
+            label: t('w.language.spanish')
         }
     ]
 
@@ -251,12 +251,12 @@ const FormReport = ({ body, setBody, taxonomies, createOrEdit }) => {
 
                 <Col sm={12} lg={6}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>Más información</Form.Label>
+                        <Form.Label>{t('w.info')}</Form.Label>
                         <Form.Control
                             as="textarea"
                             name="more_information"
                             value={body.more_information}
-                            placeholder="Ingrese mas informacion"
+                            placeholder={t('w.info.placeholder')}
                             onChange={(e) => completeField(e)}
                             ref={textareaRefs.more_information}
                             onInput={() => updateMaxHeight('more_information')}

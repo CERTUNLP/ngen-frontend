@@ -111,7 +111,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                             }
                             {disableTlp ? ""
                                 :
-                                <th style={letterSize}>{t('ngen.TLP')}</th>
+                                <th style={letterSize}>{t('ngen.tlp')}</th>
                             }
                             <th style={letterSize}>{t('ngen.taxonomy_one')}</th>
                             <th style={letterSize}>{t('ngen.infoSource')}</th>

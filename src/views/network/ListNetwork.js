@@ -43,7 +43,10 @@ const ListNetwork = () => {
 
     const [entityNames, setEntityNames] = useState({});
 
-    const types = [{ value: "internal", label: "Internal" }, { value: "external", label: "External" }]
+    const types = [
+        { value: "internal", label: t('ngen.network.type.internal') },
+        { value: "external", label: t('ngen.network.type.external') }
+    ]
 
 
     function updatePage(chosenPage) {
@@ -121,7 +124,7 @@ const ListNetwork = () => {
                                             <FilterSelectUrl options={entities} itemName={t('ngen.entity_other')} partOfTheUrl="network_entity" itemFilter={entitiesFilter} itemFilterSetter={setEntitiesFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                         <Col sm={4} lg={4}>
-                                            <FilterSelect options={types} partOfTheUrl="type" setFilter={setTypeFilter} currentFilter={typeFilter} setLoading={setLoading} placeholder="Filtrar por tipos" />
+                                            <FilterSelect options={types} partOfTheUrl="type" setFilter={setTypeFilter} currentFilter={typeFilter} setLoading={setLoading} placeholder={t('ngen.filter_by') + ' ' + t('ngen.type')} />
                                         </Col>
 
                                     </Row>

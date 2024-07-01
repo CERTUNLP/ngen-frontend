@@ -1,25 +1,27 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const ActiveButton = ({ active, onClick}) => {
-    
+const ActiveButton = ({ active, onClick }) => {
+    const { t } = useTranslation();
+
     const [stateBool, setStateBool] = useState(null);
-    
+
     useEffect(() => {
 
         setStateBool(active);
 
-    },[active]);
+    }, [active]);
 
     return (
         <React.Fragment>
-            <Button 
-                className="btn-icon btn-rounded" 
-                variant={stateBool ? 'outline-success' : 'outline-danger'} 
-                title={stateBool ? 'Activo' : 'Inactivo'}
+            <Button
+                className="btn-icon btn-rounded"
+                variant={stateBool ? 'outline-success' : 'outline-danger'}
+                title={stateBool ? t('w.active') : t('w.inactive')}
                 onClick={onClick}>
-                    <i className={stateBool ? 'feather icon-check-circle' : 'feather icon-alert-triangle'}/>
+                <i className={stateBool ? 'feather icon-check-circle' : 'feather icon-alert-triangle'} />
             </Button>
         </React.Fragment>
     );

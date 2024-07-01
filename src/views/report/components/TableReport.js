@@ -24,8 +24,8 @@ const TableReport = ({ list, loading, taxonomyNames, order, setOrder, setLoading
     const [remove, setRemove] = useState()
 
     const language = {
-        en: "Ingles",
-        es: "Español"
+        en: t('w.language.english'),
+        es: t('w.language.spanish')
     }
 
     if (loading) {

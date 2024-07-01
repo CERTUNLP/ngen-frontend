@@ -73,11 +73,11 @@ const TableContact = ({ setIsModify, list, loading, setLoading, currentPage, ord
 
     const labelRole =
     {
-        technical: 'Tecnico',
-        administrative: 'Administrativo',
-        abuse: 'Abuso',
-        notifications: 'Notificaciones',
-        noc: 'NOC',
+        technical: `${t('ngen.role.technical')}`,
+        administrative: `${t('ngen.role.administrative')}`,
+        abuse: `${t('ngen.role.abuse')}`,
+        notifications: `${t('ngen.role.notifications')}`,
+        noc: `${t('ngen.role.noc')}`,
     };
 
     const labelContact =

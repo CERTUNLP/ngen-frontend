@@ -6,7 +6,11 @@ import { API_SERVER } from '../../../config/constant';
 import RestRegister from './RestRegister';
 import Breadcrumb from '../../../layouts/AdminLayout/Breadcrumb';
 
+import { useTranslation } from 'react-i18next';
+
 const SignUp1 = () => {
+    const { t } = useTranslation();
+
     return (
         <React.Fragment>
             <Breadcrumb />
@@ -33,9 +37,9 @@ const SignUp1 = () => {
                                     <RestRegister />
 
                                     <p className="mb-2">
-                                        Ya tienes una cuenta?{' '}
+                                        {t('signup.already_have_an_account')}{' '}
                                         <NavLink to="/auth/signin" className="f-w-400">
-                                            Ingresar
+                                            {t('button.signin')}
                                         </NavLink>
                                     </p>
 

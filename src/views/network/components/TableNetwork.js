@@ -110,7 +110,7 @@ const TableNetwork = ({ setIsModify, list, loading, order, setOrder, setLoading,
                                 <td>{network.address_value}</td>
                                 <td>{network.domain}</td>
                                 <td>{network.cidr}</td>
-                                <td>{network.type === 'internal' ? 'Interna' : 'Externa'}</td>
+                                <td>{network.type === 'internal' ? t('ngen.network.type.internal') : t('ngen.network.type.external')}</td>
                                 <td>
                                     <ActiveButton active={network.active} onClick={() => pressActive(network.cidr, network.active, network.url)} />
                                 </td>

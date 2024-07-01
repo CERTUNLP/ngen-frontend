@@ -108,9 +108,9 @@ const TableStates = ({ states, callback, loading, currentPage }) => {
                                     <td>
                                         <ActiveButton active={state.active} onClick={() => modalChangeState(state.url, state.name, state.active)} />
                                     </td>
-                                    <td>{state.attended ? "Verdadero" : "Falso"} </td>
+                                    <td>{state.attended ? t('ngen.true') : t('ngen.false')}</td>
 
-                                    <td>{state.solved ? "Verdadero" : "Falso"}</td>
+                                    <td>{state.solved ? t('ngen.true') : t('ngen.false')}</td>
 
 
                                     <td>

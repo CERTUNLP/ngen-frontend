@@ -9,7 +9,11 @@ import RestLogin from './RestLogin';
 
 import Alert from './../../../components/Alert/Alert';
 
+import { useTranslation } from 'react-i18next';
+
 const Signin1 = () => {
+    const { t } = useTranslation();
+
     return (
         <React.Fragment>
             <Breadcrumb />
@@ -34,9 +38,9 @@ const Signin1 = () => {
                             <RestLogin />
 
                             <p className="mb-0 text-muted">
-                                No tienes una cuenta?{' '}
+                                {t('login.do_not_have_an_account')}{' '}
                                 <NavLink to="/auth/signup" className="f-w-400">
-                                    Registrarse
+                                    {t('button.signup')}
                                 </NavLink>
                             </p>
 

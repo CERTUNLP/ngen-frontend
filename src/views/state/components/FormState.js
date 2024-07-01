@@ -14,21 +14,21 @@ const FormState = ({ body, setBody, createState, type }) => {
     let solvedOptions = [
         {
             value: true,
-            label: "Verdadero"
+            label: t('ngen.true')
         },
         {
             value: false,
-            label: "Falso"
+            label: t('ngen.false')
         }
     ]
     let attendedOptions = [
         {
             value: true,
-            label: "Verdadero"
+            label: t('ngen.true')
         },
         {
             value: false,
-            label: "Falso"
+            label: t('ngen.false')
         }
     ]
     useEffect(() => {

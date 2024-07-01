@@ -190,7 +190,7 @@ const TableEntity = ({ setIsModify, list, loading, setLoading, currentPage, orde
                                                 <td>{t('ngen.related.info')}</td>
                                                 <td>
                                                     <Button size="sm" variant='light' className="text-capitalize">
-                                                        {t('ngen.newtork_other')} <Badge variant="light" className="ml-1">{entity ? entity.networks.length : 0}</Badge>
+                                                        {t('ngen.network_other')} <Badge variant="light" className="ml-1">{entity ? entity.networks.length : 0}</Badge>
                                                     </Button>
                                                 </td>
                                             </tr>

@@ -89,7 +89,7 @@ const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage })
                         <tr>
                             <Ordering field="name" label={t('ngen.name_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th style={letterSize}>{t('w.active')}</th>
-                            <th style={letterSize}>{t('ngen.case_associated_other')}</th>
+                            <th style={letterSize}>{t('ngen.source.associated_events')}</th>
                             <th style={letterSize}>{t('ngen.options')}</th>
                         </tr>
                     </thead>
@@ -99,10 +99,9 @@ const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage })
                                 <tr key={index}>
                                     <td>{feed.name}</td>
                                     <td>
-
                                         <ActiveButton active={feed.active} onClick={() => showModalChangeState(feed.url, feed.name, feed.active)} />
                                     </td>
-                                    <td>24256</td>
+                                    <td>{feed.events_count}</td>
                                     <td>
                                         <CrudButton type='read' onClick={() => showModalFeed(feed)} />
                                         <Link to={{ pathname: "./feeds/edit", state: feed }} >

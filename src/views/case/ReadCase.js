@@ -104,7 +104,7 @@ const ReadCase = () => {
             if (caseItem.user_creator) {
                 getAssignedUser(caseItem.user_creator);
             } else {
-                setAssigned('No asignado')
+                setAssigned(t('ngen.status.not_assigned'))
             }
             getName(caseItem.state, setState);
 
@@ -190,7 +190,7 @@ const ReadCase = () => {
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={state} />
                                         </td>
-                                        <td>{t('status.assigned')}</td>
+                                        <td>{t('ngen.status.assigned')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={assigned} />
                                         </td>

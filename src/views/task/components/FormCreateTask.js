@@ -62,7 +62,7 @@ const FormCreateTask = (props) => {
                                     );
                                 })}
                             </Form.Control>
-                            {props.priority ? '' : <div className="invalid-feedback">{t('ngen.priority_select')}</div>}
+                            {props.priority ? '' : <div className="invalid-feedback">{t('ngen.priority.select')}</div>}
                         </Form.Group>
                     </Col>
                 </Row>

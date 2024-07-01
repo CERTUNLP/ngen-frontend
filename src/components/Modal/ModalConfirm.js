@@ -1,25 +1,25 @@
 import React from 'react';
-import {Button, Modal} from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
 const ModalConfirm = (props) => { // props: showModal, onHide, ifConfirm, type, component, state, name
 
     const type = {
-        editState: 
-        { 
+        editState:
+        {
             header: `${props.component ? `Estado de ${props.component}` : 'Estado'}`,
             message: `${props.state ? `Desea desactivar ${props.name}?` : `Desea activar ${props.name}?`}`,
             variantButtonConfirm: `${props.state ? 'outline-danger' : 'outline-primary'}`,
             textButtonConfirm: `${props.state ? 'Desactivar' : 'Activar'}`
         },
-        delete: 
-        { 
+        delete:
+        {
             header: `${props.component ? `Eliminar ${props.component}` : 'Eliminar'}`,
             message: `${`¿Desea eliminar ${props.name}?`}`,
             variantButtonConfirm: 'outline-danger',
             textButtonConfirm: 'Eliminar'
         },
-        merge: 
-        { 
+        merge:
+        {
             header: `${props.component ? `Merge de ${props.component}` : 'Merge'}`,
             //message: `${`¿Desea mergear los casos: ${props.name}?`}`,
             message: `${`¿Desea mergear los casos seleccionados?`}`,

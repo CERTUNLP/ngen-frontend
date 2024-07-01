@@ -61,23 +61,23 @@ const FormCreateContact = (props) => {
     const roleOptions = [
         {
             value: 'technical',
-            label: 'Tecnico'
+            label: `${t('ngen.role.technical')}`,
         },
         {
             value: 'administrative',
-            label: 'Administrativo'
+            label: `${t('ngen.role.administrative')}`,
         },
         {
             value: 'abuse',
-            label: 'Abuso'
+            label: `${t('ngen.role.abuse')}`,
         },
         {
             value: 'notifications',
-            label: 'Notificaciones'
+            label: `${t('ngen.role.notifications')}`,
         },
         {
             value: 'noc',
-            label: 'NOC'
+            label: `${t('ngen.role.noc')}`,
         }
     ]
 

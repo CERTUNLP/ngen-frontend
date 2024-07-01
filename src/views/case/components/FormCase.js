@@ -538,16 +538,16 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setTlp} setSelect={setSelectTlp} options={allTlp}
-                                value={selectTlp} placeholder={t('ngen.TLP')} required={true} />
+                                value={selectTlp} placeholder={t('ngen.tlp')} required={true} />
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setState} setSelect={setSelectState} options={props.allStates}
-                                value={selectState} placeholder={t('status.assigned')} required={true} />
+                                value={selectState} placeholder={t('ngen.status.assigned')} required={true} />
                         </Col>
 
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setAssigned} setSelect={setSelectAssigned} options={allUsers}
-                                value={selectAssigned} placeholder={t('status.assigned')} />
+                                value={selectAssigned} placeholder={t('ngen.status.assigned')} />
                         </Col>
 
                     </Row >

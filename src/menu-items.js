@@ -179,7 +179,7 @@ const menuItems = {
             children: [
                 {
                     id: 'profile',
-                    title: 'Perfil',
+                    title: 'menu.profile',
                     type: 'item',
                     url: '/profile',
                     classes: '',
@@ -188,7 +188,7 @@ const menuItems = {
                 },
                 {
                     id: 'logout',
-                    title: 'Logout',
+                    title: 'menu.logout',
                     type: 'item',
                     url: '',
                     classes: 'logout-btn',

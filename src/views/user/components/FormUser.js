@@ -91,7 +91,7 @@ const FormUser = ({ body, setBody, priorities, createUser, loading }) => {
                 </Col>
                 <Col sm={12} lg={3}>
                     <SelectComponent controlId="exampleForm.ControlSelect1" label="Prioridades" options={priorities} value={selectPriority} nameField="priority"
-                        onChange={completeField1} placeholder={t('ngen.priority_select')} setOption={setSelectPriority} required={true} />
+                        onChange={completeField1} placeholder={t('ngen.priority.select')} setOption={setSelectPriority} required={true} />
                 </Col>
                 <Col sm={12} lg={5}>
                     <Form.Group controlId="formGridEmail">

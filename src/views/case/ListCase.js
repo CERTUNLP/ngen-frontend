@@ -226,7 +226,7 @@ const ListCase = () => {
                                             <FilterSelectUrl options={priorities} itemName={t('ngen.priority_one')} partOfTheUrl="priority" itemFilter={priorityFilter} itemFilterSetter={setPriorityFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                         <Col sm={4} lg={4}>
-                                            <FilterSelectUrl options={tlps} itemName={t('ngen.TLP')} partOfTheUrl="tlp" itemFilter={tlpFilter} itemFilterSetter={setTlpFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                                            <FilterSelectUrl options={tlps} itemName={t('ngen.tlp')} partOfTheUrl="tlp" itemFilter={tlpFilter} itemFilterSetter={setTlpFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                                         </Col>
                                         <Col sm={4} lg={4}>
                                             <FilterSelectUrl options={states} itemName={t('ngen.state_one')} partOfTheUrl="state" itemFilter={stateFilter} itemFilterSetter={setStateFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />

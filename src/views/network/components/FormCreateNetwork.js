@@ -47,10 +47,10 @@ const FormCreateNetwork = (props) => {
 
     let typeOption = [
         {
-            value: 'internal', label: "Interna"
+            value: 'internal', label: t('ngen.network.type.internal')
         },
         {
-            value: 'external', label: 'External'
+            value: 'external', label: t('ngen.network.type.external')
         }
     ]
 
@@ -173,7 +173,7 @@ const FormCreateNetwork = (props) => {
                         <Form.Label>{t('cidr.domain')}<b style={{ color: "red" }}>*</b></Form.Label>
                         <Form.Group controlId="formGridAddress1">
                             <Form.Control
-                                placeholder={t('ngen.enter.ipv5.ipv6.domain.email')}
+                                placeholder={t('ngen.enter.ipv4.ipv6.domain.email')}
                                 maxlength="150"
                                 onChange={(e) => completeFieldStringIdentifier(e)}
                                 value={props.address_value}

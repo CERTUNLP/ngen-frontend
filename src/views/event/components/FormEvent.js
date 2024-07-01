@@ -392,7 +392,7 @@ const FormEvent = (props) => {
                             </Col>
                             <Col sm={12} lg={4}>
                                 <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.priority_other')} options={props.priorities} value={selectPriority} nameField="priority"
-                                    onChange={completeField1} placeholder={t('ngen.priority_select')} setOption={setSelectPriority} required={true} />
+                                    onChange={completeField1} placeholder={t('ngen.priority.select')} setOption={setSelectPriority} required={true} />
                             </Col>
                         </Row>
                         <Form.Group controlId="formGridAddress1">
@@ -470,7 +470,7 @@ const FormEvent = (props) => {
                         <Col sm={12} lg={6}>
                             <Form.Group controlId="formGridAddress1">
                                 <Form.Control
-                                    placeholder={t('ngen.enter.ipv5.ipv6.domain.email')}
+                                    placeholder={t('ngen.enter.ipv4.ipv6.domain.email')}
                                     maxLength="150"
                                     value={props.body.address_value}
                                     disabled={(props.body.children !== [] && props.body.children.length > 0) ? true : false}

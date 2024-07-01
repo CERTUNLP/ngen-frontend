@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { Card, Form, Row, Col } from 'react-bootstrap';
 import ViewFiles from '../Button/ViewFiles';
 import FileUpload from './FileUpload/FileUpload';
-import './EvidenceCard.css'
+import './EvidenceCard.css';
+import { useTranslation, Trans } from 'react-i18next';
 
 const EvidenceCard = (props) => {
+    const { t } = useTranslation();
+
     useEffect(() => {
     }, [props.evidences]);
 
@@ -29,7 +32,7 @@ const EvidenceCard = (props) => {
     return (
         <Card>
             <Card.Header>
-                <Card.Title as="h5">Evidencias</Card.Title>
+                <Card.Title as="h5">{t('ngen.evidences')}</Card.Title>
             </Card.Header>
             <Card.Body>
                 <Form>

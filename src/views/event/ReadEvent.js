@@ -117,7 +117,7 @@ const ReadEvent = () => {
         <div>
             {navigationRow !== "false" ?
                 <Row>
-                    <Navigation actualPosition={t('ngen.event.detail')} path="/events" index="Evento" />
+                    <Navigation actualPosition={t('ngen.event.detail')} path="/events" index={t('ngen.event_one')} />
                 </Row>
                 : ""
             }
@@ -137,7 +137,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            {t('ngen.TLP')}
+                            {t('ngen.tlp')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.tlp !== undefined ?
