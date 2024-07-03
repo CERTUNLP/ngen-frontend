@@ -342,7 +342,7 @@ const ListEvent = () => {
               <ButtonFilter open={open} setOpen={setOpen} />
             </Col>
             <Col sm={8} lg={4} >
-              <Search type={t('search.taxonomy_source_affectedresource')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
+              <Search type={t('search.taxonomy_feed_affectedresource')} setWordToSearch={setWordToSearch} wordToSearch={wordToSearch} setLoading={setLoading} />
             </Col>
             <Col>
               <Link to={"/events/create"} >
