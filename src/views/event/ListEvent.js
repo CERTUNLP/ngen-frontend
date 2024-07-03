@@ -420,7 +420,7 @@ const ListEvent = () => {
                   <FilterSelectUrl options={taxonomies} itemName={t('ngen.taxonomy_one')} partOfTheUrl="taxonomy" itemFilter={taxonomyFilter} itemFilterSetter={setTaxonomyFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                 </Col>
                 <Col sm={4} lg={4}>
-                  <FilterSelectUrl options={feeds} itemName={t('ngen.source_other')} partOfTheUrl="feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
+                  <FilterSelectUrl options={feeds} itemName={t('ngen.feed_other')} partOfTheUrl="feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} setCurrentPage={setCurrentPage} />
                 </Col>
               </Row>
               <Row>

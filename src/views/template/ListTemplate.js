@@ -118,7 +118,7 @@ const ListTemplete = () => {
                                     <br />
                                     <Row>
                                         <Col sm={12} lg={4}>
-                                            <FilterSelectUrl options={feeds} itemName={t('ngen.source_other')} partOfTheUrl="event_feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} />
+                                            <FilterSelectUrl options={feeds} itemName={t('ngen.feed_other')} partOfTheUrl="event_feed" itemFilter={feedFilter} itemFilterSetter={setFeedFilter} setLoading={setLoading} />
                                         </Col>
                                         <Col sm={12} lg={4}>
                                             <FilterSelectUrl options={taxonomies} itemName={t('ngen.taxonomy_one')} partOfTheUrl="event_taxonomy" itemFilter={taxonomyFilter} itemFilterSetter={setTaxonomyFilter} setLoading={setLoading} />

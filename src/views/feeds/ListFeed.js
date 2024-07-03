@@ -56,7 +56,7 @@ const ListFeed = () => {
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="feed" />
             <Row>
-                <Navigation actualPosition={t('ngen.infoSource')} />
+                <Navigation actualPosition={t('ngen.feed.information')} />
             </Row>
             <Row>
                 <Col>
@@ -68,7 +68,7 @@ const ListFeed = () => {
                                 </Col>
                                 <Col sm={12} lg={3}>
                                     <Link to={{ pathname: './feeds/create' }} >
-                                        <CrudButton type='create' name={t('ngen.source')} />
+                                        <CrudButton type='create' name={t('ngen.feed')} />
                                     </Link>
                                 </Col>
                             </Row>

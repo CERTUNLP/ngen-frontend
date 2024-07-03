@@ -143,8 +143,8 @@ const FormTemplate = (props) => {
                                     onChange={completeField1} placeholder={t('ngen.taxonomy.one.select')} setOption={setSelectTaxonomy} required={true} />
                             </Col>
                             <Col sm={12} lg={4}>
-                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.infoSource')} options={props.feeds} value={selectFeed} nameField="event_feed"
-                                    onChange={completeField1} placeholder={t('ngen.infoSource.select')} setOption={setSelectFeed} required={true} />
+                                <SelectComponent controlId="exampleForm.ControlSelect1" label={t('ngen.feed.information')} options={props.feeds} value={selectFeed} nameField="event_feed"
+                                    onChange={completeField1} placeholder={t('ngen.feed.information.select')} setOption={setSelectFeed} required={true} />
                             </Col>
 
                         </Row>

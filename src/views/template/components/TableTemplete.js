@@ -94,7 +94,7 @@ const TableTemplete = ({ list, loading, order, setOrder, setLoading, currentPage
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="event_feed__name" label={t('ngen.infoSource')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="event_feed__name" label={t('ngen.feed.information')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <Ordering field="event_taxonomy__name" label={t('ngen.taxonomy_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th>{t('ngen.affectedResources')}</th>
                             <th>{t('ngen.state_one')}</th>

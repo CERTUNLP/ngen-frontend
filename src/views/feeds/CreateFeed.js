@@ -31,13 +31,13 @@ const CreateFeed = () => {
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={resetShowAlert} component="feed" />
             <Row>
-                <Navigation actualPosition={t('ngen.infoSource.add')} path="/feeds" index={t('ngen.infoSource')} />
+                <Navigation actualPosition={t('ngen.feed.information.add')} path="/feeds" index={t('ngen.feed.information')} />
             </Row>
             <Row>
                 <Col sm={12}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('ngen.infoSource')}</Card.Title>
+                            <Card.Title as="h5">{t('ngen.feed.information')}</Card.Title>
                         </Card.Header>
                         <Card.Body>
                             <FormFeed name={name} setName={setName} active={active} setActive={setActive} description={description} setDescription={setDescription} createFeed={createFeed} />

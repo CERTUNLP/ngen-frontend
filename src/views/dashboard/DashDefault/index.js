@@ -245,7 +245,7 @@ const DashDefault = () => {
                 <Col md={6}>
                     <Card>
                         <Card.Header>
-                            <Card.Title as="h5">{t('sources_graphic')}</Card.Title>
+                            <Card.Title as="h5">{t('feeds_graphic')}</Card.Title>
                         </Card.Header>
                         <Card.Body className="text-center">
                             <FeedGraph dashboardFeed={dashboardFeed} />

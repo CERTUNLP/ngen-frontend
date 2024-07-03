@@ -98,7 +98,7 @@ const menuItems = {
                         },
                         {
                             id: 'feeds',
-                            title: 'menu.sources',
+                            title: 'menu.feeds',
                             type: 'item',
                             url: '/feeds',
                             icon: '',

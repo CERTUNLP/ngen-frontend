@@ -114,7 +114,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                 <th style={letterSize}>{t('ngen.tlp')}</th>
                             }
                             <th style={letterSize}>{t('ngen.taxonomy_one')}</th>
-                            <th style={letterSize}>{t('ngen.infoSource')}</th>
+                            <th style={letterSize}>{t('ngen.feed.information')}</th>
                             {disableColumOption ?
                                 ""
                                 :

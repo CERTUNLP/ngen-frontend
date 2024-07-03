@@ -20,7 +20,7 @@ const EntityGraph = ({ list }) => {
         <div>
             {
                 entity.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={entity} x="name" y="eventCount" labelType="percent" /> :
-                    t('sources_noEventsAssociated')
+                    t('feeds_noEventsAssociated')
 
             }
         </div>

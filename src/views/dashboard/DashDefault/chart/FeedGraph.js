@@ -20,7 +20,7 @@ const FeedGraph = ({ dashboardFeed }) => {
         <div>
             {
                 feed.length > 0 ? <NVD3Chart id="chart" height={600} type="pieChart" datum={feed} x="feed_name" y="event_count" donut labelType="percent" /> :
-                    t('sources_noEventsAssociated')
+                    t('feeds_noEventsAssociated')
 
             }
         </div>

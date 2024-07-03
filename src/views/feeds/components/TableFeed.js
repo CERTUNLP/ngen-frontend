@@ -89,7 +89,7 @@ const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage })
                         <tr>
                             <Ordering field="name" label={t('ngen.name_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th style={letterSize}>{t('w.active')}</th>
-                            <th style={letterSize}>{t('ngen.source.associated_events')}</th>
+                            <th style={letterSize}>{t('ngen.feed.associated_events')}</th>
                             <th style={letterSize}>{t('ngen.options')}</th>
                         </tr>
                     </thead>
@@ -114,8 +114,8 @@ const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage })
                         })}
                     </tbody>
                 </Table>
-                <ModalConfirm type='delete' component={t('ngen.infoSource')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
-                <ModalConfirm type='editState' component={t('ngen.infoSource')} name={dataState.name} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
+                <ModalConfirm type='delete' component={t('ngen.feed.information')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
+                <ModalConfirm type='editState' component={t('ngen.feed.information')} name={dataState.name} state={dataState.state} showModal={showState} onHide={() => setShowState(false)} ifConfirm={() => changeState()} />
                 <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
                     <Modal.Body>
                         <Row>
@@ -124,8 +124,8 @@ const TableFeed = ({ feeds, loading, order, setOrder, setLoading, currentPage })
                                     <Card.Header>
                                         <Row>
                                             <Col>
-                                                <Card.Title as="h5">{t('ngen.infoSource')}</Card.Title>
-                                                <span className="d-block m-t-5">{t('ngen.infoSource')} {t('w.detail')}</span>
+                                                <Card.Title as="h5">{t('ngen.feed.information')}</Card.Title>
+                                                <span className="d-block m-t-5">{t('ngen.feed.information')} {t('w.detail')}</span>
                                             </Col>
                                             <Col sm={12} lg={2}>
                                                 <Link to={{ pathname: "./feeds/edit", state: feed }} >

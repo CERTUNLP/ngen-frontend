@@ -159,7 +159,7 @@ const ReadEvent = () => {
                     <p />
                     <Row>
                         <Col sm={12} lg={2}>
-                            {t('ngen.infoSource')}
+                            {t('ngen.feed.information')}
                         </Col>
                         <Col sm={12} lg={4}>
                             {body.feed !== undefined ?
