@@ -91,7 +91,7 @@ function TableUsers({ users, loading, order, setOrder, setLoading, currentPage }
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="username" label={t('ngen.user')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="username" label={t('ngen.user.username')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <Ordering field="email" label={t('w.email')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th style={letterSize}>{t('ngen.name_one')}</th>
                             <th style={letterSize}>{t('ngen.state_one')}</th>
@@ -144,16 +144,22 @@ function TableUsers({ users, loading, order, setOrder, setLoading, currentPage }
                                             <Card.Body>
                                                 <Table responsive >
                                                     <tr>
-                                                        <td>{t('ngen.user.name')}</td>
+                                                        <td>{t('ngen.user.username')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={user.username} />
                                                         </td>
                                                         <td></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>{t('ngen.user')}</td>
+                                                        <td>{t('ngen.name_one')}</td>
                                                         <td>
                                                             <Form.Control plaintext readOnly defaultValue={user.first_name} />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{t('ngen.last.name')}</td>
+                                                        <td>
+                                                            <Form.Control plaintext readOnly defaultValue={user.last_name} />
                                                         </td>
                                                     </tr>
                                                     <tr>

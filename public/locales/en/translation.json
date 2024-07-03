@@ -236,7 +236,7 @@
     "w.active": "Active",
     "w.inactive": "Inactive",
     "ngen.user.detail": "User detail",
-    "ngen.user.name": "Username",
+    "ngen.user.username": "Username",
     "ngen.user.placeholder": "Enter username",
     "ngen.user.is.superuser": "Its superuser",
     "ngen.user.is.staff": "Its part of the staff",

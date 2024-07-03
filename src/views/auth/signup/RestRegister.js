@@ -67,7 +67,7 @@ const RestRegister = ({ className, ...rest }) => {
                                 className="form-control"
                                 error={touched.username && errors.username}
                                 label="Username"
-                                placeholder={t('ngen.user.name')}
+                                placeholder={t('ngen.user.username')}
                                 name="username"
                                 onBlur={handleBlur}
                                 onChange={handleChange}

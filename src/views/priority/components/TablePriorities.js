@@ -64,7 +64,7 @@ const TablePriorities = ({ Priorities, loading, order, setOrder, setLoading, cur
                 <Table responsive hover className="text-center">
                     <thead>
                         <tr>
-                            <Ordering field="name" label={t('ngen.user.name')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                            <Ordering field="name" label={t('ngen.name_one')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             <th style={letterSize}>{t('date.limit.response')}</th>
                             <th style={letterSize}>{t('date.limit.resolution')}</th>
                             <th style={letterSize}>{t('ngen.options')}</th>

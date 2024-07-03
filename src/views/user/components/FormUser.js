@@ -78,7 +78,7 @@ const FormUser = ({ body, setBody, priorities, createUser, loading }) => {
             <Row>
                 <Col sm={12} lg={4}>
                     <Form.Group controlId="formGridAddress1">
-                        <Form.Label>{t('ngen.user.name')} <b style={{ color: "red" }}>*</b></Form.Label>
+                        <Form.Label>{t('ngen.user.username')} <b style={{ color: "red" }}>*</b></Form.Label>
                         <Form.Control
                             placeholder={t('ngen.user.placeholder')}
                             maxlength="150"
