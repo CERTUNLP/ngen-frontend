@@ -2,22 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-const options = {
-  true: "w.active",
-  false: "w.inactive"
-};
-const options2 = {
-  "w.active": true,
-  "w.inactive": false
-};
 
 function DropdownState({ state, setActive }) {
   const { t } = useTranslation();
 
+  const options = {
+    true: "w.active",
+    false: "w.inactive"
+  };
+  const options2 = {
+    "w.active": true,
+    "w.inactive": false
+  };
+
   const [selected, setSelected] = useState();
 
   useEffect(() => {
-    setSelected(options[state])
+    setSelected(t(options[state]))
   }, [state]);
 
   const setValue = (value) => {
