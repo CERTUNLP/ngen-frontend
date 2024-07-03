@@ -51,7 +51,7 @@ const DashboardCases = ({ list, loading }) => {
                     disablePriority={true} disableTlp={true}
                     stateNames={stateNames} userNames={userNames}
                     editColum={false} deleteColum={false} detailModal={false}
-                    navigationRow={false} selectCase={true} disableNubersOfEvents={false} />
+                    navigationRow={false} selectCase={true} disableNubersOfEvents={false} disableUuid={true} />
 
             </Card>
 

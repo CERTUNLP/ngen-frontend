@@ -37,9 +37,9 @@ const DashboardEvent = ({ list }) => {
                 <Card.Header>
                     <Card.Title as="h5">{t('event.last10')}</Card.Title>
                 </Card.Header>
-                <TableEvents events={list}  taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true} 
+                <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} disableDateOrdering={true}
                     disableCheckbox={true} disableDomain={true} disableCidr={true} disableTlp={true} disableColumnEdit={true}
-                    disableColumnDelete={true} disableTemplate={true} disableCheckboxAll={true}/> 
+                    disableColumnDelete={true} disableTemplate={true} disableCheckboxAll={true} disableUuid={true} />
             </Card>
         </div>
     )

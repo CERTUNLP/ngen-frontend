@@ -82,6 +82,16 @@ const ReadCase = () => {
                     console.log(error)
                 })
         }
+
+        const getUuid = (url, set) => {
+            return apiInstance.get(url)
+                .then(response => {
+                    set(response.data.uuid);
+                }).catch(error => {
+                    console.log(error)
+                })
+        }
+
         const getAssignedUser = (url) => {
             return apiInstance.get(url)
                 .then(response => {
@@ -168,10 +178,20 @@ const ReadCase = () => {
                             <Table responsive >
                                 <tbody>
                                     <tr>
+                                        <td>{t('ngen.uuid')}</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={caseItem.uuid} />
+                                        </td>
                                         <td>{t('ngen.system.id')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={id} />
                                         </td>
+                                        <td> {t('ngen.name_one')}</td>
+                                        <td>
+                                            <Form.Control plaintext readOnly defaultValue={caseItem.name ? caseItem.name : "-"} />
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>{t('ngen.priority_one')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={priority} />
@@ -180,12 +200,12 @@ const ReadCase = () => {
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={tlp} />
                                         </td>
-                                    </tr>
-                                    <tr>
                                         <td>{t('ngen.lifecycle_one')}</td>
                                         < td >
                                             <Form.Control plaintext readOnly defaultValue={caseItem.lifecycle} />
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <td>{t('ngen.state_one')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={state} />
@@ -193,12 +213,6 @@ const ReadCase = () => {
                                         <td>{t('ngen.status.assigned')}</td>
                                         <td>
                                             <Form.Control plaintext readOnly defaultValue={assigned} />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td> {t('ngen.name_one')}</td>
-                                        <td>
-                                            <Form.Control plaintext readOnly defaultValue={caseItem.name ? caseItem.name : "-"} />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -259,7 +273,7 @@ const ReadCase = () => {
 
                     <EvidenceCard evidences={evidences} disableDelete={true} disableDragAndDrop={true} />
 
-                    <SmallEventTable list={list} disableLink={true} disableColumOption={true} />
+                    <SmallEventTable list={list} disableLink={true} disableColumOption={true} disableUuid={false} />
 
 
                     <Card>

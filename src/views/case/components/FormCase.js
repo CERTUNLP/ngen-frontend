@@ -117,6 +117,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                     const responses = await Promise.all(events.map(event => getEvent(event).then((response) => { return response.data })))
                     const newEventList = responses.map(response => ({
                         url: response.url,
+                        uuid: response.uuid,
                         date: response.date,
                         address_value: response.address_value,
                         domain: response.domain,
@@ -364,7 +365,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 if (props.createCaseModal) {
                     if (props.setCaseToLink !== undefined) {
                         props.setCaseToLink({
-                            value:response.data.url,
+                            value: response.data.url,
                             name: response.data.name, date: response.data.date,
                             priority: priorityNames[response.data.priority], tlp: tlpNames[response.data.tlp].name,
                             state: props.stateNames[response.data.state], user: userNames[response.data.user_creator]
@@ -541,7 +542,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         </Col>
                         <Col lg={3} sm={12}>
                             <SelectLabel set={setState} setSelect={setSelectState} options={props.allStates}
-                                value={selectState} placeholder={t('ngen.status.assigned')} required={true} />
+                                value={selectState} placeholder={t('ngen.state_one')} required={true} />
                         </Col>
 
                         <Col lg={3} sm={12}>
@@ -571,11 +572,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 ""
                 :
                 <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail}
-                    modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} 
-                    modalEvent={modalEvent}/>
+                    modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm}
+                    modalEvent={modalEvent} disableUuid={false} />
             }
 
-            <ModalCreateEvent showModalEvent={showModalEvent} setShowModalEvent={setShowModalEvent}/>
+            <ModalCreateEvent showModalEvent={showModalEvent} setShowModalEvent={setShowModalEvent} />
 
             <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail}
                 selectFeedFilter={selectFeedFilter} setSelectFeedFilter={setSelectFeedFilter}

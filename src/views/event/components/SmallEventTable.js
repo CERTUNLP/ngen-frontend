@@ -7,7 +7,7 @@ import TableEvents from './TableEvents';
 import { useTranslation, Trans } from 'react-i18next';
 
 
-const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption, modalEvent }) => {
+const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption, modalEvent, disableUuid }) => {
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
@@ -45,7 +45,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
             <Card>
                 <Card.Header>
                     <Row>
-                        <Col sm={12} lg={10}>
+                        <Col sm={12} lg={8}>
                             <Card.Title as="h5">{t('ngen.event_one')}</Card.Title>
                         </Col>
                         {disableLink ? "" :
@@ -55,7 +55,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                                     variant="outline-dark"
                                     onClick={() => modalEvent()}
                                 >
-                                    Crear nuevo evento
+                                    {t('button.create')} {t('ngen.event_one')}
                                 </Button>
                             </Col>
                         }
@@ -76,7 +76,7 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                     <TableEvents events={list} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames}
                         disableDateOrdering={true} disableCheckbox={true} disableTemplate={true} deleteColumForm={true}
                         disableColumnEdit={true} disableCheckboxAll={true} detailModal={true} modalEventDetail={modalEventDetail}
-                        deleteEventFromForm={deleteEventFromForm} disableColumOption={disableColumOption} />
+                        deleteEventFromForm={deleteEventFromForm} disableColumOption={disableColumOption} disableUuid={disableUuid} />
                 </Card.Body>
             </Card>
         </React.Fragment>

@@ -8,7 +8,7 @@ import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
 
-const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents, disableCheckboxAll, modalEventDetail, formCaseCheckbok, detailModal, deleteColumForm, deleteEventFromForm, disableColumOption }) => {
+const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, setOrder, setLoading, taxonomyNames, feedNames, tlpNames, disableDateOrdering, disableCheckbox, disableDomain, disableCidr, disableTlp, disableColumnEdit, disableColumnDelete, disableTemplate, disableNubersOfEvents, disableCheckboxAll, modalEventDetail, formCaseCheckbok, detailModal, deleteColumForm, deleteEventFromForm, disableColumOption, disableUuid }) => {
 
     const [deleteName, setDeleteName] = useState()
     const [deleteUrl, setDeleteUrl] = useState()
@@ -49,7 +49,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
 
     const handleSelectAll = e => {
         setIsCheckAll(!isCheckAll);
-        setSelectedEvent(events.filter(item => item.solve_date == null).map(li => li.url));
+        setSelectedEvent(events.filter(item => !item.blocked).map(li => li.url));
         if (isCheckAll) {
             setSelectedEvent([]);
         }
@@ -100,15 +100,11 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                 :
                                 <Ordering field="date" label={t('ngen.event_date')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
                             }
-                            <th style={letterSize}>{t('ngen.identifier')} </th>
-                            {disableDomain ? ""
-                                :
-                                <th style={letterSize}>{t('ngen.domain')}</th>
+                            {disableUuid ? "" :
+                                <th style={letterSize}>{t('ngen.uuid')}</th>
                             }
-                            {disableCidr ? ""
-                                :
-                                <th style={letterSize}>{t('ngen.cidr')}</th>
-                            }
+                            <th style={letterSize}>{t('ngen.identifier')}</th>
+                            <th style={letterSize}>{t('ngen.domain')}/{t('ngen.cidr')}</th>
                             {disableTlp ? ""
                                 :
                                 <th style={letterSize}>{t('ngen.tlp')}</th>
@@ -130,7 +126,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                         :
                                         formCaseCheckbok ?
                                             <th ><Form.Group>
-                                                <Form.Check disabled={event.solve_date != null ? true : false}
+                                                <Form.Check disabled={event.blocked}
                                                     type="checkbox" id={event.url}
                                                     onChange={(e) => handleClickFormCase(e, event.date, event.address_value, event.domain,
                                                         event.cidr, event.tlp, event.taxonomy, event.feed)}
@@ -139,7 +135,7 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                             </th>
                                             :
                                             <th ><Form.Group>
-                                                <Form.Check disabled={event.solve_date != null ? true : false}
+                                                <Form.Check disabled={event.blocked}
                                                     type="checkbox" id={event.url}
                                                     onChange={handleClick} checked={selectedEvent.includes(event.url)} />
                                             </Form.Group>
@@ -148,14 +144,11 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                     }
 
                                     <td>{event.date ? event.date.slice(0, 10) + " " + event.date.slice(11, 19) : ""}</td>
-                                    <td>{event.address_value}</td>
-                                    {disableDomain ? ""
-                                        :
-                                        <td>{event.domain}</td>}
-                                    {disableCidr ? ""
-                                        :
-                                        <td>{event.cidr}</td>
+                                    {disableUuid ? "" :
+                                        <td>{event.uuid}</td>
                                     }
+                                    <td>{event.address_value}</td>
+                                    <td>{event.domain}{event.cidr}</td>
                                     {disableTlp ? ""
                                         :
                                         <td>
@@ -182,11 +175,13 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                         {disableColumOption ?
                                             ""
                                             :
-                                            disableColumnEdit ? ""
-                                                :
+                                            !disableColumnEdit && !event.blocked ? (
                                                 <Link to={{ pathname: "/events/edit", state: event }} >
                                                     <CrudButton type='edit' />
                                                 </Link>
+                                            ) : (
+                                                <CrudButton type='edit' disabled={true} />
+                                            )
                                         }
                                         {disableColumOption ?
                                             ""

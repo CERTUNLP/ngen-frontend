@@ -8,7 +8,7 @@ import ModalConfirm from '../../../components/Modal/ModalConfirm';
 import Ordering from '../../../components/Ordering/Ordering'
 import LetterFormat from '../../../components/LetterFormat';
 import { useTranslation, Trans } from 'react-i18next';
-const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder, order, priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority, disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption }) => {
+const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, setSelectedCases, setOrder, order, priorityNames, stateNames, tlpNames, userNames, editColum, deleteColum, detailModal, modalCaseDetail, navigationRow, selectCase, handleClickRadio, setSelectCase, disableCheckbox, disableDateOrdering, disableName, disablePriority, disableTlp, disableNubersOfEvents, deleteColumForm, deleteCaseFromForm, disableColumOption, disableUuid }) => {
     const [url, setUrl] = useState(null)
     const [modalDelete, setModalDelete] = useState(false)
     const [id, setId] = useState(null)
@@ -64,7 +64,7 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
     //Checkbox 
     const handleSelectAll = e => {
         setIsCheckAll(!isCheckAll);
-        setSelectedCases(list.filter(item => item.solve_date == null).map(li => li.url));
+        setSelectedCases(list.filter(item => !item.blocked).map(li => li.url));
         if (isCheckAll) {
             setSelectedCases([]);
         }
@@ -113,6 +113,9 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                             ""
                             :
                             <Ordering field="date" label={t('date.management.start')} order={order} setOrder={setOrder} setLoading={setLoading} letterSize={letterSize} />
+                        }
+                        {disableUuid ? "" :
+                            <th style={letterSize}> {t('ngen.uuid')} </th>
                         }
                         {disableName ? "" :
                             <th style={letterSize}> {t('ngen.name_one')} </th>
@@ -177,6 +180,10 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                                     <td>{caseItem ? caseItem.date.slice(0, 10) + " " + caseItem.date.slice(11, 19) : ""}</td>
                                 }
 
+                                {disableUuid ? "" :
+                                    <td>{caseItem.uuid}</td>
+                                }
+
                                 {disableName ? "" :
                                     <td>{caseItem.name || "-"}</td>
                                 }
@@ -204,11 +211,10 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                                                 <CrudButton type="read" onClick={() => storageCaseUrl(caseItem.url)} />
                                             </Link>
                                         )}
-                                    {disableColumOption ?
-                                        ""
+                                    {disableColumOption ? ""
                                         :
                                         editColum && (
-                                            caseItem.solve_date == null ? (
+                                            !caseItem.blocked ? (
                                                 <Link to={{ pathname: '/cases/edit', state: caseItem.url }}>
                                                     <CrudButton type="edit" />
                                                 </Link>

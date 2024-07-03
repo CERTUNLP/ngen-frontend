@@ -131,7 +131,16 @@ const ReadEvent = () => {
                             {t('date.one')}
                         </Col>
                         <Col sm={12} lg={4}>
-                            <div> {body.date ? body.date.slice(0, 10) + " " + body.date.slice(11, 19) : "--"}</div>
+                            <div>{body.date ? body.date.slice(0, 10) + " " + body.date.slice(11, 19) : "--"}</div>
+                        </Col>
+                    </Row>
+                    <p />
+                    <Row>
+                        <Col sm={12} lg={2}>
+                            {t('ngen.uuid')}
+                        </Col>
+                        <Col sm={12} lg={4}>
+                            <div>{body.uuid}</div>
                         </Col>
                     </Row>
                     <p />

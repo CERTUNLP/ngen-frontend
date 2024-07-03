@@ -434,7 +434,7 @@ const ListEvent = () => {
         </Card.Header>
         <Card.Body>
           <TableEvents events={events} loading={loading} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} order={order} setOrder={setOrder}
-            setLoading={setLoading} currentPage={currentPage} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames} disableCheckbox={false} />
+            setLoading={setLoading} currentPage={currentPage} taxonomyNames={taxonomyNames} feedNames={feedNames} tlpNames={tlpNames} disableCheckbox={false} disableUuid={false} />
         </Card.Body>
         <Card.Footer >
           <Row className="justify-content-md-center">
