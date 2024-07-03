@@ -165,7 +165,7 @@ const TableCase = ({ setIfModify, cases, loading, setLoading, selectedCases, set
                                             <td>
                                                 <Form.Group>
                                                     <Form.Check
-                                                        disabled={caseItem.solve_date !== null}
+                                                        disabled={caseItem.blocked}
                                                         type="checkbox"
                                                         id={caseItem.url}
                                                         onChange={handleClick}
