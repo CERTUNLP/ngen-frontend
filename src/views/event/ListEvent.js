@@ -446,7 +446,7 @@ const ListEvent = () => {
 
         <ModalConfirm type='merge' component={t('ngen.event_other')} name={selectedEvent} showModal={showModal} onHide={() => setShowModal(false)} ifConfirm={() => merge()} />
 
-        <Modal show={showOptionsToAddCase} size="lg" onHide={() => clearModal()} aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal show={showOptionsToAddCase} size="lg" onHide={() => setShowOptionsToAddCase(false)} aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
             <Modal.Title>{t('ngen.add.eventcase')}</Modal.Title>
           </Modal.Header>
@@ -455,7 +455,8 @@ const ListEvent = () => {
               {t('button.case_existing')}
             </Button>
             <Button variant="primary" className='text-capitalize' size="sm" onClick={() => closeOptionsCreate()} aria-expanded={openCases}>
-              {t('button.case_new')}            </Button>
+              {t('button.case_new')}
+            </Button>
           </Modal.Body>
         </Modal>
         <ModalCreateCase showModalCase={showModalCase} setShowModalCase={setShowModalCase} caseItem={caseItem}

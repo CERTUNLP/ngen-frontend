@@ -173,7 +173,7 @@
     "ngen.domain_add": "Enter a domain",
     "ngen.domain_valid": "Enter a valid domain",
     "ngen.cidr": "CIDR",
-    "ngen.add.eventcase": "Add an event to a case",
+    "ngen.add.eventcase": "Add events to a case",
     "ngen.user.profile": "User Profile",
     "ngen.network.main": "Main Network",
     "ngen.network.edit": "Edit network",
