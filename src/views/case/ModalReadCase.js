@@ -2,12 +2,14 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import ReadCase from './ReadCase';
 import { useTranslation, Trans } from 'react-i18next';
+import './ModalReadCase.css'
 
 const ModalReadCase = ({ modalShowCase, tableDetail, returnToListOfCases, linkCaseToEvent, closeModalDetail }) => {
   const { t } = useTranslation();
 
   return (
-    <Modal show={modalShowCase} size="lg" onHide={tableDetail ? closeModalDetail : returnToListOfCases} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal show={modalShowCase} size="lg" onHide={tableDetail ? closeModalDetail : returnToListOfCases}
+      aria-labelledby="contained-modal-title-vcenter" centered dialogClassName="modal-90w">
       <Modal.Header closeButton />
       <Modal.Body>
         <div id="example-collapse-text">

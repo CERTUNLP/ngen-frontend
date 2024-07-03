@@ -7,7 +7,7 @@ import TableEvents from './TableEvents';
 import { useTranslation, Trans } from 'react-i18next';
 
 
-const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption }) => {
+const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption, modalEvent }) => {
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
@@ -48,6 +48,17 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
                         <Col sm={12} lg={10}>
                             <Card.Title as="h5">{t('ngen.event_one')}</Card.Title>
                         </Col>
+                        {disableLink ? "" :
+                            <Col sm={12} lg={2}>
+                                <Button
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => modalEvent()}
+                                >
+                                    Crear nuevo evento
+                                </Button>
+                            </Col>
+                        }
                         {disableLink ? "" :
                             <Col sm={12} lg={2}>
                                 <Button

@@ -80,7 +80,8 @@ const ViewFiles = (props) => {
                         >
                             <i className={`${fileIcon} file-icon`}></i>
                             <div>
-                                <p className="file-name">{props.file.original_filename || props.file.name}</p>
+                                <p className="file-name">{props.file.original_filename? props.file.original_filename.slice(0, 20) + "... ":""
+                                || props.file.name ? props.file.name.slice(0, 20) + "... ": ""}</p>
                                 <p className="file-meta">Mime: {props.file.mime || props.file.type}</p>
                                 <p className="file-meta">Tamaño: {props.file.size} KB</p>
                                 <p className="file-meta">
@@ -88,6 +89,7 @@ const ViewFiles = (props) => {
                                 </p>
                             </div>
                         </div>
+                        {props.disableDelete?"":
                         <Button
                             size='sm'
                             className='btn-icon btn-rounded delete-button'
@@ -97,6 +99,7 @@ const ViewFiles = (props) => {
                         >
                             <i className='fas fa-trash-alt' />
                         </Button>
+                        }
                     </div>
                 </Card.Body>
             </Card>

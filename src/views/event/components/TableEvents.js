@@ -214,29 +214,15 @@ const TableEvents = ({ events, loading, selectedEvent, setSelectedEvent, order, 
                                                         <i className="fa fa-plus" aria-hidden="true"></i>
                                                     </Button>
                                                 </Link>}
-
                                     </td>
-
                                 </tr>
                             )
                         })}
-                        <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
 
                     </tbody>
                 </Table>
             </ul>
-            <ModalConfirm type='delete' component={t('ngen.state_one')} name={deleteName} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
-
-            <Modal size='lg' show={modalShow} onHide={() => setModalShow(false)} aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Body>
-                    <Row>
-                        <Col>
-
-                        </Col>
-                    </Row>
-                </Modal.Body>
-            </Modal>
-
+            <ModalConfirm type='delete' component='Evento' name={"el evento"} showModal={remove} onHide={() => setRemove(false)} ifConfirm={() => handleDelete(deleteUrl)} />
         </div>
     )
 }
