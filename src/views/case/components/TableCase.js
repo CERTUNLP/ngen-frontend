@@ -247,7 +247,7 @@ const TableCase = ({setIfModify, cases, loading, setLoading, selectedCases, setS
                     })}
                 </tbody>
             </Table>
-            <ModalConfirm type='delete' component='Caso' name={`el caso ${id}`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
+            <ModalConfirm type='delete' component='Caso' name={`el caso`} showModal={modalDelete} onHide={() => setModalDelete(false)} ifConfirm={() => removeCase(url)} />
         </React.Fragment>
     );
 };

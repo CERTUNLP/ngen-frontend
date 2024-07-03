@@ -6,7 +6,7 @@ import { getMinifiedFeed } from '../../../api/services/feeds';
 import TableEvents from './TableEvents';
 
 
-const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption }) => {
+const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, deleteEventFromForm, disableColumOption, modalEvent }) => {
 
     const [taxonomyNames, setTaxonomyNames] = useState({});
     const [feedNames, setFeedNames] = useState({});
@@ -43,9 +43,20 @@ const SmallEventTable = ({ list, disableLink, modalListEvent, modalEventDetail, 
             <Card>
                 <Card.Header>
                     <Row>
-                        <Col sm={12} lg={10}>
+                        <Col sm={12} lg={8}>
                             <Card.Title as="h5">Eventos</Card.Title>
                         </Col>
+                        {disableLink ? "" :
+                            <Col sm={12} lg={2}>
+                                <Button
+                                    size="lm"
+                                    variant="outline-dark"
+                                    onClick={() => modalEvent()}
+                                >
+                                    Crear nuevo evento
+                                </Button>
+                            </Col>
+                        }
                         {disableLink ? "" :
                             <Col sm={12} lg={2}>
                                 <Button

@@ -6,7 +6,7 @@ const ModalCreateCase = ({ showModalCase, setShowModalCase, caseItem, states, se
   return (
     <Modal show={showModalCase} size="lg" onHide={() => setShowModalCase(false)} aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Agregar eventos a un caso</Modal.Title>
+      <Modal.Title>Crear Caso</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div id="example-collapse-text">
@@ -24,6 +24,8 @@ const ModalCreateCase = ({ showModalCase, setShowModalCase, caseItem, states, se
             completeField1={completeField1}
             stateNames={stateNames}
             disableTableEvent={true}
+            disableEvidence={true}
+            disableTitle={true}
             selectedEvent={selectedEvent}
             setSelectedEvent={setSelectedEvent} 
             refresh={refresh} 

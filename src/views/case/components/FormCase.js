@@ -16,10 +16,10 @@ import ModalReadEvent from '../../event/ModalReadEvent';
 import { getEvent } from '../../../api/services/events';
 import EvidenceCard from '../../../components/UploadFiles/EvidenceCard';
 import { getEvidence } from '../../../api/services/evidences';
+import ModalCreateEvent from '../../event/ModalCreateEvent';
 
 const FormCase = (props) => {  // props: edit, caseitem, allStates 
 
-    const location = useLocation();
     const [url, setUrl] = useState(props.edit ? props.caseItem.url : null)
     const [date, setDate] = useState(props.caseItem.date !== null ? props.caseItem.date.substr(0, 16) : getCurrentDateTime())
     const [lifecycle, setLifecycle] = useState(props.caseItem.lifecycle)
@@ -32,8 +32,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [events, setEvents] = useState(props.caseItem.events !== [] ? props.caseItem.events : [])
     const [comments, setComments] = useState([])
     const [evidences, setEvidences] = useState([])
-    const [attend_date, setAttend_date] = useState(props.caseItem.attend_date !== null ? props.caseItem.attend_date.substr(0, 16) : '')
-    const [solve_date, setSolve_date] = useState(props.caseItem.solve_date !== null ? props.caseItem.solve_date.substr(0, 16) : '')
 
     //select
     const [allPriorities, setAllPriorities] = useState([])
@@ -80,6 +78,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const [selectTlpFilter, setSelectTlpFilter] = useState("")
     const [selectTaxonomyFilter, setSelectTaxonomyFilter] = useState("");
     const [tableDetail, setTableDetail] = useState(false);
+    const [showModalEvent, setShowModalEvent] = useState(false);
+
     const { t } = useTranslation();
     useEffect(() => {
 
@@ -91,8 +91,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 const data = responses.map(response => response.data);
                 // Actualizar el estado con los datos de todas las evidencias
                 evidences.forEach((evidence) => {
-                    console.log(evidence.url)
-                    if(evidence.url === undefined){
+                    if (evidence.url === undefined) {
                         data.push(evidence)
                     }
                 });
@@ -127,6 +126,8 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                         feed: response.feed
                     }));
                     setEventList(newEventList);
+                    setSelectedEvent(newEventList)
+
                 } catch (error) {
                     console.error("Error fetching events:", error);
                 }
@@ -273,7 +274,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             label: "Auto close"
         }
     ]
-
     //Edit
     const editCase = () => {
         setIfClick(true);
@@ -289,8 +289,6 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
             form.append("assigned", assigned)
         }
         form.append("state", state)
-        form.append("attend_date", attend_date)
-        form.append("solve_date", solve_date)
         //form.append("evidence", evidences)
         if (evidences !== null) {
             for (let index = 0; index < evidences.length; index++) {
@@ -336,23 +334,14 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         if (assigned !== null) {
             form.append("assigned", assigned)
         }
-        if (events !== []){
-
-            events.forEach(event => {
-                form.append("events", event);
-            });
-        }
         form.append("state", state)
-        form.append("attend_date", attend_date)
-        form.append("solve_date", solve_date)
         if (props.selectedEvent !== undefined) {
 
             props.selectedEvent.forEach(selectedEvent => {
                 form.append("events", selectedEvent);
             });
         }
-        if (events !== []) {
-
+        if (events !== [] && events !== undefined) {
             events.forEach(selectedEvent => {
                 form.append("events", selectedEvent);
             });
@@ -373,9 +362,9 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
         postCase(form)
             .then((response) => {
                 if (props.createCaseModal) {
-
                     if (props.setCaseToLink !== undefined) {
                         props.setCaseToLink({
+                            value:response.data.url,
                             name: response.data.name, date: response.data.date,
                             priority: priorityNames[response.data.priority], tlp: tlpNames[response.data.tlp].name,
                             state: props.stateNames[response.data.state], user: userNames[response.data.user_creator]
@@ -407,6 +396,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 setIfClick(false)
             });
     };
+
     function getCurrentDateTime() {
         const now = new Date();
         const year = now.getFullYear();
@@ -444,7 +434,7 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
     const linkCaseToEvent = () => {
 
-        if (!selectedEvent.some(event => event.url === selectedEventDetail.url)){
+        if (!selectedEvent.some(event => event.url === selectedEventDetail.url)) {
             setSelectedEvent([...selectedEvent, selectedEventDetail]);
         }
         setShowModalListEvent(true)
@@ -485,24 +475,33 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
     const deleteEventFromForm = (url) => {
         setEventList(eventList.filter(event => event.url !== url))
         setSelectedEvent(selectedEvent.filter(event => event.url !== url))
-        let list=[]
+        let list = []
         eventList.forEach(
             event => {
-            if(event.url !== url){
-                list.push(event.url)
+                if (event.url !== url) {
+                    list.push(event.url)
+                }
             }
-        }
-            )
+        )
         setEvents(list)
     };
+
+    const modalEvent = () => {
+        //setId
+        setShowModalEvent(true);
+    }
 
     return (
         <React.Fragment>
             <Alert showAlert={showAlert} resetShowAlert={() => setShowAlert(false)} component="case" />
             <Card>
-                <Card.Header>
-                    <Card.Title as="h5">{t('menu.main')}</Card.Title>
-                </Card.Header>
+                {props.disableTitle ?
+                    ""
+                    :
+                    <Card.Header>
+                        <Card.Title as="h5">{t('menu.main')}</Card.Title>
+                    </Card.Header>
+                }
                 <Card.Body>
                     <Row>
                         <Col lg={6} sm={12}>
@@ -572,8 +571,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
                 ""
                 :
                 <SmallEventTable list={eventList} modalEventDetail={tableCaseDetail}
-                    modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} />
+                    modalListEvent={modalListEvent} deleteEventFromForm={deleteEventFromForm} 
+                    modalEvent={modalEvent}/>
             }
+
+            <ModalCreateEvent showModalEvent={showModalEvent} setShowModalEvent={setShowModalEvent}/>
 
             <ModalListEvent showModalListEvent={showModalListEvent} modalEventDetail={modalEventDetail}
                 selectFeedFilter={selectFeedFilter} setSelectFeedFilter={setSelectFeedFilter}
@@ -591,9 +593,11 @@ const FormCase = (props) => {  // props: edit, caseitem, allStates
 
             <ModalReadEvent modalShowCase={modalShowEvent} tableDetail={tableDetail} returnToListOfCases={returnToListOfEvent}
                 linkCaseToEvent={linkCaseToEvent} closeModalDetail={closeModalDetail} />
-
-            <EvidenceCard evidences={evidences} setEvidences={setEvidences} setUpdateCase={props.setUpdateCase}
-                updateCase={props.updateCase} />
+            {props.disableEvidence ?
+                "" :
+                <EvidenceCard evidences={evidences} setEvidences={setEvidences} setUpdateCase={props.setUpdateCase}
+                    updateCase={props.updateCase} />
+            }
 
             {
                 priority !== '' && lifecycle !== '' && tlp !== '' && state !== '' ?

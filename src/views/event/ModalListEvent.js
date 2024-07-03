@@ -15,11 +15,11 @@ const ModalListEvent = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const [events, setEvents] = useState([]);
     const [disabledPagination, setDisabledPagination] = useState(true);
-    const [caseIsNull, setCaseIsNull]= useState('&case__isnull=true')
+    const [caseIsNull, setCaseIsNull] = useState('&case__isnull=true')
     //&case__isnull=true
-    
+
     useEffect(() => {
-        getEvents(props.currentPage, props.taxonomyFilter+props.tlpFilter+props.feedFilter+caseIsNull,)
+        getEvents(props.currentPage, props.taxonomyFilter + props.tlpFilter + props.feedFilter + caseIsNull,)
             .then((response) => {
                 setEvents(response.data.results);
                 setCountItems(response.data.count);
@@ -43,10 +43,10 @@ const ModalListEvent = (props) => {
     }
 
     return (
-        <Modal 
-            show={props.showModalListEvent} 
-            onHide={props.closeModal} 
-            aria-labelledby="contained-modal-title-vcenter" 
+        <Modal
+            show={props.showModalListEvent}
+            onHide={props.closeModal}
+            aria-labelledby="contained-modal-title-vcenter"
             centered
             dialogClassName="modal-90w"
         >
@@ -60,26 +60,26 @@ const ModalListEvent = (props) => {
                 <br />
                 <Row>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.tlpList} itemName="tlp" partOfTheUrl="tlp" itemFilter={props.tlpFilter} 
-                        itemFilterSetter={props.setTlpFilter} setLoading={setLoading} 
-                        setCurrentPage={props.setCurrentPage}  value={props.selectTlpFilter} setValue={props.setSelectTlpFilter}/>
+                        <FilterSelectUrl options={props.tlpList} itemName="tlp" partOfTheUrl="tlp" itemFilter={props.tlpFilter}
+                            itemFilterSetter={props.setTlpFilter} setLoading={setLoading}
+                            setCurrentPage={props.setCurrentPage} value={props.selectTlpFilter} setValue={props.setSelectTlpFilter} />
                     </Col>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.taxonomies} itemName="taxonomia" partOfTheUrl="taxonomy" 
-                        itemFilter={props.taxonomyFilter}  itemFilterSetter={props.setTaxonomyFilter} setLoading={setLoading} 
-                        setCurrentPage={props.setCurrentPage} value={props.selectTaxonomyFilter} setValue={props.setSelectTaxonomyFilter} />
+                        <FilterSelectUrl options={props.taxonomies} itemName="taxonomia" partOfTheUrl="taxonomy"
+                            itemFilter={props.taxonomyFilter} itemFilterSetter={props.setTaxonomyFilter} setLoading={setLoading}
+                            setCurrentPage={props.setCurrentPage} value={props.selectTaxonomyFilter} setValue={props.setSelectTaxonomyFilter} />
                     </Col>
                     <Col sm={4} lg={4}>
-                        <FilterSelectUrl options={props.feeds} itemName="fuentes" partOfTheUrl="feed" 
-                        itemFilter={props.feedFilter} itemFilterSetter={props.setFeedFilter} setLoading={setLoading} 
-                        setCurrentPage={props.setCurrentPage} value={props.selectFeedFilter} setValue={props.setSelectFeedFilter}/>
+                        <FilterSelectUrl options={props.feeds} itemName="fuentes" partOfTheUrl="feed"
+                            itemFilter={props.feedFilter} itemFilterSetter={props.setFeedFilter} setLoading={setLoading}
+                            setCurrentPage={props.setCurrentPage} value={props.selectFeedFilter} setValue={props.setSelectFeedFilter} />
                     </Col>
                 </Row>
                 <div id="example-collapse-text">
-                    <TableEvents 
-                        events={events} loading={loading} selectedEvent={props.selectedEvent} 
-                        setSelectedEvent={props.setSelectedEvent} order={order} setOrder={setOrder}  setLoading={setLoading} 
-                        currentPage={props.currentPage} taxonomyNames={props.taxonomyNames} feedNames={props.feedNames} 
+                    <TableEvents
+                        events={events} loading={loading} selectedEvent={props.selectedEvent}
+                        setSelectedEvent={props.setSelectedEvent} order={order} setOrder={setOrder} setLoading={setLoading}
+                        currentPage={props.currentPage} taxonomyNames={props.taxonomyNames} feedNames={props.feedNames}
                         tlpNames={props.tlpNames} disableCheckbox={false} formCaseCheckbok={true} disableCheckboxAll={true}
                         disableColumnDelete={true} disableTemplate={true} disableColumnEdit={true} detailModal={true}
                         modalEventDetail={props.modalEventDetail}
@@ -89,14 +89,14 @@ const ModalListEvent = (props) => {
             <Modal.Footer>
                 <Row className="justify-content-md-center">
                     <Col>
-                        <AdvancedPagination 
-                            countItems={countItems} 
+                        <AdvancedPagination
+                            countItems={countItems}
                             updatePage={updatePage}
-                            updatePagination={props.updatePagination} 
+                            updatePagination={props.updatePagination}
                             setUpdatePagination={props.setUpdatePagination}
-                            setLoading={setLoading} 
+                            setLoading={setLoading}
                             setDisabledPagination={setDisabledPagination}
-                            disabledPagination={disabledPagination} 
+                            disabledPagination={disabledPagination}
                         />
                     </Col>
                 </Row>
